@@ -1,8 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "pitch.h"
-#include "player.h"
+#include "../pitch/pitch.h"
+#include "../player/player.h"
 
 
 class Game
@@ -19,6 +19,9 @@ class Game
 
         Pitch* pitch;
         Player* player;
+
+        void createModel();
+        void createViews();
 };
 
 #endif // GAME_H

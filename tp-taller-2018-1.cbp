@@ -14,6 +14,7 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="src/game" />
+					<Add directory="src/pitch" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -24,6 +25,7 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add directory="src/game" />
+					<Add directory="src/pitch" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -38,11 +40,13 @@
 		</Linker>
 		<Unit filename="src/game/game.cpp" />
 		<Unit filename="src/game/game.h" />
-		<Unit filename="src/game/pitch.cpp" />
-		<Unit filename="src/game/pitch.h" />
-		<Unit filename="src/game/player.cpp" />
-		<Unit filename="src/game/player.h" />
 		<Unit filename="src/main.cpp" />
+		<Unit filename="src/pitch/pitch-view.cpp" />
+		<Unit filename="src/pitch/pitch-view.h" />
+		<Unit filename="src/pitch/pitch.cpp" />
+		<Unit filename="src/pitch/pitch.h" />
+		<Unit filename="src/player/player.cpp" />
+		<Unit filename="src/player/player.h" />
 		<Extensions>
 			<envvars />
 			<code_completion />
