@@ -1,0 +1,36 @@
+# depslib dependency file v1.0
+1521913688 source:/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/Main.cpp
+	<iostream>
+	<SDL2/SDL.h>
+
+1521920042 source:/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/game/Game.cpp
+	"Game.h"
+
+1521920042 /home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/game/Game.h
+
+1521922923 source:/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/game/game.cpp
+	"game.h"
+	<iostream>
+
+1521922649 /home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/game/game.h
+	"pitch.h"
+	"player.h"
+
+1521922028 /home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/game/pitch.h
+
+1521922070 /home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/game/player.h
+
+1521922229 source:/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/game/pitch.cpp
+	"pitch.h"
+
+1521922238 source:/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/game/player.cpp
+	"player.h"
+
+1521924348 source:/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/main.cpp
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<stdio.h>
+	<string>
+	<iostream>
+	"game.h"
+
