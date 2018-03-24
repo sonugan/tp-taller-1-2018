@@ -36,6 +36,13 @@
 		<Linker>
 			<Add option="-lSDL2 -lSDL2_image" />
 		</Linker>
+		<Unit filename="src/game/game.cpp" />
+		<Unit filename="src/game/game.h" />
+		<Unit filename="src/game/pitch.cpp" />
+		<Unit filename="src/game/pitch.h" />
+		<Unit filename="src/game/player.cpp" />
+		<Unit filename="src/game/player.h" />
+		<Unit filename="src/main.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />
