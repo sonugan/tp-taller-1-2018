@@ -2,10 +2,33 @@
 
 Player::Player()
 {
-    //ctor
+    this->location = new Location(0, 0, 0);
 }
 
 Player::~Player()
 {
-    //dtor
+    std::cout << "Destructor de Player" << "\n";
+    delete location;
 }
+
+void Player::MoveLeft(int pixels) {
+    location->UpdateX(location->GetX() - pixels);
+}
+
+void Player::MoveRight(int pixels) {
+    location->UpdateX(location->GetX() + pixels);
+}
+
+void Player::MoveUp(int pixels) {
+    location->UpdateY(location->GetY() - pixels);
+}
+
+void Player::MoveDown(int pixels) {
+    location->UpdateY(location->GetY() + pixels);
+}
+
+Location* Player::GetLocation() {
+    return location;
+}
+
+

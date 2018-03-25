@@ -2,19 +2,18 @@
 #define PITCHVIEW_H
 
 #include "pitch.h"
-#include "../common/sprite-sheet.h"
+#include "../common/abstract-view.h"
 
-class PitchView
-{
+class PitchView : public AbstractView {
     public:
-        PitchView(Pitch* pitch);
+        PitchView(Pitch* pitch, SDL_Renderer* renderer);
         virtual ~PitchView();
+        void Render();
 
     protected:
 
     private:
         Pitch* pitch;
-        SpriteSheet* sprite_sheet;
 };
 
 #endif // PITCHVIEW_H

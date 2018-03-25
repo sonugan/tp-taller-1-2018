@@ -1,6 +1,7 @@
 #ifndef SPRITESHEET_H
 #define SPRITESHEET_H
 
+#include <iostream>
 #include <string>
 #include <vector>
 #include <SDL2/SDL.h>
@@ -10,7 +11,7 @@ class SpriteSheet
 {
 	public:
 		//Initializes variables
-		SpriteSheet(SDL_Renderer* gRenderer, std::string path, std::vector<SDL_Rect*> clips);
+		SpriteSheet(SDL_Renderer* renderer, std::string path, std::vector<SDL_Rect*> clips);
 
 		//Deallocates memory
 		~SpriteSheet();
@@ -38,17 +39,17 @@ class SpriteSheet
 
 	private:
 		//The actual hardware texture
-		SDL_Texture* mTexture;
+		SDL_Texture* texture;
 
-		SDL_Renderer* gRenderer;
+		SDL_Renderer* renderer;
 
 		std::vector<SDL_Rect*> clips;
 
         //Loads image at specified path
 		bool LoadFromFile();
 		//Image dimensions
-		int mWidth;
-		int mHeight;
+		int width;
+		int height;
 		std::string path;
 };
 

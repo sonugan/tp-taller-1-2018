@@ -16,6 +16,7 @@
 					<Add directory="src/game" />
 					<Add directory="src/pitch" />
 					<Add directory="src/common" />
+					<Add directory="src/player" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -28,6 +29,7 @@
 					<Add directory="src/game" />
 					<Add directory="src/pitch" />
 					<Add directory="src/common" />
+					<Add directory="src/player" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -40,6 +42,7 @@
 		<Linker>
 			<Add option="-lSDL2 -lSDL2_image" />
 		</Linker>
+		<Unit filename="src/common/abstract-view.h" />
 		<Unit filename="src/common/location.cpp" />
 		<Unit filename="src/common/location.h" />
 		<Unit filename="src/common/sprite-sheet.cpp" />
@@ -51,9 +54,12 @@
 		<Unit filename="src/pitch/pitch-view.h" />
 		<Unit filename="src/pitch/pitch.cpp" />
 		<Unit filename="src/pitch/pitch.h" />
+		<Unit filename="src/player/player-view.cpp" />
+		<Unit filename="src/player/player-view.h" />
 		<Unit filename="src/player/player.cpp" />
 		<Unit filename="src/player/player.h" />
 		<Unit filename="src/sprites/foo.png" />
+		<Unit filename="src/sprites/pitch.jpg" />
 		<Extensions>
 			<envvars />
 			<code_completion />

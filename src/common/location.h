@@ -7,10 +7,13 @@ class Location
     public:
         Location(int x, int y, int z);
         virtual ~Location();
-        int getX();
-        int getY();
-        int getZ();
-        void update(int x, int y, int z);
+        int GetX();
+        int GetY();
+        int GetZ();
+        void Update(int x, int y, int z);
+        void UpdateX(int x);
+        void UpdateY(int y);
+        void UpdateZ(int z);
 
     protected:
 
