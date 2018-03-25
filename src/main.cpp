@@ -6,15 +6,13 @@ and may not be redistributed without written permission.*/
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <string>
-#include<iostream>
+#include <iostream>
+#include <exception>
 #include "common/sprite-sheet.h"
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
-
-//Starts up SDL and creates window
-bool init();
 
 //Frees media and shuts down SDL
 void close();
@@ -31,58 +29,44 @@ const int WALKING_ANIMATION_FRAMES = 4;
 SpriteSheet* gSpriteSheetTexture;
 
 
-bool init()
+void init()
 {
-	//Initialization flag
-	bool success = true;
-
+    //Starts up SDL and creates window
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 	{
-		printf( "SDL could not initialize! SDL Error: %s\n", SDL_GetError() );
-		success = false;
+	    throw std::runtime_error(SDL_GetError());
 	}
-	else
-	{
-		//Set texture filtering to linear
-		if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
-		{
-			printf( "Warning: Linear texture filtering not enabled!" );
-		}
+    //Set texture filtering to linear
+    if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
+    {
+        printf( "Warning: Linear texture filtering not enabled!" );
+    }
+    //Create window
+    gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+    if( gWindow == NULL )
+    {
+        throw std::runtime_error(SDL_GetError());
+    }
 
-		//Create window
-		gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-		if( gWindow == NULL )
-		{
-			printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
-			success = false;
-		}
-		else
-		{
-			//Create vsynced renderer for window
-			gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
-			if( gRenderer == NULL )
-			{
-				printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
-				success = false;
-			}
-			else
-			{
-				//Initialize renderer color
-				SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+    //Create vsynced renderer for window
+    gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+    if( gRenderer == NULL )
+    {
+        throw std::runtime_error(SDL_GetError());
+    }
 
-				//Initialize PNG loading
-				int imgFlags = IMG_INIT_PNG;
-				if( !( IMG_Init( imgFlags ) & imgFlags ) )
-				{
-					printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
-					success = false;
-				}
-			}
-		}
-	}
+    //Initialize renderer color
+    SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 
-	return success;
+    //Initialize PNG loading
+    int imgFlags = IMG_INIT_PNG;
+    if( !( IMG_Init( imgFlags ) & imgFlags ) )
+    {
+        throw std::runtime_error(IMG_GetError());
+
+    }
+
 }
 
 bool createSpriteSheet()
@@ -90,36 +74,36 @@ bool createSpriteSheet()
 	//Loading success flag
 	bool success = true;
 
-        SDL_Rect* sprite1 = new SDL_Rect();
-		sprite1->x =   0;
-		sprite1->y =   0;
-		sprite1->w =  64;
-		sprite1->h = 205;
+    SDL_Rect* sprite1 = new SDL_Rect();
+    sprite1->x =   0;
+    sprite1->y =   0;
+    sprite1->w =  64;
+    sprite1->h = 205;
 
-		SDL_Rect* sprite2 = new SDL_Rect();
-		sprite2->x =  64;
-		sprite2->y =   0;
-		sprite2->w =  64;
-		sprite2->h = 205;
+    SDL_Rect* sprite2 = new SDL_Rect();
+    sprite2->x =  64;
+    sprite2->y =   0;
+    sprite2->w =  64;
+    sprite2->h = 205;
 
-		SDL_Rect* sprite3 = new SDL_Rect();
-		sprite3->x = 128;
-		sprite3->y =   0;
-		sprite3->w =  64;
-		sprite3->h = 205;
+    SDL_Rect* sprite3 = new SDL_Rect();
+    sprite3->x = 128;
+    sprite3->y =   0;
+    sprite3->w =  64;
+    sprite3->h = 205;
 
 
-		SDL_Rect* sprite4 = new SDL_Rect();
-		sprite4->x = 196;
-		sprite4->y =   0;
-		sprite4->w =  64;
-		sprite4->h = 205;
+    SDL_Rect* sprite4 = new SDL_Rect();
+    sprite4->x = 196;
+    sprite4->y =   0;
+    sprite4->w =  64;
+    sprite4->h = 205;
 
-		std::vector<SDL_Rect*> clips;
-        clips.push_back(sprite1);
-        clips.push_back(sprite2);
-        clips.push_back(sprite3);
-        clips.push_back(sprite4);
+    std::vector<SDL_Rect*> clips;
+    clips.push_back(sprite1);
+    clips.push_back(sprite2);
+    clips.push_back(sprite3);
+    clips.push_back(sprite4);
 
 	gSpriteSheetTexture = new SpriteSheet(gRenderer, "foo.png", clips);
 
@@ -152,83 +136,76 @@ void clearScreen() {
 
 int main( int argc, char* args[] )
 {
-    std::cout << "hello!";
-	//Start up SDL and create window
-	if( !init() )
-	{
-		printf( "Failed to initialize!\n" );
-	}
-	else
-	{
+	init();
 		//Load media
-		if( !createSpriteSheet() )
-		{
-			printf( "Failed to load media!\n" );
-		}
-		else
-		{
-			//Main loop flag
-			bool quit = false;
+    if( !createSpriteSheet() )
+    {
+        printf( "Failed to load media!\n" );
+    }
+    else
+    {
+        //Main loop flag
+        bool quit = false;
 
-			//Event handler
-			SDL_Event e;
+        //Event handler
+        SDL_Event e;
 
-			//Current animation frame
-			int frame = 0;
-			int x = 0;
-			int y = 0;
+        //Current animation frame
+        int frame = 0;
+        int x = 0;
+        int y = 0;
 
-			clearScreen();
-			SDL_RenderPresent( gRenderer );
+        clearScreen();
+        SDL_RenderPresent( gRenderer );
 
-			const Uint8 *keyboard_state_array = SDL_GetKeyboardState(NULL);
+        const Uint8 *keyboard_state_array = SDL_GetKeyboardState(NULL);
 
-			//While application is running
-			while( !quit )
-			{
-				//Handle events on queue
-				while( SDL_PollEvent( &e ) != 0 )
-				{
-					//User requests quit
-					if( e.type == SDL_QUIT )
-					{
-						quit = true;
-					} else if(e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
+        //While application is running
+        while( !quit )
+        {
+            //Handle events on queue
+            while( SDL_PollEvent( &e ) != 0 )
+            {
+                //User requests quit
+                if( e.type == SDL_QUIT )
+                {
+                    quit = true;
+                } else if(e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
 {                       ++frame;
-					    std::cout << "Frame: " << frame << "\n";
-                        if( (frame / FRAME_RETARDANT) >= WALKING_ANIMATION_FRAMES )
-                        {
-                            frame = 0;
-                        }
-
-                        if (keyboard_state_array[SDL_SCANCODE_UP] && !(keyboard_state_array[SDL_SCANCODE_DOWN]))
-                        {
-                            --y;
-                        }
-                        else if (!keyboard_state_array[SDL_SCANCODE_UP] && keyboard_state_array[SDL_SCANCODE_DOWN])
-                        {
-                            ++y;
-                        }
-
-                        if (keyboard_state_array[SDL_SCANCODE_RIGHT] && !keyboard_state_array[SDL_SCANCODE_LEFT])
-                        {
-                            ++x;
-                        }
-                        else if (!keyboard_state_array[SDL_SCANCODE_RIGHT] && keyboard_state_array[SDL_SCANCODE_LEFT])
-                        {
-                            --x;
-                        }
-
-                        clearScreen();
-
-                        SDL_Rect* currentClip = gSpriteSheetTexture->GetClips()[ frame / FRAME_RETARDANT];
-                        gSpriteSheetTexture->Render( x, y, currentClip );
-
-                        //Update screen
-                        SDL_RenderPresent( gRenderer );
+                    std::cout << "Frame: " << frame << "\n";
+                    if( (frame / FRAME_RETARDANT) >= WALKING_ANIMATION_FRAMES )
+                    {
+                        frame = 0;
                     }
 
-				}
+                    if (keyboard_state_array[SDL_SCANCODE_UP] && !(keyboard_state_array[SDL_SCANCODE_DOWN]))
+                    {
+                        --y;
+                    }
+                    else if (!keyboard_state_array[SDL_SCANCODE_UP] && keyboard_state_array[SDL_SCANCODE_DOWN])
+                    {
+                        ++y;
+                    }
+
+                    if (keyboard_state_array[SDL_SCANCODE_RIGHT] && !keyboard_state_array[SDL_SCANCODE_LEFT])
+                    {
+                        ++x;
+                    }
+                    else if (!keyboard_state_array[SDL_SCANCODE_RIGHT] && keyboard_state_array[SDL_SCANCODE_LEFT])
+                    {
+                        --x;
+                    }
+
+                    clearScreen();
+
+                    SDL_Rect* currentClip = gSpriteSheetTexture->GetClips()[ frame / FRAME_RETARDANT];
+                    gSpriteSheetTexture->Render( x, y, currentClip );
+
+                    //Update screen
+                    SDL_RenderPresent( gRenderer );
+                }
+
+
 
                 if (x > SCREEN_WIDTH) {
                     x = 0;
