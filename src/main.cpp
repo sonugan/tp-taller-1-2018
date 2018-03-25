@@ -123,13 +123,6 @@ bool createSpriteSheet()
 
 	gSpriteSheetTexture = new SpriteSheet(gRenderer, "foo.png", clips);
 
-	//Load sprite sheet texture
-//	if( !gSpriteSheetTexture->loadFromFile( "foo.png" ) )
-//	{
-//		printf( "Failed to load walking animation texture!\n" );
-//		success = false;
-//	}
-
 	return success;
 }
 
@@ -188,6 +181,8 @@ int main( int argc, char* args[] )
 			clearScreen();
 			SDL_RenderPresent( gRenderer );
 
+			const Uint8 *keyboard_state_array = SDL_GetKeyboardState(NULL);
+
 			//While application is running
 			while( !quit )
 			{
@@ -198,34 +193,31 @@ int main( int argc, char* args[] )
 					if( e.type == SDL_QUIT )
 					{
 						quit = true;
-					} else if ( e.type == SDL_KEYDOWN )
-					{
-					    ++frame;
+					} else if(e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
+{                       ++frame;
 					    std::cout << "Frame: " << frame << "\n";
                         if( (frame / FRAME_RETARDANT) >= WALKING_ANIMATION_FRAMES )
                         {
                             frame = 0;
                         }
 
-						switch( e.key.keysym.sym )
-						{
-							case SDLK_UP:
-							--y;
-							break;
+                        if (keyboard_state_array[SDL_SCANCODE_UP] && !(keyboard_state_array[SDL_SCANCODE_DOWN]))
+                        {
+                            --y;
+                        }
+                        else if (!keyboard_state_array[SDL_SCANCODE_UP] && keyboard_state_array[SDL_SCANCODE_DOWN])
+                        {
+                            ++y;
+                        }
 
-							case SDLK_DOWN:
-							++y;
-							break;
-
-							case SDLK_LEFT:
-							--x;
-							break;
-
-							case SDLK_RIGHT:
-							++x;
-							break;
-
-						}
+                        if (keyboard_state_array[SDL_SCANCODE_RIGHT] && !keyboard_state_array[SDL_SCANCODE_LEFT])
+                        {
+                            ++x;
+                        }
+                        else if (!keyboard_state_array[SDL_SCANCODE_RIGHT] && keyboard_state_array[SDL_SCANCODE_LEFT])
+                        {
+                            --x;
+                        }
 
                         clearScreen();
 
@@ -234,7 +226,7 @@ int main( int argc, char* args[] )
 
                         //Update screen
                         SDL_RenderPresent( gRenderer );
-					}
+                    }
 
 				}
 
@@ -250,12 +242,6 @@ int main( int argc, char* args[] )
                 if (y < 0) {
                     y = SCREEN_HEIGHT;
                 }
-
-				//Go to next frame
-//				++frame;
-
-
-				//Cycle animation
 
 			}
 		}
