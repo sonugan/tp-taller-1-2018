@@ -3,20 +3,41 @@
 
 Game::Game()
 {
-    //ctor
-    this->pitch = new Pitch();
-    this->player = new Player();
+    CreateModel();
+    CreateViews();
 }
 
 Game::~Game()
 {
-    std::cout << "destructor de game";
-    //dtor
-    delete this->pitch;
-    delete this->player;
+    DestroyModel();
+    DestroyViews();
 }
 
 void Game::Start()
 {
-    std::cout << "start game...";
+    std::cout << "Start game..." << "\n";
+}
+
+void Game::CreateModel() {
+    std::cout << "Creando modelo..." << "\n";
+    this->pitch = new Pitch();
+    this->player = new Player();
+}
+
+void Game::CreateViews() {
+    std::cout << "Creando vistas..." << "\n";
+    this->pitch_view = new PitchView(this->pitch);
+
+
+}
+
+void Game::DestroyModel() {
+    std::cout << "Destruyendo modelo..." << "\n";
+    delete this->pitch;
+    delete this->player;
+}
+
+void Game::DestroyViews() {
+    std::cout << "Destruyendo vistas..." << "\n";
+    delete this->pitch_view;
 }

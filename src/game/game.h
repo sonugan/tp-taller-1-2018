@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "../pitch/pitch.h"
+#include "../pitch/pitch-view.h"
 #include "../player/player.h"
 
 
@@ -18,10 +19,13 @@ class Game
     private:
 
         Pitch* pitch;
+        PitchView* pitch_view;
         Player* player;
 
-        void createModel();
-        void createViews();
+        void CreateModel();
+        void CreateViews();
+        void DestroyModel();
+        void DestroyViews();
 };
 
 #endif // GAME_H

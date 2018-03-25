@@ -2,7 +2,7 @@
 
 PitchView::PitchView(Pitch* pitch)
 {
-    //ctor
+    this->pitch = pitch;
 }
 
 PitchView::~PitchView()

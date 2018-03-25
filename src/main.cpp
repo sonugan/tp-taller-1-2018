@@ -6,60 +6,15 @@ and may not be redistributed without written permission.*/
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <string>
-#include <iostream>
-
-#include "game.h"
+#include<iostream>
+#include "common/sprite-sheet.h"
 
 //Screen dimension constants
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
-
-//Texture wrapper class
-class LTexture
-{
-	public:
-		//Initializes variables
-		LTexture();
-
-		//Deallocates memory
-		~LTexture();
-
-		//Loads image at specified path
-		bool loadFromFile( std::string path );
-
-		//Deallocates texture
-		void free();
-
-		//Set color modulation
-		void setColor( Uint8 red, Uint8 green, Uint8 blue );
-
-		//Set blending
-		void setBlendMode( SDL_BlendMode blending );
-
-		//Set alpha modulation
-		void setAlpha( Uint8 alpha );
-
-		//Renders texture at given point
-		void render( int x, int y, SDL_Rect* clip = NULL );
-
-		//Gets image dimensions
-		int getWidth();
-		int getHeight();
-
-	private:
-		//The actual hardware texture
-		SDL_Texture* mTexture;
-
-		//Image dimensions
-		int mWidth;
-		int mHeight;
-};
+const int SCREEN_WIDTH = 640;
+const int SCREEN_HEIGHT = 480;
 
 //Starts up SDL and creates window
 bool init();
-
-//Loads media
-bool loadMedia();
 
 //Frees media and shuts down SDL
 void close();
@@ -71,121 +26,10 @@ SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
 
 //Walking animation
+const int FRAME_RETARDANT = 4;
 const int WALKING_ANIMATION_FRAMES = 4;
-SDL_Rect gSpriteClips[ WALKING_ANIMATION_FRAMES ];
-LTexture gSpriteSheetTexture;
+SpriteSheet* gSpriteSheetTexture;
 
-
-LTexture::LTexture()
-{
-	//Initialize
-	mTexture = NULL;
-	mWidth = 0;
-	mHeight = 0;
-}
-
-LTexture::~LTexture()
-{
-	//Deallocate
-	free();
-}
-
-bool LTexture::loadFromFile( std::string path )
-{
-	//Get rid of preexisting texture
-	free();
-
-	//The final texture
-	SDL_Texture* newTexture = NULL;
-
-	//Load image at specified path
-	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
-	if( loadedSurface == NULL )
-	{
-		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
-	}
-	else
-	{
-		//Color key image
-		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
-
-		//Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
-		if( newTexture == NULL )
-		{
-			printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
-		}
-		else
-		{
-			//Get image dimensions
-			mWidth = loadedSurface->w;
-			mHeight = loadedSurface->h;
-		}
-
-		//Get rid of old loaded surface
-		SDL_FreeSurface( loadedSurface );
-	}
-
-	//Return success
-	mTexture = newTexture;
-	return mTexture != NULL;
-}
-
-void LTexture::free()
-{
-	//Free texture if it exists
-	if( mTexture != NULL )
-	{
-		SDL_DestroyTexture( mTexture );
-		mTexture = NULL;
-		mWidth = 0;
-		mHeight = 0;
-	}
-}
-
-void LTexture::setColor( Uint8 red, Uint8 green, Uint8 blue )
-{
-	//Modulate texture rgb
-	SDL_SetTextureColorMod( mTexture, red, green, blue );
-}
-
-void LTexture::setBlendMode( SDL_BlendMode blending )
-{
-	//Set blending function
-	SDL_SetTextureBlendMode( mTexture, blending );
-}
-
-void LTexture::setAlpha( Uint8 alpha )
-{
-	//Modulate texture alpha
-	SDL_SetTextureAlphaMod( mTexture, alpha );
-}
-
-void LTexture::render( int x, int y, SDL_Rect* clip )
-{
-	//Set rendering space and render to screen
-	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
-
-	//Set clip rendering dimensions
-	if( clip != NULL )
-	{
-		renderQuad.w = clip->w;
-		renderQuad.h = clip->h;
-	}
-
-	//Render to screen
-	SDL_RenderCopy( gRenderer, mTexture, clip, &renderQuad );
-}
-
-int LTexture::getWidth()
-{
-	return mWidth;
-}
-
-int LTexture::getHeight()
-{
-	return mHeight;
-}
 
 bool init()
 {
@@ -241,48 +85,60 @@ bool init()
 	return success;
 }
 
-bool loadMedia()
+bool createSpriteSheet()
 {
 	//Loading success flag
 	bool success = true;
 
+        SDL_Rect* sprite1 = new SDL_Rect();
+		sprite1->x =   0;
+		sprite1->y =   0;
+		sprite1->w =  64;
+		sprite1->h = 205;
+
+		SDL_Rect* sprite2 = new SDL_Rect();
+		sprite2->x =  64;
+		sprite2->y =   0;
+		sprite2->w =  64;
+		sprite2->h = 205;
+
+		SDL_Rect* sprite3 = new SDL_Rect();
+		sprite3->x = 128;
+		sprite3->y =   0;
+		sprite3->w =  64;
+		sprite3->h = 205;
+
+
+		SDL_Rect* sprite4 = new SDL_Rect();
+		sprite4->x = 196;
+		sprite4->y =   0;
+		sprite4->w =  64;
+		sprite4->h = 205;
+
+		std::vector<SDL_Rect*> clips;
+        clips.push_back(sprite1);
+        clips.push_back(sprite2);
+        clips.push_back(sprite3);
+        clips.push_back(sprite4);
+
+	gSpriteSheetTexture = new SpriteSheet(gRenderer, "foo.png", clips);
+
 	//Load sprite sheet texture
-	if( !gSpriteSheetTexture.loadFromFile( "src/game/sprites/foo.png" ) )
-	{
-		printf( "Failed to load walking animation texture!\n" );
-		success = false;
-	}
-	else
-	{
-		//Set sprite clips
-		gSpriteClips[ 0 ].x =   0;
-		gSpriteClips[ 0 ].y =   0;
-		gSpriteClips[ 0 ].w =  64;
-		gSpriteClips[ 0 ].h = 205;
-
-		gSpriteClips[ 1 ].x =  64;
-		gSpriteClips[ 1 ].y =   0;
-		gSpriteClips[ 1 ].w =  64;
-		gSpriteClips[ 1 ].h = 205;
-
-		gSpriteClips[ 2 ].x = 128;
-		gSpriteClips[ 2 ].y =   0;
-		gSpriteClips[ 2 ].w =  64;
-		gSpriteClips[ 2 ].h = 205;
-
-		gSpriteClips[ 3 ].x = 196;
-		gSpriteClips[ 3 ].y =   0;
-		gSpriteClips[ 3 ].w =  64;
-		gSpriteClips[ 3 ].h = 205;
-	}
+//	if( !gSpriteSheetTexture->loadFromFile( "foo.png" ) )
+//	{
+//		printf( "Failed to load walking animation texture!\n" );
+//		success = false;
+//	}
 
 	return success;
 }
 
 void close()
 {
+
 	//Free loaded images
-	gSpriteSheetTexture.free();
+	gSpriteSheetTexture->Free();
+	delete gSpriteSheetTexture;
 
 	//Destroy window
 	SDL_DestroyRenderer( gRenderer );
@@ -295,12 +151,15 @@ void close()
 	SDL_Quit();
 }
 
+void clearScreen() {
+    //Clear screen
+    SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+    SDL_RenderClear( gRenderer );
+}
+
 int main( int argc, char* args[] )
 {
-
-    std::cout << "Iniciando main";
-    Game* game = new Game();
-    game->Start();
+    std::cout << "hello!";
 	//Start up SDL and create window
 	if( !init() )
 	{
@@ -309,7 +168,7 @@ int main( int argc, char* args[] )
 	else
 	{
 		//Load media
-		if( !loadMedia() )
+		if( !createSpriteSheet() )
 		{
 			printf( "Failed to load media!\n" );
 		}
@@ -323,6 +182,11 @@ int main( int argc, char* args[] )
 
 			//Current animation frame
 			int frame = 0;
+			int x = 0;
+			int y = 0;
+
+			clearScreen();
+			SDL_RenderPresent( gRenderer );
 
 			//While application is running
 			while( !quit )
@@ -334,30 +198,65 @@ int main( int argc, char* args[] )
 					if( e.type == SDL_QUIT )
 					{
 						quit = true;
-					} else if(e.type == SDL_KEYDOWN) {
-                        std::cout << "aaaahaggag";
+					} else if ( e.type == SDL_KEYDOWN )
+					{
+					    ++frame;
+					    std::cout << "Frame: " << frame << "\n";
+                        if( (frame / FRAME_RETARDANT) >= WALKING_ANIMATION_FRAMES )
+                        {
+                            frame = 0;
+                        }
+
+						switch( e.key.keysym.sym )
+						{
+							case SDLK_UP:
+							--y;
+							break;
+
+							case SDLK_DOWN:
+							++y;
+							break;
+
+							case SDLK_LEFT:
+							--x;
+							break;
+
+							case SDLK_RIGHT:
+							++x;
+							break;
+
+						}
+
+                        clearScreen();
+
+                        SDL_Rect* currentClip = gSpriteSheetTexture->GetClips()[ frame / FRAME_RETARDANT];
+                        gSpriteSheetTexture->Render( x, y, currentClip );
+
+                        //Update screen
+                        SDL_RenderPresent( gRenderer );
 					}
+
 				}
 
-				//Clear screen
-				SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
-				SDL_RenderClear( gRenderer );
-
-				//Render current frame
-				SDL_Rect* currentClip = &gSpriteClips[ frame / 4 ];
-				gSpriteSheetTexture.render( ( SCREEN_WIDTH - currentClip->w ) / 2, ( SCREEN_HEIGHT - currentClip->h ) / 2, currentClip );
-
-				//Update screen
-				SDL_RenderPresent( gRenderer );
+                if (x > SCREEN_WIDTH) {
+                    x = 0;
+                }
+                if (y > SCREEN_HEIGHT) {
+                    y = 0;
+                }
+                if (x < 0) {
+                    x = SCREEN_WIDTH;
+                }
+                if (y < 0) {
+                    y = SCREEN_HEIGHT;
+                }
 
 				//Go to next frame
-				++frame;
+//				++frame;
+
 
 				//Cycle animation
-				if( frame / 4 >= WALKING_ANIMATION_FRAMES )
-				{
-					frame = 0;
-				}
+
 			}
 		}
 	}
@@ -365,7 +264,7 @@ int main( int argc, char* args[] )
 	//Free resources and close SDL
 	close();
 
-	delete game;
+	std::cout << "bye.";
 
 	return 0;
 }
