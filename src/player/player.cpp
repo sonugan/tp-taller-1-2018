@@ -25,7 +25,6 @@ void Player::MoveUp(int pixels) {
 
 void Player::MoveDown(int pixels) {
     location->UpdateY(location->GetY() + pixels);
-    std::cout << location->GetY() << "\n";
 }
 
 Location* Player::GetLocation() {

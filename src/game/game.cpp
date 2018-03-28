@@ -16,9 +16,10 @@ Game::~Game() {
 void Game::RenderViews() {
     SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
     SDL_RenderClear( renderer );
-    for (unsigned int i = 0; i < views.size(); i++) {
-        views[i]->Render();
-    }
+//    for (unsigned int i = 0; i < views.size(); i++) {
+//        views[i]->Render();
+//    }
+    this->camera->Render();
     SDL_RenderPresent( renderer );
 }
 
@@ -85,14 +86,15 @@ void Game::CreateModel() {
 
 void Game::CreateViews() {
     std::cout << "Game::CreateViews" << "\n";
-    PitchView* pitch_view = new PitchView(this->pitch, this->renderer);
+    //PitchView* pitch_view = new PitchView(this->pitch, this->renderer);
     PlayerView* player_view = new PlayerView(this->player, this->renderer);
 
-    Camera* camera = new Camera(PITCH_WIDTH/2 - SCREEN_WIDTH/2, PITCH_HEIGHT/2 - SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEIGHT, player_view, this->renderer);
+    this->camera = new Camera(PITCH_WIDTH/2 - SCREEN_WIDTH/2, PITCH_HEIGHT/2 - SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEIGHT, player_view, this->renderer);
 
-    this->views.push_back(camera);
-    //this->views.push_back(pitch_view);
-    this->views.push_back(player_view);
+    //this->views.push_back(camera);
+    //player_view->camera = camera;
+    //this->views.push_back(player_view);
+    this->camera->Add(player_view);
 }
 
 void Game::DestroyModel() {
@@ -103,9 +105,11 @@ void Game::DestroyModel() {
 
 void Game::DestroyViews() {
     std::cout << "Game::DestroyViews()" << "\n";
+    std::vector<AbstractView*> views = this->camera->GetViews();
     for (unsigned int i = 0; i < views.size(); i++) {
         delete (views[i]);
     }
+    delete this->camera;
 }
 
 void Game::InitSDL()

@@ -50,6 +50,45 @@ PlayerView::~PlayerView() {
 }
 
 void PlayerView::Render() {
+//    ++frame;
+//    if ((frame * FRAMES_PER_EVENT) >= WALKING_ANIMATION_FRAMES) {
+//        frame = 0;
+//    }
+//    int current_frame_index = frame * FRAMES_PER_EVENT;
+//    SDL_Rect* currentClip = this->sprite_sheet->GetClips()[current_frame_index];
+//
+//    int x = player->GetLocation()->GetX() - this->camera->area->x;
+//    int y = player->GetLocation()->GetY() - this->camera->area->y;
+//
+//    if(x < 0)
+//    {
+//        x = 0;
+//    }
+//
+//    if(y < 0)
+//    {
+//        y = 0;
+//    }
+//
+//    if(x > 800 - this->width)
+//    {
+//        x = 800 - this->width;
+//    }
+//
+//    if(y > 600 - this->height)
+//    {
+//        y = 600 - this->height;
+//    }
+//    std::cout << y << "\n";
+//
+//    sprite_sheet->Render( x, y, currentClip );
+    //sprite_sheet->Render( player->GetLocation()->GetX(), player->GetLocation()->GetY(), currentClip );
+    //sprite_sheet->Render( 0, 0, currentClip );
+}
+
+void PlayerView::Render(int xCamera, int yCamera, int maxX, int maxY)
+{
+    std::cout << maxX << "\n";
     ++frame;
     if ((frame * FRAMES_PER_EVENT) >= WALKING_ANIMATION_FRAMES) {
         frame = 0;
@@ -57,34 +96,30 @@ void PlayerView::Render() {
     int current_frame_index = frame * FRAMES_PER_EVENT;
     SDL_Rect* currentClip = this->sprite_sheet->GetClips()[current_frame_index];
 
-    int x = player->GetLocation()->GetX() - ((player->GetLocation()->GetX() + 64/2) - 400);
-    int y = player->GetLocation()->GetY() - ((player->GetLocation()->GetY() + 205/2)- 300);
+    int x = player->GetLocation()->GetX() - xCamera;
+    int y = player->GetLocation()->GetY() - yCamera;
 
-    std::cout << player->GetLocation()->GetX() << "\n";
-    std::cout << x << "\n";
-
-    //Keep the camera in bounds
-    if( x < 0 )
+    if(x < 0)
     {
         x = 0;
     }
 
-    if( y < 0 )
+    if(y < 0)
     {
         y = 0;
     }
-    if( x > 1920 - 800 )
+
+    if(x > maxX - this->width)
     {
-        x = 1920 - 800;
+        x = maxX - this->width;
     }
-    if( y > 1080 - 600 )
+
+    if(y > maxY - this->height)
     {
-        y = 1080 - 600;
+        y = maxY - this->height;
     }
 
     sprite_sheet->Render( x, y, currentClip );
-    //sprite_sheet->Render( player->GetLocation()->GetX(), player->GetLocation()->GetY(), currentClip );
-    //sprite_sheet->Render( 0, 0, currentClip );
 }
 
 Location* PlayerView::GetLocation()

@@ -33,11 +33,25 @@ void Camera::Render()
 {
     this->Move();
     sprite_sheet->Render(0, 0, this->area);
+
+    for (unsigned int i = 0; i < this->views.size(); i++) {
+        this->views[i]->Render(this->area->x, this->area->y, this->area->w, this->area->h);
+    }
 }
 
 void Camera::SetLocatable(IShowable* showable)
 {
     this->showable = showable;
+}
+
+void Camera::Add(AbstractView* view)
+{
+    this->views.push_back(view);
+}
+
+std::vector<AbstractView*> Camera::GetViews()
+{
+    return this->views;
 }
 
 void Camera::Move()

@@ -35,7 +35,6 @@ class Game
         Pitch* pitch;
         Player* player;
         Camera* camera;
-        std::vector<AbstractView*> views;
 
         void CreateModel();
         void CreateViews();

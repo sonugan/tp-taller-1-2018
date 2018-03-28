@@ -4,6 +4,7 @@
 #include "player.h"
 #include "../common/abstract-view.h"
 #include "../common/ishowable.h"
+#include "../camera/camera.h"
 
 class PlayerView : public AbstractView, public IShowable
 {
@@ -11,8 +12,8 @@ class PlayerView : public AbstractView, public IShowable
         PlayerView(Player* player, SDL_Renderer* renderer);
         virtual ~PlayerView();
         void Render();
+        void Render(int xCamera, int yCamera, int maxX, int maxY);
         Location* GetLocation();
-
     protected:
 
     private:
