@@ -5,6 +5,8 @@
 #include "../common/location.h"
 #include "../common/ilocatable.h"
 
+
+enum DIRECTION { NORTH, SOUTH, EAST, WEST, NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST };
 class Player : public ILocatable
 {
     public:
@@ -15,10 +17,11 @@ class Player : public ILocatable
         void MoveUp(int pixels);
         void MoveDown(int pixels);
         Location* GetLocation();
-
+        DIRECTION GetDirection();
     protected:
 
     private:
+        DIRECTION direction;
 };
 
 #endif // PLAYER_H

@@ -10,29 +10,28 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
     this->renderer = renderer;
 
     SDL_Rect* sprite1 = new SDL_Rect();
-    sprite1->x =   0;
-    sprite1->y =   0;
-    sprite1->w =  64;
-    sprite1->h = 205;
+    sprite1->x = 1;
+    sprite1->y = 128;
+    sprite1->w = 62;
+    sprite1->h = 62;
 
     SDL_Rect* sprite2 = new SDL_Rect();
-    sprite2->x =  64;
-    sprite2->y =   0;
-    sprite2->w =  64;
-    sprite2->h = 205;
+    sprite2->x = 64;
+    sprite2->y = 128;
+    sprite2->w = 62;
+    sprite2->h = 62;
 
     SDL_Rect* sprite3 = new SDL_Rect();
     sprite3->x = 128;
-    sprite3->y =   0;
-    sprite3->w =  64;
-    sprite3->h = 205;
-
+    sprite3->y = 128;
+    sprite3->w = 62;
+    sprite3->h = 62;
 
     SDL_Rect* sprite4 = new SDL_Rect();
-    sprite4->x = 196;
-    sprite4->y =   0;
-    sprite4->w =  64;
-    sprite4->h = 205;
+    sprite4->x = 192;
+    sprite4->y = 128;
+    sprite4->w = 62;
+    sprite4->h = 62;
 
     std::vector<SDL_Rect*> clips;
     clips.push_back(sprite1);
@@ -40,7 +39,7 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
     clips.push_back(sprite3);
     clips.push_back(sprite4);
 
-	this->sprite_sheet = new SpriteSheet(renderer, "foo.png", clips);
+	this->sprite_sheet = new SpriteSheet(renderer, "player.png", clips);
 
 }
 
@@ -119,7 +118,22 @@ void PlayerView::Render(int xCamera, int yCamera, int maxX, int maxY)
         y = maxY - this->height;
     }
 
-    sprite_sheet->Render( x, y, currentClip );
+    DIRECTION direction = this->player->GetDirection();
+    switch(direction)
+    {
+        case NORTH:
+            sprite_sheet->Render( x, y, currentClip );
+        break;
+        case WEST:
+            sprite_sheet->Render( x, y, currentClip, -60);
+        break;
+        case SOUTH:
+            sprite_sheet->Render( x, y, currentClip, 180);
+        break;
+        case EAST:
+            sprite_sheet->Render( x, y, currentClip, 60);
+        break;
+    }
 }
 
 Location* PlayerView::GetLocation()
