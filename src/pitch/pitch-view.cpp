@@ -27,3 +27,11 @@ void PitchView::Render() {
     SDL_Rect* currentClip = this->sprite_sheet->GetClips()[0];
     sprite_sheet->Render( 0, 0, currentClip );
 }
+
+void PitchView::Render(int xCamera, int yCamera, int maxX, int maxY)
+{
+    SDL_Rect* currentClip = this->sprite_sheet->GetClips()[0];
+    currentClip->x = xCamera;
+    currentClip->y = yCamera;
+    sprite_sheet->Render( 0, 0, currentClip );
+}

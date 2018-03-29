@@ -16,9 +16,10 @@ Game::~Game() {
 void Game::RenderViews() {
     SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
     SDL_RenderClear( renderer );
-    for (unsigned int i = 0; i < views.size(); i++) {
-        views[i]->Render();
-    }
+//    for (unsigned int i = 0; i < views.size(); i++) {
+//        views[i]->Render();
+//    }
+    this->camera->Render();
     SDL_RenderPresent( renderer );
 }
 
@@ -51,15 +52,15 @@ void Game::Start()
             if(e.type == SDL_KEYDOWN || e.type == SDL_KEYUP){
 
                 if (keyboard_state_array[SDL_SCANCODE_UP] && !(keyboard_state_array[SDL_SCANCODE_DOWN])) {
-                    player->MoveUp(1);
+                    player->MoveUp(10);
                 } else if (!keyboard_state_array[SDL_SCANCODE_UP] && keyboard_state_array[SDL_SCANCODE_DOWN]) {
-                    player->MoveDown(1);
+                    player->MoveDown(10);
                 }
 
                 if (keyboard_state_array[SDL_SCANCODE_RIGHT] && !keyboard_state_array[SDL_SCANCODE_LEFT]) {
-                    player->MoveRight(1);
+                    player->MoveRight(10);
                 } else if (!keyboard_state_array[SDL_SCANCODE_RIGHT] && keyboard_state_array[SDL_SCANCODE_LEFT]) {
-                    player->MoveLeft(1);
+                    player->MoveLeft(10);
                 }
 
                 RenderViews();
@@ -87,8 +88,13 @@ void Game::CreateViews() {
     std::cout << "Game::CreateViews" << "\n";
     PitchView* pitch_view = new PitchView(this->pitch, this->renderer);
     PlayerView* player_view = new PlayerView(this->player, this->renderer);
-    this->views.push_back(pitch_view);
-    this->views.push_back(player_view);
+
+    this->camera = new Camera(PITCH_WIDTH, PITCH_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, player_view, this->renderer);
+    //Location position = Location(PITCH_WIDTH/2 - SCREEN_WIDTH/2, PITCH_HEIGHT/2 - SCREEN_HEIGHT/2, 0);
+    //this->camera->SetStartPosition(&position);
+
+    this->camera->Add(pitch_view);
+    this->camera->Add(player_view);
 }
 
 void Game::DestroyModel() {
@@ -99,9 +105,11 @@ void Game::DestroyModel() {
 
 void Game::DestroyViews() {
     std::cout << "Game::DestroyViews()" << "\n";
+    std::vector<AbstractView*> views = this->camera->GetViews();
     for (unsigned int i = 0; i < views.size(); i++) {
         delete (views[i]);
     }
+    delete this->camera;
 }
 
 void Game::InitSDL()

@@ -30,3 +30,13 @@ Properties -> click en "Project's build options"
 
 
 LISTO!
+
+----------------------------------------------------------
+Configurar C++ 11 en codeblocks (necesario para yaml-cpp)
+
+1) Ir a Toolbar -> Settings -> Compiler
+2) El valor del campo "Selected compiler" debe ser "GNU GCC Compiler"
+3) Luego, ir al tab "Compiler settings" y dentro de él al tab "Compiler Flags"
+4) Tildar la opción "Have g++ follow the C++11 ISO C++  language standard [-std=c++11]"
+
+

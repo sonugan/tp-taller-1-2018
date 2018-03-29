@@ -94,7 +94,7 @@ void SpriteSheet::SetAlpha( Uint8 alpha )
 	SDL_SetTextureAlphaMod( texture, alpha );
 }
 
-void SpriteSheet::Render( int x, int y, SDL_Rect* clip )
+void SpriteSheet::Render( int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
 	//Set rendering space and render to screen
 	SDL_Rect renderQuad = { x, y, width, height };
@@ -107,7 +107,7 @@ void SpriteSheet::Render( int x, int y, SDL_Rect* clip )
 	}
 
 	//Render to screen
-	SDL_RenderCopy( renderer, texture, clip, &renderQuad );
+	SDL_RenderCopyEx( renderer, texture, clip, &renderQuad, angle, center, flip);
 }
 
 int SpriteSheet::GetWidth()

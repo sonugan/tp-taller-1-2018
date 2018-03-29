@@ -13,7 +13,7 @@
 #include "../pitch/pitch-view.h"
 #include "../player/player.h"
 #include "../player/player-view.h"
-
+#include "../camera/camera.h"
 
 class Game
 {
@@ -24,6 +24,8 @@ class Game
         void End();
         static const int SCREEN_WIDTH = 800;
         static const int SCREEN_HEIGHT = 600;
+        static const unsigned int PITCH_WIDTH = 1920;
+        static const unsigned int PITCH_HEIGHT = 1080;
     protected:
 
     private:
@@ -32,7 +34,7 @@ class Game
         SDL_Renderer* renderer;
         Pitch* pitch;
         Player* player;
-        std::vector<AbstractView*> views;
+        Camera* camera;
 
         void CreateModel();
         void CreateViews();

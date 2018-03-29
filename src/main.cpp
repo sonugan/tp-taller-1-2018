@@ -1,5 +1,5 @@
 #include "game/game.h"
-#include "configuration-parser.h"
+#include "configuration/configuration-parser.h"
 
 
 int main( int argc, char* args[] ) {

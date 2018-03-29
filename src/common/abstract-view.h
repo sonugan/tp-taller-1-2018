@@ -11,6 +11,7 @@ class AbstractView
 {
     public:
         virtual void Render() = 0;
+        virtual void Render(int xCamera, int yCamera, int maxX, int maxY) = 0;
         virtual ~AbstractView () {};
 
     protected:
