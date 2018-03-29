@@ -1,0 +1,42 @@
+ymal-cpp
+
+1) [Pre-requisito] Instalar CMake
+
+sudo apt-get install cmake
+
+2) Clonar el repositorio de yaml-cpp (o bajar el codigo)
+
+git clone git@github.com:jbeder/yaml-cpp.git
+
+3) Buildear el proyecto
+
+Parado en el directorio de los fuentes de yaml-cpp:
+
+mkdir build
+cd build
+cmake ..
+
+4) Instalar los headers y lib compilada
+
+make
+sudo make install
+
+5) Para poder usar la lib, hay que compilar con el flag --std=c++11
+
+En Code::Blocks:
+Properties -> click en "Project's build options"
+    -> tildar flag en pestaña Compiler Flags
+    -> agregar -lyaml-cpp en pestaña Linker
+
+
+LISTO!
+
+----------------------------------------------------------
+Configurar C++ 11 en codeblocks (necesario para yaml-cpp)
+
+1) Ir a Toolbar -> Settings -> Compiler
+2) El valor del campo "Selected compiler" debe ser "GNU GCC Compiler"
+3) Luego, ir al tab "Compiler settings" y dentro de él al tab "Compiler Flags"
+4) Tildar la opción "Have g++ follow the C++11 ISO C++  language standard [-std=c++11]"
+
+

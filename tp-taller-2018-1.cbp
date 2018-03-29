@@ -51,10 +51,6 @@
 		<Unit filename="src/common/sprite-sheet.h" />
 		<Unit filename="src/game/game.cpp" />
 		<Unit filename="src/game/game.h" />
-		<Unit filename="src/game/observable.cpp" />
-		<Unit filename="src/game/observable.h" />
-		<Unit filename="src/game/observer.cpp" />
-		<Unit filename="src/game/observer.h" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/pitch/pitch-view.cpp" />
 		<Unit filename="src/pitch/pitch-view.h" />

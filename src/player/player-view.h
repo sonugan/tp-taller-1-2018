@@ -19,7 +19,7 @@ class PlayerView : public AbstractView, public IShowable
     private:
         Player* player;
         int frame;
-        static const float FRAMES_PER_EVENT = 0.3;
+        static constexpr float FRAMES_PER_EVENT = 0.3;
         static const int WALKING_ANIMATION_FRAMES = 4;
 };
 
