@@ -8,13 +8,23 @@
 
 1521920042 /home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/game/Game.h
 
-1521922923 source:/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/game/game.cpp
+1522116432 source:/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/game/game.cpp
 	"game.h"
 	<iostream>
 
-1521922649 /home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/game/game.h
-	"pitch.h"
-	"player.h"
+1522200276 /home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/game/game.h
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<stdio.h>
+	<string>
+	<iostream>
+	<exception>
+	<vector>
+	"../common/sprite-sheet.h"
+	"../pitch/pitch.h"
+	"../pitch/pitch-view.h"
+	"../player/player.h"
+	"../player/player-view.h"
 
 1521922028 /home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/game/pitch.h
 
@@ -26,13 +36,9 @@
 1521922238 source:/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/game/player.cpp
 	"player.h"
 
-1521924348 source:/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/main.cpp
-	<SDL2/SDL.h>
-	<SDL2/SDL_image.h>
-	<stdio.h>
-	<string>
-	<iostream>
-	"game.h"
+1522284067 source:/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/main.cpp
+	"game/game.h"
+	"configuration-parser.h"
 
 1521987880 source:/home/paracosmico/Escritorio/75.42/tp-taller-2018-1/src/game/game.cpp
 	"game.h"
@@ -102,4 +108,60 @@
 1521986484 /home/paracosmico/Escritorio/75.42/tp-taller-2018-1/src/player/player-view.h
 	"player.h"
 	"../common/abstract-view.h"
+
+1522200276 /home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/common/sprite-sheet.h
+	<iostream>
+	<string>
+	<vector>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+
+1522200276 /home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/pitch/pitch.h
+
+1522200276 /home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/pitch/pitch-view.h
+	"pitch.h"
+	"../common/abstract-view.h"
+
+1522200276 /home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/common/abstract-view.h
+	<vector>
+	<iostream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	"sprite-sheet.h"
+
+1522200276 /home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/player/player.h
+	<iostream>
+	"../common/location.h"
+
+1522200276 /home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/common/location.h
+
+1522237975 /home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/player/player-view.h
+	"player.h"
+	"../common/abstract-view.h"
+
+1522200276 source:/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/common/location.cpp
+	"location.h"
+
+1522200276 source:/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/common/sprite-sheet.cpp
+	"sprite-sheet.h"
+
+1522200276 source:/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/pitch/pitch-view.cpp
+	"pitch-view.h"
+
+1522200276 source:/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/pitch/pitch.cpp
+	"pitch.h"
+
+1522200276 source:/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/player/player-view.cpp
+	"player-view.h"
+
+1522200276 source:/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/player/player.cpp
+	"player.h"
+
+1522285048 source:/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/configuration/configuration-parser.cpp
+	"configuration-parser.h"
+	<iostream>
+
+1522284316 /home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/tp-taller-2018-1/src/configuration/configuration-parser.h
+	"yaml-cpp/yaml.h"
+	<string>
 

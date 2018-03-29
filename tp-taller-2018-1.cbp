@@ -17,6 +17,7 @@
 					<Add directory="src/pitch" />
 					<Add directory="src/common" />
 					<Add directory="src/player" />
+					<Add directory="src/configuration" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -30,6 +31,7 @@
 					<Add directory="src/pitch" />
 					<Add directory="src/common" />
 					<Add directory="src/player" />
+					<Add directory="src/configuration" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -38,15 +40,19 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-std=c++11" />
 		</Compiler>
 		<Linker>
-			<Add option="-lSDL2 -lSDL2_image" />
+			<Add option="-lSDL2 -lSDL2_image -lyaml-cpp" />
 		</Linker>
 		<Unit filename="src/common/abstract-view.h" />
 		<Unit filename="src/common/location.cpp" />
 		<Unit filename="src/common/location.h" />
 		<Unit filename="src/common/sprite-sheet.cpp" />
 		<Unit filename="src/common/sprite-sheet.h" />
+		<Unit filename="src/configuration/configuration-parser.cpp" />
+		<Unit filename="src/configuration/configuration-parser.h" />
+		<Unit filename="src/configuration/default-config.yml" />
 		<Unit filename="src/game/game.cpp" />
 		<Unit filename="src/game/game.h" />
 		<Unit filename="src/main.cpp" />

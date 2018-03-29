@@ -1,0 +1,5 @@
+logger:
+  level: debug
+team:
+  formation: 3-3
+  shirt: main
