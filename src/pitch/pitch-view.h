@@ -9,7 +9,7 @@ class PitchView : public AbstractView {
         PitchView(Pitch* pitch, SDL_Renderer* renderer);
         virtual ~PitchView();
         void Render();
-
+        void Render(int xCamera, int yCamera, int maxX, int maxY);
     protected:
 
     private:

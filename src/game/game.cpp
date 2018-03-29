@@ -86,14 +86,14 @@ void Game::CreateModel() {
 
 void Game::CreateViews() {
     std::cout << "Game::CreateViews" << "\n";
-    //PitchView* pitch_view = new PitchView(this->pitch, this->renderer);
+    PitchView* pitch_view = new PitchView(this->pitch, this->renderer);
     PlayerView* player_view = new PlayerView(this->player, this->renderer);
 
-    this->camera = new Camera(PITCH_WIDTH/2 - SCREEN_WIDTH/2, PITCH_HEIGHT/2 - SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEIGHT, player_view, this->renderer);
+    this->camera = new Camera(PITCH_WIDTH, PITCH_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, player_view, this->renderer);
+    //Location position = Location(PITCH_WIDTH/2 - SCREEN_WIDTH/2, PITCH_HEIGHT/2 - SCREEN_HEIGHT/2, 0);
+    //this->camera->SetStartPosition(&position);
 
-    //this->views.push_back(camera);
-    //player_view->camera = camera;
-    //this->views.push_back(player_view);
+    this->camera->Add(pitch_view);
     this->camera->Add(player_view);
 }
 
