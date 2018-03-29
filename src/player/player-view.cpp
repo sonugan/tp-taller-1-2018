@@ -2,8 +2,8 @@
 
 PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
 {
-    this->width = 64;
-    this->height = 205;
+    this->width = 62;
+    this->height = 62;
 
     this->frame = 0;
     this->player = player;
@@ -12,26 +12,26 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
     SDL_Rect* sprite1 = new SDL_Rect();
     sprite1->x = 1;
     sprite1->y = 128;
-    sprite1->w = 62;
-    sprite1->h = 62;
+    sprite1->w = this->width;
+    sprite1->h = this->height;
 
     SDL_Rect* sprite2 = new SDL_Rect();
     sprite2->x = 64;
     sprite2->y = 128;
-    sprite2->w = 62;
-    sprite2->h = 62;
+    sprite2->w = this->width;
+    sprite2->h = this->height;
 
     SDL_Rect* sprite3 = new SDL_Rect();
     sprite3->x = 128;
     sprite3->y = 128;
-    sprite3->w = 62;
-    sprite3->h = 62;
+    sprite3->w = this->width;
+    sprite3->h = this->height;
 
     SDL_Rect* sprite4 = new SDL_Rect();
     sprite4->x = 192;
     sprite4->y = 128;
-    sprite4->w = 62;
-    sprite4->h = 62;
+    sprite4->w = this->width;
+    sprite4->h = this->height;
 
     std::vector<SDL_Rect*> clips;
     clips.push_back(sprite1);
@@ -87,7 +87,6 @@ void PlayerView::Render() {
 
 void PlayerView::Render(int xCamera, int yCamera, int maxX, int maxY)
 {
-    std::cout << maxX << "\n";
     ++frame;
     if ((frame * FRAMES_PER_EVENT) >= WALKING_ANIMATION_FRAMES) {
         frame = 0;
@@ -132,6 +131,9 @@ void PlayerView::Render(int xCamera, int yCamera, int maxX, int maxY)
         break;
         case EAST:
             sprite_sheet->Render( x, y, currentClip, 60);
+        break;
+        default:
+            sprite_sheet->Render( x, y, currentClip );
         break;
     }
 }
