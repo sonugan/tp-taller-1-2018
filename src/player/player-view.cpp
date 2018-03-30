@@ -49,40 +49,10 @@ PlayerView::~PlayerView() {
 }
 
 void PlayerView::Render() {
-//    ++frame;
-//    if ((frame * FRAMES_PER_EVENT) >= WALKING_ANIMATION_FRAMES) {
-//        frame = 0;
-//    }
-//    int current_frame_index = frame * FRAMES_PER_EVENT;
-//    SDL_Rect* currentClip = this->sprite_sheet->GetClips()[current_frame_index];
-//
-//    int x = player->GetLocation()->GetX() - this->camera->area->x;
-//    int y = player->GetLocation()->GetY() - this->camera->area->y;
-//
-//    if(x < 0)
-//    {
-//        x = 0;
-//    }
-//
-//    if(y < 0)
-//    {
-//        y = 0;
-//    }
-//
-//    if(x > 800 - this->width)
-//    {
-//        x = 800 - this->width;
-//    }
-//
-//    if(y > 600 - this->height)
-//    {
-//        y = 600 - this->height;
-//    }
-//    std::cout << y << "\n";
-//
-//    sprite_sheet->Render( x, y, currentClip );
-    //sprite_sheet->Render( player->GetLocation()->GetX(), player->GetLocation()->GetY(), currentClip );
-    //sprite_sheet->Render( 0, 0, currentClip );
+    int current_frame_index = frame * FRAMES_PER_EVENT;
+    SDL_Rect* currentClip = this->sprite_sheet->GetClips()[current_frame_index];
+
+    sprite_sheet->Render( 0, 0, currentClip );
 }
 
 void PlayerView::Render(int xCamera, int yCamera, int maxX, int maxY)
@@ -121,24 +91,38 @@ void PlayerView::Render(int xCamera, int yCamera, int maxX, int maxY)
     switch(direction)
     {
         case NORTH:
-            sprite_sheet->Render( x, y, currentClip );
+            angle = 0;
         break;
         case WEST:
-            sprite_sheet->Render( x, y, currentClip, -60);
+            angle = -90;
         break;
         case SOUTH:
-            sprite_sheet->Render( x, y, currentClip, 180);
+            angle = 180;
         break;
         case EAST:
-            sprite_sheet->Render( x, y, currentClip, 60);
+            angle = 90;
+        break;
+        case NORTHEAST:
+            angle = 45;
+        break;
+        case NORTHWEST:
+            angle = -45;
+        break;
+        case SOUTHEAST:
+            angle = 135;
+        break;
+        case SOUTHWEST:
+            angle = -135;
         break;
         default:
-            sprite_sheet->Render( x, y, currentClip );
+            angle = angle;
         break;
     }
+    sprite_sheet->Render( x, y, currentClip, this->angle);
 }
 
 Location* PlayerView::GetLocation()
 {
     return this->player->GetLocation();
 }
+

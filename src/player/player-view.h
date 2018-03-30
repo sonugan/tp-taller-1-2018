@@ -21,6 +21,8 @@ class PlayerView : public AbstractView, public IShowable
         int frame;
         static constexpr float FRAMES_PER_EVENT = 0.3;
         static const int WALKING_ANIMATION_FRAMES = 4;
+        double angle = 0;
+
 };
 
 #endif // PLAYERVIEW_H

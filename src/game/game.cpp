@@ -49,23 +49,14 @@ void Game::Start()
                 quit = true;
             }
 
-            if(e.type == SDL_KEYDOWN || e.type == SDL_KEYUP){
-
-                if (keyboard_state_array[SDL_SCANCODE_UP] && !(keyboard_state_array[SDL_SCANCODE_DOWN])) {
-                    player->MoveUp(10);
-                } else if (!keyboard_state_array[SDL_SCANCODE_UP] && keyboard_state_array[SDL_SCANCODE_DOWN]) {
-                    player->MoveDown(10);
-                }
-
-                if (keyboard_state_array[SDL_SCANCODE_RIGHT] && !keyboard_state_array[SDL_SCANCODE_LEFT]) {
-                    player->MoveRight(10);
-                } else if (!keyboard_state_array[SDL_SCANCODE_RIGHT] && keyboard_state_array[SDL_SCANCODE_LEFT]) {
-                    player->MoveLeft(10);
-                }
-
-                RenderViews();
-            }
+            //this->MovePlayer(&e, keyboard_state_array);
         }
+
+        //Si queda dentro del loop de eventos, se genera un delay
+        this->MovePlayer(keyboard_state_array);
+
+        //Manejo de frames por segundo: http://lazyfoo.net/SDL_tutorials/lesson16/index.php
+        SDL_Delay( ( 1000 / FRAMES_PER_SECOND ));
     }
 
 }
@@ -166,4 +157,49 @@ void Game::CloseSDL()
 	SDL_Quit();
 
 	std::cout << "bye." << "\n";
+}
+
+void Game::MovePlayer(const Uint8 *keyboard_state_array)
+{
+    if((keyboard_state_array[SDL_SCANCODE_UP] && (keyboard_state_array[SDL_SCANCODE_RIGHT])))
+    {
+        player->MoveUpToRight();
+    }
+    else
+    if((keyboard_state_array[SDL_SCANCODE_UP] && (keyboard_state_array[SDL_SCANCODE_LEFT])))
+    {
+        player->MoveUpToLeft();
+    }
+    else
+    if((keyboard_state_array[SDL_SCANCODE_DOWN] && (keyboard_state_array[SDL_SCANCODE_RIGHT])))
+    {
+        player->MoveDownToRight();
+    }
+    else
+    if((keyboard_state_array[SDL_SCANCODE_DOWN] && (keyboard_state_array[SDL_SCANCODE_LEFT])))
+    {
+        player->MoveDownToLeft();
+    }
+    else
+    if(keyboard_state_array[SDL_SCANCODE_UP])
+    {
+        player->MoveUp();
+    }
+    else
+    if(keyboard_state_array[SDL_SCANCODE_LEFT])
+    {
+        player->MoveLeft();
+    }
+    else
+    if(keyboard_state_array[SDL_SCANCODE_DOWN])
+    {
+        player->MoveDown();
+    }
+    else
+    if(keyboard_state_array[SDL_SCANCODE_RIGHT])
+    {
+        player->MoveRight();
+    }
+
+    RenderViews();
 }
