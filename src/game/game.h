@@ -45,6 +45,10 @@ class Game
         void RenderViews();
         void MovePlayer(const Uint8 *keyboard_state_array);
         Uint8 GetSelectedKey(const Uint8* keyboard_state_array);
+        bool UpKeySelected(const Uint8 *keyboard_state_array);
+        bool RightKeySelected(const Uint8 *keyboard_state_array);
+        bool LeftKeySelected(const Uint8 *keyboard_state_array);
+        bool DownKeySelected(const Uint8 *keyboard_state_array);
         static const int FRAMES_PER_SECOND = 20;
 };
 

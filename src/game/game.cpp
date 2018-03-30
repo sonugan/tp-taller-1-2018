@@ -161,45 +161,65 @@ void Game::CloseSDL()
 
 void Game::MovePlayer(const Uint8 *keyboard_state_array)
 {
-    if((keyboard_state_array[SDL_SCANCODE_UP] && (keyboard_state_array[SDL_SCANCODE_RIGHT])))
+    if(UpKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array))
     {
         player->MoveUpToRight();
     }
     else
-    if((keyboard_state_array[SDL_SCANCODE_UP] && (keyboard_state_array[SDL_SCANCODE_LEFT])))
+    if(UpKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array))
     {
         player->MoveUpToLeft();
     }
     else
-    if((keyboard_state_array[SDL_SCANCODE_DOWN] && (keyboard_state_array[SDL_SCANCODE_RIGHT])))
+    if(DownKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array))
     {
         player->MoveDownToRight();
     }
     else
-    if((keyboard_state_array[SDL_SCANCODE_DOWN] && (keyboard_state_array[SDL_SCANCODE_LEFT])))
+    if(DownKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array))
     {
         player->MoveDownToLeft();
     }
     else
-    if(keyboard_state_array[SDL_SCANCODE_UP])
+    if(UpKeySelected(keyboard_state_array))
     {
         player->MoveUp();
     }
     else
-    if(keyboard_state_array[SDL_SCANCODE_LEFT])
+    if(RightKeySelected(keyboard_state_array))
+    {
+        player->MoveRight();
+    }
+    else
+    if(LeftKeySelected(keyboard_state_array))
     {
         player->MoveLeft();
     }
     else
-    if(keyboard_state_array[SDL_SCANCODE_DOWN])
+    if(DownKeySelected(keyboard_state_array))
     {
         player->MoveDown();
     }
-    else
-    if(keyboard_state_array[SDL_SCANCODE_RIGHT])
-    {
-        player->MoveRight();
-    }
 
     RenderViews();
+}
+
+bool Game::UpKeySelected(const Uint8 *keyboard_state_array)
+{
+    return keyboard_state_array[SDL_SCANCODE_UP] || keyboard_state_array[SDL_SCANCODE_W];
+}
+
+bool Game::RightKeySelected(const Uint8 *keyboard_state_array)
+{
+    return keyboard_state_array[SDL_SCANCODE_RIGHT] || keyboard_state_array[SDL_SCANCODE_D];
+}
+
+bool Game::LeftKeySelected(const Uint8 *keyboard_state_array)
+{
+    return keyboard_state_array[SDL_SCANCODE_LEFT] || keyboard_state_array[SDL_SCANCODE_A];
+}
+
+bool Game::DownKeySelected(const Uint8 *keyboard_state_array)
+{
+    return keyboard_state_array[SDL_SCANCODE_DOWN] || keyboard_state_array[SDL_SCANCODE_S];
 }
