@@ -15,10 +15,10 @@ SpriteSheet::SpriteSheet(SDL_Renderer* renderer, std::string path, std::vector<S
 SpriteSheet::~SpriteSheet()
 {
     std::cout << "Destructor de SpriteSheet" << "\n";
-    for (unsigned int i = 0; i < clips.size(); i++) {
-        delete (clips[i]);
-    }
-    clips.clear();
+//    for (unsigned int i = 0; i < clips.size(); i++) {
+//        delete (clips[i]);
+//    }
+//    clips.clear();
 	//Deallocate
 	Free();
 }

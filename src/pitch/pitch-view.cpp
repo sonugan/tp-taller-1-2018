@@ -14,6 +14,9 @@ PitchView::PitchView(Pitch* pitch, SDL_Renderer* renderer)
     std::vector<SDL_Rect*> clips;
     clips.push_back(sprite1);
 
+    animations.push_back(new Animation("pitch", clips));
+    currentAnimationIndex = 0;
+
 	this->sprite_sheet = new SpriteSheet(renderer, "pitch.jpg", clips);
 }
 
@@ -21,10 +24,14 @@ PitchView::~PitchView()
 {
     std::cout << "Destructor de PitchView" << "\n";
     delete sprite_sheet;
+
+    for (unsigned int i = 0; i < animations.size(); i++) {
+        delete (animations[i]);
+    }
 }
 
 void PitchView::Render() {
-    SDL_Rect* currentClip = this->sprite_sheet->GetClips()[0];
+    SDL_Rect* currentClip = this->animations[currentAnimationIndex]->NextClip();
     sprite_sheet->Render( 0, 0, currentClip );
 }
 

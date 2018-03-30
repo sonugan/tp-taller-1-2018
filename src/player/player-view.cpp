@@ -9,43 +9,89 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
     this->player = player;
     this->renderer = renderer;
 
-    SDL_Rect* sprite1 = new SDL_Rect();
-    sprite1->x = 1;
-    sprite1->y = 128;
-    sprite1->w = this->width;
-    sprite1->h = this->height;
+    std::vector<SDL_Rect*> runClips;
 
-    SDL_Rect* sprite2 = new SDL_Rect();
-    sprite2->x = 64;
-    sprite2->y = 128;
-    sprite2->w = this->width;
-    sprite2->h = this->height;
+    //Run sprites
+    SDL_Rect* runSprite1 = new SDL_Rect();
+    runSprite1->x = 1;
+    runSprite1->y = 128;
+    runSprite1->w = this->width;
+    runSprite1->h = this->height;
+    runClips.push_back(runSprite1);
 
-    SDL_Rect* sprite3 = new SDL_Rect();
-    sprite3->x = 128;
-    sprite3->y = 128;
-    sprite3->w = this->width;
-    sprite3->h = this->height;
+    SDL_Rect* runSprite2 = new SDL_Rect();
+    runSprite2->x = 64;
+    runSprite2->y = 128;
+    runSprite2->w = this->width;
+    runSprite2->h = this->height;
+    runClips.push_back(runSprite2);
 
-    SDL_Rect* sprite4 = new SDL_Rect();
-    sprite4->x = 192;
-    sprite4->y = 128;
-    sprite4->w = this->width;
-    sprite4->h = this->height;
+    SDL_Rect* runSprite3 = new SDL_Rect();
+    runSprite3->x = 128;
+    runSprite3->y = 128;
+    runSprite3->w = this->width;
+    runSprite3->h = this->height;
+    runClips.push_back(runSprite3);
 
-    std::vector<SDL_Rect*> clips;
-    clips.push_back(sprite1);
-    clips.push_back(sprite2);
-    clips.push_back(sprite3);
-    clips.push_back(sprite4);
+    SDL_Rect* runSprite4 = new SDL_Rect();
+    runSprite4->x = 192;
+    runSprite4->y = 128;
+    runSprite4->w = this->width;
+    runSprite4->h = this->height;
+    runClips.push_back(runSprite4);
 
-	this->sprite_sheet = new SpriteSheet(renderer, "player.png", clips);
+    animations.push_back(new Animation("run", runClips, FRAMES_PER_EVENT));
 
+    std::vector<SDL_Rect*> stillClips;
+
+    //Still sprites
+    SDL_Rect* stillSprite1 = new SDL_Rect();
+    stillSprite1->x = 1;
+    stillSprite1->y = 1;
+    stillSprite1->w = this->width;
+    stillSprite1->h = this->height;
+    stillClips.push_back(stillSprite1);
+
+    SDL_Rect* stillSprite2 = new SDL_Rect();
+    stillSprite2->x = 64;
+    stillSprite2->y = 1;
+    stillSprite2->w = this->width;
+    stillSprite2->h = this->height;
+    stillClips.push_back(stillSprite2);
+
+    SDL_Rect* stillSprite3 = new SDL_Rect();
+    stillSprite3->x = 128;
+    stillSprite3->y = 1;
+    stillSprite3->w = this->width;
+    stillSprite3->h = this->height;
+    stillClips.push_back(stillSprite3);
+
+    SDL_Rect* stillSprite4 = new SDL_Rect();
+    stillSprite4->x = 192;
+    stillSprite4->y = 1;
+    stillSprite4->w = this->width;
+    stillSprite4->h = this->height;
+    stillClips.push_back(stillSprite4);
+
+    animations.push_back(new Animation("still", stillClips, FRAMES_PER_EVENT));
+
+    currentAnimationIndex = 0;
+
+    Location* currentLocation = player->GetLocation();
+    previousLocation = new Location(currentLocation->GetX(), currentLocation->GetY(), currentLocation->GetZ());
+
+	this->sprite_sheet = new SpriteSheet(renderer, "player.png", runClips);
 }
 
 PlayerView::~PlayerView() {
     std::cout << "Destructor de PlayerView" << "\n";
     delete sprite_sheet;
+
+    //TODO: delete clips in animation destructor
+    for (unsigned int i = 0; i < animations.size(); i++) {
+        delete (animations[i]);
+    }
+    delete previousLocation;
 }
 
 void PlayerView::Render() {
@@ -57,12 +103,19 @@ void PlayerView::Render() {
 
 void PlayerView::Render(int xCamera, int yCamera, int maxX, int maxY)
 {
-    ++frame;
-    if ((frame * FRAMES_PER_EVENT) >= WALKING_ANIMATION_FRAMES) {
-        frame = 0;
+    if(IsStill())
+    {
+        currentAnimationIndex = STILL_ANIMATION_INDEX;
     }
-    int current_frame_index = frame * FRAMES_PER_EVENT;
-    SDL_Rect* currentClip = this->sprite_sheet->GetClips()[current_frame_index];
+    else
+    {
+        currentAnimationIndex = RUN_ANIMATION_INDEX;
+    }
+
+    this->previousLocation->UpdateX(player->GetLocation()->GetX());
+    this->previousLocation->UpdateY(player->GetLocation()->GetY());
+
+    SDL_Rect* currentClip = animations[currentAnimationIndex]->NextClip();
 
     int x = player->GetLocation()->GetX() - xCamera;
     int y = player->GetLocation()->GetY() - yCamera;
@@ -126,3 +179,14 @@ Location* PlayerView::GetLocation()
     return this->player->GetLocation();
 }
 
+void PlayerView::SetAnimation(Animation* animation)
+{
+
+}
+
+bool PlayerView::IsStill()
+{
+    Location* currentLocation = player->GetLocation();
+    return currentLocation->GetX() == previousLocation->GetX()
+        && currentLocation->GetY() == previousLocation->GetY();
+}

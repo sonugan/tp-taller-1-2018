@@ -6,6 +6,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "sprite-sheet.h"
+#include "animation.h"
 
 class AbstractView
 {
@@ -17,6 +18,9 @@ class AbstractView
     protected:
         SDL_Renderer* renderer;
         SpriteSheet* sprite_sheet;
+        virtual void SetAnimation(Animation* animation) {};
+        std::vector<Animation*> animations;
+        int currentAnimationIndex = 0;
 };
 
 #endif // ABSTRACTVIEW_H
