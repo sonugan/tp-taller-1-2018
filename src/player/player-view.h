@@ -15,12 +15,16 @@ class PlayerView : public AbstractView, public IShowable
         void Render(int xCamera, int yCamera, int maxX, int maxY);
         Location* GetLocation();
     protected:
-
+        void SetAnimation(Animation* animation);
     private:
         Player* player;
         int frame;
         static constexpr float FRAMES_PER_EVENT = 0.3;
-        static const int WALKING_ANIMATION_FRAMES = 4;
+        static constexpr int RUN_ANIMATION_INDEX = 0;
+        static constexpr int STILL_ANIMATION_INDEX = 1;
+        double angle = 0;
+        Location* previousLocation;
+        bool IsStill();
 };
 
 #endif // PLAYERVIEW_H

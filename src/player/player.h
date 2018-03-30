@@ -12,16 +12,21 @@ class Player : public ILocatable
     public:
         Player();
         virtual ~Player();
-        void MoveLeft(int pixels);
-        void MoveRight(int pixels);
-        void MoveUp(int pixels);
-        void MoveDown(int pixels);
+        void MoveLeft();
+        void MoveRight();
+        void MoveUp();
+        void MoveDown();
+        void MoveUpToRight();
+        void MoveUpToLeft();
+        void MoveDownToRight();
+        void MoveDownToLeft();
         Location* GetLocation();
         DIRECTION GetDirection();
     protected:
 
     private:
         DIRECTION direction;
+        static const int PLAYER_SPEED = 10;
 };
 
 #endif // PLAYER_H

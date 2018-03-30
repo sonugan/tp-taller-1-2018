@@ -46,6 +46,8 @@
 		<Unit filename="src/camera/camera.cpp" />
 		<Unit filename="src/camera/camera.h" />
 		<Unit filename="src/common/abstract-view.h" />
+		<Unit filename="src/common/ilocatable.h" />
+		<Unit filename="src/common/ishowable.h" />
 		<Unit filename="src/common/location.cpp" />
 		<Unit filename="src/common/location.h" />
 		<Unit filename="src/common/sprite-sheet.cpp" />

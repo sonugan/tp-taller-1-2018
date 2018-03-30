@@ -49,23 +49,14 @@ void Game::Start()
                 quit = true;
             }
 
-            if(e.type == SDL_KEYDOWN || e.type == SDL_KEYUP){
-
-                if (keyboard_state_array[SDL_SCANCODE_UP] && !(keyboard_state_array[SDL_SCANCODE_DOWN])) {
-                    player->MoveUp(10);
-                } else if (!keyboard_state_array[SDL_SCANCODE_UP] && keyboard_state_array[SDL_SCANCODE_DOWN]) {
-                    player->MoveDown(10);
-                }
-
-                if (keyboard_state_array[SDL_SCANCODE_RIGHT] && !keyboard_state_array[SDL_SCANCODE_LEFT]) {
-                    player->MoveRight(10);
-                } else if (!keyboard_state_array[SDL_SCANCODE_RIGHT] && keyboard_state_array[SDL_SCANCODE_LEFT]) {
-                    player->MoveLeft(10);
-                }
-
-                RenderViews();
-            }
+            //this->MovePlayer(&e, keyboard_state_array);
         }
+
+        //Si queda dentro del loop de eventos, se genera un delay
+        this->MovePlayer(keyboard_state_array);
+
+        //Manejo de frames por segundo: http://lazyfoo.net/SDL_tutorials/lesson16/index.php
+        SDL_Delay( ( 1000 / FRAMES_PER_SECOND ));
     }
 
 }
@@ -166,4 +157,69 @@ void Game::CloseSDL()
 	SDL_Quit();
 
 	std::cout << "bye." << "\n";
+}
+
+void Game::MovePlayer(const Uint8 *keyboard_state_array)
+{
+    if(UpKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array))
+    {
+        player->MoveUpToRight();
+    }
+    else
+    if(UpKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array))
+    {
+        player->MoveUpToLeft();
+    }
+    else
+    if(DownKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array))
+    {
+        player->MoveDownToRight();
+    }
+    else
+    if(DownKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array))
+    {
+        player->MoveDownToLeft();
+    }
+    else
+    if(UpKeySelected(keyboard_state_array))
+    {
+        player->MoveUp();
+    }
+    else
+    if(RightKeySelected(keyboard_state_array))
+    {
+        player->MoveRight();
+    }
+    else
+    if(LeftKeySelected(keyboard_state_array))
+    {
+        player->MoveLeft();
+    }
+    else
+    if(DownKeySelected(keyboard_state_array))
+    {
+        player->MoveDown();
+    }
+
+    RenderViews();
+}
+
+bool Game::UpKeySelected(const Uint8 *keyboard_state_array)
+{
+    return keyboard_state_array[SDL_SCANCODE_UP] || keyboard_state_array[SDL_SCANCODE_W];
+}
+
+bool Game::RightKeySelected(const Uint8 *keyboard_state_array)
+{
+    return keyboard_state_array[SDL_SCANCODE_RIGHT] || keyboard_state_array[SDL_SCANCODE_D];
+}
+
+bool Game::LeftKeySelected(const Uint8 *keyboard_state_array)
+{
+    return keyboard_state_array[SDL_SCANCODE_LEFT] || keyboard_state_array[SDL_SCANCODE_A];
+}
+
+bool Game::DownKeySelected(const Uint8 *keyboard_state_array)
+{
+    return keyboard_state_array[SDL_SCANCODE_DOWN] || keyboard_state_array[SDL_SCANCODE_S];
 }

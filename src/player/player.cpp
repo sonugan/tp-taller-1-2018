@@ -11,24 +11,52 @@ Player::~Player()
     delete location;
 }
 
-void Player::MoveLeft(int pixels) {
-    location->UpdateX(location->GetX() - pixels);
+void Player::MoveLeft() {
+    location->UpdateX(location->GetX() - PLAYER_SPEED);
     this->direction = WEST;
 }
 
-void Player::MoveRight(int pixels) {
-    location->UpdateX(location->GetX() + pixels);
+void Player::MoveRight() {
+    location->UpdateX(location->GetX() + PLAYER_SPEED);
     this->direction = EAST;
 }
 
-void Player::MoveUp(int pixels) {
-    location->UpdateY(location->GetY() - pixels);
+void Player::MoveUp() {
+    location->UpdateY(location->GetY() - PLAYER_SPEED);
     this->direction = NORTH;
 }
 
-void Player::MoveDown(int pixels) {
-    location->UpdateY(location->GetY() + pixels);
+void Player::MoveDown() {
+    location->UpdateY(location->GetY() + PLAYER_SPEED);
     this->direction = SOUTH;
+}
+
+void Player::MoveUpToRight()
+{
+    location->UpdateY(location->GetY() - PLAYER_SPEED);
+    location->UpdateX(location->GetX() + PLAYER_SPEED);
+    this->direction = NORTHEAST;
+}
+
+void Player::MoveUpToLeft()
+{
+    location->UpdateY(location->GetY() - PLAYER_SPEED);
+    location->UpdateX(location->GetX() - PLAYER_SPEED);
+    this->direction = NORTHWEST;
+}
+
+void Player::MoveDownToRight()
+{
+    location->UpdateY(location->GetY() + PLAYER_SPEED);
+    location->UpdateX(location->GetX() + PLAYER_SPEED);
+    this->direction = SOUTHEAST;
+}
+
+void Player::MoveDownToLeft()
+{
+    location->UpdateY(location->GetY() + PLAYER_SPEED);
+    location->UpdateX(location->GetX() - PLAYER_SPEED);
+    this->direction = SOUTHWEST;
 }
 
 Location* Player::GetLocation() {
