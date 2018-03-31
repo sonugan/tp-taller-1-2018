@@ -15,6 +15,7 @@ class Camera
         std::vector<AbstractView*> GetViews();
         SDL_Rect* area;
         void SetStartPosition(Location* position);//Move the camera to this position
+
     protected:
     private:
         std::vector<AbstractView*> views;

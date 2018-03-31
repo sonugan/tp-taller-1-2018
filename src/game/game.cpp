@@ -175,18 +175,47 @@ void Game::CloseSDL()
 	std::cout << "bye." << "\n";
 }
 
+Player* Game::FindNextPlayerToSelect() {
+    Player* next_player = NULL;
+    unsigned int new_selected_player_position_index = selected_player->GetPositionIndex();
+    for (unsigned int i = 0; i < 6; i++) {
+
+            if (new_selected_player_position_index == Team::TEAM_SIZE-1) {
+                new_selected_player_position_index = 0;
+            } else {
+                new_selected_player_position_index++;
+            }
+            Player* possible_player = match->GetTeamA()->GetPlayers()[new_selected_player_position_index];
+            if (!possible_player->IsSelected()
+                && ((possible_player->GetLocation()->GetX() - camera->area->x) >= 0)
+                && ((possible_player->GetLocation()->GetY() - camera->area->y) >= 0)) {
+                    next_player = possible_player;
+                    break;
+                }
+    }
+    return next_player;
+}
+
 void Game::ChangePlayerSelection(const Uint8 *keyboard_state_array)
 {
     if(CKeySelected(keyboard_state_array)) {
 
-        selected_player->SetSelected(false);
-        unsigned int new_selected_player_position_index = selected_player->GetPositionIndex() + 1;
-        if (new_selected_player_position_index >= Team::TEAM_SIZE) {
-            new_selected_player_position_index = 0;
+        Player* next_player = FindNextPlayerToSelect();
+        if (next_player != NULL) {
+            selected_player->SetSelected(false);
+            selected_player = next_player;
+            selected_player->SetSelected(true);
+//            camera->SetLocatable(player_views_map[selected_player->GetPositionIndex()]);
         }
-        selected_player = match->GetTeamA()->GetPlayers()[new_selected_player_position_index];
-        selected_player->SetSelected(true);
-        camera->SetLocatable(player_views_map[selected_player->GetPositionIndex()]);
+
+//        selected_player->SetSelected(false);
+//        unsigned int new_selected_player_position_index = selected_player->GetPositionIndex() + 1;
+//        if (new_selected_player_position_index >= Team::TEAM_SIZE) {
+//            new_selected_player_position_index = 0;
+//        }
+//        selected_player = match->GetTeamA()->GetPlayers()[new_selected_player_position_index];
+//        selected_player->SetSelected(true);
+//        camera->SetLocatable(player_views_map[selected_player->GetPositionIndex()]);
     }
 }
 
