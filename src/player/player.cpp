@@ -86,6 +86,10 @@ unsigned int Player::GetPositionIndex() {
     return this->position_index;
 }
 
+bool Player::IsSelected() {
+    return selected;
+}
+
 
 
 

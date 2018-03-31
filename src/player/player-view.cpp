@@ -94,75 +94,71 @@ PlayerView::~PlayerView() {
     delete previous_location;
 }
 
-void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
-{
-    if(IsStill())
-    {
+void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y) {
+    if(IsStill()) {
         current_animation_index = STILL_ANIMATION_INDEX;
-    }
-    else
-    {
+    } else {
         current_animation_index = RUN_ANIMATION_INDEX;
     }
-
-    this->previous_location->UpdateX(player->GetLocation()->GetX());
-    this->previous_location->UpdateY(player->GetLocation()->GetY());
-
     SDL_Rect* current_clip = animations[current_animation_index]->NextClip();
+    int x, y;
 
-    int x = player->GetLocation()->GetX() - x_camera;
-    int y = player->GetLocation()->GetY() - y_camera;
+    if (!player->IsSelected()) {
+        x = player->GetLocation()->GetX() - x_camera;
+        y = player->GetLocation()->GetY() - y_camera;
+    } else {
+        this->previous_location->UpdateX(player->GetLocation()->GetX());
+        this->previous_location->UpdateY(player->GetLocation()->GetY());
 
-    if(x < 0)
-    {
-        x = 0;
-    }
+        x = player->GetLocation()->GetX() - x_camera;
+        y = player->GetLocation()->GetY() - y_camera;
 
-    if(y < 0)
-    {
-        y = 0;
-    }
+        if(x < 0) {
+            x = 0;
+        }
 
-    if(x > max_x - this->width)
-    {
-        x = max_x - this->width;
-    }
+        if(y < 0) {
+            y = 0;
+        }
 
-    if(y > max_y - this->height)
-    {
-        y = max_y - this->height;
-    }
+        if(x > max_x - this->width) {
+            x = max_x - this->width;
+        }
 
-    DIRECTION direction = this->player->GetDirection();
-    switch(direction)
-    {
-        case NORTH:
-            angle = 0;
-        break;
-        case WEST:
-            angle = -90;
-        break;
-        case SOUTH:
-            angle = 180;
-        break;
-        case EAST:
-            angle = 90;
-        break;
-        case NORTHEAST:
-            angle = 45;
-        break;
-        case NORTHWEST:
-            angle = -45;
-        break;
-        case SOUTHEAST:
-            angle = 135;
-        break;
-        case SOUTHWEST:
-            angle = -135;
-        break;
-        default:
-            angle = angle;
-        break;
+        if(y > max_y - this->height) {
+            y = max_y - this->height;
+        }
+
+        DIRECTION direction = this->player->GetDirection();
+        switch(direction) {
+            case NORTH:
+                angle = 0;
+            break;
+            case WEST:
+                angle = -90;
+            break;
+            case SOUTH:
+                angle = 180;
+            break;
+            case EAST:
+                angle = 90;
+            break;
+            case NORTHEAST:
+                angle = 45;
+            break;
+            case NORTHWEST:
+                angle = -45;
+            break;
+            case SOUTHEAST:
+                angle = 135;
+            break;
+            case SOUTHWEST:
+                angle = -135;
+            break;
+            default:
+                angle = angle;
+            break;
+        }
     }
     sprite_sheet->Render( x, y, current_clip, this->angle);
 }

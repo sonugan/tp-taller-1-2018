@@ -24,6 +24,7 @@ class Player : public ILocatable
         void MoveDownToLeft();
         Location* GetLocation();
         DIRECTION GetDirection();
+        bool IsSelected();
         void SetSelected(bool value);
         Location* GetDefaultLocation();
         void SetTeam(Team* team);
