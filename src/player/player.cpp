@@ -1,8 +1,8 @@
 #include "player.h"
 
-Player::Player()
-{
-    this->location = new Location(960, 540, 0);
+Player::Player(unsigned int position_index) {
+    this->position_index = position_index;
+    this->selected = false;
 }
 
 Player::~Player()
@@ -67,5 +67,25 @@ DIRECTION Player::GetDirection()
 {
     return this->direction;
 }
+
+void Player::SetSelected(bool value) {
+    this->selected = value;
+}
+
+Location* Player::GetDefaultLocation() {
+    return team->GetFormation()->GetLocationForPlayer(position_index);
+
+}
+
+void Player::SetTeam(Team* team) {
+    this->team = team;
+    this->location = GetDefaultLocation();
+}
+
+unsigned int Player::GetPositionIndex() {
+    return this->position_index;
+}
+
+
 
 

@@ -16,9 +16,7 @@ Game::~Game() {
 void Game::RenderViews() {
     SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
     SDL_RenderClear( renderer );
-//    for (unsigned int i = 0; i < views.size(); i++) {
-//        views[i]->Render();
-//    }
+
     this->camera->Render();
     SDL_RenderPresent( renderer );
 }
@@ -52,8 +50,10 @@ void Game::Start()
             //this->MovePlayer(&e, keyboard_state_array);
         }
 
+        this->ChangePlayerSelection(keyboard_state_array);
         //Si queda dentro del loop de eventos, se genera un delay
         this->MovePlayer(keyboard_state_array);
+        RenderViews();
 
         //Manejo de frames por segundo: http://lazyfoo.net/SDL_tutorials/lesson16/index.php
         SDL_Delay( ( 1000 / FRAMES_PER_SECOND ));
@@ -71,27 +71,42 @@ void Game::End()
 
 void Game::CreateModel() {
     std::cout << "Game::CreateModel" << "\n";
-    this->pitch = new Pitch();
-    this->player = new Player();
+    Pitch* pitch = new Pitch();
+    Formation* formation = new Formation(F_3_3);
+    Team* team_a = new Team(formation);
+
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+        team_a->AddPlayer(new Player(i));
+    }
+
+    //selecciono por default al delantero del medio
+    this->selected_player = team_a->GetPlayers()[5];
+    this->selected_player->SetSelected(true);
+
+    this->match = new Match(pitch, team_a, NULL);
 }
 
 void Game::CreateViews() {
     std::cout << "Game::CreateViews" << "\n";
-    PitchView* pitch_view = new PitchView(this->pitch, this->renderer);
-    PlayerView* player_view = new PlayerView(this->player, this->renderer);
+    this->camera = new Camera(PITCH_WIDTH, PITCH_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, this->renderer);
 
-    this->camera = new Camera(PITCH_WIDTH, PITCH_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, player_view, this->renderer);
-    //Location position = Location(PITCH_WIDTH/2 - SCREEN_WIDTH/2, PITCH_HEIGHT/2 - SCREEN_HEIGHT/2, 0);
-    //this->camera->SetStartPosition(&position);
-
+    PitchView* pitch_view = new PitchView(this->match->GetPitch(), this->renderer);
     this->camera->Add(pitch_view);
-    this->camera->Add(player_view);
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+        Player* player = match->GetTeamA()->GetPlayers()[i];
+        PlayerView* player_view = new PlayerView(player, this->renderer);
+        this->camera->Add(player_view);
+        //selecciono por default al delantero del medio
+        if (i == 5) {
+            this->camera->SetLocatable(player_view);
+        }
+    }
+
 }
 
 void Game::DestroyModel() {
     std::cout << "Game::DestroyModel" << "\n";
-    delete this->pitch;
-    delete this->player;
+    delete this->match;
 }
 
 void Game::DestroyViews() {
@@ -159,49 +174,67 @@ void Game::CloseSDL()
 	std::cout << "bye." << "\n";
 }
 
+void Game::ChangePlayerSelection(const Uint8 *keyboard_state_array)
+{
+    if(CKeySelected(keyboard_state_array))
+    {
+        selected_player->SetSelected(false);
+        unsigned int new_selected_player_position_index = selected_player->GetPositionIndex() + 1;
+        if (new_selected_player_position_index >= Team::TEAM_SIZE) {
+            new_selected_player_position_index = 0;
+        }
+        selected_player = match->GetTeamA()->GetPlayers()[new_selected_player_position_index];
+        selected_player->SetSelected(true);
+    }
+}
+
 void Game::MovePlayer(const Uint8 *keyboard_state_array)
 {
     if(UpKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array))
     {
-        player->MoveUpToRight();
+        selected_player->MoveUpToRight();
     }
     else
     if(UpKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array))
     {
-        player->MoveUpToLeft();
+        selected_player->MoveUpToLeft();
     }
     else
     if(DownKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array))
     {
-        player->MoveDownToRight();
+        selected_player->MoveDownToRight();
     }
     else
     if(DownKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array))
     {
-        player->MoveDownToLeft();
+        selected_player->MoveDownToLeft();
     }
     else
     if(UpKeySelected(keyboard_state_array))
     {
-        player->MoveUp();
+        selected_player->MoveUp();
     }
     else
     if(RightKeySelected(keyboard_state_array))
     {
-        player->MoveRight();
+        selected_player->MoveRight();
     }
     else
     if(LeftKeySelected(keyboard_state_array))
     {
-        player->MoveLeft();
+        selected_player->MoveLeft();
     }
     else
     if(DownKeySelected(keyboard_state_array))
     {
-        player->MoveDown();
+        selected_player->MoveDown();
     }
 
-    RenderViews();
+}
+
+bool Game::CKeySelected(const Uint8 *keyboard_state_array)
+{
+    return keyboard_state_array[SDL_SCANCODE_C];
 }
 
 bool Game::UpKeySelected(const Uint8 *keyboard_state_array)

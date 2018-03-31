@@ -4,13 +4,15 @@
 #include <iostream>
 #include "../common/location.h"
 #include "../common/ilocatable.h"
+#include "../team/team.h"
 
 
 enum DIRECTION { NORTH, SOUTH, EAST, WEST, NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST };
+class Team; //  forward declaration
 class Player : public ILocatable
 {
     public:
-        Player();
+        Player(unsigned int position_index);
         virtual ~Player();
         void MoveLeft();
         void MoveRight();
@@ -22,11 +24,18 @@ class Player : public ILocatable
         void MoveDownToLeft();
         Location* GetLocation();
         DIRECTION GetDirection();
+        void SetSelected(bool value);
+        Location* GetDefaultLocation();
+        void SetTeam(Team* team);
+        unsigned int GetPositionIndex();
     protected:
 
     private:
         DIRECTION direction;
         static const int PLAYER_SPEED = 10;
+        bool selected;
+        Team* team;
+        unsigned int position_index;
 };
 
 #endif // PLAYER_H

@@ -14,6 +14,9 @@
 #include "../player/player.h"
 #include "../player/player-view.h"
 #include "../camera/camera.h"
+#include "../match/match.h"
+#include "../team/team.h"
+#include "../team/formation.h"
 
 class Game
 {
@@ -32,8 +35,8 @@ class Game
 
         SDL_Window* window;
         SDL_Renderer* renderer;
-        Pitch* pitch;
-        Player* player;
+        Match* match;
+        Player* selected_player;
         Camera* camera;
 
         void CreateModel();
@@ -44,11 +47,13 @@ class Game
         void CloseSDL();
         void RenderViews();
         void MovePlayer(const Uint8 *keyboard_state_array);
+        void ChangePlayerSelection(const Uint8 *keyboard_state_array);
         Uint8 GetSelectedKey(const Uint8* keyboard_state_array);
         bool UpKeySelected(const Uint8 *keyboard_state_array);
         bool RightKeySelected(const Uint8 *keyboard_state_array);
         bool LeftKeySelected(const Uint8 *keyboard_state_array);
         bool DownKeySelected(const Uint8 *keyboard_state_array);
+        bool CKeySelected(const Uint8 *keyboard_state_array);
         static const int FRAMES_PER_SECOND = 20;
 };
 
