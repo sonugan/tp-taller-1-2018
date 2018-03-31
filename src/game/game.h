@@ -17,6 +17,7 @@
 #include "../match/match.h"
 #include "../team/team.h"
 #include "../team/formation.h"
+#include <map>
 
 class Game
 {
@@ -55,6 +56,7 @@ class Game
         bool DownKeySelected(const Uint8 *keyboard_state_array);
         bool CKeySelected(const Uint8 *keyboard_state_array);
         static const int FRAMES_PER_SECOND = 20;
+        std::map <unsigned int, PlayerView*> player_views_map;
 };
 
 #endif // GAME_H

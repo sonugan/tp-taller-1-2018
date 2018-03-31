@@ -95,6 +95,7 @@ void Game::CreateViews() {
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
         Player* player = match->GetTeamA()->GetPlayers()[i];
         PlayerView* player_view = new PlayerView(player, this->renderer);
+        player_views_map[i] = player_view;
         this->camera->Add(player_view);
         //selecciono por default al delantero del medio
         if (i == 5) {
@@ -176,8 +177,8 @@ void Game::CloseSDL()
 
 void Game::ChangePlayerSelection(const Uint8 *keyboard_state_array)
 {
-    if(CKeySelected(keyboard_state_array))
-    {
+    if(CKeySelected(keyboard_state_array)) {
+
         selected_player->SetSelected(false);
         unsigned int new_selected_player_position_index = selected_player->GetPositionIndex() + 1;
         if (new_selected_player_position_index >= Team::TEAM_SIZE) {
@@ -185,6 +186,7 @@ void Game::ChangePlayerSelection(const Uint8 *keyboard_state_array)
         }
         selected_player = match->GetTeamA()->GetPlayers()[new_selected_player_position_index];
         selected_player->SetSelected(true);
+        camera->SetLocatable(player_views_map[selected_player->GetPositionIndex()]);
     }
 }
 
