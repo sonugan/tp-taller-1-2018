@@ -1,9 +1,9 @@
 #include "camera.h"
 
-Camera::Camera(int pitchWidth, int pitchHeight, int width, int height, IShowable* showable, SDL_Renderer* renderer)
+Camera::Camera(int pitch_width, int pitch_height, int width, int height, IShowable* showable, SDL_Renderer* renderer)
 {
-    this->pitchWidth = pitchWidth;
-    this->pitchHeight = pitchHeight;
+    this->pitch_width = pitch_width;
+    this->pitch_height = pitch_height;
 
     this->area = new SDL_Rect();
     this->area->x = 0;
@@ -69,12 +69,12 @@ void Camera::Move()
     {
         this->area->y = 0;
     }
-    if( this->area->x > this->pitchWidth - this->area->w )
+    if( this->area->x > this->pitch_width - this->area->w )
     {
-        this->area->x = this->pitchWidth - this->area->w;
+        this->area->x = this->pitch_width - this->area->w;
     }
-    if( this->area->y > this->pitchHeight - this->area->h )
+    if( this->area->y > this->pitch_height - this->area->h )
     {
-        this->area->y = this->pitchHeight - this->area->h;
+        this->area->y = this->pitch_height - this->area->h;
     }
 }

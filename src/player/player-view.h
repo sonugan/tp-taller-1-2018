@@ -11,7 +11,7 @@ class PlayerView : public AbstractView, public IShowable
     public:
         PlayerView(Player* player, SDL_Renderer* renderer);
         virtual ~PlayerView();
-        void Render(int xCamera, int yCamera, int maxX, int maxY);
+        void Render(int x_camera, int y_camera, int max_x, int max_y);
         Location* GetLocation();
     protected:
         void SetAnimation(Animation* animation);
@@ -22,7 +22,7 @@ class PlayerView : public AbstractView, public IShowable
         static constexpr int RUN_ANIMATION_INDEX = 0;
         static constexpr int STILL_ANIMATION_INDEX = 1;
         double angle = 0;
-        Location* previousLocation;
+        Location* previous_location;
         bool IsStill();
 };
 

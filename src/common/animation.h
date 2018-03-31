@@ -10,7 +10,7 @@
 class Animation
 {
     public:
-        Animation(std::string name, std::vector<SDL_Rect*> clips, float framesPerCicle = 1.0);
+        Animation(std::string name, std::vector<SDL_Rect*> clips, float frames_per_cicle = 1.0);
         virtual ~Animation();
         std::vector<SDL_Rect*> GetClips();
         SDL_Rect* NextClip();
@@ -20,8 +20,8 @@ class Animation
 		int height;
 		std::string name;
 		std::vector<SDL_Rect*> clips;
-		int currentClip;
-		float framesPerCicle;
+		int current_clip;
+		float frames_per_cicle;
 };
 
 #endif // ANIMATION_H

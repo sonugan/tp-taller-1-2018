@@ -12,7 +12,7 @@ class ConfigurationParser
         ConfigurationParser();
         virtual ~ConfigurationParser();
 
-        void ReadFile(string filePath);
+        void ReadFile(string file_path);
 
     protected:
 

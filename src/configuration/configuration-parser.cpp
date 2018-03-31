@@ -11,9 +11,9 @@ ConfigurationParser::~ConfigurationParser()
     //dtor
 }
 
-void ConfigurationParser::ReadFile(string filePath) {
+void ConfigurationParser::ReadFile(string file_path) {
     try {
-        YAML::Node config = YAML::LoadFile(filePath);
+        YAML::Node config = YAML::LoadFile(file_path);
         if (config["logger"]) {
             std::cout << "Logger - level: " << config["logger"]["level"].as<std::string>() << "\n";
         }

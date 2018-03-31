@@ -7,7 +7,7 @@
 class Camera
 {
     public:
-        Camera(int pitchWidth, int pitchHeight, int width, int height, IShowable* showable, SDL_Renderer* renderer);
+        Camera(int pitch_width, int pitch_height, int width, int height, IShowable* showable, SDL_Renderer* renderer);
         virtual ~Camera();
         void Render();
         void SetLocatable(IShowable* showable);
@@ -21,8 +21,8 @@ class Camera
         void Move();
         IShowable* showable;
         SDL_Renderer* renderer;
-        unsigned int pitchHeight;
-        unsigned int pitchWidth;
+        unsigned int pitch_height;
+        unsigned int pitch_width;
 };
 
 #endif // CAMERA_H

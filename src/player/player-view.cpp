@@ -9,78 +9,78 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
     this->player = player;
     this->renderer = renderer;
 
-    std::vector<SDL_Rect*> runClips;
+    std::vector<SDL_Rect*> run_clips;
 
     //Run sprites
-    SDL_Rect* runSprite1 = new SDL_Rect();
-    runSprite1->x = 1;
-    runSprite1->y = 128;
-    runSprite1->w = this->width;
-    runSprite1->h = this->height;
-    runClips.push_back(runSprite1);
+    SDL_Rect* run_sprite_1 = new SDL_Rect();
+    run_sprite_1->x = 1;
+    run_sprite_1->y = 128;
+    run_sprite_1->w = this->width;
+    run_sprite_1->h = this->height;
+    run_clips.push_back(run_sprite_1);
 
-    SDL_Rect* runSprite2 = new SDL_Rect();
-    runSprite2->x = 64;
-    runSprite2->y = 128;
-    runSprite2->w = this->width;
-    runSprite2->h = this->height;
-    runClips.push_back(runSprite2);
+    SDL_Rect* run_sprite_2 = new SDL_Rect();
+    run_sprite_2->x = 64;
+    run_sprite_2->y = 128;
+    run_sprite_2->w = this->width;
+    run_sprite_2->h = this->height;
+    run_clips.push_back(run_sprite_2);
 
-    SDL_Rect* runSprite3 = new SDL_Rect();
-    runSprite3->x = 128;
-    runSprite3->y = 128;
-    runSprite3->w = this->width;
-    runSprite3->h = this->height;
-    runClips.push_back(runSprite3);
+    SDL_Rect* run_sprite_3 = new SDL_Rect();
+    run_sprite_3->x = 128;
+    run_sprite_3->y = 128;
+    run_sprite_3->w = this->width;
+    run_sprite_3->h = this->height;
+    run_clips.push_back(run_sprite_3);
 
-    SDL_Rect* runSprite4 = new SDL_Rect();
-    runSprite4->x = 192;
-    runSprite4->y = 128;
-    runSprite4->w = this->width;
-    runSprite4->h = this->height;
-    runClips.push_back(runSprite4);
+    SDL_Rect* run_sprite_4 = new SDL_Rect();
+    run_sprite_4->x = 192;
+    run_sprite_4->y = 128;
+    run_sprite_4->w = this->width;
+    run_sprite_4->h = this->height;
+    run_clips.push_back(run_sprite_4);
 
-    animations.push_back(new Animation("run", runClips, FRAMES_PER_EVENT));
+    animations.push_back(new Animation("run", run_clips, FRAMES_PER_EVENT));
 
-    std::vector<SDL_Rect*> stillClips;
+    std::vector<SDL_Rect*> still_clips;
 
     //Still sprites
-    SDL_Rect* stillSprite1 = new SDL_Rect();
-    stillSprite1->x = 1;
-    stillSprite1->y = 1;
-    stillSprite1->w = this->width;
-    stillSprite1->h = this->height;
-    stillClips.push_back(stillSprite1);
+    SDL_Rect* still_sprite_1 = new SDL_Rect();
+    still_sprite_1->x = 1;
+    still_sprite_1->y = 1;
+    still_sprite_1->w = this->width;
+    still_sprite_1->h = this->height;
+    still_clips.push_back(still_sprite_1);
 
-    SDL_Rect* stillSprite2 = new SDL_Rect();
-    stillSprite2->x = 64;
-    stillSprite2->y = 1;
-    stillSprite2->w = this->width;
-    stillSprite2->h = this->height;
-    stillClips.push_back(stillSprite2);
+    SDL_Rect* still_sprite_2 = new SDL_Rect();
+    still_sprite_2->x = 64;
+    still_sprite_2->y = 1;
+    still_sprite_2->w = this->width;
+    still_sprite_2->h = this->height;
+    still_clips.push_back(still_sprite_2);
 
-    SDL_Rect* stillSprite3 = new SDL_Rect();
-    stillSprite3->x = 128;
-    stillSprite3->y = 1;
-    stillSprite3->w = this->width;
-    stillSprite3->h = this->height;
-    stillClips.push_back(stillSprite3);
+    SDL_Rect* still_sprite_3 = new SDL_Rect();
+    still_sprite_3->x = 128;
+    still_sprite_3->y = 1;
+    still_sprite_3->w = this->width;
+    still_sprite_3->h = this->height;
+    still_clips.push_back(still_sprite_3);
 
-    SDL_Rect* stillSprite4 = new SDL_Rect();
-    stillSprite4->x = 192;
-    stillSprite4->y = 1;
-    stillSprite4->w = this->width;
-    stillSprite4->h = this->height;
-    stillClips.push_back(stillSprite4);
+    SDL_Rect* still_sprite_4 = new SDL_Rect();
+    still_sprite_4->x = 192;
+    still_sprite_4->y = 1;
+    still_sprite_4->w = this->width;
+    still_sprite_4->h = this->height;
+    still_clips.push_back(still_sprite_4);
 
-    animations.push_back(new Animation("still", stillClips, FRAMES_PER_EVENT));
+    animations.push_back(new Animation("still", still_clips, FRAMES_PER_EVENT));
 
-    currentAnimationIndex = 0;
+    current_animation_index = 0;
 
-    Location* currentLocation = player->GetLocation();
-    previousLocation = new Location(currentLocation->GetX(), currentLocation->GetY(), currentLocation->GetZ());
+    Location* current_location = player->GetLocation();
+    previous_location = new Location(current_location->GetX(), current_location->GetY(), current_location->GetZ());
 
-	this->sprite_sheet = new SpriteSheet(renderer, "player.png", runClips);
+	this->sprite_sheet = new SpriteSheet(renderer, "player.png", run_clips);
 }
 
 PlayerView::~PlayerView() {
@@ -91,27 +91,27 @@ PlayerView::~PlayerView() {
     for (unsigned int i = 0; i < animations.size(); i++) {
         delete (animations[i]);
     }
-    delete previousLocation;
+    delete previous_location;
 }
 
-void PlayerView::Render(int xCamera, int yCamera, int maxX, int maxY)
+void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
 {
     if(IsStill())
     {
-        currentAnimationIndex = STILL_ANIMATION_INDEX;
+        current_animation_index = STILL_ANIMATION_INDEX;
     }
     else
     {
-        currentAnimationIndex = RUN_ANIMATION_INDEX;
+        current_animation_index = RUN_ANIMATION_INDEX;
     }
 
-    this->previousLocation->UpdateX(player->GetLocation()->GetX());
-    this->previousLocation->UpdateY(player->GetLocation()->GetY());
+    this->previous_location->UpdateX(player->GetLocation()->GetX());
+    this->previous_location->UpdateY(player->GetLocation()->GetY());
 
-    SDL_Rect* currentClip = animations[currentAnimationIndex]->NextClip();
+    SDL_Rect* current_clip = animations[current_animation_index]->NextClip();
 
-    int x = player->GetLocation()->GetX() - xCamera;
-    int y = player->GetLocation()->GetY() - yCamera;
+    int x = player->GetLocation()->GetX() - x_camera;
+    int y = player->GetLocation()->GetY() - y_camera;
 
     if(x < 0)
     {
@@ -123,14 +123,14 @@ void PlayerView::Render(int xCamera, int yCamera, int maxX, int maxY)
         y = 0;
     }
 
-    if(x > maxX - this->width)
+    if(x > max_x - this->width)
     {
-        x = maxX - this->width;
+        x = max_x - this->width;
     }
 
-    if(y > maxY - this->height)
+    if(y > max_y - this->height)
     {
-        y = maxY - this->height;
+        y = max_y - this->height;
     }
 
     DIRECTION direction = this->player->GetDirection();
@@ -164,7 +164,7 @@ void PlayerView::Render(int xCamera, int yCamera, int maxX, int maxY)
             angle = angle;
         break;
     }
-    sprite_sheet->Render( x, y, currentClip, this->angle);
+    sprite_sheet->Render( x, y, current_clip, this->angle);
 }
 
 Location* PlayerView::GetLocation()
@@ -179,7 +179,7 @@ void PlayerView::SetAnimation(Animation* animation)
 
 bool PlayerView::IsStill()
 {
-    Location* currentLocation = player->GetLocation();
-    return currentLocation->GetX() == previousLocation->GetX()
-        && currentLocation->GetY() == previousLocation->GetY();
+    Location* current_location = player->GetLocation();
+    return current_location->GetX() == previous_location->GetX()
+        && current_location->GetY() == previous_location->GetY();
 }

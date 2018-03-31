@@ -1,11 +1,11 @@
 #include "animation.h"
 
-Animation::Animation(std::string name, std::vector<SDL_Rect*> clips, float framesPerCicle)
+Animation::Animation(std::string name, std::vector<SDL_Rect*> clips, float frames_per_cicle)
 {
     this->name = name;
     this->clips = clips;
-    this->currentClip = 0;
-    this->framesPerCicle = framesPerCicle;
+    this->current_clip = 0;
+    this->frames_per_cicle = frames_per_cicle;
 }
 
 Animation::~Animation()
@@ -24,11 +24,11 @@ std::vector<SDL_Rect*> Animation::GetClips()
 
 SDL_Rect* Animation::NextClip()
 {
-    currentClip++;
-    if((currentClip * framesPerCicle) >= clips.size())
+    current_clip++;
+    if((current_clip * frames_per_cicle) >= clips.size())
     {
-        currentClip = 0;
+        current_clip = 0;
     }
-    int currentClipIndex = currentClip * framesPerCicle;
-    return clips[currentClipIndex];
+    unsigned int current_clip_index = current_clip * frames_per_cicle;
+    return clips[current_clip_index];
 }

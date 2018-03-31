@@ -11,7 +11,7 @@
 class AbstractView
 {
     public:
-        virtual void Render(int xCamera, int yCamera, int maxX, int maxY) = 0;
+        virtual void Render(int x_camera, int y_camera, int max_x, int max_y) = 0;
         virtual ~AbstractView () {};
 
     protected:
@@ -19,7 +19,7 @@ class AbstractView
         SpriteSheet* sprite_sheet;
         virtual void SetAnimation(Animation* animation) {};
         std::vector<Animation*> animations;
-        int currentAnimationIndex = 0;
+        int current_animation_index = 0;
 };
 
 #endif // ABSTRACTVIEW_H

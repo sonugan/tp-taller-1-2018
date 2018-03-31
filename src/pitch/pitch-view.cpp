@@ -15,7 +15,7 @@ PitchView::PitchView(Pitch* pitch, SDL_Renderer* renderer)
     clips.push_back(sprite1);
 
     animations.push_back(new Animation("pitch", clips));
-    currentAnimationIndex = 0;
+    current_animation_index = 0;
 
 	this->sprite_sheet = new SpriteSheet(renderer, "pitch.jpg", clips);
 }
@@ -30,10 +30,10 @@ PitchView::~PitchView()
     }
 }
 
-void PitchView::Render(int xCamera, int yCamera, int maxX, int maxY)
+void PitchView::Render(int x_camera, int y_camera, int max_x, int max_y)
 {
-    SDL_Rect* currentClip = this->sprite_sheet->GetClips()[0];
-    currentClip->x = xCamera;
-    currentClip->y = yCamera;
-    sprite_sheet->Render( 0, 0, currentClip );
+    SDL_Rect* current_clip = this->sprite_sheet->GetClips()[0];
+    current_clip->x = x_camera;
+    current_clip->y = y_camera;
+    sprite_sheet->Render( 0, 0, current_clip );
 }
