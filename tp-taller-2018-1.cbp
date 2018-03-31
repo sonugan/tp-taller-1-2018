@@ -37,8 +37,8 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-std=c++11" />
 			<Add option="-Wall" />
+			<Add option="-std=c++11" />
 		</Compiler>
 		<Linker>
 			<Add option="-lSDL2 -lSDL2_image -lyaml-cpp" />
@@ -46,6 +46,8 @@
 		<Unit filename="src/camera/camera.cpp" />
 		<Unit filename="src/camera/camera.h" />
 		<Unit filename="src/common/abstract-view.h" />
+		<Unit filename="src/common/animation.cpp" />
+		<Unit filename="src/common/animation.h" />
 		<Unit filename="src/common/ilocatable.h" />
 		<Unit filename="src/common/ishowable.h" />
 		<Unit filename="src/common/location.cpp" />

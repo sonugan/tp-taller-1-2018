@@ -94,13 +94,6 @@ PlayerView::~PlayerView() {
     delete previousLocation;
 }
 
-void PlayerView::Render() {
-    int current_frame_index = frame * FRAMES_PER_EVENT;
-    SDL_Rect* currentClip = this->sprite_sheet->GetClips()[current_frame_index];
-
-    sprite_sheet->Render( 0, 0, currentClip );
-}
-
 void PlayerView::Render(int xCamera, int yCamera, int maxX, int maxY)
 {
     if(IsStill())
