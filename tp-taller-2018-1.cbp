@@ -77,8 +77,6 @@
 		<Unit filename="src/sprites/player.png" />
 		<Unit filename="src/team/formation.cpp" />
 		<Unit filename="src/team/formation.h" />
-		<Unit filename="src/team/position.cpp" />
-		<Unit filename="src/team/position.h" />
 		<Unit filename="src/team/team.cpp" />
 		<Unit filename="src/team/team.h" />
 		<Extensions>

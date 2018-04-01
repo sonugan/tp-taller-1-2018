@@ -21,8 +21,7 @@ void Game::RenderViews() {
     SDL_RenderPresent( renderer );
 }
 
-void Game::Start()
-{
+void Game::Start() {
     std::cout << "Game::Start" << "\n";
 
     //Main loop flag
@@ -50,6 +49,7 @@ void Game::Start()
             //this->MovePlayer(&e, keyboard_state_array);
         }
 
+        this->MoveUnselectedPlayersToDefaultPositions();
         this->ChangePlayerSelection(keyboard_state_array);
         //Si queda dentro del loop de eventos, se genera un delay
         this->MovePlayer(keyboard_state_array);
@@ -61,8 +61,7 @@ void Game::Start()
 
 }
 
-void Game::End()
-{
+void Game::End() {
     std::cout << "Game::End" << "\n";
     DestroyModel();
     DestroyViews();
@@ -119,8 +118,7 @@ void Game::DestroyViews() {
     delete this->camera;
 }
 
-void Game::InitSDL()
-{
+void Game::InitSDL() {
     std::cout << "Game::InitSDL" << "\n";
     //Starts up SDL and creates window
 	//Initialize SDL
@@ -178,13 +176,14 @@ void Game::CloseSDL()
 Player* Game::FindNextPlayerToSelect() {
     Player* next_player = NULL;
     unsigned int new_selected_player_position_index = selected_player->GetPositionIndex();
-    for (unsigned int i = 0; i < 6; i++) {
+    for (unsigned int i = 0; i < (Team::TEAM_SIZE - 1); i++) {
 
             if (new_selected_player_position_index == Team::TEAM_SIZE-1) {
                 new_selected_player_position_index = 0;
             } else {
                 new_selected_player_position_index++;
             }
+            // El próximo jugador tiene que estar dentro de la cámara y no tiene que estar seleccionado
             Player* possible_player = match->GetTeamA()->GetPlayers()[new_selected_player_position_index];
             if (!possible_player->IsSelected()
                 && ((possible_player->GetLocation()->GetX() - camera->area->x) >= 0)
@@ -196,8 +195,7 @@ Player* Game::FindNextPlayerToSelect() {
     return next_player;
 }
 
-void Game::ChangePlayerSelection(const Uint8 *keyboard_state_array)
-{
+void Game::ChangePlayerSelection(const Uint8 *keyboard_state_array) {
     if(CKeySelected(keyboard_state_array)) {
 
         Player* next_player = FindNextPlayerToSelect();
@@ -221,46 +219,32 @@ void Game::ChangePlayerSelection(const Uint8 *keyboard_state_array)
 
 void Game::MovePlayer(const Uint8 *keyboard_state_array)
 {
-    if(UpKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array))
-    {
+    if (UpKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array)) {
         selected_player->MoveUpToRight();
-    }
-    else
-    if(UpKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array))
-    {
+    } else if (UpKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array)) {
         selected_player->MoveUpToLeft();
-    }
-    else
-    if(DownKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array))
-    {
+    } else if (DownKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array)) {
         selected_player->MoveDownToRight();
-    }
-    else
-    if(DownKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array))
-    {
+    } else if (DownKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array)) {
         selected_player->MoveDownToLeft();
-    }
-    else
-    if(UpKeySelected(keyboard_state_array))
-    {
+    } else if (UpKeySelected(keyboard_state_array)) {
         selected_player->MoveUp();
-    }
-    else
-    if(RightKeySelected(keyboard_state_array))
-    {
+    } else if(RightKeySelected(keyboard_state_array)) {
         selected_player->MoveRight();
-    }
-    else
-    if(LeftKeySelected(keyboard_state_array))
-    {
+    } else if(LeftKeySelected(keyboard_state_array)) {
         selected_player->MoveLeft();
-    }
-    else
-    if(DownKeySelected(keyboard_state_array))
-    {
+    } else if(DownKeySelected(keyboard_state_array)) {
         selected_player->MoveDown();
     }
+}
 
+void Game::MoveUnselectedPlayersToDefaultPositions() {
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+        Player* player = match->GetTeamA()->GetPlayers()[i];
+        if (!player->IsSelected()) {
+            player->GoBackToDefaultPosition();
+        }
+    }
 }
 
 bool Game::CKeySelected(const Uint8 *keyboard_state_array)

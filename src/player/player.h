@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <iostream>
+#include <cmath>
 #include "../common/location.h"
 #include "../common/ilocatable.h"
 #include "../team/team.h"
@@ -29,6 +30,7 @@ class Player : public ILocatable
         Location* GetDefaultLocation();
         void SetTeam(Team* team);
         unsigned int GetPositionIndex();
+        void GoBackToDefaultPosition();
     protected:
 
     private:

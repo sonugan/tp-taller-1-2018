@@ -50,6 +50,7 @@ class Game
         void CloseSDL();
         void RenderViews();
         void MovePlayer(const Uint8 *keyboard_state_array);
+        void MoveUnselectedPlayersToDefaultPositions();
         void ChangePlayerSelection(const Uint8 *keyboard_state_array);
         Uint8 GetSelectedKey(const Uint8* keyboard_state_array);
         bool UpKeySelected(const Uint8 *keyboard_state_array);

@@ -97,39 +97,10 @@ PlayerView::~PlayerView() {
 void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y) {
     if(IsStill()) {
         current_animation_index = STILL_ANIMATION_INDEX;
+        angle = 90;
     } else {
         current_animation_index = RUN_ANIMATION_INDEX;
-    }
-    SDL_Rect* current_clip = animations[current_animation_index]->NextClip();
-    int x, y;
-
-    if (!player->IsSelected()) {
-        x = player->GetLocation()->GetX() - x_camera;
-        y = player->GetLocation()->GetY() - y_camera;
-    } else {
-        this->previous_location->UpdateX(player->GetLocation()->GetX());
-        this->previous_location->UpdateY(player->GetLocation()->GetY());
-
-        x = player->GetLocation()->GetX() - x_camera;
-        y = player->GetLocation()->GetY() - y_camera;
-
-        if(x < 0) {
-            x = 0;
-        }
-
-        if(y < 0) {
-            y = 0;
-        }
-
-        if(x > max_x - this->width) {
-            x = max_x - this->width;
-        }
-
-        if(y > max_y - this->height) {
-            y = max_y - this->height;
-        }
-
-        DIRECTION direction = this->player->GetDirection();
+            DIRECTION direction = this->player->GetDirection();
         switch(direction) {
             case NORTH:
                 angle = 0;
@@ -160,6 +131,36 @@ void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y) {
             break;
         }
     }
+    SDL_Rect* current_clip = animations[current_animation_index]->NextClip();
+    int x, y;
+
+    this->previous_location->UpdateX(player->GetLocation()->GetX());
+    this->previous_location->UpdateY(player->GetLocation()->GetY());
+
+    x = player->GetLocation()->GetX() - x_camera;
+    y = player->GetLocation()->GetY() - y_camera;
+
+    if (player->IsSelected()) {
+
+        if(x < 0) {
+            x = 0;
+        }
+
+        if(y < 0) {
+            y = 0;
+        }
+
+        if(x > max_x - this->width) {
+            x = max_x - this->width;
+        }
+
+        if(y > max_y - this->height) {
+            y = max_y - this->height;
+        }
+    }
+
+
+
     sprite_sheet->Render( x, y, current_clip, this->angle);
 }
 
@@ -176,6 +177,7 @@ void PlayerView::SetAnimation(Animation* animation)
 bool PlayerView::IsStill()
 {
     Location* current_location = player->GetLocation();
-    return current_location->GetX() == previous_location->GetX()
+    bool still = current_location->GetX() == previous_location->GetX()
         && current_location->GetY() == previous_location->GetY();
+    return still;
 }

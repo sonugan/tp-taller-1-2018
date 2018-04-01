@@ -14,9 +14,12 @@ Formation::Formation(FORMATION value)
     }
 }
 
-Formation::~Formation()
-{
-    //dtor
+Formation::~Formation() {
+    std::cout << "Destructor de Formation" << "\n";
+    for (unsigned int i; i < positions.size(); i++) {
+        delete positions[i];
+    }
+    positions.clear();
 }
 
 Location* Formation::GetLocationForPlayer(unsigned int player_index) {

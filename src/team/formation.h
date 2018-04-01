@@ -2,6 +2,7 @@
 #define FORMATION_H
 
 #include <vector>
+#include <iostream>
 #include "../common/location.h"
 
 enum FORMATION { F_3_3, F_3_1_2, F_3_2_1 };

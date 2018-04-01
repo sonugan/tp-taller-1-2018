@@ -79,7 +79,8 @@ Location* Player::GetDefaultLocation() {
 
 void Player::SetTeam(Team* team) {
     this->team = team;
-    this->location = GetDefaultLocation();
+    Location* default_location = GetDefaultLocation();
+    this->location = new Location(default_location->GetX(), default_location->GetY(), default_location->GetZ());
 }
 
 unsigned int Player::GetPositionIndex() {
@@ -88,6 +89,39 @@ unsigned int Player::GetPositionIndex() {
 
 bool Player::IsSelected() {
     return selected;
+}
+
+void Player::GoBackToDefaultPosition() {
+    Location* default_location = team->GetFormation()->GetLocationForPlayer(position_index);
+    int default_x = default_location->GetX();
+    int x = location->GetX();
+    int default_y = default_location->GetY();
+    int y = location->GetY();
+    if (x > default_x && y > default_y) {
+        MoveUpToLeft();
+    } else if (x < default_x && y > default_y) {
+        MoveUpToRight();
+    } else if (x < default_x && y < default_y) {
+        MoveDownToRight();
+    } else if (x > default_x && y < default_y) {
+        MoveDownToLeft();
+    } else if (x > default_x && y == default_y) {
+        MoveLeft();
+    } else if (x < default_x && y == default_y) {
+        MoveRight();
+    } else if (x == default_x && y > default_y) {
+        MoveUp();
+    } else if (x == default_x && y < default_y) {
+        MoveDown();
+    }
+
+    if (abs(default_y - location->GetY()) < PLAYER_SPEED) {
+        location->UpdateY(default_location->GetY());
+    }
+    if (abs(default_x - location->GetX()) < PLAYER_SPEED) {
+        location->UpdateX(default_location->GetX());
+    }
+
 }
 
 

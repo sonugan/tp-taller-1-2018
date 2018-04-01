@@ -5,7 +5,12 @@ Team::Team(Formation* formation) {
 }
 
 Team::~Team() {
-    //dtor
+    std::cout << "Destructor de Team" << "\n";
+    delete formation;
+    for (unsigned int i; i < players.size(); i++) {
+        delete players[i];
+    }
+    players.clear();
 }
 
 std::vector<Player*> Team::GetPlayers() {
