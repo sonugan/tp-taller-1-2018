@@ -13,7 +13,7 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
 
     //Run sprites
     SDL_Rect* run_sprite_1 = new SDL_Rect();
-    run_sprite_1->x = 1;
+    run_sprite_1->x = 0;
     run_sprite_1->y = 128;
     run_sprite_1->w = this->width;
     run_sprite_1->h = this->height;
@@ -46,7 +46,7 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
 
     //Still sprites
     SDL_Rect* still_sprite_1 = new SDL_Rect();
-    still_sprite_1->x = 1;
+    still_sprite_1->x = 0;
     still_sprite_1->y = 1;
     still_sprite_1->w = this->width;
     still_sprite_1->h = this->height;
