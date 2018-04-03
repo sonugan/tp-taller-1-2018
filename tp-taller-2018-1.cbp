@@ -60,6 +60,7 @@
 		<Unit filename="src/common/sprite-sheet.h" />
 		<Unit filename="src/configuration/configuration-parser.cpp" />
 		<Unit filename="src/configuration/configuration-parser.h" />
+		<Unit filename="src/configuration/default-config.yml" />
 		<Unit filename="src/game/game.cpp" />
 		<Unit filename="src/game/game.h" />
 		<Unit filename="src/main.cpp" />
