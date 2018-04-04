@@ -56,6 +56,8 @@
 		<Unit filename="src/common/ishowable.h" />
 		<Unit filename="src/common/location.cpp" />
 		<Unit filename="src/common/location.h" />
+		<Unit filename="src/common/logger.cpp" />
+		<Unit filename="src/common/logger.h" />
 		<Unit filename="src/common/sprite-sheet.cpp" />
 		<Unit filename="src/common/sprite-sheet.h" />
 		<Unit filename="src/configuration/configuration-parser.cpp" />
