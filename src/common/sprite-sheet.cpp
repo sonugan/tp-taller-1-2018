@@ -1,4 +1,6 @@
 #include "sprite-sheet.h"
+#include "logger.h"
+
 
 SpriteSheet::SpriteSheet(SDL_Renderer* renderer, std::string path, std::vector<SDL_Rect*> clips)
 {
@@ -14,7 +16,7 @@ SpriteSheet::SpriteSheet(SDL_Renderer* renderer, std::string path, std::vector<S
 
 SpriteSheet::~SpriteSheet()
 {
-    std::cout << "Destructor de SpriteSheet" << "\n";
+    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO SPRITESHEET");
 //    for (unsigned int i = 0; i < clips.size(); i++) {
 //        delete (clips[i]);
 //    }

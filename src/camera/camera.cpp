@@ -1,4 +1,5 @@
 #include "camera.h"
+#include "logger.h"
 
 Camera::Camera(int pitch_width, int pitch_height, int width, int height, IShowable* showable, SDL_Renderer* renderer)
 {
@@ -18,7 +19,7 @@ Camera::Camera(int pitch_width, int pitch_height, int width, int height, IShowab
 
 Camera::~Camera()
 {
-    std::cout << "Destructor de Camera" << "\n";
+    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO CAMARA");
     delete this->area;
 }
 

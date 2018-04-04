@@ -1,5 +1,6 @@
 #include "game.h"
 #include <iostream>
+#include "logger.h"
 
 Game::Game() {
     InitSDL();
@@ -8,7 +9,6 @@ Game::Game() {
 }
 
 Game::~Game() {
-    std::cout << "Destructor de Game" << "\n";
     DestroyModel();
     DestroyViews();
 }
@@ -22,8 +22,8 @@ void Game::RenderViews() {
 }
 
 void Game::Start() {
-    std::cout << "Game::Start" << "\n";
-
+    Logger::getInstance()->setMode(Logger::INFO);
+    Logger::getInstance()->log(Logger::INFO, "======COMIENZA EL JUEGO======");
     //Main loop flag
     bool quit = false;
 
@@ -62,14 +62,15 @@ void Game::Start() {
 }
 
 void Game::End() {
-    std::cout << "Game::End" << "\n";
+    Logger::getInstance()->log(Logger::INFO, "======JUEGO TERMINADO======");
+
     DestroyModel();
     DestroyViews();
     CloseSDL();
 }
 
 void Game::CreateModel() {
-    std::cout << "Game::CreateModel" << "\n";
+    Logger::getInstance()->log(Logger::DEBUG, "CREANDO EL MODELO");
     Pitch* pitch = new Pitch();
     Formation* formation = new Formation(F_3_3);
     Team* team_a = new Team(formation);
@@ -86,7 +87,7 @@ void Game::CreateModel() {
 }
 
 void Game::CreateViews() {
-    std::cout << "Game::CreateViews" << "\n";
+    Logger::getInstance()->log(Logger::DEBUG, "CREANDO LAS VISTAS");
     this->camera = new Camera(PITCH_WIDTH, PITCH_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, this->renderer);
 
     PitchView* pitch_view = new PitchView(this->match->GetPitch(), this->renderer);
@@ -105,12 +106,12 @@ void Game::CreateViews() {
 }
 
 void Game::DestroyModel() {
-    std::cout << "Game::DestroyModel" << "\n";
+    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO EL MODELO");
     delete this->match;
 }
 
 void Game::DestroyViews() {
-    std::cout << "Game::DestroyViews()" << "\n";
+    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO LAS VISTAS");
     std::vector<AbstractView*> views = this->camera->GetViews();
     for (unsigned int i = 0; i < views.size(); i++) {
         delete (views[i]);
@@ -119,7 +120,7 @@ void Game::DestroyViews() {
 }
 
 void Game::InitSDL() {
-    std::cout << "Game::InitSDL" << "\n";
+    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO LAS VISTAS");
     //Starts up SDL and creates window
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
@@ -170,7 +171,7 @@ void Game::CloseSDL()
 	IMG_Quit();
 	SDL_Quit();
 
-	std::cout << "bye." << "\n";
+	Logger::getInstance()->log(Logger::DEBUG, "TERMINANDO PROGRAMA");
 }
 
 Player* Game::FindNextPlayerToSelect() {

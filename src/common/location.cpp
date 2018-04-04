@@ -1,4 +1,6 @@
 #include "location.h"
+#include "logger.h"
+
 
 Location::Location(int x, int y, int z)
 {

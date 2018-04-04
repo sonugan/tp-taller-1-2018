@@ -1,4 +1,6 @@
 #include "pitch-view.h"
+#include "logger.h"
+
 
 PitchView::PitchView(Pitch* pitch, SDL_Renderer* renderer)
 {
@@ -22,7 +24,7 @@ PitchView::PitchView(Pitch* pitch, SDL_Renderer* renderer)
 
 PitchView::~PitchView()
 {
-    std::cout << "Destructor de PitchView" << "\n";
+    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO LA VISTA DEL CAMPO");
     delete sprite_sheet;
 
     for (unsigned int i = 0; i < animations.size(); i++) {

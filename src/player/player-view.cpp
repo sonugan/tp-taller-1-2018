@@ -1,4 +1,5 @@
 #include "player-view.h"
+#include "logger.h"
 
 PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
 {
@@ -84,7 +85,7 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
 }
 
 PlayerView::~PlayerView() {
-    std::cout << "Destructor de PlayerView" << "\n";
+    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO PLAYERVIEW");
     delete sprite_sheet;
 
     //TODO: delete clips in animation destructor

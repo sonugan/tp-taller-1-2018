@@ -1,4 +1,5 @@
 #include "animation.h"
+#include "logger.h"
 
 Animation::Animation(std::string name, std::vector<SDL_Rect*> clips, float frames_per_cicle)
 {
@@ -10,7 +11,7 @@ Animation::Animation(std::string name, std::vector<SDL_Rect*> clips, float frame
 
 Animation::~Animation()
 {
-    std::cout << "Destructor de Animation" << "\n";
+    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO ANIMACION");
     for (unsigned int i = 0; i < clips.size(); i++) {
         delete (clips[i]);
     }
