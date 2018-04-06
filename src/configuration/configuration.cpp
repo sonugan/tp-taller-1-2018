@@ -45,3 +45,13 @@ void Configuration::SetShirt(string shirt)
 {
     this->shirt = shirt;
 }
+
+string Configuration::GetSpritesPath()
+{
+    return this->sprites_path;
+}
+
+void Configuration::SetSpritesPath(string sprites_path)
+{
+    this->sprites_path = sprites_path;
+}

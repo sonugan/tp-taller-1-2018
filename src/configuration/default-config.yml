@@ -3,3 +3,4 @@ logger:
 team:
   formation: 3-3
   shirt: main
+sprites_path: src/sprites

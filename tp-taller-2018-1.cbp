@@ -11,6 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters="--config --config /home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/config.yml" />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="src/game" />
@@ -19,6 +20,7 @@
 					<Add directory="src/player" />
 					<Add directory="src/match" />
 					<Add directory="src/team" />
+					<Add directory="src/configuration" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -26,6 +28,7 @@
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters="--config /home/swandelow/config.yml" />
 				<Compiler>
 					<Add option="-O2" />
 					<Add directory="src/game" />
@@ -34,6 +37,7 @@
 					<Add directory="src/player" />
 					<Add directory="src/match" />
 					<Add directory="src/team" />
+					<Add directory="src/configuration" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -60,6 +64,8 @@
 		<Unit filename="src/common/sprite-sheet.h" />
 		<Unit filename="src/configuration/configuration-parser.cpp" />
 		<Unit filename="src/configuration/configuration-parser.h" />
+		<Unit filename="src/configuration/configuration.cpp" />
+		<Unit filename="src/configuration/configuration.h" />
 		<Unit filename="src/configuration/default-config.yml" />
 		<Unit filename="src/game/game.cpp" />
 		<Unit filename="src/game/game.h" />

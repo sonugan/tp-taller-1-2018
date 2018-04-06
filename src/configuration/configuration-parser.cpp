@@ -24,6 +24,10 @@ Configuration parseConfigFile(YAML::Node config_file)
         }
     }
 
+    if(config_file["sprites_path"]){
+        configuration.SetSpritesPath(config_file["sprites_path"].as<string>());
+    }
+
     return configuration;
 }
 

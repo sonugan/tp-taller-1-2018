@@ -17,6 +17,8 @@ class Configuration
         void SetFormation(string formation);
         string GetShirt();
         void SetShirt(string shirt);
+        string GetSpritesPath();
+        void SetSpritesPath(string sprites_path);
 
     protected:
 
@@ -24,6 +26,7 @@ class Configuration
         string log_level;
         string formation;
         string shirt;
+        string sprites_path;
 };
 
 
