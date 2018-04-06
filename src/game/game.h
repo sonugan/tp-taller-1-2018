@@ -39,7 +39,7 @@ class Game
         Match* match;
         Player* selected_player;
         Camera* camera;
-        static const int FRAMES_PER_SECOND = 20;
+        static const int FRAMES_PER_SECOND = 200;
         std::map <unsigned int, PlayerView*> player_views_map;
 
         void CreateModel();
