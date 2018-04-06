@@ -16,7 +16,7 @@ SpriteSheet::SpriteSheet(SDL_Renderer* renderer, std::string path, std::vector<S
 
 SpriteSheet::~SpriteSheet()
 {
-    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO SPRITESHEET");
+    Logger::getInstance()->debug("DESTRUYENDO SPRITESHEET");
 //    for (unsigned int i = 0; i < clips.size(); i++) {
 //        delete (clips[i]);
 //    }

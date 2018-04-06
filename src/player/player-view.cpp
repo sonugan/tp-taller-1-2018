@@ -85,7 +85,7 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
 }
 
 PlayerView::~PlayerView() {
-    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO PLAYERVIEW");
+    Logger::getInstance()->debug("DESTRUYENDO PLAYERVIEW");
     delete sprite_sheet;
 
     //TODO: delete clips in animation destructor

@@ -8,7 +8,7 @@ Player::Player(unsigned int position_index) {
 
 Player::~Player()
 {
-    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO PLAYER");
+    Logger::getInstance()->debug("DESTRUYENDO PLAYER");
     delete location;
 }
 

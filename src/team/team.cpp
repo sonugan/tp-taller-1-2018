@@ -7,7 +7,7 @@ Team::Team(Formation* formation) {
 }
 
 Team::~Team() {
-    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO EQUIPO");
+    Logger::getInstance()->debug("DESTRUYENDO EQUIPO");
     delete formation;
     for (unsigned int i; i < players.size(); i++) {
         delete players[i];

@@ -16,7 +16,7 @@ Formation::Formation(FORMATION value)
 }
 
 Formation::~Formation() {
-    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO FORMACION");
+    Logger::getInstance()->debug("DESTRUYENDO FORMACION");
     for (unsigned int i; i < positions.size(); i++) {
         delete positions[i];
     }

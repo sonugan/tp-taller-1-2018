@@ -11,7 +11,7 @@ Animation::Animation(std::string name, std::vector<SDL_Rect*> clips, float frame
 
 Animation::~Animation()
 {
-    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO ANIMACION");
+    Logger::getInstance()->debug("DESTRUYENDO ANIMACION");
     for (unsigned int i = 0; i < clips.size(); i++) {
         delete (clips[i]);
     }

@@ -22,8 +22,7 @@ void Game::RenderViews() {
 }
 
 void Game::Start() {
-    Logger::getInstance()->setMode(Logger::INFO);
-    Logger::getInstance()->log(Logger::INFO, "======COMIENZA EL JUEGO======");
+    Logger::getInstance()->info("==================COMIENZA EL JUEGO==================");
     //Main loop flag
     bool quit = false;
 
@@ -62,7 +61,7 @@ void Game::Start() {
 }
 
 void Game::End() {
-    Logger::getInstance()->log(Logger::INFO, "======JUEGO TERMINADO======");
+    Logger::getInstance()->info("==================JUEGO TERMINADO==================");
 
     DestroyModel();
     DestroyViews();
@@ -70,7 +69,7 @@ void Game::End() {
 }
 
 void Game::CreateModel() {
-    Logger::getInstance()->log(Logger::DEBUG, "CREANDO EL MODELO");
+    Logger::getInstance()->debug("CREANDO EL MODELO");
     Pitch* pitch = new Pitch();
     Formation* formation = new Formation(F_3_3);
     Team* team_a = new Team(formation);
@@ -87,7 +86,7 @@ void Game::CreateModel() {
 }
 
 void Game::CreateViews() {
-    Logger::getInstance()->log(Logger::DEBUG, "CREANDO LAS VISTAS");
+    Logger::getInstance()->debug("CREANDO LAS VISTAS");
     this->camera = new Camera(PITCH_WIDTH, PITCH_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, this->renderer);
 
     PitchView* pitch_view = new PitchView(this->match->GetPitch(), this->renderer);
@@ -106,12 +105,12 @@ void Game::CreateViews() {
 }
 
 void Game::DestroyModel() {
-    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO EL MODELO");
+    Logger::getInstance()->debug("DESTRUYENDO EL MODELO");
     delete this->match;
 }
 
 void Game::DestroyViews() {
-    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO LAS VISTAS");
+    Logger::getInstance()->debug("DESTRUYENDO LAS VISTAS");
     std::vector<AbstractView*> views = this->camera->GetViews();
     for (unsigned int i = 0; i < views.size(); i++) {
         delete (views[i]);
@@ -120,7 +119,7 @@ void Game::DestroyViews() {
 }
 
 void Game::InitSDL() {
-    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO LAS VISTAS");
+    Logger::getInstance()->debug("DESTRUYENDO LAS VISTAS");
     //Starts up SDL and creates window
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
@@ -130,7 +129,7 @@ void Game::InitSDL() {
     //Set texture filtering to linear
     if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
     {
-        printf( "Warning: Linear texture filtering not enabled!" );
+        Logger::getInstance()->debug( "Warning: Linear texture filtering not enabled!" );
     }
     //Create window
     window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
@@ -171,7 +170,7 @@ void Game::CloseSDL()
 	IMG_Quit();
 	SDL_Quit();
 
-	Logger::getInstance()->log(Logger::DEBUG, "TERMINANDO PROGRAMA");
+	Logger::getInstance()->debug("TERMINANDO PROGRAMA");
 }
 
 Player* Game::FindNextPlayerToSelect() {

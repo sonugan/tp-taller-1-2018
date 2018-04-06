@@ -9,7 +9,7 @@ Match::Match(Pitch* pitch, Team* team_a, Team* team_b) {
 }
 
 Match::~Match() {
-    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO EL MATCH");
+    Logger::getInstance()->debug("DESTRUYENDO EL MATCH");
     delete pitch;
     delete team_a;
     delete team_b;

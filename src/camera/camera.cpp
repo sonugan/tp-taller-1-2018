@@ -19,7 +19,7 @@ Camera::Camera(int pitch_width, int pitch_height, int width, int height, IShowab
 
 Camera::~Camera()
 {
-    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO CAMARA");
+    Logger::getInstance()->debug("DESTRUYENDO CAMARA");
     delete this->area;
 }
 

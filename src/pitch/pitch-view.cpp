@@ -24,7 +24,7 @@ PitchView::PitchView(Pitch* pitch, SDL_Renderer* renderer)
 
 PitchView::~PitchView()
 {
-    Logger::getInstance()->log(Logger::DEBUG, "DESTRUYENDO LA VISTA DEL CAMPO");
+    Logger::getInstance()->debug("DESTRUYENDO LA VISTA DEL CAMPO");
     delete sprite_sheet;
 
     for (unsigned int i = 0; i < animations.size(); i++) {
