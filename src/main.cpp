@@ -1,27 +1,15 @@
 #include "game/game.h"
-#include "configuration/configuration-parser.h"
 #include "configuration.h"
+#include "configuration/cli-options-parser.h"
 
 #include <iostream>
 #include <string>
 
-// Estos métodos podrían ser parte de un CliParser
-std::string getConfigPath(int argc, char* args[])
-{
-    //TODO: Implementar!
-    return "";
-}
-
-std::string getLogLevel(int argc, char* args[])
-{
-    //TODO: Implementar!
-    return "";
-}
-
 Configuration* loadConfiguration(int argc, char* args[])
 {
-    std::string config_path = getConfigPath(argc, args);
-    std::string log_level = getLogLevel(argc, args);
+    CLIOptionsParser* parser = new CLIOptionsParser();
+    std::string config_path = parser->GetConfigPath(argc, args);
+    std::string log_level = parser->GetLogLevel(argc, args);
     return Configuration::Load(config_path, log_level);
 }
 
@@ -29,6 +17,8 @@ int main( int argc, char* args[] ) {
 
     Configuration* config = loadConfiguration(argc, args);
     std::cout << config->GetSpritesPath() << "\n";
+    std::cout << config->GetLogLevel() << "\n";
+    std::cout << config->GetFormation() << "\n";
 
     Game* game = new Game();
     game->Start();
