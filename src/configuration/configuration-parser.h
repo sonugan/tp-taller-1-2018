@@ -1,10 +1,11 @@
 #ifndef CONFIGURATIONPARSER_H
 #define CONFIGURATIONPARSER_H
 
-#include "yaml-cpp/yaml.h"
 #include <string>
+#include "configuration.h"
 
 using namespace std;
+
 
 class ConfigurationParser
 {
@@ -12,13 +13,13 @@ class ConfigurationParser
         ConfigurationParser();
         virtual ~ConfigurationParser();
 
-        void ReadFile(string file_path);
+        Configuration* ReadFile(string file_path);
 
     protected:
 
     private:
         const string DEFAULT_CONFIG_FILE = "src/configuration/default-config.yml";
-        void ReadDefaultConfig();
+        Configuration* ReadDefaultConfig();
 };
 
 #endif // CONFIGURATIONPARSER_H
