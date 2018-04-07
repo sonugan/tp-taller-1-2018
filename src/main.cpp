@@ -1,16 +1,13 @@
 #include "game/game.h"
 #include "configuration.h"
-#include "configuration/cli-options-parser.h"
+#include "cli-options.h"
 
 #include <iostream>
-#include <string>
 
 Configuration* loadConfiguration(int argc, char* args[])
 {
-    CLIOptionsParser* parser = new CLIOptionsParser();
-    std::string config_path = parser->GetConfigPath(argc, args);
-    std::string log_level = parser->GetLogLevel(argc, args);
-    return Configuration::Load(config_path, log_level);
+    CLIOptions* cli_options = CLIOptions::GetOptions(argc, args);
+    return Configuration::Load(cli_options->GetConfigPath(), cli_options->GetLogLevel());
 }
 
 int main( int argc, char* args[] ) {
