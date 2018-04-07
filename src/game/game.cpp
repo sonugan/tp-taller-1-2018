@@ -87,7 +87,8 @@ void Game::CreateModel() {
 
 void Game::CreateViews() {
     std::cout << "Game::CreateViews" << "\n";
-    this->camera = new Camera(PITCH_WIDTH, PITCH_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, this->renderer);
+    Location center(PITCH_WIDTH/2 - SCREEN_WIDTH/2, PITCH_HEIGHT/2 - SCREEN_HEIGHT/2, 0);
+    this->camera = new Camera(PITCH_WIDTH, PITCH_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, this->renderer, &center);
 
     PitchView* pitch_view = new PitchView(this->match->GetPitch(), this->renderer);
     this->camera->Add(pitch_view);

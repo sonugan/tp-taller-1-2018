@@ -22,8 +22,21 @@ int Location::GetZ() {
 }
 
 void Location::Update(int x, int y, int z) {
-    this->x = x;
+
+    // Controlo que el jugador no se pase de los limites de la cancha
+
+    if (x >= MIN_X_LOCATION && x <= MAX_X_LOCATION) {
+        this->x = x;
+
+    } else if (x < MIN_X_LOCATION) {
+        this->x = MIN_X_LOCATION;
+
+    } else if (x > MAX_X_LOCATION) {
+        this->x = MAX_X_LOCATION;
+    }
+
     this->y = y;
+
     this->z = z;
 }
 

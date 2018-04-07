@@ -7,7 +7,7 @@
 class Camera
 {
     public:
-        Camera(int pitch_width, int pitch_height, int width, int height, IShowable* showable, SDL_Renderer* renderer);
+        Camera(int pitch_width, int pitch_height, int width, int height, IShowable* showable, SDL_Renderer* renderer, Location* initialPosition);
         virtual ~Camera();
         void Render();
         void SetLocatable(IShowable* showable);
@@ -24,6 +24,7 @@ class Camera
         SDL_Renderer* renderer;
         unsigned int pitch_height;
         unsigned int pitch_width;
+        const static int CAMERA_MARGIN = 200;
 };
 
 #endif // CAMERA_H
