@@ -1,4 +1,5 @@
 #include "configuration.h"
+#include "configuration-parser.h"
 
 Configuration::Configuration()
 {
@@ -54,4 +55,15 @@ string Configuration::GetSpritesPath()
 void Configuration::SetSpritesPath(string sprites_path)
 {
     this->sprites_path = sprites_path;
+}
+
+Configuration* Configuration::Load(string config_path, string log_level)
+{
+    ConfigurationParser* parser = new ConfigurationParser();
+    Configuration* config = parser->ReadFile(config_path);
+    if(log_level != "") {
+        config->SetLogLevel(log_level);
+    }
+
+    return config;
 }

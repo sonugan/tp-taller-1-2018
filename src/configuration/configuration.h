@@ -11,14 +11,24 @@ class Configuration
         Configuration();
         Configuration(string formation, string shirt, string log_level);
         virtual ~Configuration();
+
         string GetLogLevel();
+
         void SetLogLevel(string log_level);
+
         string GetFormation();
+
         void SetFormation(string formation);
+
         string GetShirt();
+
         void SetShirt(string shirt);
+
         string GetSpritesPath();
+
         void SetSpritesPath(string sprites_path);
+
+        static Configuration* Load(string config_path, string log_level);
 
     protected:
 

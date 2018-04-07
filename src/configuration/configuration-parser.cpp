@@ -2,30 +2,37 @@
 #include "yaml-cpp/yaml.h"
 #include <iostream>
 
+const string LOGGER_NODE = "logger";
+const string LOGGER_LEVEL_NODE = "level";
+const string TEAM_NODE = "team";
+const string TEAM_FORMATION_NODE = "formation";
+const string TEAM_SHIRT_NODE = "shirt";
+const string SPRITES_PATH = "sprites_path";
+
 /** Helper functions **/
-Configuration parseConfigFile(YAML::Node config_file)
+Configuration* parseConfigFile(YAML::Node config_file)
 {
-    Configuration configuration = Configuration();
+    Configuration* configuration = new Configuration();
 
-    if(config_file["logger"]) {
-        YAML::Node logger_node = config_file["logger"];
-        if(logger_node["level"]) {
-            configuration.SetLogLevel(logger_node["level"].as<string>());
+    if(config_file[LOGGER_NODE]) {
+        YAML::Node logger_node = config_file[LOGGER_NODE];
+        if(logger_node[LOGGER_LEVEL_NODE]) {
+            configuration->SetLogLevel(logger_node[LOGGER_LEVEL_NODE].as<string>());
         }
     }
 
-    if(config_file["team"]) {
-        YAML::Node team_node = config_file["team"];
-        if(team_node["formation"]) {
-            configuration.SetFormation(team_node["formation"].as<string>());
+    if(config_file[TEAM_NODE]) {
+        YAML::Node team_node = config_file[TEAM_NODE];
+        if(team_node[TEAM_FORMATION_NODE]) {
+            configuration->SetFormation(team_node[TEAM_FORMATION_NODE].as<string>());
         }
-        if(team_node["shirt"]) {
-            configuration.SetShirt(team_node["shirt"].as<string>());
+        if(team_node[TEAM_SHIRT_NODE]) {
+            configuration->SetShirt(team_node[TEAM_SHIRT_NODE].as<string>());
         }
     }
 
-    if(config_file["sprites_path"]){
-        configuration.SetSpritesPath(config_file["sprites_path"].as<string>());
+    if(config_file[SPRITES_PATH]){
+        configuration->SetSpritesPath(config_file[SPRITES_PATH].as<string>());
     }
 
     return configuration;
@@ -43,7 +50,7 @@ ConfigurationParser::~ConfigurationParser()
     //dtor
 }
 
-Configuration ConfigurationParser::ReadFile(string file_path) {
+Configuration* ConfigurationParser::ReadFile(string file_path) {
     try {
         YAML::Node config_file = YAML::LoadFile(file_path);
         return parseConfigFile(config_file);
@@ -53,7 +60,7 @@ Configuration ConfigurationParser::ReadFile(string file_path) {
     }
 }
 
-Configuration ConfigurationParser::ReadDefaultConfig() {
+Configuration* ConfigurationParser::ReadDefaultConfig() {
     YAML::Node config_file = YAML::LoadFile(DEFAULT_CONFIG_FILE);
     return parseConfigFile(config_file);
 }
