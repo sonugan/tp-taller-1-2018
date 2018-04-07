@@ -18,6 +18,8 @@ class Location
     protected:
 
     private:
+        static const int MAX_X_LOCATION = 1700;
+        static const int MIN_X_LOCATION = 160;
         int x;
         int y;
         int z;
