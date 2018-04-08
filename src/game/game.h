@@ -58,6 +58,7 @@ class Game
         bool LeftKeySelected(const Uint8 *keyboard_state_array);
         bool DownKeySelected(const Uint8 *keyboard_state_array);
         bool CKeySelected(const Uint8 *keyboard_state_array);
+        bool PlayerWithinMargins(Player* player);
         Player* FindNextPlayerToSelect();
 
 };
