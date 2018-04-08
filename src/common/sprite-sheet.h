@@ -11,7 +11,7 @@ class SpriteSheet
 {
 	public:
 		//Initializes variables
-		SpriteSheet(SDL_Renderer* renderer, std::string path, std::vector<SDL_Rect*> clips);
+		SpriteSheet(SDL_Renderer* renderer, std::string path);
 
 		//Deallocates memory
 		~SpriteSheet();
@@ -35,15 +35,11 @@ class SpriteSheet
 		int GetWidth();
 		int GetHeight();
 
-		std::vector<SDL_Rect*> GetClips();
-
 	private:
 		//The actual hardware texture
 		SDL_Texture* texture;
 
 		SDL_Renderer* renderer;
-
-		std::vector<SDL_Rect*> clips;
 
         //Loads image at specified path
 		bool LoadFromFile();

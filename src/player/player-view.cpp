@@ -80,7 +80,7 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
     Location* current_location = player->GetLocation();
     previous_location = new Location(current_location->GetX(), current_location->GetY(), current_location->GetZ());
 
-	this->sprite_sheet = new SpriteSheet(renderer, "player.png", run_clips);
+	this->sprite_sheet = new SpriteSheet(renderer, "player.png");
 }
 
 PlayerView::~PlayerView() {
