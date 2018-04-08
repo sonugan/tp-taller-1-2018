@@ -39,7 +39,7 @@ class Game
         Match* match;
         Player* selected_player;
         Camera* camera;
-        static const int FRAMES_PER_SECOND = 200;
+        static const int FRAMES_PER_SECOND = 30;
         std::map <unsigned int, PlayerView*> player_views_map;
 
         void CreateModel();
@@ -52,12 +52,14 @@ class Game
         void MovePlayer(const Uint8 *keyboard_state_array);
         void MoveUnselectedPlayersToDefaultPositions();
         void ChangePlayerSelection(const Uint8 *keyboard_state_array);
+        void ChangeFormation(const Uint8 *keyboard_state_array, SDL_Event* e);
         Uint8 GetSelectedKey(const Uint8* keyboard_state_array);
         bool UpKeySelected(const Uint8 *keyboard_state_array);
         bool RightKeySelected(const Uint8 *keyboard_state_array);
         bool LeftKeySelected(const Uint8 *keyboard_state_array);
         bool DownKeySelected(const Uint8 *keyboard_state_array);
         bool CKeySelected(const Uint8 *keyboard_state_array);
+        bool FKeySelected(const Uint8 *keyboard_state_array, SDL_Event* e);
         bool PlayerWithinMargins(Player* player);
         Player* FindNextPlayerToSelect();
 

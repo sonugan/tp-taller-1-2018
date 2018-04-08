@@ -14,8 +14,6 @@ class Team
         std::vector<Player*> GetPlayers();
         void SetFormation(Formation* formation);
         Formation* GetFormation();
-        Formation* SetFormation();
-
         void AddPlayer(Player* player);
         static const unsigned int TEAM_SIZE = 7;
 

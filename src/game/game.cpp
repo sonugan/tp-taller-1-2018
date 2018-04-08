@@ -45,10 +45,9 @@ void Game::Start() {
             {
                 quit = true;
             }
-
-            //this->MovePlayer(&e, keyboard_state_array);
         }
 
+        this->ChangeFormation(keyboard_state_array, &e);
         this->MoveUnselectedPlayersToDefaultPositions();
         this->ChangePlayerSelection(keyboard_state_array);
         //Si queda dentro del loop de eventos, se genera un delay
@@ -71,7 +70,7 @@ void Game::End() {
 void Game::CreateModel() {
     std::cout << "Game::CreateModel" << "\n";
     Pitch* pitch = new Pitch();
-    Formation* formation = new Formation(F_3_3);
+    Formation* formation = new Formation(F_3_2_1);
     Team* team_a = new Team(formation);
 
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
@@ -175,7 +174,6 @@ void Game::CloseSDL()
 }
 
 bool Game::PlayerWithinMargins(Player* player) {
-
     //  64 es el tamaño del sprite del player... magic number.
     int half_player_sprite_size = 32;
     int x = player->GetLocation()->GetX() - camera->area->x;
@@ -205,7 +203,6 @@ Player* Game::FindNextPlayerToSelect() {
 
 void Game::ChangePlayerSelection(const Uint8 *keyboard_state_array) {
     if(CKeySelected(keyboard_state_array)) {
-
         Player* next_player = FindNextPlayerToSelect();
         if (next_player != NULL) {
             selected_player->SetSelected(false);
@@ -213,15 +210,19 @@ void Game::ChangePlayerSelection(const Uint8 *keyboard_state_array) {
             selected_player->SetSelected(true);
             camera->SetLocatable(player_views_map[selected_player->GetPositionIndex()]);
         }
+    }
+}
 
-//        selected_player->SetSelected(false);
-//        unsigned int new_selected_player_position_index = selected_player->GetPositionIndex() + 1;
-//        if (new_selected_player_position_index >= Team::TEAM_SIZE) {
-//            new_selected_player_position_index = 0;
-//        }
-//        selected_player = match->GetTeamA()->GetPlayers()[new_selected_player_position_index];
-//        selected_player->SetSelected(true);
-//        camera->SetLocatable(player_views_map[selected_player->GetPositionIndex()]);
+void Game::ChangeFormation(const Uint8 *keyboard_state_array, SDL_Event* e) {
+    if(FKeySelected(keyboard_state_array, e)) {
+        FORMATION old_formation_value = match->GetTeamA()->GetFormation()->GetValue();
+        if (old_formation_value == F_3_3) {
+            match->GetTeamA()->SetFormation(new Formation(F_3_2_1));
+        } else if (old_formation_value == F_3_2_1) {
+            match->GetTeamA()->SetFormation(new Formation(F_3_1_2));
+        } else if (old_formation_value == F_3_1_2) {
+            match->GetTeamA()->SetFormation(new Formation(F_3_3));
+        }
     }
 }
 
@@ -278,4 +279,9 @@ bool Game::LeftKeySelected(const Uint8 *keyboard_state_array)
 bool Game::DownKeySelected(const Uint8 *keyboard_state_array)
 {
     return keyboard_state_array[SDL_SCANCODE_DOWN] || keyboard_state_array[SDL_SCANCODE_S];
+}
+
+bool Game::FKeySelected(const Uint8 *keyboard_state_array, SDL_Event* e)
+{
+    return keyboard_state_array[SDL_SCANCODE_F];
 }

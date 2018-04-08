@@ -18,7 +18,9 @@ std::vector<Player*> Team::GetPlayers() {
 }
 
 void Team::SetFormation(Formation* formation) {
+    Formation* old_formation = this->formation;
     this->formation = formation;
+    delete old_formation;
 }
 
 Formation* Team::GetFormation() {
