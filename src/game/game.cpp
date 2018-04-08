@@ -78,8 +78,8 @@ void Game::CreateModel() {
         team_a->AddPlayer(new Player(i));
     }
 
-    //selecciono por default al delantero del medio
-    this->selected_player = team_a->GetPlayers()[5];
+    //selecciono por default al arquero
+    this->selected_player = team_a->GetPlayers()[0];
     this->selected_player->SetSelected(true);
 
     this->match = new Match(pitch, team_a, NULL);
@@ -97,8 +97,8 @@ void Game::CreateViews() {
         PlayerView* player_view = new PlayerView(player, this->renderer);
         player_views_map[i] = player_view;
         this->camera->Add(player_view);
-        //selecciono por default al delantero del medio
-        if (i == 5) {
+        //selecciono por default al arquero
+        if (i == 0) {
             this->camera->SetLocatable(player_view);
         }
     }
@@ -175,9 +175,12 @@ void Game::CloseSDL()
 }
 
 bool Game::PlayerWithinMargins(Player* player) {
+
+    //  64 es el tamaño del sprite del player... magic number.
+    int half_player_sprite_size = 32;
     int x = player->GetLocation()->GetX() - camera->area->x;
     int y = player->GetLocation()->GetY() - camera->area->y;
-    return x >= Camera::CAMERA_MARGIN && y >= Camera::CAMERA_MARGIN && x <= (SCREEN_WIDTH - Camera::CAMERA_MARGIN) && y <= (SCREEN_HEIGHT - Camera::CAMERA_MARGIN);
+    return x >= (Camera::CAMERA_MARGIN - half_player_sprite_size) && y >= (Camera::CAMERA_MARGIN - half_player_sprite_size) && x <= (SCREEN_WIDTH - Camera::CAMERA_MARGIN + half_player_sprite_size) && y <= (SCREEN_HEIGHT - Camera::CAMERA_MARGIN + half_player_sprite_size);
 }
 
 Player* Game::FindNextPlayerToSelect() {
