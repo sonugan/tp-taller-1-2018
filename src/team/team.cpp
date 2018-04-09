@@ -1,11 +1,13 @@
 #include "team.h"
+#include "logger.h"
+
 
 Team::Team(Formation* formation) {
     this->formation = formation;
 }
 
 Team::~Team() {
-    std::cout << "Destructor de Team" << "\n";
+    Logger::getInstance()->debug("DESTRUYENDO EQUIPO");
     delete formation;
     for (unsigned int i; i < players.size(); i++) {
         delete players[i];

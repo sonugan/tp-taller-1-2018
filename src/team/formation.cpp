@@ -1,4 +1,5 @@
 #include "formation.h"
+#include "logger.h"
 
 Formation::Formation(FORMATION value)
 {
@@ -31,7 +32,7 @@ Formation::Formation(FORMATION value)
 }
 
 Formation::~Formation() {
-    std::cout << "Destructor de Formation" << "\n";
+    Logger::getInstance()->debug("DESTRUYENDO FORMACION");
     for (unsigned int i; i < positions.size(); i++) {
         delete positions[i];
     }

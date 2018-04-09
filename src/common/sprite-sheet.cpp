@@ -1,4 +1,6 @@
 #include "sprite-sheet.h"
+#include "logger.h"
+
 
 SpriteSheet::SpriteSheet(SDL_Renderer* renderer, std::string path)
 {
@@ -13,7 +15,7 @@ SpriteSheet::SpriteSheet(SDL_Renderer* renderer, std::string path)
 
 SpriteSheet::~SpriteSheet()
 {
-    std::cout << "Destructor de SpriteSheet" << "\n";
+    Logger::getInstance()->debug("DESTRUYENDO SPRITESHEET");
 	Free();
 }
 
