@@ -24,6 +24,7 @@ class PlayerView : public AbstractView, public IShowable
         double angle = 0;
         Location* previous_location;
         bool IsStill();
+        bool File_Exists(const string& name);
 };
 
 #endif // PLAYERVIEW_H

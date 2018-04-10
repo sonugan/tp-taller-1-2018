@@ -70,8 +70,9 @@ void Game::End() {
 void Game::CreateModel() {
     Logger::getInstance()->debug("CREANDO EL MODELO");
     Pitch* pitch = new Pitch();
-    Formation* formation = new Formation(F_3_2_1);
-    Team* team_a = new Team(formation);
+
+    Formation* formation = new Formation(F_3_3);
+    Team* team_a = new Team(formation, "team_a", "away");
 
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
         team_a->AddPlayer(new Player(i));

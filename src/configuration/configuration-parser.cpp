@@ -7,6 +7,7 @@ const string LOGGER_NODE = "logger";
 const string LOGGER_LEVEL_NODE = "level";
 const string TEAM_NODE = "team";
 const string TEAM_FORMATION_NODE = "formation";
+const string TEAM_NAME_NODE = "name";
 const string TEAM_SHIRT_NODE = "shirt";
 const string SPRITES_PATH = "sprites_path";
 const string DEFAULT_LOG_MODE = "debug";
@@ -38,22 +39,24 @@ Configuration* parseConfigFile(YAML::Node config_file)
         YAML::Node team_node = config_file[TEAM_NODE];
         if(team_node[TEAM_FORMATION_NODE]) {
             configuration->SetFormation(team_node[TEAM_FORMATION_NODE].as<string>());
-        }
-        else {
+        } else {
             Logger::getInstance()->error("No se encontro la key '" + TEAM_FORMATION_NODE + "' en el nodo '" + TEAM_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_FORMATION + "'.");
             configuration->SetFormation(DEFAULT_FORMATION);
         }
 
+
         if(team_node[TEAM_SHIRT_NODE]) {
             configuration->SetShirt(team_node[TEAM_SHIRT_NODE].as<string>());
-        }
-        else {
+        } else {
             Logger::getInstance()->error("No se encontro la key '" + TEAM_SHIRT_NODE + "' en el nodo '" + TEAM_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_SHIRT + "'.");
             configuration->SetShirt(DEFAULT_SHIRT);
         }
 
-    }
-    else {
+        if(team_node[TEAM_NAME_NODE]) {
+            configuration->SetTeamName(team_node[TEAM_NAME_NODE].as<string>());
+        }
+
+    } else {
         Logger::getInstance()->error("No se encontro el nodo '" + TEAM_NODE + "' en la configuracion. Se procede a tomar los valores por defecto para formacion y remera: '" + DEFAULT_FORMATION + "' y '" + DEFAULT_SHIRT + "'.");
         configuration->SetFormation(DEFAULT_FORMATION);
         configuration->SetShirt(DEFAULT_SHIRT);
@@ -61,8 +64,7 @@ Configuration* parseConfigFile(YAML::Node config_file)
 
     if(config_file[SPRITES_PATH]){
         configuration->SetSpritesPath(config_file[SPRITES_PATH].as<string>());
-    }
-    else {
+    } else {
         Logger::getInstance()->error("No se encontro la key '" + SPRITES_PATH + "' en la configuracion. Se procede a tomar el valor por defecto: '" + DEFAULT_SPRITES_PATH + "'.");
         configuration->SetSpritesPath(DEFAULT_SPRITES_PATH);
     }

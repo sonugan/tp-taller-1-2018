@@ -72,3 +72,13 @@ Configuration* Configuration::Load(string config_path, string log_level)
 
     return config;
 }
+
+string Configuration::GetTeamName()
+{
+    return this->team_name;
+}
+
+void Configuration::SetTeamName(string name)
+{
+    this->team_name = name;
+}
