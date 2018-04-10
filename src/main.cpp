@@ -16,6 +16,8 @@ int main( int argc, char* args[] ) {
     std::cout << config->GetSpritesPath() << "\n";
     std::cout << config->GetLogLevel() << "\n";
     std::cout << config->GetFormation() << "\n";
+    std::cout << config->GetTeamName() << "\n";
+    std::cout << config->GetShirt() << "\n";
 
     Game* game = new Game();
     game->Start();

@@ -124,6 +124,10 @@ void Player::GoBackToDefaultPosition() {
 
 }
 
+Team* Player::getTeam() {
+    return this->team;
+}
+
 
 
 

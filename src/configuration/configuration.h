@@ -26,6 +26,10 @@ class Configuration
 
         string GetSpritesPath();
 
+        void SetTeamName(string name);
+
+        string GetTeamName();
+
         void SetSpritesPath(string sprites_path);
 
         static Configuration* Load(string config_path, string log_level);
@@ -37,6 +41,7 @@ class Configuration
         string formation;
         string shirt;
         string sprites_path;
+        string team_name;
 };
 
 

@@ -6,6 +6,7 @@ const string LOGGER_NODE = "logger";
 const string LOGGER_LEVEL_NODE = "level";
 const string TEAM_NODE = "team";
 const string TEAM_FORMATION_NODE = "formation";
+const string TEAM_NAME_NODE = "name";
 const string TEAM_SHIRT_NODE = "shirt";
 const string SPRITES_PATH = "sprites_path";
 
@@ -26,8 +27,13 @@ Configuration* parseConfigFile(YAML::Node config_file)
         if(team_node[TEAM_FORMATION_NODE]) {
             configuration->SetFormation(team_node[TEAM_FORMATION_NODE].as<string>());
         }
+
         if(team_node[TEAM_SHIRT_NODE]) {
             configuration->SetShirt(team_node[TEAM_SHIRT_NODE].as<string>());
+        }
+
+        if(team_node[TEAM_NAME_NODE]) {
+            configuration->SetTeamName(team_node[TEAM_NAME_NODE].as<string>());
         }
     }
 

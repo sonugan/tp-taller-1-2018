@@ -1,7 +1,9 @@
 #include "team.h"
 
-Team::Team(Formation* formation) {
+Team::Team(Formation* formation, string name, string shirt) {
     this->formation = formation;
+    this->name = name;
+    this->shirt = shirt;
 }
 
 Team::~Team() {
@@ -30,4 +32,12 @@ void Team::AddPlayer(Player* player) {
         players.push_back(player);
         player->SetTeam(this);
     }
+}
+
+string Team::GetName() {
+    return this->name;
+}
+
+string Team::GetShirt() {
+    return this->shirt;
 }
