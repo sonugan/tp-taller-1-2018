@@ -59,6 +59,16 @@ void Player::MoveDownToLeft()
     this->direction = SOUTHWEST;
 }
 
+void Player::Kick()
+{
+    this->kicking = true;
+}
+
+void Player::RecoverBall()
+{
+    this->recoveringBall = true;
+}
+
 Location* Player::GetLocation() {
     return location;
 }
@@ -124,6 +134,18 @@ void Player::GoBackToDefaultPosition() {
 
 }
 
+bool Player::IsKicking() {
+    return kicking;
+}
 
+void Player::SetKicking(bool kicking) {
+    this->kicking = kicking;
+}
 
+bool Player::IsRecoveringBall() {
+    return recoveringBall;
+}
 
+void Player::SetRecoveringBall(bool recoveringBall) {
+    this->recoveringBall = recoveringBall;
+}

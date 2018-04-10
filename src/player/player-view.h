@@ -21,9 +21,14 @@ class PlayerView : public AbstractView, public IShowable
         static constexpr float FRAMES_PER_EVENT = 0.3;
         static constexpr int RUN_ANIMATION_INDEX = 0;
         static constexpr int STILL_ANIMATION_INDEX = 1;
+        static constexpr int KICKING_ANIMATION_INDEX = 2;
+        static constexpr int RECOVERING_BALL_ANIMATION_INDEX = 3;
         double angle = 0;
         Location* previous_location;
         bool IsStill();
+        bool IsKicking();
+        bool IsRecoveringBall();
+        void GetPlayerAngle();
 };
 
 #endif // PLAYERVIEW_H

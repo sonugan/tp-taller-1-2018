@@ -49,14 +49,18 @@ class Game
         void InitSDL();
         void CloseSDL();
         void RenderViews();
+        void PlayerPlay(const Uint8 *keyboard_state_array);
         void MovePlayer(const Uint8 *keyboard_state_array);
         void MoveUnselectedPlayersToDefaultPositions();
         void ChangePlayerSelection(const Uint8 *keyboard_state_array);
+        bool PlayerRecoverBall(const Uint8 *keyboard_state_array);
+        bool KickPlayer(const Uint8 *keyboard_state_array);
         Uint8 GetSelectedKey(const Uint8* keyboard_state_array);
         bool UpKeySelected(const Uint8 *keyboard_state_array);
         bool RightKeySelected(const Uint8 *keyboard_state_array);
         bool LeftKeySelected(const Uint8 *keyboard_state_array);
         bool DownKeySelected(const Uint8 *keyboard_state_array);
+        bool SpaceBarSelected(const Uint8 *keyboard_state_array);
         bool CKeySelected(const Uint8 *keyboard_state_array);
         Player* FindNextPlayerToSelect();
 

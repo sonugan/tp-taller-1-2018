@@ -52,11 +52,25 @@ void Game::Start() {
         this->MoveUnselectedPlayersToDefaultPositions();
         this->ChangePlayerSelection(keyboard_state_array);
         //Si queda dentro del loop de eventos, se genera un delay
-        this->MovePlayer(keyboard_state_array);
+        this->PlayerPlay(keyboard_state_array);
+
         RenderViews();
 
         //Manejo de frames por segundo: http://lazyfoo.net/SDL_tutorials/lesson16/index.php
         SDL_Delay( ( 1000 / FRAMES_PER_SECOND ));
+    }
+
+}
+
+void Game::PlayerPlay(const Uint8 *keyboard_state_array) {
+
+    bool playerKicked = this->KickPlayer(keyboard_state_array);
+
+    if (!playerKicked) {
+        bool playerRecovered = this->PlayerRecoverBall(keyboard_state_array);
+        if (!playerRecovered) {
+            this->MovePlayer(keyboard_state_array);
+        }
     }
 
 }
@@ -248,6 +262,24 @@ void Game::MoveUnselectedPlayersToDefaultPositions() {
     }
 }
 
+bool Game::KickPlayer(const Uint8 *keyboard_state_array)
+{
+    if (SpaceBarSelected(keyboard_state_array)) {
+        selected_player->Kick();
+        return true;
+    }
+    return false;
+}
+
+bool Game::PlayerRecoverBall(const Uint8 *keyboard_state_array)
+{
+    if (keyboard_state_array[SDL_SCANCODE_V]) {
+        selected_player->RecoverBall();
+        return true;
+    }
+    return false;
+}
+
 bool Game::CKeySelected(const Uint8 *keyboard_state_array)
 {
     return keyboard_state_array[SDL_SCANCODE_C];
@@ -272,3 +304,9 @@ bool Game::DownKeySelected(const Uint8 *keyboard_state_array)
 {
     return keyboard_state_array[SDL_SCANCODE_DOWN] || keyboard_state_array[SDL_SCANCODE_S];
 }
+
+bool Game::SpaceBarSelected(const Uint8 *keyboard_state_array)
+{
+    return keyboard_state_array[SDL_SCANCODE_SPACE];
+}
+
