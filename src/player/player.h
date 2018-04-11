@@ -37,6 +37,7 @@ class Player : public ILocatable
         void SetTeam(Team* team);
         unsigned int GetPositionIndex();
         void GoBackToDefaultPosition();
+        Team* getTeam();
     protected:
 
     private:

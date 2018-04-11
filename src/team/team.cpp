@@ -1,11 +1,15 @@
 #include "team.h"
+#include "logger.h"
 
-Team::Team(Formation* formation) {
+
+Team::Team(Formation* formation, string name, string shirt) {
     this->formation = formation;
+    this->name = name;
+    this->shirt = shirt;
 }
 
 Team::~Team() {
-    std::cout << "Destructor de Team" << "\n";
+    Logger::getInstance()->debug("DESTRUYENDO EQUIPO");
     delete formation;
     for (unsigned int i; i < players.size(); i++) {
         delete players[i];
@@ -18,7 +22,9 @@ std::vector<Player*> Team::GetPlayers() {
 }
 
 void Team::SetFormation(Formation* formation) {
+    Formation* old_formation = this->formation;
     this->formation = formation;
+    delete old_formation;
 }
 
 Formation* Team::GetFormation() {
@@ -30,4 +36,12 @@ void Team::AddPlayer(Player* player) {
         players.push_back(player);
         player->SetTeam(this);
     }
+}
+
+string Team::GetName() {
+    return this->name;
+}
+
+string Team::GetShirt() {
+    return this->shirt;
 }

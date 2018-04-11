@@ -1,10 +1,11 @@
 #include "sprite-sheet.h"
+#include "logger.h"
 
-SpriteSheet::SpriteSheet(SDL_Renderer* renderer, std::string path, std::vector<SDL_Rect*> clips)
+
+SpriteSheet::SpriteSheet(SDL_Renderer* renderer, std::string path)
 {
 	//Initialize
 	this->renderer = renderer;
-	this->clips = clips;
 	this->path = "src/sprites/" + path;
 	texture = NULL;
 	width = 0;
@@ -14,12 +15,7 @@ SpriteSheet::SpriteSheet(SDL_Renderer* renderer, std::string path, std::vector<S
 
 SpriteSheet::~SpriteSheet()
 {
-    std::cout << "Destructor de SpriteSheet" << "\n";
-//    for (unsigned int i = 0; i < clips.size(); i++) {
-//        delete (clips[i]);
-//    }
-//    clips.clear();
-	//Deallocate
+    Logger::getInstance()->debug("DESTRUYENDO SPRITESHEET");
 	Free();
 }
 
@@ -119,9 +115,3 @@ int SpriteSheet::GetHeight()
 {
 	return height;
 }
-
-std::vector<SDL_Rect*> SpriteSheet::GetClips() {
-    return this->clips;
-}
-
-

@@ -12,6 +12,7 @@ class Formation
         Formation(FORMATION value);
         virtual ~Formation();
         Location* GetLocationForPlayer(unsigned int player_index);
+        FORMATION GetValue();
 
     protected:
 

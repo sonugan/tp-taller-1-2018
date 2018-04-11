@@ -1,4 +1,7 @@
 #include "player-view.h"
+#include "logger.h"
+#include <sys/stat.h>
+
 
 PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
 {
@@ -146,11 +149,23 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
     Location* current_location = player->GetLocation();
     previous_location = new Location(current_location->GetX(), current_location->GetY(), current_location->GetZ());
 
-	this->sprite_sheet = new SpriteSheet(renderer, "player.png", run_clips);
+    string kitFile = player->getTeam()->GetName();
+    kitFile.append("/");
+    kitFile.append(player->getTeam()->GetShirt());
+    kitFile.append("-kit.png");
+
+    if (File_Exists("src/sprites/" + kitFile)) {
+        this->sprite_sheet = new SpriteSheet(renderer, kitFile);
+    } else {
+        cout << "No se encontro la camiseta para el jugador" << endl;
+        //Por defecto cargo el home kit del team_a
+        this->sprite_sheet = new SpriteSheet(renderer, "team_a/home-kit.png");
+    }
+
 }
 
 PlayerView::~PlayerView() {
-    std::cout << "Destructor de PlayerView" << "\n";
+    Logger::getInstance()->debug("DESTRUYENDO PLAYERVIEW");
     delete sprite_sheet;
 
     //TODO: delete clips in animation destructor
@@ -271,4 +286,10 @@ bool PlayerView::IsKicking()
 bool PlayerView::IsRecoveringBall()
 {
     return this->player->IsRecoveringBall();
+}
+
+bool PlayerView::File_Exists (const string& name)
+{
+    struct stat buffer;
+    return (stat (name.c_str(), &buffer) == 0);
 }

@@ -1,5 +1,6 @@
 #include "game.h"
 #include <iostream>
+#include "logger.h"
 
 Game::Game() {
     InitSDL();
@@ -8,7 +9,6 @@ Game::Game() {
 }
 
 Game::~Game() {
-    std::cout << "Destructor de Game" << "\n";
     DestroyModel();
     DestroyViews();
 }
@@ -22,8 +22,7 @@ void Game::RenderViews() {
 }
 
 void Game::Start() {
-    std::cout << "Game::Start" << "\n";
-
+    Logger::getInstance()->info("==================COMIENZA EL JUEGO==================");
     //Main loop flag
     bool quit = false;
 
@@ -45,10 +44,9 @@ void Game::Start() {
             {
                 quit = true;
             }
-
-            //this->MovePlayer(&e, keyboard_state_array);
         }
 
+        this->ChangeFormation(keyboard_state_array, &e);
         this->MoveUnselectedPlayersToDefaultPositions();
         this->ChangePlayerSelection(keyboard_state_array);
         //Si queda dentro del loop de eventos, se genera un delay
@@ -76,17 +74,19 @@ void Game::PlayerPlay(const Uint8 *keyboard_state_array) {
 }
 
 void Game::End() {
-    std::cout << "Game::End" << "\n";
+    Logger::getInstance()->info("==================JUEGO TERMINADO==================");
+
     DestroyModel();
     DestroyViews();
     CloseSDL();
 }
 
 void Game::CreateModel() {
-    std::cout << "Game::CreateModel" << "\n";
+    Logger::getInstance()->debug("CREANDO EL MODELO");
     Pitch* pitch = new Pitch();
+
     Formation* formation = new Formation(F_3_3);
-    Team* team_a = new Team(formation);
+    Team* team_a = new Team(formation, "team_a", "away");
 
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
         team_a->AddPlayer(new Player(i));
@@ -100,7 +100,8 @@ void Game::CreateModel() {
 }
 
 void Game::CreateViews() {
-    std::cout << "Game::CreateViews" << "\n";
+
+    Logger::getInstance()->debug("CREANDO LAS VISTAS");
     Location center(PITCH_WIDTH/2 - SCREEN_WIDTH/2, PITCH_HEIGHT/2 - SCREEN_HEIGHT/2, 0);
     this->camera = new Camera(PITCH_WIDTH, PITCH_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, this->renderer, &center);
 
@@ -120,12 +121,12 @@ void Game::CreateViews() {
 }
 
 void Game::DestroyModel() {
-    std::cout << "Game::DestroyModel" << "\n";
+    Logger::getInstance()->debug("DESTRUYENDO EL MODELO");
     delete this->match;
 }
 
 void Game::DestroyViews() {
-    std::cout << "Game::DestroyViews()" << "\n";
+    Logger::getInstance()->debug("DESTRUYENDO LAS VISTAS");
     std::vector<AbstractView*> views = this->camera->GetViews();
     for (unsigned int i = 0; i < views.size(); i++) {
         delete (views[i]);
@@ -134,7 +135,7 @@ void Game::DestroyViews() {
 }
 
 void Game::InitSDL() {
-    std::cout << "Game::InitSDL" << "\n";
+    Logger::getInstance()->debug("DESTRUYENDO LAS VISTAS");
     //Starts up SDL and creates window
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
@@ -144,7 +145,7 @@ void Game::InitSDL() {
     //Set texture filtering to linear
     if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
     {
-        printf( "Warning: Linear texture filtering not enabled!" );
+        Logger::getInstance()->debug( "Warning: Linear texture filtering not enabled!" );
     }
     //Create window
     window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
@@ -185,11 +186,10 @@ void Game::CloseSDL()
 	IMG_Quit();
 	SDL_Quit();
 
-	std::cout << "bye." << "\n";
+	Logger::getInstance()->debug("TERMINANDO PROGRAMA");
 }
 
 bool Game::PlayerWithinMargins(Player* player) {
-
     //  64 es el tamaño del sprite del player... magic number.
     int half_player_sprite_size = 32;
     int x = player->GetLocation()->GetX() - camera->area->x;
@@ -219,7 +219,6 @@ Player* Game::FindNextPlayerToSelect() {
 
 void Game::ChangePlayerSelection(const Uint8 *keyboard_state_array) {
     if(CKeySelected(keyboard_state_array)) {
-
         Player* next_player = FindNextPlayerToSelect();
         if (next_player != NULL) {
             selected_player->SetSelected(false);
@@ -227,15 +226,19 @@ void Game::ChangePlayerSelection(const Uint8 *keyboard_state_array) {
             selected_player->SetSelected(true);
             camera->SetLocatable(player_views_map[selected_player->GetPositionIndex()]);
         }
+    }
+}
 
-//        selected_player->SetSelected(false);
-//        unsigned int new_selected_player_position_index = selected_player->GetPositionIndex() + 1;
-//        if (new_selected_player_position_index >= Team::TEAM_SIZE) {
-//            new_selected_player_position_index = 0;
-//        }
-//        selected_player = match->GetTeamA()->GetPlayers()[new_selected_player_position_index];
-//        selected_player->SetSelected(true);
-//        camera->SetLocatable(player_views_map[selected_player->GetPositionIndex()]);
+void Game::ChangeFormation(const Uint8 *keyboard_state_array, SDL_Event* e) {
+    if(FKeySelected(keyboard_state_array, e)) {
+        FORMATION old_formation_value = match->GetTeamA()->GetFormation()->GetValue();
+        if (old_formation_value == F_3_3) {
+            match->GetTeamA()->SetFormation(new Formation(F_3_2_1));
+        } else if (old_formation_value == F_3_2_1) {
+            match->GetTeamA()->SetFormation(new Formation(F_3_1_2));
+        } else if (old_formation_value == F_3_1_2) {
+            match->GetTeamA()->SetFormation(new Formation(F_3_3));
+        }
     }
 }
 
@@ -317,3 +320,7 @@ bool Game::SpaceBarSelected(const Uint8 *keyboard_state_array)
     return keyboard_state_array[SDL_SCANCODE_SPACE];
 }
 
+bool Game::FKeySelected(const Uint8 *keyboard_state_array, SDL_Event* e)
+{
+    return keyboard_state_array[SDL_SCANCODE_F];
+}

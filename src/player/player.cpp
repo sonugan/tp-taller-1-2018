@@ -1,4 +1,5 @@
 #include "player.h"
+#include "logger.h"
 
 Player::Player(unsigned int position_index) {
     this->position_index = position_index;
@@ -7,7 +8,7 @@ Player::Player(unsigned int position_index) {
 
 Player::~Player()
 {
-    std::cout << "Destructor de Player" << "\n";
+    Logger::getInstance()->debug("DESTRUYENDO PLAYER");
     delete location;
 }
 
@@ -134,11 +135,18 @@ void Player::GoBackToDefaultPosition() {
 
 }
 
-bool Player::IsKicking() {
+Team* Player::getTeam()
+{
+    return this->team;
+}
+
+bool Player::IsKicking()
+{
     return kicking;
 }
 
-void Player::SetKicking(bool kicking) {
+void Player::SetKicking(bool kicking)
+{
     this->kicking = kicking;
 }
 
