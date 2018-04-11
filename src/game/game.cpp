@@ -23,8 +23,7 @@ void Game::RenderViews() {
 
 void Game::Start() {
     Logger::getInstance()->info("==================COMIENZA EL JUEGO==================");
-    //Main loop flag
-    bool quit = false;
+    this->quit = false;
 
     //Event handler
     SDL_Event e;
@@ -33,29 +32,23 @@ void Game::Start() {
 
     const Uint8 *keyboard_state_array = SDL_GetKeyboardState(NULL);
 
-    //While application is running
-    while( !quit )
-    {
-        //Handle events on queue
-        while( SDL_PollEvent( &e ) != 0 )
-        {
-            //User requests quit
-            if( e.type == SDL_QUIT )
-            {
-                quit = true;
-            }
-        }
-
-        this->ChangeFormation(keyboard_state_array, &e);
+    // GAME LOOP
+    while( !quit ) {
+        this->ChangeFormation(keyboard_state_array);
         this->MoveUnselectedPlayersToDefaultPositions();
         this->ChangePlayerSelection(keyboard_state_array);
-        //Si queda dentro del loop de eventos, se genera un delay
         this->PlayerPlay(keyboard_state_array);
+        this->ExitGame(keyboard_state_array);
 
         RenderViews();
 
         //Manejo de frames por segundo: http://lazyfoo.net/SDL_tutorials/lesson16/index.php
         SDL_Delay( ( 1000 / FRAMES_PER_SECOND ));
+
+        while( SDL_PollEvent( &e ) != 0 ) {
+            //User requests quit
+            quit = ( e.type == SDL_QUIT );
+        }
     }
 
 }
@@ -229,8 +222,8 @@ void Game::ChangePlayerSelection(const Uint8 *keyboard_state_array) {
     }
 }
 
-void Game::ChangeFormation(const Uint8 *keyboard_state_array, SDL_Event* e) {
-    if(FKeySelected(keyboard_state_array, e)) {
+void Game::ChangeFormation(const Uint8 *keyboard_state_array) {
+    if(FKeySelected(keyboard_state_array)) {
         FORMATION old_formation_value = match->GetTeamA()->GetFormation()->GetValue();
         if (old_formation_value == F_3_3) {
             match->GetTeamA()->SetFormation(new Formation(F_3_2_1));
@@ -320,7 +313,13 @@ bool Game::SpaceBarSelected(const Uint8 *keyboard_state_array)
     return keyboard_state_array[SDL_SCANCODE_SPACE];
 }
 
-bool Game::FKeySelected(const Uint8 *keyboard_state_array, SDL_Event* e)
+bool Game::FKeySelected(const Uint8 *keyboard_state_array)
 {
     return keyboard_state_array[SDL_SCANCODE_F];
+}
+
+void Game::ExitGame(const Uint8 *keyboard_state_array) {
+    if (keyboard_state_array[SDL_SCANCODE_ESCAPE]) {
+        this->quit = true;
+    }
 }
