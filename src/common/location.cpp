@@ -35,7 +35,15 @@ void Location::Update(int x, int y, int z) {
         this->x = MAX_X_LOCATION;
     }
 
-    this->y = y;
+    if (y >= MIN_Y_LOCATION && y <= MAX_Y_LOCATION) {
+        this->y = y;
+
+    } else if (y < MIN_Y_LOCATION) {
+        this->y = MIN_Y_LOCATION;
+
+    } else if (y > MAX_Y_LOCATION) {
+        this->y = MAX_Y_LOCATION;
+    }
 
     this->z = z;
 }

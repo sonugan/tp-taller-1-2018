@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="--config --config /home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/config.yml" />
+				<Option parameters="--config=/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/config.yml --loglevel=ERROR" />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="src/game" />
@@ -62,6 +62,10 @@
 		<Unit filename="src/common/location.h" />
 		<Unit filename="src/common/sprite-sheet.cpp" />
 		<Unit filename="src/common/sprite-sheet.h" />
+		<Unit filename="src/configuration/cli-options-parser.cpp" />
+		<Unit filename="src/configuration/cli-options-parser.h" />
+		<Unit filename="src/configuration/cli-options.cpp" />
+		<Unit filename="src/configuration/cli-options.h" />
 		<Unit filename="src/configuration/configuration-parser.cpp" />
 		<Unit filename="src/configuration/configuration-parser.h" />
 		<Unit filename="src/configuration/configuration.cpp" />
