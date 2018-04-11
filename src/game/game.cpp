@@ -10,8 +10,7 @@ Game::Game(Configuration* initial_configuration) {
 }
 
 Game::~Game() {
-    DestroyModel();
-    DestroyViews();
+
 }
 
 void Game::RenderViews() {

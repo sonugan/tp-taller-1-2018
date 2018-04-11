@@ -22,6 +22,7 @@ int main( int argc, char* args[] ) {
     Game* game = new Game(config);
     game->Start();
     game->End();
+    delete game;
     delete config;
 	return 0;
 }
