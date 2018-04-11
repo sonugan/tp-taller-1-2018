@@ -19,8 +19,9 @@ int main( int argc, char* args[] ) {
     std::cout << config->GetTeamName() << "\n";
     std::cout << config->GetShirt() << "\n";
 
-    Game* game = new Game();
+    Game* game = new Game(config);
     game->Start();
     game->End();
+    delete config;
 	return 0;
 }

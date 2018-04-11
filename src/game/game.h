@@ -17,12 +17,13 @@
 #include "../match/match.h"
 #include "../team/team.h"
 #include "../team/formation.h"
+#include "../configuration/configuration.h"
 #include <map>
 
 class Game
 {
     public:
-        Game();
+        Game(Configuration* initial_configuration);
         virtual ~Game();
         void Start();
         void End();
@@ -34,6 +35,7 @@ class Game
 
     private:
 
+        Configuration* initial_configuration;
         SDL_Window* window;
         SDL_Renderer* renderer;
         Match* match;
