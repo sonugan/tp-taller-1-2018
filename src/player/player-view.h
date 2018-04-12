@@ -23,6 +23,7 @@ class PlayerView : public AbstractView, public IShowable
         static constexpr int STILL_ANIMATION_INDEX = 1;
         static constexpr int KICKING_ANIMATION_INDEX = 2;
         static constexpr int RECOVERING_BALL_ANIMATION_INDEX = 3;
+        static constexpr int SELECTOR_ANIMATION_INDEX = 4;
         double angle = 0;
         Location* previous_location;
         bool IsStill();
@@ -30,6 +31,7 @@ class PlayerView : public AbstractView, public IShowable
         bool IsRecoveringBall();
         void GetPlayerAngle();
         bool File_Exists(const string& name);
+        SpriteSheet* selector_sheet;
 };
 
 #endif // PLAYERVIEW_H

@@ -98,4 +98,3 @@ Configuration* ConfigurationParser::ReadDefaultConfig() {
     YAML::Node config_file = YAML::LoadFile(DEFAULT_CONFIG_FILE);
     return parseConfigFile(config_file);
 }
-

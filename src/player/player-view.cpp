@@ -146,6 +146,20 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
 
     current_animation_index = 0;
 
+    std::vector<SDL_Rect*> player_selector_clips;
+
+    //player selector sprites
+    SDL_Rect* player_selector_sprite_1 = new SDL_Rect();
+    player_selector_sprite_1->x = 0;
+    player_selector_sprite_1->y = 1;
+    player_selector_sprite_1->w = this->width;
+    player_selector_sprite_1->h = this->height;
+    player_selector_clips.push_back(player_selector_sprite_1);
+
+    animations.push_back(new Animation("selector", player_selector_clips, FRAMES_PER_EVENT));
+
+    this->selector_sheet = new SpriteSheet(renderer, "seleccion3.png");
+
     Location* current_location = player->GetLocation();
     previous_location = new Location(current_location->GetX(), current_location->GetY(), current_location->GetZ());
 
@@ -167,6 +181,7 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
 PlayerView::~PlayerView() {
     Logger::getInstance()->debug("DESTRUYENDO PLAYERVIEW");
     delete sprite_sheet;
+    delete selector_sheet;
 
     //TODO: delete clips in animation destructor
     for (unsigned int i = 0; i < animations.size(); i++) {
@@ -255,6 +270,8 @@ void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
         if(y > max_y - this->height) {
             y = max_y - this->height;
         }
+
+        selector_sheet->Render(x, y, animations[SELECTOR_ANIMATION_INDEX]->NextClip(), 0);
     }
 
     sprite_sheet->Render( x, y, current_clip, this->angle);
