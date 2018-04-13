@@ -41,6 +41,9 @@ class SpriteSheet
 
 		SDL_Renderer* renderer;
 
+		//Loads surface at specified path
+		SDL_Surface* LoadSurface();
+
         //Loads image at specified path
 		bool LoadFromFile();
 		//Image dimensions

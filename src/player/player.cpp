@@ -1,4 +1,5 @@
 #include "player.h"
+#include "logger.h"
 
 Player::Player(unsigned int position_index) {
     this->position_index = position_index;
@@ -7,7 +8,7 @@ Player::Player(unsigned int position_index) {
 
 Player::~Player()
 {
-    std::cout << "Destructor de Player" << "\n";
+    Logger::getInstance()->debug("DESTRUYENDO PLAYER");
     delete location;
 }
 
@@ -57,6 +58,16 @@ void Player::MoveDownToLeft()
     location->UpdateY(location->GetY() + PLAYER_SPEED);
     location->UpdateX(location->GetX() - PLAYER_SPEED);
     this->direction = SOUTHWEST;
+}
+
+void Player::Kick()
+{
+    this->kicking = true;
+}
+
+void Player::RecoverBall()
+{
+    this->recoveringBall = true;
 }
 
 Location* Player::GetLocation() {
@@ -124,6 +135,25 @@ void Player::GoBackToDefaultPosition() {
 
 }
 
+Team* Player::getTeam()
+{
+    return this->team;
+}
 
+bool Player::IsKicking()
+{
+    return kicking;
+}
 
+void Player::SetKicking(bool kicking)
+{
+    this->kicking = kicking;
+}
 
+bool Player::IsRecoveringBall() {
+    return recoveringBall;
+}
+
+void Player::SetRecoveringBall(bool recoveringBall) {
+    this->recoveringBall = recoveringBall;
+}

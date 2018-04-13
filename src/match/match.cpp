@@ -1,4 +1,6 @@
 #include "match.h"
+#include "logger.h"
+
 
 Match::Match(Pitch* pitch, Team* team_a, Team* team_b) {
     this->team_a = team_a;
@@ -7,7 +9,7 @@ Match::Match(Pitch* pitch, Team* team_a, Team* team_b) {
 }
 
 Match::~Match() {
-    std::cout << "Destructor de Match" << "\n";
+    Logger::getInstance()->debug("DESTRUYENDO EL MATCH");
     delete pitch;
     delete team_a;
     delete team_b;

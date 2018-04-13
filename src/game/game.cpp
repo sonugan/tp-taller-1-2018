@@ -1,16 +1,16 @@
 #include "game.h"
 #include <iostream>
+#include "logger.h"
 
-Game::Game() {
+Game::Game(Configuration* initial_configuration) {
+    this->initial_configuration = initial_configuration;
     InitSDL();
     CreateModel();
     CreateViews();
 }
 
 Game::~Game() {
-    std::cout << "Destructor de Game" << "\n";
-    DestroyModel();
-    DestroyViews();
+
 }
 
 void Game::RenderViews() {
@@ -22,10 +22,8 @@ void Game::RenderViews() {
 }
 
 void Game::Start() {
-    std::cout << "Game::Start" << "\n";
-
-    //Main loop flag
-    bool quit = false;
+    Logger::getInstance()->info("==================COMIENZA EL JUEGO==================");
+    this->quit = false;
 
     //Event handler
     SDL_Event e;
@@ -34,44 +32,54 @@ void Game::Start() {
 
     const Uint8 *keyboard_state_array = SDL_GetKeyboardState(NULL);
 
-    //While application is running
-    while( !quit )
-    {
-        //Handle events on queue
-        while( SDL_PollEvent( &e ) != 0 )
-        {
-            //User requests quit
-            if( e.type == SDL_QUIT )
-            {
-                quit = true;
-            }
-        }
-
-        this->ChangeFormation(keyboard_state_array, &e);
+    // GAME LOOP
+    while( !quit ) {
+        this->ChangeFormation(keyboard_state_array);
         this->MoveUnselectedPlayersToDefaultPositions();
         this->ChangePlayerSelection(keyboard_state_array);
-        //Si queda dentro del loop de eventos, se genera un delay
-        this->MovePlayer(keyboard_state_array);
+        this->PlayerPlay(keyboard_state_array);
+        this->ExitGame(keyboard_state_array);
+
         RenderViews();
 
         //Manejo de frames por segundo: http://lazyfoo.net/SDL_tutorials/lesson16/index.php
         SDL_Delay( ( 1000 / FRAMES_PER_SECOND ));
+
+        while( SDL_PollEvent( &e ) != 0 ) {
+            //User requests quit
+            quit = ( e.type == SDL_QUIT );
+        }
+    }
+
+}
+
+void Game::PlayerPlay(const Uint8 *keyboard_state_array) {
+
+    bool playerKicked = this->KickPlayer(keyboard_state_array);
+
+    if (!playerKicked) {
+        bool playerRecovered = this->PlayerRecoverBall(keyboard_state_array);
+        if (!playerRecovered) {
+            this->MovePlayer(keyboard_state_array);
+        }
     }
 
 }
 
 void Game::End() {
-    std::cout << "Game::End" << "\n";
+    Logger::getInstance()->info("==================JUEGO TERMINADO==================");
+
     DestroyModel();
     DestroyViews();
     CloseSDL();
 }
 
 void Game::CreateModel() {
-    std::cout << "Game::CreateModel" << "\n";
+    Logger::getInstance()->debug("CREANDO EL MODELO");
     Pitch* pitch = new Pitch();
-    Formation* formation = new Formation(F_3_2_1);
-    Team* team_a = new Team(formation);
+
+    Formation* formation = new Formation(initial_configuration->GetFormation());
+    Team* team_a = new Team(formation, "team_a", "away");
 
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
         team_a->AddPlayer(new Player(i));
@@ -85,7 +93,8 @@ void Game::CreateModel() {
 }
 
 void Game::CreateViews() {
-    std::cout << "Game::CreateViews" << "\n";
+
+    Logger::getInstance()->debug("CREANDO LAS VISTAS");
     Location center(PITCH_WIDTH/2 - SCREEN_WIDTH/2, PITCH_HEIGHT/2 - SCREEN_HEIGHT/2, 0);
     this->camera = new Camera(PITCH_WIDTH, PITCH_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, this->renderer, &center);
 
@@ -105,12 +114,12 @@ void Game::CreateViews() {
 }
 
 void Game::DestroyModel() {
-    std::cout << "Game::DestroyModel" << "\n";
+    Logger::getInstance()->debug("DESTRUYENDO EL MODELO");
     delete this->match;
 }
 
 void Game::DestroyViews() {
-    std::cout << "Game::DestroyViews()" << "\n";
+    Logger::getInstance()->debug("DESTRUYENDO LAS VISTAS");
     std::vector<AbstractView*> views = this->camera->GetViews();
     for (unsigned int i = 0; i < views.size(); i++) {
         delete (views[i]);
@@ -119,7 +128,7 @@ void Game::DestroyViews() {
 }
 
 void Game::InitSDL() {
-    std::cout << "Game::InitSDL" << "\n";
+    Logger::getInstance()->debug("DESTRUYENDO LAS VISTAS");
     //Starts up SDL and creates window
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
@@ -129,7 +138,7 @@ void Game::InitSDL() {
     //Set texture filtering to linear
     if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
     {
-        printf( "Warning: Linear texture filtering not enabled!" );
+        Logger::getInstance()->debug( "Warning: Linear texture filtering not enabled!" );
     }
     //Create window
     window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
@@ -170,7 +179,7 @@ void Game::CloseSDL()
 	IMG_Quit();
 	SDL_Quit();
 
-	std::cout << "bye." << "\n";
+	Logger::getInstance()->debug("TERMINANDO PROGRAMA");
 }
 
 bool Game::PlayerWithinMargins(Player* player) {
@@ -213,8 +222,8 @@ void Game::ChangePlayerSelection(const Uint8 *keyboard_state_array) {
     }
 }
 
-void Game::ChangeFormation(const Uint8 *keyboard_state_array, SDL_Event* e) {
-    if(FKeySelected(keyboard_state_array, e)) {
+void Game::ChangeFormation(const Uint8 *keyboard_state_array) {
+    if(FKeySelected(keyboard_state_array)) {
         FORMATION old_formation_value = match->GetTeamA()->GetFormation()->GetValue();
         if (old_formation_value == F_3_3) {
             match->GetTeamA()->SetFormation(new Formation(F_3_2_1));
@@ -256,6 +265,24 @@ void Game::MoveUnselectedPlayersToDefaultPositions() {
     }
 }
 
+bool Game::KickPlayer(const Uint8 *keyboard_state_array)
+{
+    if (SpaceBarSelected(keyboard_state_array)) {
+        selected_player->Kick();
+        return true;
+    }
+    return false;
+}
+
+bool Game::PlayerRecoverBall(const Uint8 *keyboard_state_array)
+{
+    if (keyboard_state_array[SDL_SCANCODE_V]) {
+        selected_player->RecoverBall();
+        return true;
+    }
+    return false;
+}
+
 bool Game::CKeySelected(const Uint8 *keyboard_state_array)
 {
     return keyboard_state_array[SDL_SCANCODE_C];
@@ -281,7 +308,18 @@ bool Game::DownKeySelected(const Uint8 *keyboard_state_array)
     return keyboard_state_array[SDL_SCANCODE_DOWN] || keyboard_state_array[SDL_SCANCODE_S];
 }
 
-bool Game::FKeySelected(const Uint8 *keyboard_state_array, SDL_Event* e)
+bool Game::SpaceBarSelected(const Uint8 *keyboard_state_array)
+{
+    return keyboard_state_array[SDL_SCANCODE_SPACE];
+}
+
+bool Game::FKeySelected(const Uint8 *keyboard_state_array)
 {
     return keyboard_state_array[SDL_SCANCODE_F];
+}
+
+void Game::ExitGame(const Uint8 *keyboard_state_array) {
+    if (keyboard_state_array[SDL_SCANCODE_ESCAPE]) {
+        this->quit = true;
+    }
 }

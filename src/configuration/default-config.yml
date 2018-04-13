@@ -2,5 +2,6 @@ logger:
   level: debug
 team:
   formation: 3-3
-  shirt: main
+  shirt: home
+  name: team_a
 sprites_path: src/sprites

@@ -1,5 +1,6 @@
 #include "configuration.h"
 #include "configuration-parser.h"
+#include "logger.h"
 
 Configuration::Configuration()
 {
@@ -25,6 +26,7 @@ string Configuration::GetLogLevel()
 void Configuration::SetLogLevel(string log_level)
 {
     this->log_level = log_level;
+    Logger::getInstance()->debug("(Configuracion) NIVEL DE LOG: " + log_level);
 }
 
 string Configuration::GetFormation()
@@ -35,6 +37,7 @@ string Configuration::GetFormation()
 void Configuration::SetFormation(string formation)
 {
     this->formation = formation;
+    Logger::getInstance()->debug("(Configuracion) FORMACION: " + formation);
 }
 
 string Configuration::GetShirt()
@@ -45,6 +48,7 @@ string Configuration::GetShirt()
 void Configuration::SetShirt(string shirt)
 {
     this->shirt = shirt;
+    Logger::getInstance()->debug("(Configuracion) SHIRT: " + shirt);
 }
 
 string Configuration::GetSpritesPath()
@@ -55,6 +59,7 @@ string Configuration::GetSpritesPath()
 void Configuration::SetSpritesPath(string sprites_path)
 {
     this->sprites_path = sprites_path;
+    Logger::getInstance()->debug("(Configuracion) SPRITES PATH: " + sprites_path);
 }
 
 Configuration* Configuration::Load(string config_path, string log_level)
@@ -66,4 +71,14 @@ Configuration* Configuration::Load(string config_path, string log_level)
     }
 
     return config;
+}
+
+string Configuration::GetTeamName()
+{
+    return this->team_name;
+}
+
+void Configuration::SetTeamName(string name)
+{
+    this->team_name = name;
 }
