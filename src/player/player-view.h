@@ -30,7 +30,6 @@ class PlayerView : public AbstractView, public IShowable
         bool IsKicking();
         bool IsRecoveringBall();
         void GetPlayerAngle();
-        bool File_Exists(const string& name);
         SpriteSheet* selector_sheet;
 };
 

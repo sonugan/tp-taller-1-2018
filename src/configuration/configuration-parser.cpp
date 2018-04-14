@@ -12,7 +12,7 @@ const string TEAM_SHIRT_NODE = "shirt";
 const string SPRITES_PATH = "sprites_path";
 const string DEFAULT_LOG_MODE = "debug";
 const string DEFAULT_FORMATION = "3-3";
-const string DEFAULT_SHIRT = "main";
+const string DEFAULT_SHIRT = "home";
 const string DEFAULT_SPRITES_PATH = "src/sprites";
 
 /** Helper functions **/
@@ -26,7 +26,7 @@ Configuration* parseConfigFile(YAML::Node config_file)
             configuration->SetLogLevel(logger_node[LOGGER_LEVEL_NODE].as<string>());
         }
         else {
-            Logger::getInstance()->error("No se encontro la key '" + LOGGER_LEVEL_NODE + "' en el nodo '" + LOGGER_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_LOG_MODE + "'.");
+            Logger::getInstance()->error("No se encontro el parametro '" + LOGGER_LEVEL_NODE + "' en el nodo '" + LOGGER_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_LOG_MODE + "'.");
             configuration->SetLogLevel(DEFAULT_LOG_MODE);
         }
     }
@@ -40,7 +40,7 @@ Configuration* parseConfigFile(YAML::Node config_file)
         if(team_node[TEAM_FORMATION_NODE]) {
             configuration->SetFormation(team_node[TEAM_FORMATION_NODE].as<string>());
         } else {
-            Logger::getInstance()->error("No se encontro la key '" + TEAM_FORMATION_NODE + "' en el nodo '" + TEAM_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_FORMATION + "'.");
+            Logger::getInstance()->error("No se encontro el parametro '" + TEAM_FORMATION_NODE + "' en el nodo '" + TEAM_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_FORMATION + "'.");
             configuration->SetFormation(DEFAULT_FORMATION);
         }
 
@@ -48,7 +48,7 @@ Configuration* parseConfigFile(YAML::Node config_file)
         if(team_node[TEAM_SHIRT_NODE]) {
             configuration->SetShirt(team_node[TEAM_SHIRT_NODE].as<string>());
         } else {
-            Logger::getInstance()->error("No se encontro la key '" + TEAM_SHIRT_NODE + "' en el nodo '" + TEAM_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_SHIRT + "'.");
+            Logger::getInstance()->error("No se encontro el parametro '" + TEAM_SHIRT_NODE + "' en el nodo '" + TEAM_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_SHIRT + "'.");
             configuration->SetShirt(DEFAULT_SHIRT);
         }
 
@@ -65,7 +65,7 @@ Configuration* parseConfigFile(YAML::Node config_file)
     if(config_file[SPRITES_PATH]){
         configuration->SetSpritesPath(config_file[SPRITES_PATH].as<string>());
     } else {
-        Logger::getInstance()->error("No se encontro la key '" + SPRITES_PATH + "' en la configuracion. Se procede a tomar el valor por defecto: '" + DEFAULT_SPRITES_PATH + "'.");
+        Logger::getInstance()->error("No se encontro el parametro '" + SPRITES_PATH + "' en la configuracion. Se procede a tomar el valor por defecto: '" + DEFAULT_SPRITES_PATH + "'.");
         configuration->SetSpritesPath(DEFAULT_SPRITES_PATH);
     }
 
@@ -85,6 +85,7 @@ ConfigurationParser::~ConfigurationParser()
 }
 
 Configuration* ConfigurationParser::ReadFile(string file_path) {
+    Logger::getInstance()->debug("Leyendo archivo de configuracion desde '" + file_path + "'...");
     try {
         YAML::Node config_file = YAML::LoadFile(file_path);
         return parseConfigFile(config_file);

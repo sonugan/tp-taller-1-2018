@@ -14,7 +14,7 @@ class Camera
         void Add(AbstractView* view);
         std::vector<AbstractView*> GetViews();
         SDL_Rect* area;
-        void SetStartPosition(Location* position);//Move the camera to this position
+        void SetStartPosition(Location* position);
         const static int CAMERA_MARGIN = 100;
 
     protected:
