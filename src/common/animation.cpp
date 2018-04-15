@@ -33,3 +33,8 @@ SDL_Rect* Animation::NextClip()
     unsigned int current_clip_index = current_clip * frames_per_cicle;
     return clips[current_clip_index];
 }
+
+void Animation::Restart()
+{
+    current_clip = 0;
+}

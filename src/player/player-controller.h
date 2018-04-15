@@ -5,6 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include "../common/abstract-controller.h"
 #include "../player/player.h"
+#include "../player/player-view.h"
 #include "../team/team.h"
 #include "../camera/camera.h"
 
@@ -19,6 +20,9 @@ class PlayerController : public AbstractController
 
     private:
         Team* team;
+        int current_action_timming;
+        PLAYER_ACTION current_action;
+        Player* selected_player;
 
         void PlayerPlay(const Uint8 *keyboard_state_array);
         void MovePlayer(const Uint8 *keyboard_state_array);
@@ -29,6 +33,8 @@ class PlayerController : public AbstractController
         bool LeftKeySelected(const Uint8 *keyboard_state_array);
         bool DownKeySelected(const Uint8 *keyboard_state_array);
         bool SpaceBarSelected(const Uint8 *keyboard_state_array);
+        bool SelectedPlayerHasChange();
+        bool ContinueCurrentAction();
 };
 
 #endif // PLAYERCONTROLLER_H

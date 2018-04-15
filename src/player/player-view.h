@@ -13,12 +13,15 @@ class PlayerView : public AbstractView, public IShowable
         virtual ~PlayerView();
         void Render(int x_camera, int y_camera, int max_x, int max_y);
         Location* GetLocation();
+        static constexpr float FRAMES_PER_EVENT = 0.3;
+        static constexpr int RUN_FRAME_COUNT = 4;
+        static constexpr int KICKING_FRAME_COUNT = 4;
+        static constexpr int RECOVERING_FRAME_COUNT = 7;
     protected:
         void SetAnimation(Animation* animation);
     private:
         Player* player;
         int frame;
-        static constexpr float FRAMES_PER_EVENT = 0.3;
         static constexpr int RUN_ANIMATION_INDEX = 0;
         static constexpr int STILL_ANIMATION_INDEX = 1;
         static constexpr int KICKING_ANIMATION_INDEX = 2;
