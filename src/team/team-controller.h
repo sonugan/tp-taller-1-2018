@@ -22,8 +22,8 @@ class TeamController : public AbstractController
     protected:
 
     private:
-        static const unsigned int PLAYER_SELECTION_DELAY_MILLIS = 250;
-        static const unsigned int FORMATION_CHANGE_DELAY_MILLIS = 250;
+        static const unsigned int PLAYER_SELECTION_DELAY_MILLIS = 150;
+        static const unsigned int FORMATION_CHANGE_DELAY_MILLIS = 150;
         bool CKeySelected(const Uint8 *keyboard_state_array);
         bool FKeySelected(const Uint8 *keyboard_state_array);
         void ChangePlayerSelection(const Uint8 *keyboard_state_array);

@@ -24,7 +24,7 @@ bool TeamController::PlayerWithinMargins(Player* player) {
     int half_player_sprite_size = 32;
     int x = player->GetLocation()->GetX() - camera->area->x;
     int y = player->GetLocation()->GetY() - camera->area->y;
-    return x >= (Camera::CAMERA_MARGIN - half_player_sprite_size) && y >= (Camera::CAMERA_MARGIN - half_player_sprite_size) && x <= (Game::SCREEN_WIDTH - Camera::CAMERA_MARGIN + half_player_sprite_size) && y <= (Game::SCREEN_HEIGHT - Camera::CAMERA_MARGIN + half_player_sprite_size);
+    return x >= (Camera::CAMERA_MARGIN - half_player_sprite_size) && y >= (Camera::CAMERA_MARGIN - half_player_sprite_size) && x <= (Game::SCREEN_WIDTH - Camera::CAMERA_MARGIN - half_player_sprite_size) && y <= (Game::SCREEN_HEIGHT - Camera::CAMERA_MARGIN - half_player_sprite_size);
 }
 
 Player* TeamController::FindNextPlayerToSelect() {
