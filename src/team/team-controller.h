@@ -30,9 +30,10 @@ class TeamController : public AbstractController
         bool PlayerWithinMargins(Player* player);
         Player* FindNextPlayerToSelect();
         void ChangeFormation(const Uint8 *keyboard_state_array);
+        void MoveUnselectedPlayersToDefaultPositions();
+
         std::chrono::time_point<std::chrono::system_clock> last_player_selection_change;
         std::chrono::time_point<std::chrono::system_clock> last_formation_change;
-
         Team* team;
         Camera* camera;
 

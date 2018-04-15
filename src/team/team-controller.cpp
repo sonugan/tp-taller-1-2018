@@ -88,9 +88,19 @@ void TeamController::ChangeFormation(const Uint8 *keyboard_state_array) {
     }
 }
 
+void TeamController::MoveUnselectedPlayersToDefaultPositions() {
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+        Player* player = team->GetPlayers()[i];
+        if (!player->IsSelected()) {
+            player->GoBackToDefaultPosition();
+        }
+    }
+}
+
 void TeamController::Handle(const Uint8* keyboard_state_array) {
     ChangeFormation(keyboard_state_array);
     ChangePlayerSelection(keyboard_state_array);
+    MoveUnselectedPlayersToDefaultPositions();
 }
 
 

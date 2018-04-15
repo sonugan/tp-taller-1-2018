@@ -15,12 +15,16 @@
 #include "../camera/camera.h"
 #include "../match/match.h"
 #include "../player/player.h"
+#include "../player/player-controller.h"
 #include "../team/team.h"
 #include "../team/team-controller.h"
 #include "../team/formation.h"
 #include "../configuration/configuration.h"
+#include "game-controller.h"
 #include <map>
 
+class GameController; //  forward declaration
+class PlayerController; //  forward declaration
 class TeamController; //  forward declaration
 class Game
 {
@@ -29,6 +33,7 @@ class Game
         virtual ~Game();
         void Start();
         void End();
+        void RequestQuit();
         static const int SCREEN_WIDTH = 800;
         static const int SCREEN_HEIGHT = 600;
         static const unsigned int PITCH_WIDTH = 1920;
@@ -44,6 +49,8 @@ class Game
         Camera* camera;
         static const int FRAMES_PER_SECOND = 30;
         TeamController* team_controller;
+        PlayerController* player_controller;
+        GameController* game_controller;
         bool quit;
 
         void CreateModel();
@@ -51,23 +58,10 @@ class Game
         void CreateControllers();
         void DestroyModel();
         void DestroyViews();
+        void DestroyControllers();
         void InitSDL();
         void CloseSDL();
         void RenderViews();
-        void PlayerPlay(const Uint8 *keyboard_state_array);
-        void MovePlayer(const Uint8 *keyboard_state_array);
-        void MoveUnselectedPlayersToDefaultPositions();
-        bool PlayerRecoverBall(const Uint8 *keyboard_state_array);
-        bool KickPlayer(const Uint8 *keyboard_state_array);
-        Uint8 GetSelectedKey(const Uint8* keyboard_state_array);
-        bool UpKeySelected(const Uint8 *keyboard_state_array);
-        bool RightKeySelected(const Uint8 *keyboard_state_array);
-        bool LeftKeySelected(const Uint8 *keyboard_state_array);
-        bool DownKeySelected(const Uint8 *keyboard_state_array);
-        bool SpaceBarSelected(const Uint8 *keyboard_state_array);
-        void ExitGame(const Uint8 *keyboard_state_array);
-
-
 
 };
 

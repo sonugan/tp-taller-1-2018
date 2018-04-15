@@ -35,9 +35,8 @@ void Game::Start() {
 
     // GAME LOOP
     while( !quit ) {
-        this->MoveUnselectedPlayersToDefaultPositions();
-        this->PlayerPlay(keyboard_state_array);
-        this->ExitGame(keyboard_state_array);
+        this->game_controller->Handle(keyboard_state_array);
+        this->player_controller->Handle(keyboard_state_array);
         this->team_controller->Handle(keyboard_state_array);
 
         RenderViews();
@@ -53,24 +52,12 @@ void Game::Start() {
 
 }
 
-void Game::PlayerPlay(const Uint8 *keyboard_state_array) {
-
-    bool playerKicked = this->KickPlayer(keyboard_state_array);
-
-    if (!playerKicked) {
-        bool playerRecovered = this->PlayerRecoverBall(keyboard_state_array);
-        if (!playerRecovered) {
-            this->MovePlayer(keyboard_state_array);
-        }
-    }
-
-}
-
 void Game::End() {
     Logger::getInstance()->info("==================JUEGO TERMINADO==================");
 
     DestroyModel();
     DestroyViews();
+    DestroyControllers();
     CloseSDL();
 }
 
@@ -116,6 +103,8 @@ void Game::CreateViews() {
 void Game::CreateControllers() {
     Logger::getInstance()->debug("CREANDO CONTROLLERS");class Player; //  forward declaration
     team_controller = new TeamController(match->GetTeamA(), camera);
+    player_controller = new PlayerController(match->GetTeamA(), camera);
+    game_controller = new GameController(this);
 }
 
 void Game::DestroyModel() {
@@ -130,6 +119,13 @@ void Game::DestroyViews() {
         delete (views[i]);
     }
     delete this->camera;
+}
+
+void Game::DestroyControllers() {
+    Logger::getInstance()->debug("DESTRUYENDO LOS CONTROLLERS");
+    delete game_controller;
+    delete player_controller;
+    delete team_controller;
 }
 
 void Game::InitSDL() {
@@ -172,8 +168,7 @@ void Game::InitSDL() {
 
 }
 
-void Game::CloseSDL()
-{
+void Game::CloseSDL() {
 	//Destroy window
 	SDL_DestroyRenderer( renderer );
 	SDL_DestroyWindow( window );
@@ -187,83 +182,6 @@ void Game::CloseSDL()
 	Logger::getInstance()->debug("TERMINANDO PROGRAMA");
 }
 
-
-
-void Game::MovePlayer(const Uint8 *keyboard_state_array)
-{
-    if (UpKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array)) {
-        match->GetTeamA()->GetSelectedPlayer()->MoveUpToRight();
-    } else if (UpKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array)) {
-        match->GetTeamA()->GetSelectedPlayer()->MoveUpToLeft();
-    } else if (DownKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array)) {
-        match->GetTeamA()->GetSelectedPlayer()->MoveDownToRight();
-    } else if (DownKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array)) {
-        match->GetTeamA()->GetSelectedPlayer()->MoveDownToLeft();
-    } else if (UpKeySelected(keyboard_state_array)) {
-        match->GetTeamA()->GetSelectedPlayer()->MoveUp();
-    } else if(RightKeySelected(keyboard_state_array)) {
-        match->GetTeamA()->GetSelectedPlayer()->MoveRight();
-    } else if(LeftKeySelected(keyboard_state_array)) {
-        match->GetTeamA()->GetSelectedPlayer()->MoveLeft();
-    } else if(DownKeySelected(keyboard_state_array)) {
-        match->GetTeamA()->GetSelectedPlayer()->MoveDown();
-    }
-}
-
-void Game::MoveUnselectedPlayersToDefaultPositions() {
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
-        Player* player = match->GetTeamA()->GetPlayers()[i];
-        if (!player->IsSelected()) {
-            player->GoBackToDefaultPosition();
-        }
-    }
-}
-
-bool Game::KickPlayer(const Uint8 *keyboard_state_array)
-{
-    if (SpaceBarSelected(keyboard_state_array)) {
-        match->GetTeamA()->GetSelectedPlayer()->Kick();
-        return true;
-    }
-    return false;
-}
-
-bool Game::PlayerRecoverBall(const Uint8 *keyboard_state_array)
-{
-    if (keyboard_state_array[SDL_SCANCODE_V]) {
-        match->GetTeamA()->GetSelectedPlayer()->RecoverBall();
-        return true;
-    }
-    return false;
-}
-
-bool Game::UpKeySelected(const Uint8 *keyboard_state_array)
-{
-    return keyboard_state_array[SDL_SCANCODE_UP] || keyboard_state_array[SDL_SCANCODE_W];
-}
-
-bool Game::RightKeySelected(const Uint8 *keyboard_state_array)
-{
-    return keyboard_state_array[SDL_SCANCODE_RIGHT] || keyboard_state_array[SDL_SCANCODE_D];
-}
-
-bool Game::LeftKeySelected(const Uint8 *keyboard_state_array)
-{
-    return keyboard_state_array[SDL_SCANCODE_LEFT] || keyboard_state_array[SDL_SCANCODE_A];
-}
-
-bool Game::DownKeySelected(const Uint8 *keyboard_state_array)
-{
-    return keyboard_state_array[SDL_SCANCODE_DOWN] || keyboard_state_array[SDL_SCANCODE_S];
-}
-
-bool Game::SpaceBarSelected(const Uint8 *keyboard_state_array)
-{
-    return keyboard_state_array[SDL_SCANCODE_SPACE];
-}
-
-void Game::ExitGame(const Uint8 *keyboard_state_array) {
-    if (keyboard_state_array[SDL_SCANCODE_ESCAPE]) {
-        this->quit = true;
-    }
+void Game::RequestQuit() {
+    this->quit = true;
 }
