@@ -11,15 +11,21 @@
 #include "../common/sprite-sheet.h"
 #include "../pitch/pitch.h"
 #include "../pitch/pitch-view.h"
-#include "../player/player.h"
 #include "../player/player-view.h"
 #include "../camera/camera.h"
 #include "../match/match.h"
+#include "../player/player.h"
+#include "../player/player-controller.h"
 #include "../team/team.h"
+#include "../team/team-controller.h"
 #include "../team/formation.h"
 #include "../configuration/configuration.h"
+#include "game-controller.h"
 #include <map>
 
+class GameController; //  forward declaration
+class PlayerController; //  forward declaration
+class TeamController; //  forward declaration
 class Game
 {
     public:
@@ -27,6 +33,7 @@ class Game
         virtual ~Game();
         void Start();
         void End();
+        void RequestQuit();
         static const int SCREEN_WIDTH = 800;
         static const int SCREEN_HEIGHT = 600;
         static const unsigned int PITCH_WIDTH = 1920;
@@ -39,37 +46,22 @@ class Game
         SDL_Window* window;
         SDL_Renderer* renderer;
         Match* match;
-        Player* selected_player;
         Camera* camera;
         static const int FRAMES_PER_SECOND = 30;
-        std::map <unsigned int, PlayerView*> player_views_map;
+        TeamController* team_controller;
+        PlayerController* player_controller;
+        GameController* game_controller;
         bool quit;
 
         void CreateModel();
         void CreateViews();
+        void CreateControllers();
         void DestroyModel();
         void DestroyViews();
+        void DestroyControllers();
         void InitSDL();
         void CloseSDL();
         void RenderViews();
-        void PlayerPlay(const Uint8 *keyboard_state_array);
-        void MovePlayer(const Uint8 *keyboard_state_array);
-        void MoveUnselectedPlayersToDefaultPositions();
-        void ChangePlayerSelection(const Uint8 *keyboard_state_array);
-        bool PlayerRecoverBall(const Uint8 *keyboard_state_array);
-        bool KickPlayer(const Uint8 *keyboard_state_array);
-        void ChangeFormation(const Uint8 *keyboard_state_array);
-        Uint8 GetSelectedKey(const Uint8* keyboard_state_array);
-        bool UpKeySelected(const Uint8 *keyboard_state_array);
-        bool RightKeySelected(const Uint8 *keyboard_state_array);
-        bool LeftKeySelected(const Uint8 *keyboard_state_array);
-        bool DownKeySelected(const Uint8 *keyboard_state_array);
-        bool SpaceBarSelected(const Uint8 *keyboard_state_array);
-        bool CKeySelected(const Uint8 *keyboard_state_array);
-        bool FKeySelected(const Uint8 *keyboard_state_array);
-        bool PlayerWithinMargins(Player* player);
-        void ExitGame(const Uint8 *keyboard_state_array);
-        Player* FindNextPlayerToSelect();
 
 };
 

@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="--config=/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/config.yml --loglevel=ERROR" />
+				<Option parameters="--config=/home/patricia/Escritorio/config.yml --loglevel=ERROR" />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="src/game" />
@@ -53,6 +53,7 @@
 		</Linker>
 		<Unit filename="src/camera/camera.cpp" />
 		<Unit filename="src/camera/camera.h" />
+		<Unit filename="src/common/abstract-controller.h" />
 		<Unit filename="src/common/abstract-view.h" />
 		<Unit filename="src/common/animation.cpp" />
 		<Unit filename="src/common/animation.h" />
@@ -73,6 +74,8 @@
 		<Unit filename="src/configuration/configuration.cpp" />
 		<Unit filename="src/configuration/configuration.h" />
 		<Unit filename="src/configuration/default-config.yml" />
+		<Unit filename="src/game/game-controller.cpp" />
+		<Unit filename="src/game/game-controller.h" />
 		<Unit filename="src/game/game.cpp" />
 		<Unit filename="src/game/game.h" />
 		<Unit filename="src/main.cpp" />
@@ -82,6 +85,8 @@
 		<Unit filename="src/pitch/pitch-view.h" />
 		<Unit filename="src/pitch/pitch.cpp" />
 		<Unit filename="src/pitch/pitch.h" />
+		<Unit filename="src/player/player-controller.cpp" />
+		<Unit filename="src/player/player-controller.h" />
 		<Unit filename="src/player/player-view.cpp" />
 		<Unit filename="src/player/player-view.h" />
 		<Unit filename="src/player/player.cpp" />
@@ -90,6 +95,8 @@
 		<Unit filename="src/sprites/player.png" />
 		<Unit filename="src/team/formation.cpp" />
 		<Unit filename="src/team/formation.h" />
+		<Unit filename="src/team/team-controller.cpp" />
+		<Unit filename="src/team/team-controller.h" />
 		<Unit filename="src/team/team.cpp" />
 		<Unit filename="src/team/team.h" />
 		<Extensions>

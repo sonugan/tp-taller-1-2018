@@ -3,6 +3,13 @@
 #include <sys/stat.h>
 
 
+
+bool File_Exists (const string& name)
+{
+    struct stat buffer;
+    return (stat (name.c_str(), &buffer) == 0);
+}
+
 PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
 {
     this->width = 62;
@@ -136,11 +143,32 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
     recover_ball_clips.push_back(recover_sprite_3);
 
     SDL_Rect* recover_sprite_4 = new SDL_Rect();
-    recover_sprite_4->x = 0;
-    recover_sprite_3->y = 448;
+    recover_sprite_4->x = 64;
+    recover_sprite_4->y = 448;
     recover_sprite_4->w = this->width;
     recover_sprite_4->h = this->height;
     recover_ball_clips.push_back(recover_sprite_4);
+
+    SDL_Rect* recover_sprite_5 = new SDL_Rect();
+    recover_sprite_5->x = 128;
+    recover_sprite_5->y = 448;
+    recover_sprite_5->w = this->width;
+    recover_sprite_5->h = this->height;
+    recover_ball_clips.push_back(recover_sprite_5);
+
+    SDL_Rect* recover_sprite_6 = new SDL_Rect();
+    recover_sprite_6->x = 128;
+    recover_sprite_6->y = 448;
+    recover_sprite_6->w = this->width;
+    recover_sprite_6->h = this->height;
+    recover_ball_clips.push_back(recover_sprite_6);
+
+    SDL_Rect* recover_sprite_7 = new SDL_Rect();
+    recover_sprite_7->x = 192;
+    recover_sprite_3->y = 448;
+    recover_sprite_7->w = this->width;
+    recover_sprite_7->h = this->height;
+    recover_ball_clips.push_back(recover_sprite_7);
 
     animations.push_back(new Animation("recover", recover_ball_clips, FRAMES_PER_EVENT));
 
@@ -169,9 +197,10 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
     kitFile.append("-kit.png");
 
     if (File_Exists("src/sprites/" + kitFile)) {
+            cout << "Cargando " << kitFile << endl;
         this->sprite_sheet = new SpriteSheet(renderer, kitFile);
     } else {
-        cout << "No se encontro la camiseta para el jugador" << endl;
+        Logger::getInstance()->error("No se encontro kit de camiseta en '" + kitFile + "'. Se procede a cargar la camiseta por defecto: 'team_a/home-kit.png'");
         //Por defecto cargo el home kit del team_a
         this->sprite_sheet = new SpriteSheet(renderer, "team_a/home-kit.png");
     }
@@ -226,20 +255,20 @@ void PlayerView::GetPlayerAngle()
 
 void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
 {
-
+    this->GetPlayerAngle();
+    int animation_index = current_animation_index;
     if (IsKicking()) {
         current_animation_index = KICKING_ANIMATION_INDEX;
-
     } else if (IsRecoveringBall()) {
         current_animation_index = RECOVERING_BALL_ANIMATION_INDEX;
-
     } else if(IsStill()) {
         current_animation_index = STILL_ANIMATION_INDEX;
-        angle = 90;
-
     } else {
         current_animation_index = RUN_ANIMATION_INDEX;
-        this->GetPlayerAngle();
+    }
+    if(animation_index != current_animation_index)
+    {
+        animations[current_animation_index]->Restart();
     }
 
     SDL_Rect* current_clip = animations[current_animation_index]->NextClip();
@@ -303,10 +332,4 @@ bool PlayerView::IsKicking()
 bool PlayerView::IsRecoveringBall()
 {
     return this->player->IsRecoveringBall();
-}
-
-bool PlayerView::File_Exists (const string& name)
-{
-    struct stat buffer;
-    return (stat (name.c_str(), &buffer) == 0);
 }

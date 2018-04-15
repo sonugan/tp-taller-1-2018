@@ -1,18 +1,25 @@
 #include "game/game.h"
-#include "configuration.h"
-#include "cli-options.h"
+#include "configuration/cli-options-parser.h"
+#include "configuration/cli-options.h"
+#include "configuration/configuration.h"
 
 #include <iostream>
 
-Configuration* loadConfiguration(int argc, char* args[])
+void loadConfiguration(int argc, char* args[], Configuration* config)
 {
-    CLIOptions* cli_options = CLIOptions::GetOptions(argc, args);
-    return Configuration::Load(cli_options->GetConfigPath(), cli_options->GetLogLevel());
+    CLIOptionsParser* parser = new CLIOptionsParser();
+    string config_path = parser->GetConfigPath(argc, args);
+    string log_level = parser->GetLogLevel(argc, args);
+    CLIOptions* cli_options = new CLIOptions(config_path, log_level);
+    Configuration::Load(config, cli_options->GetConfigPath(), cli_options->GetLogLevel());
+    delete parser;
+    delete cli_options;
 }
 
 int main( int argc, char* args[] ) {
 
-    Configuration* config = loadConfiguration(argc, args);
+    Configuration* config = new Configuration();
+    loadConfiguration(argc, args, config);
     std::cout << config->GetSpritesPath() << "\n";
     std::cout << config->GetLogLevel() << "\n";
     std::cout << config->GetFormation() << "\n";

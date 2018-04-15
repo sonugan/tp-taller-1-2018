@@ -3,7 +3,10 @@
 
 #include "../common/abstract-view.h"
 #include "../common/ishowable.h"
+#include "../player/player-view.h"
+#include <map>
 
+class PlayerView;
 class Camera
 {
     public:
@@ -14,12 +17,16 @@ class Camera
         void Add(AbstractView* view);
         std::vector<AbstractView*> GetViews();
         SDL_Rect* area;
-        void SetStartPosition(Location* position);//Move the camera to this position
+        void SetStartPosition(Location* position);
+        void SetPlayerViewsMap(std::map <unsigned int, PlayerView*> player_views_map);
+        void UpdateLocatable(int player_key);
+
         const static int CAMERA_MARGIN = 100;
 
     protected:
     private:
         std::vector<AbstractView*> views;
+        std::map <unsigned int, PlayerView*> player_views_map;
         void Move();
         IShowable* showable;
         SDL_Renderer* renderer;

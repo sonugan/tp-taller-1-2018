@@ -45,3 +45,13 @@ string Team::GetName() {
 string Team::GetShirt() {
     return this->shirt;
 }
+
+Player* Team::GetSelectedPlayer() {
+    for (unsigned int i = 0; i < (Team::TEAM_SIZE); i++) {
+        Player* player = GetPlayers()[i];
+        if (player->IsSelected()) {
+            return player;
+        }
+    }
+    return NULL;
+}

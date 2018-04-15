@@ -2,6 +2,8 @@
 #define CONFIGURATION_H
 
 #include <string>
+#include <map>
+#include <vector>
 using namespace std;
 
 
@@ -32,7 +34,9 @@ class Configuration
 
         void SetSpritesPath(string sprites_path);
 
-        static Configuration* Load(string config_path, string log_level);
+        static void Load(Configuration* config, string config_path, string log_level);
+
+        bool IsValidConfigValue(string parameter, string value);
 
     protected:
 
@@ -42,6 +46,11 @@ class Configuration
         string shirt;
         string sprites_path;
         string team_name;
+        map<string, vector<string>> valid_configurations = {
+            {"level", { "info", "debug", "error" }},
+            {"formation", { "3-3", "3-1-2", "3-2-1" }},
+            {"shirt", { "home", "away" }}
+        };
 };
 
 
