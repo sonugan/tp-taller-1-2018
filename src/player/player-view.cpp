@@ -129,21 +129,21 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
     recover_ball_clips.push_back(recover_sprite_1);
 
     SDL_Rect* recover_sprite_2 = new SDL_Rect();
-    recover_sprite_2->x = 0;
+    recover_sprite_2->x = 64;
     recover_sprite_2->y = 448;
     recover_sprite_2->w = this->width;
     recover_sprite_2->h = this->height;
     recover_ball_clips.push_back(recover_sprite_2);
 
     SDL_Rect* recover_sprite_3 = new SDL_Rect();
-    recover_sprite_3->x = 0;
+    recover_sprite_3->x = 128;
     recover_sprite_3->y = 448;
     recover_sprite_3->w = this->width;
     recover_sprite_3->h = this->height;
     recover_ball_clips.push_back(recover_sprite_3);
 
     SDL_Rect* recover_sprite_4 = new SDL_Rect();
-    recover_sprite_4->x = 0;
+    recover_sprite_4->x = 192;
     recover_sprite_3->y = 448;
     recover_sprite_4->w = this->width;
     recover_sprite_4->h = this->height;
@@ -234,7 +234,7 @@ void PlayerView::GetPlayerAngle()
 
 void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
 {
-
+    this->GetPlayerAngle();
     if (IsKicking()) {
         current_animation_index = KICKING_ANIMATION_INDEX;
 
@@ -243,11 +243,9 @@ void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
 
     } else if(IsStill()) {
         current_animation_index = STILL_ANIMATION_INDEX;
-        angle = 90;
 
     } else {
         current_animation_index = RUN_ANIMATION_INDEX;
-        this->GetPlayerAngle();
     }
 
     SDL_Rect* current_clip = animations[current_animation_index]->NextClip();

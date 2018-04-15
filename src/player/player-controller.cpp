@@ -2,6 +2,8 @@
 
 PlayerController::PlayerController(Team* team) {
     this->team = team;
+    current_action_timming = 0;
+    current_action = PLAYER_IS_STILL;
 }
 
 PlayerController::~PlayerController() {
@@ -9,16 +11,28 @@ PlayerController::~PlayerController() {
 }
 
 void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
+    if(current_action == PLAYER_IS_KICKING && (current_action_timming * PlayerView::FRAMES_PER_EVENT) < PlayerView::KICKING_FRAME_COUNT)
+    {
+        team->GetSelectedPlayer()->Kick();
+        current_action_timming++;
+    }
+    else if(current_action == PLAYER_IS_RECOVERING && (current_action_timming * PlayerView::FRAMES_PER_EVENT) < PlayerView::RECOVERING_FRAME_COUNT)
+    {
+        team->GetSelectedPlayer()->RecoverBall();
+        current_action_timming++;
+    }
+    else
+    {
+        current_action_timming = 0;
+        bool playerKicked = this->KickPlayer(keyboard_state_array);
 
-    bool playerKicked = this->KickPlayer(keyboard_state_array);
-
-    if (!playerKicked) {
-        bool playerRecovered = this->PlayerRecoverBall(keyboard_state_array);
-        if (!playerRecovered) {
-            this->MovePlayer(keyboard_state_array);
+        if (!playerKicked) {
+            bool playerRecovered = this->PlayerRecoverBall(keyboard_state_array);
+            if (!playerRecovered) {
+                this->MovePlayer(keyboard_state_array);
+            }
         }
     }
-
 }
 
 void PlayerController::MovePlayer(const Uint8 *keyboard_state_array)
@@ -40,11 +54,13 @@ void PlayerController::MovePlayer(const Uint8 *keyboard_state_array)
     } else if(DownKeySelected(keyboard_state_array)) {
         team->GetSelectedPlayer()->MoveDown();
     }
+    current_action = PLAYER_IS_RUNNING;
 }
 
 bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array) {
     if (SpaceBarSelected(keyboard_state_array)) {
         team->GetSelectedPlayer()->Kick();
+        current_action = PLAYER_IS_KICKING;
         return true;
     }
     return false;
@@ -53,6 +69,7 @@ bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array) {
 bool PlayerController::PlayerRecoverBall(const Uint8 *keyboard_state_array) {
     if (keyboard_state_array[SDL_SCANCODE_V]) {
         team->GetSelectedPlayer()->RecoverBall();
+        current_action = PLAYER_IS_RECOVERING;
         return true;
     }
     return false;

@@ -27,7 +27,6 @@ Camera::~Camera()
 void Camera::Render()
 {
     this->Move();
-    this->views[0]->Render(this->area->x, this->area->y, this->area->w, this->area->h);
     for (unsigned int i = 0; i < this->views.size(); i++) {
         this->views[i]->Render(this->area->x, this->area->y, this->area->w, this->area->h);
     }
