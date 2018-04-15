@@ -53,6 +53,7 @@
 		</Linker>
 		<Unit filename="src/camera/camera.cpp" />
 		<Unit filename="src/camera/camera.h" />
+		<Unit filename="src/common/abstract-controller.h" />
 		<Unit filename="src/common/abstract-view.h" />
 		<Unit filename="src/common/animation.cpp" />
 		<Unit filename="src/common/animation.h" />
@@ -90,6 +91,8 @@
 		<Unit filename="src/sprites/player.png" />
 		<Unit filename="src/team/formation.cpp" />
 		<Unit filename="src/team/formation.h" />
+		<Unit filename="src/team/team-controller.cpp" />
+		<Unit filename="src/team/team-controller.h" />
 		<Unit filename="src/team/team.cpp" />
 		<Unit filename="src/team/team.h" />
 		<Extensions>

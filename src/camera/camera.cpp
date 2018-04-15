@@ -101,3 +101,11 @@ void Camera::Move()
         this->area->y = this->pitch_height - this->area->h;
     }
 }
+
+void Camera::SetPlayerViewsMap(std::map <unsigned int, PlayerView*> player_views_map) {
+    this->player_views_map = player_views_map;
+}
+
+void Camera::UpdateLocatable(int player_key) {
+    SetLocatable(player_views_map[player_key]);
+}

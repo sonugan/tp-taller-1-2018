@@ -7,6 +7,7 @@ Game::Game(Configuration* initial_configuration) {
     InitSDL();
     CreateModel();
     CreateViews();
+    CreateControllers();
 }
 
 Game::~Game() {
@@ -30,15 +31,14 @@ void Game::Start() {
 
     RenderViews();
 
-    const Uint8 *keyboard_state_array = SDL_GetKeyboardState(NULL);
+    const Uint8* keyboard_state_array = SDL_GetKeyboardState(NULL);
 
     // GAME LOOP
     while( !quit ) {
-        this->ChangeFormation(keyboard_state_array);
         this->MoveUnselectedPlayersToDefaultPositions();
-        this->ChangePlayerSelection(keyboard_state_array);
         this->PlayerPlay(keyboard_state_array);
         this->ExitGame(keyboard_state_array);
+        this->team_controller->Handle(keyboard_state_array);
 
         RenderViews();
 
@@ -86,8 +86,7 @@ void Game::CreateModel() {
     }
 
     //selecciono por default al arquero
-    this->selected_player = team_a->GetPlayers()[0];
-    this->selected_player->SetSelected(true);
+    team_a->GetPlayers()[0]->SetSelected(true);
 
     this->match = new Match(pitch, team_a, NULL);
 }
@@ -99,6 +98,7 @@ void Game::CreateViews() {
     this->camera = new Camera(PITCH_WIDTH, PITCH_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, this->renderer, &center);
 
     PitchView* pitch_view = new PitchView(this->match->GetPitch(), this->renderer);
+    std::map <unsigned int, PlayerView*> player_views_map;
     this->camera->Add(pitch_view);
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
         Player* player = match->GetTeamA()->GetPlayers()[i];
@@ -110,7 +110,12 @@ void Game::CreateViews() {
             this->camera->SetLocatable(player_view);
         }
     }
+    this->camera->SetPlayerViewsMap(player_views_map);
+}
 
+void Game::CreateControllers() {
+    Logger::getInstance()->debug("CREANDO CONTROLLERS");class Player; //  forward declaration
+    team_controller = new TeamController(match->GetTeamA(), camera);
 }
 
 void Game::DestroyModel() {
@@ -182,77 +187,26 @@ void Game::CloseSDL()
 	Logger::getInstance()->debug("TERMINANDO PROGRAMA");
 }
 
-bool Game::PlayerWithinMargins(Player* player) {
-    //  64 es el tamaño del sprite del player... magic number.
-    int half_player_sprite_size = 32;
-    int x = player->GetLocation()->GetX() - camera->area->x;
-    int y = player->GetLocation()->GetY() - camera->area->y;
-    return x >= (Camera::CAMERA_MARGIN - half_player_sprite_size) && y >= (Camera::CAMERA_MARGIN - half_player_sprite_size) && x <= (SCREEN_WIDTH - Camera::CAMERA_MARGIN + half_player_sprite_size) && y <= (SCREEN_HEIGHT - Camera::CAMERA_MARGIN + half_player_sprite_size);
-}
 
-Player* Game::FindNextPlayerToSelect() {
-    Player* next_player = NULL;
-    unsigned int new_selected_player_position_index = selected_player->GetPositionIndex();
-    for (unsigned int i = 0; i < (Team::TEAM_SIZE - 1); i++) {
-
-            if (new_selected_player_position_index == Team::TEAM_SIZE-1) {
-                new_selected_player_position_index = 0;
-            } else {
-                new_selected_player_position_index++;
-            }
-            // El próximo jugador tiene que estar dentro de la cámara y no tiene que estar seleccionado
-            Player* possible_player = match->GetTeamA()->GetPlayers()[new_selected_player_position_index];
-            if (!possible_player->IsSelected() && PlayerWithinMargins(possible_player)) {
-                next_player = possible_player;
-                break;
-            }
-    }
-    return next_player;
-}
-
-void Game::ChangePlayerSelection(const Uint8 *keyboard_state_array) {
-    if(CKeySelected(keyboard_state_array)) {
-        Player* next_player = FindNextPlayerToSelect();
-        if (next_player != NULL) {
-            selected_player->SetSelected(false);
-            selected_player = next_player;
-            selected_player->SetSelected(true);
-            camera->SetLocatable(player_views_map[selected_player->GetPositionIndex()]);
-        }
-    }
-}
-
-void Game::ChangeFormation(const Uint8 *keyboard_state_array) {
-    if(FKeySelected(keyboard_state_array)) {
-        FORMATION old_formation_value = match->GetTeamA()->GetFormation()->GetValue();
-        if (old_formation_value == F_3_3) {
-            match->GetTeamA()->SetFormation(new Formation(F_3_2_1));
-        } else if (old_formation_value == F_3_2_1) {
-            match->GetTeamA()->SetFormation(new Formation(F_3_1_2));
-        } else if (old_formation_value == F_3_1_2) {
-            match->GetTeamA()->SetFormation(new Formation(F_3_3));
-        }
-    }
-}
 
 void Game::MovePlayer(const Uint8 *keyboard_state_array)
 {
     if (UpKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array)) {
-        selected_player->MoveUpToRight();
+        match->GetTeamA()->GetSelectedPlayer()->MoveUpToRight();
     } else if (UpKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array)) {
-        selected_player->MoveUpToLeft();
+        match->GetTeamA()->GetSelectedPlayer()->MoveUpToLeft();
     } else if (DownKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array)) {
-        selected_player->MoveDownToRight();
+        match->GetTeamA()->GetSelectedPlayer()->MoveDownToRight();
     } else if (DownKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array)) {
-        selected_player->MoveDownToLeft();
+        match->GetTeamA()->GetSelectedPlayer()->MoveDownToLeft();
     } else if (UpKeySelected(keyboard_state_array)) {
-        selected_player->MoveUp();
+        match->GetTeamA()->GetSelectedPlayer()->MoveUp();
     } else if(RightKeySelected(keyboard_state_array)) {
-        selected_player->MoveRight();
+        match->GetTeamA()->GetSelectedPlayer()->MoveRight();
     } else if(LeftKeySelected(keyboard_state_array)) {
-        selected_player->MoveLeft();
+        match->GetTeamA()->GetSelectedPlayer()->MoveLeft();
     } else if(DownKeySelected(keyboard_state_array)) {
-        selected_player->MoveDown();
+        match->GetTeamA()->GetSelectedPlayer()->MoveDown();
     }
 }
 
@@ -268,7 +222,7 @@ void Game::MoveUnselectedPlayersToDefaultPositions() {
 bool Game::KickPlayer(const Uint8 *keyboard_state_array)
 {
     if (SpaceBarSelected(keyboard_state_array)) {
-        selected_player->Kick();
+        match->GetTeamA()->GetSelectedPlayer()->Kick();
         return true;
     }
     return false;
@@ -277,15 +231,10 @@ bool Game::KickPlayer(const Uint8 *keyboard_state_array)
 bool Game::PlayerRecoverBall(const Uint8 *keyboard_state_array)
 {
     if (keyboard_state_array[SDL_SCANCODE_V]) {
-        selected_player->RecoverBall();
+        match->GetTeamA()->GetSelectedPlayer()->RecoverBall();
         return true;
     }
     return false;
-}
-
-bool Game::CKeySelected(const Uint8 *keyboard_state_array)
-{
-    return keyboard_state_array[SDL_SCANCODE_C];
 }
 
 bool Game::UpKeySelected(const Uint8 *keyboard_state_array)
@@ -311,11 +260,6 @@ bool Game::DownKeySelected(const Uint8 *keyboard_state_array)
 bool Game::SpaceBarSelected(const Uint8 *keyboard_state_array)
 {
     return keyboard_state_array[SDL_SCANCODE_SPACE];
-}
-
-bool Game::FKeySelected(const Uint8 *keyboard_state_array)
-{
-    return keyboard_state_array[SDL_SCANCODE_F];
 }
 
 void Game::ExitGame(const Uint8 *keyboard_state_array) {
