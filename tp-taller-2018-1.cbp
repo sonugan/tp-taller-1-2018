@@ -74,6 +74,8 @@
 		<Unit filename="src/configuration/configuration.cpp" />
 		<Unit filename="src/configuration/configuration.h" />
 		<Unit filename="src/configuration/default-config.yml" />
+		<Unit filename="src/game/game-controller.cpp" />
+		<Unit filename="src/game/game-controller.h" />
 		<Unit filename="src/game/game.cpp" />
 		<Unit filename="src/game/game.h" />
 		<Unit filename="src/main.cpp" />
@@ -83,6 +85,8 @@
 		<Unit filename="src/pitch/pitch-view.h" />
 		<Unit filename="src/pitch/pitch.cpp" />
 		<Unit filename="src/pitch/pitch.h" />
+		<Unit filename="src/player/player-controller.cpp" />
+		<Unit filename="src/player/player-controller.h" />
 		<Unit filename="src/player/player-view.cpp" />
 		<Unit filename="src/player/player-view.h" />
 		<Unit filename="src/player/player.cpp" />

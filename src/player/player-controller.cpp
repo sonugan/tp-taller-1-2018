@@ -1,8 +1,7 @@
 #include "player-controller.h"
 
-PlayerController::PlayerController(Team* team, Camera* camera) {
+PlayerController::PlayerController(Team* team) {
     this->team = team;
-    this->camera = camera;
 }
 
 PlayerController::~PlayerController() {

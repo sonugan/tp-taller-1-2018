@@ -11,7 +11,7 @@
 class PlayerController : public AbstractController
 {
     public:
-        PlayerController(Team* team, Camera* camera);
+        PlayerController(Team* team);
         virtual ~PlayerController();
         void Handle(const Uint8* keyboard_state_array);
 
@@ -19,7 +19,6 @@ class PlayerController : public AbstractController
 
     private:
         Team* team;
-        Camera* camera;
 
         void PlayerPlay(const Uint8 *keyboard_state_array);
         void MovePlayer(const Uint8 *keyboard_state_array);
