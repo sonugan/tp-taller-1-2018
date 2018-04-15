@@ -2,7 +2,7 @@
 
 PlayerController::PlayerController(Team* team) {
     this->team = team;
-    current_action_timming = 0;
+    current_action_timming = 1;
     current_action = PLAYER_IS_STILL;
 }
 
@@ -11,19 +11,9 @@ PlayerController::~PlayerController() {
 }
 
 void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
-    if(current_action == PLAYER_IS_KICKING && (current_action_timming * PlayerView::FRAMES_PER_EVENT) < PlayerView::KICKING_FRAME_COUNT)
+    if(!ContinueCurrentAction())
     {
-        team->GetSelectedPlayer()->Kick();
-        current_action_timming++;
-    }
-    else if(current_action == PLAYER_IS_RECOVERING && (current_action_timming * PlayerView::FRAMES_PER_EVENT) < PlayerView::RECOVERING_FRAME_COUNT)
-    {
-        team->GetSelectedPlayer()->RecoverBall();
-        current_action_timming++;
-    }
-    else
-    {
-        current_action_timming = 0;
+        selected_player = this->team->GetSelectedPlayer();
         bool playerKicked = this->KickPlayer(keyboard_state_array);
 
         if (!playerKicked) {
@@ -97,4 +87,39 @@ bool PlayerController::SpaceBarSelected(const Uint8 *keyboard_state_array) {
 
 void PlayerController::Handle(const Uint8* keyboard_state_array) {
     PlayerPlay(keyboard_state_array);
+}
+
+bool PlayerController::SelectedPlayerHasChange()
+{
+    return team->GetSelectedPlayer() != this->selected_player;
+}
+
+bool PlayerController::ContinueCurrentAction()
+{
+    if(!SelectedPlayerHasChange())
+    {
+        current_action_timming++;
+        if(current_action == PLAYER_IS_KICKING &&
+            (current_action_timming * PlayerView::FRAMES_PER_EVENT) < PlayerView::KICKING_FRAME_COUNT)
+        {
+            this->team->GetSelectedPlayer()->Kick();
+            return true;
+        }
+        else if(current_action == PLAYER_IS_RECOVERING &&
+            (current_action_timming * PlayerView::FRAMES_PER_EVENT) < PlayerView::RECOVERING_FRAME_COUNT)
+        {
+            this->team->GetSelectedPlayer()->RecoverBall();
+            return true;
+        }
+        else
+        {
+            current_action_timming = 1;
+            return false;
+        }
+    }
+    else
+    {
+        current_action_timming = 1; //Es la segunda vez por la que debo entrar acá
+        return false;
+    }
 }

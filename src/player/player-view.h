@@ -16,7 +16,7 @@ class PlayerView : public AbstractView, public IShowable
         static constexpr float FRAMES_PER_EVENT = 0.3;
         static constexpr int RUN_FRAME_COUNT = 4;
         static constexpr int KICKING_FRAME_COUNT = 4;
-        static constexpr int RECOVERING_FRAME_COUNT = 4;
+        static constexpr int RECOVERING_FRAME_COUNT = 7;
     protected:
         void SetAnimation(Animation* animation);
     private:

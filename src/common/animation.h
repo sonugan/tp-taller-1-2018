@@ -14,6 +14,7 @@ class Animation
         virtual ~Animation();
         std::vector<SDL_Rect*> GetClips();
         SDL_Rect* NextClip();
+        void Restart();
     protected:
     private:
         int width;

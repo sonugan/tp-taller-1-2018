@@ -134,6 +134,8 @@ void Player::GoBackToDefaultPosition() {
         MoveUp();
     } else if (x == default_x && y < default_y) {
         MoveDown();
+    }else{
+        direction = EAST;//TODO: cuando haya mas equipos debe quedar mirando para otro lado    
     }
 
     if (abs(default_y - location->GetY()) < PLAYER_SPEED) {
@@ -142,7 +144,6 @@ void Player::GoBackToDefaultPosition() {
     if (abs(default_x - location->GetX()) < PLAYER_SPEED) {
         location->UpdateX(default_location->GetX());
     }
-
 }
 
 Team* Player::getTeam()

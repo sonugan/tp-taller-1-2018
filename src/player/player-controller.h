@@ -20,6 +20,9 @@ class PlayerController : public AbstractController
 
     private:
         Team* team;
+        int current_action_timming;
+        PLAYER_ACTION current_action;
+        Player* selected_player;
 
         void PlayerPlay(const Uint8 *keyboard_state_array);
         void MovePlayer(const Uint8 *keyboard_state_array);
@@ -30,8 +33,8 @@ class PlayerController : public AbstractController
         bool LeftKeySelected(const Uint8 *keyboard_state_array);
         bool DownKeySelected(const Uint8 *keyboard_state_array);
         bool SpaceBarSelected(const Uint8 *keyboard_state_array);
-        int current_action_timming;
-        PLAYER_ACTION current_action;
+        bool SelectedPlayerHasChange();
+        bool ContinueCurrentAction();
 };
 
 #endif // PLAYERCONTROLLER_H
