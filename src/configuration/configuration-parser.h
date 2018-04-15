@@ -13,13 +13,13 @@ class ConfigurationParser
         ConfigurationParser();
         virtual ~ConfigurationParser();
 
-        Configuration* ReadFile(string file_path);
+        void ReadFile(Configuration* configuration, string file_path);
 
     protected:
 
     private:
         const string DEFAULT_CONFIG_FILE = "src/configuration/default-config.yml";
-        Configuration* ReadDefaultConfig();
+        void ReadDefaultConfig(Configuration* configuration);
 };
 
 #endif // CONFIGURATIONPARSER_H
