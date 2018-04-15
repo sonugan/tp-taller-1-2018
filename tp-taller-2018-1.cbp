@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="--config=/home/swandelow/Documents/FIUBA/7542_taller_de_programacion/workspace/config.yml --loglevel=ERROR" />
+				<Option parameters="--config=/home/patricia/Escritorio/config.yml --loglevel=ERROR" />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="src/game" />

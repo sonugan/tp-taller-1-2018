@@ -16,10 +16,8 @@ const string DEFAULT_SHIRT = "home";
 const string DEFAULT_SPRITES_PATH = "src/sprites";
 
 /** Helper functions **/
-Configuration* parseConfigFile(YAML::Node config_file)
+void parseConfigFile(Configuration* configuration, YAML::Node config_file)
 {
-    Configuration* configuration = new Configuration();
-
     if(config_file[LOGGER_NODE]) {
         YAML::Node logger_node = config_file[LOGGER_NODE];
         if(logger_node[LOGGER_LEVEL_NODE]) {
@@ -69,7 +67,6 @@ Configuration* parseConfigFile(YAML::Node config_file)
         configuration->SetSpritesPath(DEFAULT_SPRITES_PATH);
     }
 
-    return configuration;
 }
 
 /** Configuration class implementation **/
@@ -84,18 +81,18 @@ ConfigurationParser::~ConfigurationParser()
     //dtor
 }
 
-Configuration* ConfigurationParser::ReadFile(string file_path) {
+void ConfigurationParser::ReadFile(Configuration* config, string file_path) {
     Logger::getInstance()->debug("Leyendo archivo de configuracion desde '" + file_path + "'...");
     try {
         YAML::Node config_file = YAML::LoadFile(file_path);
-        return parseConfigFile(config_file);
+        parseConfigFile(config, config_file);
     } catch (YAML::BadFile e) {
         Logger::getInstance()->error("No se encontro el archivo '" + file_path + "'. Se procede a cargar el archivo por defecto: '" + DEFAULT_CONFIG_FILE + "'.");
-        return this->ReadDefaultConfig();
+        this->ReadDefaultConfig(config);
     }
 }
 
-Configuration* ConfigurationParser::ReadDefaultConfig() {
+void ConfigurationParser::ReadDefaultConfig(Configuration* config) {
     YAML::Node config_file = YAML::LoadFile(DEFAULT_CONFIG_FILE);
-    return parseConfigFile(config_file);
+    parseConfigFile(config, config_file);
 }
