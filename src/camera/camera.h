@@ -13,7 +13,7 @@ class Camera
         Camera(int pitch_width, int pitch_height, int width, int height, IShowable* showable, SDL_Renderer* renderer, Location* initialPosition);
         virtual ~Camera();
         void Render();
-        void SetLocatable(IShowable* showable);
+        void SetShowable(IShowable* showable);
         void Add(AbstractView* view);
         std::vector<AbstractView*> GetViews();
         SDL_Rect* area;

@@ -94,7 +94,7 @@ void Game::CreateViews() {
         this->camera->Add(player_view);
         //selecciono por default al arquero
         if (i == 0) {
-            this->camera->SetLocatable(player_view);
+            this->camera->SetShowable(player_view);
         }
     }
     this->camera->SetPlayerViewsMap(player_views_map);
