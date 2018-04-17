@@ -197,7 +197,6 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
     kitFile.append("-kit.png");
 
     if (File_Exists("src/sprites/" + kitFile)) {
-            cout << "Cargando " << kitFile << endl;
         this->sprite_sheet = new SpriteSheet(renderer, kitFile);
     } else {
         Logger::getInstance()->error("No se encontro kit de camiseta en '" + kitFile + "'. Se procede a cargar la camiseta por defecto: 'team_a/home-kit.png'");
