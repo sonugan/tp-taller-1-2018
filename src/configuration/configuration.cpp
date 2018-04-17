@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <sys/stat.h>
 
+using namespace std;
+
 Configuration::Configuration()
 {
 }
@@ -33,9 +35,16 @@ string Configuration::GetLogLevel()
     return this->log_level;
 }
 
+string str_to_lower(string str) {
+    transform(str.begin(), str.end(), str.begin(), ::tolower);
+
+    return str;
+}
+
 void Configuration::SetLogLevel(string log_level)
 {
-    if (IsValidConfigValue("level", log_level)) {
+
+    if (IsValidConfigValue("level", str_to_lower(log_level))) {
         this->log_level = log_level;
     }
     else {
