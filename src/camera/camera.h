@@ -21,7 +21,7 @@ class Camera
         void SetPlayerViewsMap(std::map <unsigned int, PlayerView*> player_views_map);
         void UpdateLocatable(int player_key);
 
-        const static int CAMERA_MARGIN = 100;
+        const static unsigned int CAMERA_MARGIN = 100;
 
     protected:
     private:
