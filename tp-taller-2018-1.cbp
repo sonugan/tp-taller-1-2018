@@ -65,6 +65,8 @@
 		<Unit filename="src/common/logger.h" />
 		<Unit filename="src/common/sprite-sheet.cpp" />
 		<Unit filename="src/common/sprite-sheet.h" />
+		<Unit filename="src/common/sprites-provider.cpp" />
+		<Unit filename="src/common/sprites-provider.h" />
 		<Unit filename="src/configuration/cli-options-parser.cpp" />
 		<Unit filename="src/configuration/cli-options-parser.h" />
 		<Unit filename="src/configuration/cli-options.cpp" />
