@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="--config=/home/patricia/Escritorio/config.yml --loglevel=ERROR" />
+				<Option parameters="--config=/home/patricia/Escritorio/config.yml --loglevel=debug" />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="src/game" />
@@ -53,12 +53,8 @@
 		</Linker>
 		<Unit filename="src/camera/camera.cpp" />
 		<Unit filename="src/camera/camera.h" />
-		<Unit filename="src/common/abstract-controller.h" />
-		<Unit filename="src/common/abstract-view.h" />
 		<Unit filename="src/common/animation.cpp" />
 		<Unit filename="src/common/animation.h" />
-		<Unit filename="src/common/ilocatable.h" />
-		<Unit filename="src/common/ishowable.h" />
 		<Unit filename="src/common/location.cpp" />
 		<Unit filename="src/common/location.h" />
 		<Unit filename="src/common/logger.cpp" />

@@ -2,14 +2,6 @@
 #include "logger.h"
 #include <sys/stat.h>
 
-
-
-bool File_Exists (const string& name)
-{
-    struct stat buffer;
-    return (stat (name.c_str(), &buffer) == 0);
-}
-
 PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
 {
     this->width = 62;
@@ -196,14 +188,7 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
     kitFile.append(player->getTeam()->GetShirt());
     kitFile.append("-kit.png");
 
-    if (File_Exists("src/sprites/" + kitFile)) {
-        this->sprite_sheet = new SpriteSheet(renderer, kitFile);
-    } else {
-        Logger::getInstance()->error("No se encontro kit de camiseta en '" + kitFile + "'. Se procede a cargar la camiseta por defecto: 'team_a/home-kit.png'");
-        //Por defecto cargo el home kit del team_a
-        this->sprite_sheet = new SpriteSheet(renderer, "team_a/home-kit.png");
-    }
-
+    this->sprite_sheet = new SpriteSheet(renderer, kitFile);
 }
 
 PlayerView::~PlayerView() {
