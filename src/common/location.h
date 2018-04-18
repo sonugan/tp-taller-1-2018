@@ -18,10 +18,13 @@ class Location
     protected:
 
     private:
-        static const int MAX_X_LOCATION = 1700;
-        static const int MIN_X_LOCATION = 160;
-        static const int MAX_Y_LOCATION = 1065;
-        static const int MIN_Y_LOCATION = 0;
+        //  La imagen de la cancha es de 1920x1080.
+        //  Se le resta 32 porque la ubicación del jugador no es la misma que la del sprite
+        //  (hay un offset de 32 píxeles).
+        static const int MAX_X_LOCATION = 1888;
+        static const int MIN_X_LOCATION = -32;
+        static const int MAX_Y_LOCATION = 1048;
+        static const int MIN_Y_LOCATION = -32;
         int x;
         int y;
         int z;

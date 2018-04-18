@@ -32,7 +32,7 @@ void Camera::Render()
     }
 }
 
-void Camera::SetLocatable(IShowable* showable)
+void Camera::SetShowable(IShowable* showable)
 {
     this->showable = showable;
 }
@@ -106,5 +106,5 @@ void Camera::SetPlayerViewsMap(std::map <unsigned int, PlayerView*> player_views
 }
 
 void Camera::UpdateLocatable(int player_key) {
-    SetLocatable(player_views_map[player_key]);
+    SetShowable(player_views_map[player_key]);
 }
