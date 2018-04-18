@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include "logger.h"
 using namespace std;
 
 
@@ -11,10 +12,9 @@ class Configuration
 {
     public:
         Configuration();
-        Configuration(string formation, string shirt, string log_level);
         virtual ~Configuration();
 
-        string GetLogLevel();
+        LogMode GetLogLevel();
 
         void SetLogLevel(string log_level);
 
@@ -41,7 +41,7 @@ class Configuration
     protected:
 
     private:
-        string log_level;
+        LogMode log_level;
         string formation;
         string shirt;
         string sprites_path;
@@ -51,6 +51,13 @@ class Configuration
             {"formation", { "3-3", "3-1-2", "3-2-1" }},
             {"shirt", { "home", "away" }}
         };
+        const map<string, LogMode> LOG_MODE_MAP = {
+            {"error", LogMode::ERROR},
+            {"info", LogMode::INFO},
+            {"debug", LogMode::DEBUG}
+        };
+        LogMode ToLogMode(string log_level_str);
+
 };
 
 

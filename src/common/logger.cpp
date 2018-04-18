@@ -62,7 +62,7 @@ string Logger::dateAndTime() {
 	time_t t = time(NULL);
     char dateTime[20];
 
-    strftime(dateTime, 20, "%Y-%m-%d %T", localtime(&t));
+    strftime(dateTime, 20, "%Y-%m-%d-%T", localtime(&t));
 
     return dateTime;
 }

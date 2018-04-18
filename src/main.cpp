@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-void loadConfiguration(int argc, char* args[], Configuration* config)
+void load_configuration(int argc, char* args[], Configuration* config)
 {
     CLIOptionsParser* parser = new CLIOptionsParser();
     string config_path = parser->GetConfigPath(argc, args);
@@ -19,12 +19,8 @@ void loadConfiguration(int argc, char* args[], Configuration* config)
 int main( int argc, char* args[] ) {
 
     Configuration* config = new Configuration();
-    loadConfiguration(argc, args, config);
-    std::cout << config->GetSpritesPath() << "\n";
-    std::cout << config->GetLogLevel() << "\n";
-    std::cout << config->GetFormation() << "\n";
-    std::cout << config->GetTeamName() << "\n";
-    std::cout << config->GetShirt() << "\n";
+    load_configuration(argc, args, config);
+    Logger::getInstance()->setMode(config->GetLogLevel());
 
     Game* game = new Game(config);
     game->Start();

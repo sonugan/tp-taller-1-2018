@@ -1,6 +1,5 @@
 #include "configuration.h"
 #include "configuration-parser.h"
-#include "logger.h"
 
 #include <algorithm>
 #include <sys/stat.h>
@@ -9,13 +8,6 @@ using namespace std;
 
 Configuration::Configuration()
 {
-}
-
-Configuration::Configuration(string formation, string shirt, string log_level)
-{
-    this->formation = formation;
-    this->shirt = shirt;
-    this->log_level = log_level;
 }
 
 Configuration::~Configuration()
@@ -30,7 +22,7 @@ bool DirectoryExists(string dir)
     return stat(dir.c_str(), &statStruct) == 0 && S_ISDIR(statStruct.st_mode);
 }
 
-string Configuration::GetLogLevel()
+LogMode Configuration::GetLogLevel()
 {
     return this->log_level;
 }
@@ -45,14 +37,13 @@ void Configuration::SetLogLevel(string log_level)
 {
 
     if (IsValidConfigValue("level", str_to_lower(log_level))) {
-        this->log_level = log_level;
+        this->log_level = this->ToLogMode(str_to_lower(log_level));
     }
     else {
-        this->log_level = "debug";
+        this->log_level = this->ToLogMode("debug");
         Logger::getInstance()->error("El valor '" + log_level + "' no es valido para el nivel de log. Se procede a tomar el valor por defecto del logger: 'debug'");
     }
 
-    Logger::getInstance()->debug("(Configuracion) NIVEL DE LOG: " + this->log_level);
 }
 
 string Configuration::GetFormation()
@@ -145,4 +136,10 @@ bool Configuration::IsValidConfigValue(string parameter, string value)
 
     //El parametro no existe
     return false;
+}
+
+LogMode Configuration::ToLogMode(string log_level_str)
+{
+    auto it = this->LOG_MODE_MAP.find(log_level_str);
+    return it->second;
 }

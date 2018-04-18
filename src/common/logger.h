@@ -3,10 +3,11 @@
 
 using namespace std;
 
+enum LogMode { ERROR = 1, INFO = 2, DEBUG = 3 };
+
 class Logger {
 
 public:
-    enum LogMode { ERROR = 1, INFO = 2, DEBUG = 3 };
 	static Logger* getInstance();
 	void setMode(LogMode modo);
 	void error(string msg);
