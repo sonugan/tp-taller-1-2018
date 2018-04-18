@@ -26,7 +26,7 @@ void Game::Start() {
     Logger::getInstance()->info("==================COMIENZA EL JUEGO==================");
     this->quit = false;
 
-    //Event handler
+    //Handler de eventos
     SDL_Event e;
 
     RenderViews();
@@ -45,7 +45,7 @@ void Game::Start() {
         SDL_Delay( ( 1000 / FRAMES_PER_SECOND ));
 
         while( SDL_PollEvent( &e ) != 0 ) {
-            //User requests quit
+            //Apreta ESCAPE
             quit = ( e.type == SDL_QUIT );
         }
     }
@@ -66,7 +66,7 @@ void Game::CreateModel() {
     Pitch* pitch = new Pitch();
 
     Formation* formation = new Formation(initial_configuration->GetFormation());
-    Team* team_a = new Team(formation, "team_a", "away");
+    Team* team_a = new Team(formation, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt());
 
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
         team_a->AddPlayer(new Player(i));
@@ -130,35 +130,30 @@ void Game::DestroyControllers() {
 
 void Game::InitSDL() {
     Logger::getInstance()->debug("DESTRUYENDO LAS VISTAS");
-    //Starts up SDL and creates window
-	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 	{
 	    throw std::runtime_error(SDL_GetError());
 	}
-    //Set texture filtering to linear
+
     if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
     {
-        Logger::getInstance()->debug( "Warning: Linear texture filtering not enabled!" );
+        Logger::getInstance()->debug( "WARNING (SDL): Linear texture filtering not enabled!" );
     }
-    //Create window
+
     window = SDL_CreateWindow( "Tehkan world cup", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
     if( window == NULL )
     {
         throw std::runtime_error(SDL_GetError());
     }
 
-    //Create vsynced renderer for window
     renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
     if( renderer == NULL )
     {
         throw std::runtime_error(SDL_GetError());
     }
 
-    //Initialize renderer color
     SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 
-    //Initialize PNG loading
     int imgFlags = IMG_INIT_PNG;
     if( !( IMG_Init( imgFlags ) & imgFlags ) )
     {
@@ -169,13 +164,11 @@ void Game::InitSDL() {
 }
 
 void Game::CloseSDL() {
-	//Destroy window
 	SDL_DestroyRenderer( renderer );
 	SDL_DestroyWindow( window );
 	window = NULL;
 	renderer = NULL;
 
-	//Quit SDL subsystems
 	IMG_Quit();
 	SDL_Quit();
 

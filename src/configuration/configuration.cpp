@@ -44,6 +44,7 @@ void Configuration::SetLogLevel(string log_level)
         Logger::getInstance()->error("El valor '" + log_level + "' no es valido para el nivel de log. Se procede a tomar el valor por defecto del logger: 'debug'");
     }
 
+    Logger::getInstance()->setMode(this->log_level);
 }
 
 string Configuration::GetFormation()
@@ -105,7 +106,7 @@ void Configuration::Load(Configuration* config, string config_path, string log_l
     ConfigurationParser* parser = new ConfigurationParser();
     parser->ReadFile(config, config_path);
     if(log_level != "") {
-        Logger::getInstance()->debug("(Configuracion-CLI) NIVEL DE LOG: " + log_level);
+        Logger::getInstance()->debug("(Configuracion-CLI MASTER) NIVEL DE LOG: " + log_level);
         config->SetLogLevel(log_level);
     }
     delete parser;

@@ -36,7 +36,7 @@ bool SpriteSheet::LoadFromFile()
         if( newTexture == NULL )
         {
 			stringstream ss;
-			ss << "No se puede crear la textura desde " << this->path.c_str() << " Error: " << IMG_GetError();
+			ss << "No se puede crear la textura desde " << this->path.c_str() << ". Error: " << IMG_GetError();
 			Logger::getInstance()->error(ss.str());
         }
         else
@@ -68,7 +68,7 @@ SDL_Surface* SpriteSheet::LoadSurface()
     if (surfaceLoad == NULL)
     {
 		stringstream ss;
-		ss << "No se puede cargar la imagen " << this->path.c_str() << "Error: " << IMG_GetError();
+		ss << "No se puede cargar la imagen " << this->path.c_str() << ". Error: " << IMG_GetError();
 		Logger::getInstance()->error(ss.str());
         surfaceLoad = IMG_Load( "src/sprites/error.png" );
     }
