@@ -27,28 +27,29 @@ void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
 
 void PlayerController::MovePlayer(const Uint8 *keyboard_state_array)
 {
+    bool run = ShiftKeySelected(keyboard_state_array);
     if (UpKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveUpToRight();
+        team->GetSelectedPlayer()->MoveUpToRight(run);
     } else if (UpKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveUpToLeft();
+        team->GetSelectedPlayer()->MoveUpToLeft(run);
     } else if (DownKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveDownToRight();
+        team->GetSelectedPlayer()->MoveDownToRight(run);
     } else if (DownKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveDownToLeft();
+        team->GetSelectedPlayer()->MoveDownToLeft(run);
     } else if (UpKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveUp();
+        team->GetSelectedPlayer()->MoveUp(run);
     } else if(RightKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveRight();
+        team->GetSelectedPlayer()->MoveRight(run);
     } else if(LeftKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveLeft();
+        team->GetSelectedPlayer()->MoveLeft(run);
     } else if(DownKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveDown();
+        team->GetSelectedPlayer()->MoveDown(run);
     }
     current_action = PLAYER_IS_RUNNING;
 }
 
 bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array) {
-    if (SpaceBarSelected(keyboard_state_array)) {
+    if (DKeySelected(keyboard_state_array)) {
         team->GetSelectedPlayer()->Kick();
         current_action = PLAYER_IS_KICKING;
         return true;
@@ -57,7 +58,7 @@ bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array) {
 }
 
 bool PlayerController::PlayerRecoverBall(const Uint8 *keyboard_state_array) {
-    if (keyboard_state_array[SDL_SCANCODE_V]) {
+    if (AKeySelected(keyboard_state_array)) {
         team->GetSelectedPlayer()->RecoverBall();
         current_action = PLAYER_IS_RECOVERING;
         return true;
@@ -66,23 +67,35 @@ bool PlayerController::PlayerRecoverBall(const Uint8 *keyboard_state_array) {
 }
 
 bool PlayerController::UpKeySelected(const Uint8 *keyboard_state_array) {
-    return keyboard_state_array[SDL_SCANCODE_UP] || keyboard_state_array[SDL_SCANCODE_W];
+    return keyboard_state_array[SDL_SCANCODE_UP];
 }
 
 bool PlayerController::RightKeySelected(const Uint8 *keyboard_state_array) {
-    return keyboard_state_array[SDL_SCANCODE_RIGHT] || keyboard_state_array[SDL_SCANCODE_D];
+    return keyboard_state_array[SDL_SCANCODE_RIGHT];
 }
 
 bool PlayerController::LeftKeySelected(const Uint8 *keyboard_state_array) {
-    return keyboard_state_array[SDL_SCANCODE_LEFT] || keyboard_state_array[SDL_SCANCODE_A];
+    return keyboard_state_array[SDL_SCANCODE_LEFT];
 }
 
 bool PlayerController::DownKeySelected(const Uint8 *keyboard_state_array) {
-    return keyboard_state_array[SDL_SCANCODE_DOWN] || keyboard_state_array[SDL_SCANCODE_S];
+    return keyboard_state_array[SDL_SCANCODE_DOWN];
 }
 
-bool PlayerController::SpaceBarSelected(const Uint8 *keyboard_state_array) {
-    return keyboard_state_array[SDL_SCANCODE_SPACE];
+bool PlayerController::AKeySelected(const Uint8 *keyboard_state_array) {
+    return keyboard_state_array[SDL_SCANCODE_A];
+}
+
+bool PlayerController::SKeySelected(const Uint8 *keyboard_state_array) {
+    return keyboard_state_array[SDL_SCANCODE_S];
+}
+
+bool PlayerController::DKeySelected(const Uint8 *keyboard_state_array) {
+    return keyboard_state_array[SDL_SCANCODE_D];
+}
+
+bool PlayerController::ShiftKeySelected(const Uint8 *keyboard_state_array) {
+    return keyboard_state_array[SDL_SCANCODE_LSHIFT];
 }
 
 void PlayerController::Handle(const Uint8* keyboard_state_array) {

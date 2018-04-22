@@ -32,7 +32,10 @@ class PlayerController : public AbstractController
         bool RightKeySelected(const Uint8 *keyboard_state_array);
         bool LeftKeySelected(const Uint8 *keyboard_state_array);
         bool DownKeySelected(const Uint8 *keyboard_state_array);
-        bool SpaceBarSelected(const Uint8 *keyboard_state_array);
+        bool AKeySelected(const Uint8 *keyboard_state_array);
+        bool SKeySelected(const Uint8 *keyboard_state_array);
+        bool DKeySelected(const Uint8 *keyboard_state_array);
+        bool ShiftKeySelected(const Uint8 *keyboard_state_array);
         bool SelectedPlayerHasChange();
         bool ContinueCurrentAction();
 };

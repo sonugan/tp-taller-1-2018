@@ -13,51 +13,51 @@ Player::~Player()
     delete location;
 }
 
-void Player::MoveLeft() {
+void Player::MoveLeft(bool run) {
     this->direction = WEST;
-    Move(PLAYER_SPEED);
+    Move(run);
 }
 
-void Player::MoveRight()
+void Player::MoveRight(bool run)
 {
     this->direction = EAST;
-    Move(PLAYER_SPEED);
+    Move(run);
 }
 
-void Player::MoveUp()
+void Player::MoveUp(bool run)
 {
     this->direction = NORTH;
-    Move(PLAYER_SPEED);
+    Move(run);
 }
 
-void Player::MoveDown()
+void Player::MoveDown(bool run)
 {
     this->direction = SOUTH;
-    Move(PLAYER_SPEED);
+    Move(run);
 }
 
-void Player::MoveUpToRight()
+void Player::MoveUpToRight(bool run)
 {
     this->direction = NORTHEAST;
-    Move(PLAYER_SPEED);
+    Move(run);
 }
 
-void Player::MoveUpToLeft()
+void Player::MoveUpToLeft(bool run)
 {
     this->direction = NORTHWEST;
-    Move(PLAYER_SPEED);
+    Move(run);
 }
 
-void Player::MoveDownToRight()
+void Player::MoveDownToRight(bool run)
 {
     this->direction = SOUTHEAST;
-    Move(PLAYER_SPEED);
+    Move(run);
 }
 
-void Player::MoveDownToLeft()
+void Player::MoveDownToLeft(bool run)
 {
     this->direction = SOUTHWEST;
-    Move(PLAYER_SPEED);
+    Move(run);
 }
 
 void Player::Kick()
@@ -68,7 +68,7 @@ void Player::Kick()
 void Player::RecoverBall()
 {
     this->recoveringBall = true;
-    this->Move(PLAYER_SPEED*0.3);
+    this->Move(false);
 }
 
 Location* Player::GetLocation() {
@@ -110,21 +110,21 @@ void Player::GoBackToDefaultPosition() {
     int default_y = default_location->GetY();
     int y = location->GetY();
     if (x > default_x && y > default_y) {
-        MoveUpToLeft();
+        MoveUpToLeft(false);
     } else if (x < default_x && y > default_y) {
-        MoveUpToRight();
+        MoveUpToRight(false);
     } else if (x < default_x && y < default_y) {
-        MoveDownToRight();
+        MoveDownToRight(false);
     } else if (x > default_x && y < default_y) {
-        MoveDownToLeft();
+        MoveDownToLeft(false);
     } else if (x > default_x && y == default_y) {
-        MoveLeft();
+        MoveLeft(false);
     } else if (x < default_x && y == default_y) {
-        MoveRight();
+        MoveRight(false);
     } else if (x == default_x && y > default_y) {
-        MoveUp();
+        MoveUp(false);
     } else if (x == default_x && y < default_y) {
-        MoveDown();
+        MoveDown(false);
     }else{
         direction = EAST;//TODO: cuando haya mas equipos debe quedar mirando para otro lado
     }
@@ -160,8 +160,17 @@ void Player::SetRecoveringBall(bool recoveringBall) {
     this->recoveringBall = recoveringBall;
 }
 
-void Player::Move(int speed)
+void Player::Move(bool run)
 {
+    int speed;
+    if (recoveringBall) {
+        speed = PLAYER_SPEED * 0.3;
+    } else if (run) {
+        speed = PLAYER_RUNNING_SPEED;
+    } else {
+        speed = PLAYER_SPEED;
+    }
+
     switch(direction) {
         case NORTH:
             location->UpdateY(location->GetY() - speed);

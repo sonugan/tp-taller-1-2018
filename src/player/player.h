@@ -15,14 +15,14 @@ class Player
     public:
         Player(unsigned int position_index);
         virtual ~Player();
-        void MoveLeft();
-        void MoveRight();
-        void MoveUp();
-        void MoveDown();
-        void MoveUpToRight();
-        void MoveUpToLeft();
-        void MoveDownToRight();
-        void MoveDownToLeft();
+        void MoveLeft(bool run);
+        void MoveRight(bool run);
+        void MoveUp(bool run);
+        void MoveDown(bool run);
+        void MoveUpToRight(bool run);
+        void MoveUpToLeft(bool run);
+        void MoveDownToRight(bool run);
+        void MoveDownToLeft(bool run);
         void Kick();
         void RecoverBall();
         Location* GetLocation();
@@ -43,12 +43,13 @@ class Player
     private:
         DIRECTION direction;
         static const int PLAYER_SPEED = 10;
+        static const int PLAYER_RUNNING_SPEED = 15;
         bool selected;
         bool kicking;
         bool recoveringBall;
         Team* team;
         unsigned int position_index;
-        void Move(int speed);
+        void Move(bool run);
         Location* location;
 };
 
