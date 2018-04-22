@@ -1,0 +1,11 @@
+A: barrer
+S: pase
+D: tiro al arco
+C: cambiar jugador
+F: cambiar formación
+LEFT SHIFT: correr
+LEFT: mover a la izquierda
+RIGHT: mover a la derecha
+UP: mover arriba
+DOWN: mover abajo
+ESC: salir del juego
