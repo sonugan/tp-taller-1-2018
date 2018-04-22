@@ -58,6 +58,7 @@ void Game::End() {
     DestroyModel();
     DestroyViews();
     DestroyControllers();
+    SpritesProvider::FreeResources();
     CloseSDL();
 }
 

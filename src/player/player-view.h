@@ -4,6 +4,7 @@
 #include "player.h"
 #include "../common/abstract-view.h"
 #include "../common/ishowable.h"
+#include "../common/sprites-provider.h"
 #include "../camera/camera.h"
 
 class PlayerView : public AbstractView, public IShowable

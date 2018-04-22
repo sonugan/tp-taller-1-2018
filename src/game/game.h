@@ -9,6 +9,7 @@
 #include <exception>
 #include <vector>
 #include "../common/sprite-sheet.h"
+#include "../common/sprites-provider.h"
 #include "../pitch/pitch.h"
 #include "../pitch/pitch-view.h"
 #include "../player/player-view.h"
