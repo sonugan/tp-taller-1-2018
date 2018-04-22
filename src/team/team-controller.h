@@ -11,6 +11,7 @@
 #include "../game/game.h"
 #include <vector>
 #include <chrono>
+#include "../sound/sound-manager.h"
 
 class TeamController : public AbstractController
 {
