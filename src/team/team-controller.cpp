@@ -56,6 +56,7 @@ void TeamController::ChangePlayerSelection(const Uint8 *keyboard_state_array) {
         if(CKeySelected(keyboard_state_array)) {
             Player* next_player = FindNextPlayerToSelect();
             if (next_player != NULL) {
+                SoundManager::PlayPlayerSelectionSound();
                 Player* selected_player = team->GetSelectedPlayer();
                 selected_player->SetSelected(false);
                 selected_player = next_player;

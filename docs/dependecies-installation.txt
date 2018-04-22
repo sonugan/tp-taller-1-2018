@@ -39,4 +39,11 @@ Configurar C++ 11 en codeblocks (necesario para yaml-cpp)
 3) Luego, ir al tab "Compiler settings" y dentro de él al tab "Compiler Flags"
 4) Tildar la opción "Have g++ follow the C++11 ISO C++  language standard [-std=c++11]"
 
+----------------------------------------------------------
+SDL Mixer
+
+sudo apt-get install libsdl-mixer1.2 libsdl-mixer1.2-dev libsdl2-mixer-2.0-0 libsdl2-mixer-dev
+
+Agregar el flag -lSDL2_mixer en las linker options.
+
 

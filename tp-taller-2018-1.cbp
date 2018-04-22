@@ -21,6 +21,7 @@
 					<Add directory="src/match" />
 					<Add directory="src/team" />
 					<Add directory="src/configuration" />
+					<Add directory="src/sound" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -38,6 +39,7 @@
 					<Add directory="src/match" />
 					<Add directory="src/team" />
 					<Add directory="src/configuration" />
+					<Add directory="src/sound" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -49,7 +51,7 @@
 			<Add option="-std=c++11" />
 		</Compiler>
 		<Linker>
-			<Add option="-lSDL2 -lSDL2_image -lyaml-cpp" />
+			<Add option="-lSDL2 -lSDL2_image -lyaml-cpp -lSDL2_mixer" />
 		</Linker>
 		<Unit filename="src/camera/camera.cpp" />
 		<Unit filename="src/camera/camera.h" />
@@ -95,6 +97,9 @@
 		<Unit filename="src/player/player-view.h" />
 		<Unit filename="src/player/player.cpp" />
 		<Unit filename="src/player/player.h" />
+		<Unit filename="src/sound/scratch.wav" />
+		<Unit filename="src/sound/sound-manager.cpp" />
+		<Unit filename="src/sound/sound-manager.h" />
 		<Unit filename="src/sprites/pitch.jpg" />
 		<Unit filename="src/sprites/player.png" />
 		<Unit filename="src/team/formation.cpp" />

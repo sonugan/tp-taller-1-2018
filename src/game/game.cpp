@@ -59,6 +59,7 @@ void Game::End() {
     DestroyViews();
     DestroyControllers();
     SpritesProvider::FreeResources();
+    SoundManager::FreeResources();
     CloseSDL();
 }
 
@@ -130,7 +131,7 @@ void Game::DestroyControllers() {
 }
 
 void Game::InitSDL() {
-    Logger::getInstance()->debug("DESTRUYENDO LAS VISTAS");
+    Logger::getInstance()->debug("INICIALIZANDO SDL");
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 	{
 	    throw std::runtime_error(SDL_GetError());
@@ -161,6 +162,7 @@ void Game::InitSDL() {
         throw std::runtime_error(IMG_GetError());
 
     }
+    SoundManager::LoadResources();
 
 }
 
