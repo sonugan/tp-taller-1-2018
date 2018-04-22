@@ -4,6 +4,7 @@
 
 SpriteSheet::SpriteSheet(SDL_Renderer* renderer, std::string path)
 {
+    Logger::getInstance()->debug("CREANDO SPRITESHEET");
 	this->renderer = renderer;
 	this->path = "src/sprites/" + path;
 	texture = NULL;
