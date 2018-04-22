@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <sys/stat.h>
+#include "string-builder.h"
 
 using namespace std;
 
@@ -23,5 +25,7 @@ private:
 	void log(LogMode modo, string msg);
 	bool checkPermissionsByMode(LogMode modo);
 	string dateAndTime();
+	bool CreateDirectory(std::string relative_path);
+	void SetFileName();
+	static constexpr const char* LOGFILES_DIRECTORY = "log";
 };
-
