@@ -16,7 +16,7 @@ void SoundManager::LoadResources() {
     if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 1024 ) == -1 ) {
         Logger::getInstance()->error(Mix_GetError());
     } else {
-        SoundManager::change_player_sound = Mix_LoadWAV( "src/sound/select_player.wav" );
+        SoundManager::change_player_sound = Mix_LoadWAV( "src/client/sound/select_player.wav" );
         if (SoundManager::change_player_sound == NULL) {
             Logger::getInstance()->error(Mix_GetError());
         }
