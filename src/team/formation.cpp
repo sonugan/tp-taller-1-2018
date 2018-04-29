@@ -20,7 +20,7 @@ Formation::Formation(FORMATION value) {
 
 Formation::~Formation() {
     Logger::getInstance()->debug("DESTRUYENDO FORMACION");
-    for (unsigned int i; i < positions.size(); i++) {
+    for (unsigned int i = 0; i < positions.size(); i++) {
         delete positions[i];
     }
     positions.clear();

@@ -11,7 +11,7 @@ Team::Team(Formation* formation, string name, string shirt) {
 Team::~Team() {
     Logger::getInstance()->debug("DESTRUYENDO EQUIPO");
     delete formation;
-    for (unsigned int i; i < players.size(); i++) {
+    for (unsigned int i = 0; i < players.size(); i++) {
         delete players[i];
     }
     players.clear();

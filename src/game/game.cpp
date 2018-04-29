@@ -103,7 +103,7 @@ void Game::CreateViews() {
 }
 
 void Game::CreateControllers() {
-    Logger::getInstance()->debug("CREANDO CONTROLLERS");class Player; //  forward declaration
+    Logger::getInstance()->debug("CREANDO CONTROLLERS"); //  forward declaration
     team_controller = new TeamController(match->GetTeamA(), camera);
     player_controller = new PlayerController(match->GetTeamA());
     game_controller = new GameController(this);
