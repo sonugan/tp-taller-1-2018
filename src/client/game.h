@@ -12,6 +12,7 @@
 #include "view/sprites-provider.h"
 #include "../shared/model/pitch.h"
 #include "view/pitch-view.h"
+#include "view/ball-view.h"
 #include "view/player-view.h"
 #include "view/camera.h"
 #include "../shared/model/match.h"
