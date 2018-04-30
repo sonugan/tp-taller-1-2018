@@ -35,6 +35,10 @@ Formation* Team::GetFormation() {
     return this->formation;
 }
 
+Match* Team::GetMatch() {
+    return this->match;
+}
+
 void Team::AddPlayer(Player* player) {
     if (players.size() < TEAM_SIZE) {
         players.push_back(player);

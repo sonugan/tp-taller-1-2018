@@ -20,6 +20,7 @@ class Team
         void SetFormation(Formation* formation);
         void SetMatch(Match* match);
         Formation* GetFormation();
+        Match* GetMatch();
         void AddPlayer(Player* player);
         static const unsigned int TEAM_SIZE = 7;
         string GetName();
