@@ -38,6 +38,8 @@ class Player
         unsigned int GetPositionIndex();
         void GoBackToDefaultPosition();
         Team* getTeam();
+        bool HasBall();
+        void SetHasBall(bool has_ball);
     protected:
 
     private:
@@ -46,7 +48,8 @@ class Player
         static const int PLAYER_RUNNING_SPEED = 15;
         bool selected;
         bool kicking;
-        bool recoveringBall;
+        bool recovering_ball;
+        bool has_ball;
         Team* team;
         unsigned int position_index;
         void Move(bool run);

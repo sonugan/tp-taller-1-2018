@@ -67,7 +67,7 @@ void Player::Kick()
 
 void Player::RecoverBall()
 {
-    this->recoveringBall = true;
+    this->recovering_ball = true;
     this->Move(false);
 }
 
@@ -84,6 +84,10 @@ void Player::SetSelected(bool value) {
     this->selected = value;
 }
 
+void Player::SetHasBall(bool value) {
+    this->has_ball = value;
+}
+
 Location* Player::GetDefaultLocation() {
     return team->GetFormation()->GetLocationForPlayer(position_index);
 
@@ -97,6 +101,10 @@ void Player::SetTeam(Team* team) {
 
 unsigned int Player::GetPositionIndex() {
     return this->position_index;
+}
+
+bool Player::HasBall() {
+    return this->has_ball;
 }
 
 bool Player::IsSelected() {
@@ -153,17 +161,17 @@ void Player::SetKicking(bool kicking)
 }
 
 bool Player::IsRecoveringBall() {
-    return recoveringBall;
+    return recovering_ball;
 }
 
-void Player::SetRecoveringBall(bool recoveringBall) {
-    this->recoveringBall = recoveringBall;
+void Player::SetRecoveringBall(bool recovering_ball) {
+    this->recovering_ball = recovering_ball;
 }
 
 void Player::Move(bool run)
 {
     int speed;
-    if (recoveringBall) {
+    if (recovering_ball) {
         speed = PLAYER_SPEED * 0.3;
     } else if (run) {
         speed = PLAYER_RUNNING_SPEED;
