@@ -5,3 +5,4 @@ team:
   shirt: home
   name: team_a
 sprites_path: src/client/sprites
+init_mode: client

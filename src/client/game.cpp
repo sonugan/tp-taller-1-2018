@@ -93,8 +93,8 @@ void Game::CreateViews() {
     std::map <unsigned int, PlayerView*> player_views_map;
     this->camera->Add(pitch_view);
 
-    BallView* ball_view = new BallView(match->GetBall(), this->renderer);
-    this->camera->Add(ball_view);
+    //BallView* ball_view = new BallView(match->GetBall(), this->renderer);
+    //this->camera->Add(ball_view);
 
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
         Player* player = match->GetTeamA()->GetPlayers()[i];

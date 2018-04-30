@@ -124,6 +124,26 @@ void Configuration::SetTeamName(string name)
     Logger::getInstance()->debug("(Configuracion) NOMBRE DE EQUIPO: " + this->team_name);
 }
 
+void Configuration::SetInitMode(string init_mode)
+{
+    if (IsValidConfigValue("init_mode", init_mode))
+    {
+        this->init_mode = init_mode;
+    }
+    else
+    {
+        this->init_mode = "client";
+        Logger::getInstance()->error("El valor '" + init_mode + "' no es valido para el modo de inicio. Se procede a tomar el valor por defecto del modo de inicio: 'client'");
+    }
+
+    Logger::getInstance()->debug("(Configuracion) INIT_MODE: " + this->init_mode);
+}
+
+string Configuration::GetInitMode()
+{
+    return this->init_mode;
+}
+
 bool Configuration::IsValidConfigValue(string parameter, string value)
 {
     vector<string> valid_values = {};
@@ -144,3 +164,4 @@ LogMode Configuration::ToLogMode(string log_level_str)
     auto it = this->LOG_MODE_MAP.find(log_level_str);
     return it->second;
 }
+

@@ -32,6 +32,10 @@ class Configuration
 
         string GetTeamName();
 
+        void SetInitMode(string init_mode);
+
+        string GetInitMode();
+
         void SetSpritesPath(string sprites_path);
 
         static void Load(Configuration* config, string config_path, string log_level);
@@ -46,10 +50,12 @@ class Configuration
         string shirt;
         string sprites_path;
         string team_name;
+        string init_mode;
         map<string, vector<string>> valid_configurations = {
             {"level", { "info", "debug", "error" }},
             {"formation", { "3-3", "3-1-2", "3-2-1" }},
-            {"shirt", { "home", "away" }}
+            {"shirt", { "home", "away" }},
+            {"init_mode", { "server", "client" }},
         };
         const map<string, LogMode> LOG_MODE_MAP = {
             {"error", LogMode::ERROR},
