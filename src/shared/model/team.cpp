@@ -27,6 +27,10 @@ void Team::SetFormation(Formation* formation) {
     delete old_formation;
 }
 
+void Team::SetMatch(Match* match) {
+    this->match = match;
+}
+
 Formation* Team::GetFormation() {
     return this->formation;
 }

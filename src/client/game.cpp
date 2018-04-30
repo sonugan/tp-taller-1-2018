@@ -78,7 +78,9 @@ void Game::CreateModel() {
     //selecciono por default al arquero
     team_a->GetPlayers()[0]->SetSelected(true);
 
-    this->match = new Match(pitch, team_a, NULL);
+    Ball* ball = new Ball();
+
+    this->match = new Match(pitch, team_a, NULL, ball);
 }
 
 void Game::CreateViews() {
