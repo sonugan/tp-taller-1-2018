@@ -126,9 +126,9 @@ void Configuration::SetTeamName(string name)
 
 void Configuration::SetInitMode(string init_mode)
 {
-    if (IsValidConfigValue("init_mode", init_mode))
+    if (IsValidConfigValue("init_mode", str_to_lower(init_mode)))
     {
-        this->init_mode = init_mode;
+        this->init_mode = str_to_lower(init_mode);
     }
     else
     {
@@ -165,3 +165,13 @@ LogMode Configuration::ToLogMode(string log_level_str)
     return it->second;
 }
 
+
+bool Configuration::InitModeIsServer()
+{
+    return this->init_mode.compare("server") == 0;
+}
+
+bool Configuration::InitModeIsClient()
+{
+    return !this->InitModeIsServer();
+}

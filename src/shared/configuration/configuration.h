@@ -7,7 +7,6 @@
 #include "../logger.h"
 using namespace std;
 
-
 class Configuration
 {
     public:
@@ -41,6 +40,10 @@ class Configuration
         static void Load(Configuration* config, string config_path, string log_level);
 
         bool IsValidConfigValue(string parameter, string value);
+
+        bool InitModeIsServer();
+
+        bool InitModeIsClient();
 
     protected:
 
