@@ -22,6 +22,7 @@
 					<Add directory="src/team" />
 					<Add directory="src/configuration" />
 					<Add directory="src/sound" />
+					<Add directory="src/shared/model" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -40,6 +41,7 @@
 					<Add directory="src/team" />
 					<Add directory="src/configuration" />
 					<Add directory="src/sound" />
+					<Add directory="src/shared/model" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -91,6 +93,8 @@
 		<Unit filename="src/shared/configuration/default-config.yml" />
 		<Unit filename="src/shared/logger.cpp" />
 		<Unit filename="src/shared/logger.h" />
+		<Unit filename="src/shared/model/ball.cpp" />
+		<Unit filename="src/shared/model/ball.h" />
 		<Unit filename="src/shared/model/formation.cpp" />
 		<Unit filename="src/shared/model/formation.h" />
 		<Unit filename="src/shared/model/location.cpp" />
