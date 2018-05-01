@@ -10,6 +10,7 @@ const string TEAM_FORMATION_NODE = "formation";
 const string TEAM_NAME_NODE = "name";
 const string TEAM_SHIRT_NODE = "shirt";
 const string INIT_MODE_NODE = "init_mode";
+const string USERS_NODE = "users";
 const string SPRITES_PATH = "sprites_path";
 const string DEFAULT_LOG_MODE = "debug";
 const string DEFAULT_INIT_MODE = "client";
@@ -96,6 +97,17 @@ void parseConfigFile(Configuration* configuration, YAML::Node config_file)
         configuration->SetInitMode(DEFAULT_INIT_MODE);
     }
 
+    if (config_file[USERS_NODE])
+    {
+        // OBTENGO TODOS LOS USUARIOS Y SUS PASSWORDS
+        YAML::Node users_node = config_file[USERS_NODE];
+
+        for (unsigned short i = 0; i < users_node.size(); ++i) {
+            std::string username = users_node[i]["name"].as<std::string>();
+            std::string password = users_node[i]["password"].as<std::string>();
+            configuration->AddValidCredential(username, password);
+        }
+	}
 }
 
 /** Configuration class implementation **/

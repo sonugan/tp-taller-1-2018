@@ -12,7 +12,6 @@ Configuration::Configuration()
 
 Configuration::~Configuration()
 {
-    //dtor
 }
 
 bool DirectoryExists(string dir)
@@ -174,4 +173,23 @@ bool Configuration::InitModeIsServer()
 bool Configuration::InitModeIsClient()
 {
     return !this->InitModeIsServer();
+}
+
+void Configuration::AddValidCredential(string username, string password)
+{
+    this->valid_credentials.insert(pair<string, string>(username, password));
+}
+
+bool Configuration::IsValidCredential(string username, string password)
+{
+    map<string,string>::iterator it = this->valid_credentials.find(username);
+
+    if (it != this->valid_credentials.end())
+    { // Encontro el usuario, comparo las passwords
+        string stored_password = it->second;
+        return stored_password.compare(password) == 0;
+    }
+
+    return false; // No existe ese usuario
+
 }

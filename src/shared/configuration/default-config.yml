@@ -6,3 +6,10 @@ team:
   name: team_a
 sprites_path: src/client/sprites
 init_mode: client
+users:
+  - name: user
+    password: 1234
+  - name: user2
+    password: 1234
+
+

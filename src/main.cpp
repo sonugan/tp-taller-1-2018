@@ -25,13 +25,25 @@ int main( int argc, char* args[] ) {
 
     bool isClient = config->InitModeIsClient();
 
+    // Para las pruebas, esto se deberia cargar con lo que venga del login
+    string username = "user";
+    string password = "1234";
+
     if (isClient) {
-        // POR AHORA QUEDA IGUAL A LO QUE YA TENIAMOS
-        Game* game = new Game(config);
-        game->Start();
-        game->End();
-        delete game;
-        delete config;
+
+        if (config->IsValidCredential(username, password))
+        {
+            // POR AHORA QUEDA IGUAL A LO QUE YA TENIAMOS
+            Game* game = new Game(config);
+            game->Start();
+            game->End();
+            delete game;
+            delete config;
+        }
+        else
+        {
+            Logger::getInstance()->error("El usuario " + username + " o la password " + password + " son incorrectos.");
+        }
 
     } else { // SE INICIO COMO SERVER
         Server* server = new Server();

@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="--config=/home/patricia/Escritorio/config.yml --loglevel=ERROR" />
+				<Option parameters="--config=/home/patricia/Escritorio/config.yml" />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="src/game" />
@@ -23,6 +23,7 @@
 					<Add directory="src/configuration" />
 					<Add directory="src/sound" />
 					<Add directory="src/shared/model" />
+					<Add directory="src/server" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -42,6 +43,7 @@
 					<Add directory="src/configuration" />
 					<Add directory="src/sound" />
 					<Add directory="src/shared/model" />
+					<Add directory="src/server" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -82,6 +84,8 @@
 		<Unit filename="src/client/view/sprites-provider.h" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/server/bla.txt" />
+		<Unit filename="src/server/server.cpp" />
+		<Unit filename="src/server/server.h" />
 		<Unit filename="src/shared/configuration/cli-options-parser.cpp" />
 		<Unit filename="src/shared/configuration/cli-options-parser.h" />
 		<Unit filename="src/shared/configuration/cli-options.cpp" />
