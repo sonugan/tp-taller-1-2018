@@ -18,12 +18,12 @@ Socket::Socket(int socket_id)
     this->socket_id = socket_id;
 }
 
-void Socket::Write(Socket client_socket, Message message)
+void Socket::Send(Socket client_socket, Request request)
 {
-    send(client_socket.socket_id, message.GetData(), message.GetDataSize(), 0);
+    send(client_socket.socket_id, request.GetData(), request.GetDataSize(), 0);
 }
 
-Message Socket::Read(Socket client_socket, int expected_size)
+Message Socket::Receive(Socket client_socket, int expected_size)
 {
     char* buffer = (char*) malloc(expected_size);
 

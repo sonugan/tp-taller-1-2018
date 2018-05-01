@@ -7,6 +7,7 @@
 #include "shared/network/client-socket.h"
 #include "shared/network/socket-address.h"
 #include "shared/network/message.h"
+#include "shared/network/request.h"
 
 
 #include <iostream>
@@ -46,10 +47,11 @@ int main( int argc, char* args[] ) {
         ServerSocket clientSocket = serverSocket.Accept();
         //printf("server: got connection from %s port %d\n",
         //inet_ntoa(cli_addr.sin_addr), ntohs(cli_addr.sin_port));
-        Message m("Hello, world!\n", 13);
-        serverSocket.Write(clientSocket, m);
+        //Message m("Hello, world!\n", 13);
+        Request r("Hello, world!\n");
+        serverSocket.Send(clientSocket, r);
 
-        Message incommingMessage = serverSocket.Read(clientSocket,255);
+        Message incommingMessage = serverSocket.Receive(clientSocket,255);
         printf("Here is the message: %s\n",incommingMessage.GetData());
         serverSocket.Close();
     }
@@ -64,8 +66,9 @@ int main( int argc, char* args[] ) {
         bzero(buffer,256);
         fgets(buffer,255,stdin);
         //Message m("Hello, dlrow!\n", 13);
-        Message m("Hello, dlrow!\n");
-        clientSocket.Write(clientSocket, m);
+        //Message m("Hello, dlrow!\n");
+        Request r("Hello, dlrow!\n");
+        clientSocket.Send(clientSocket, r);
         //n = write(sockfd, buffer, strlen(buffer));
 
         clientSocket.Close();

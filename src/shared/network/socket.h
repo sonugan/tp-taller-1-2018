@@ -6,6 +6,8 @@
 #include <netinet/in.h>
 
 #include "message.h"
+#include "request.h"
+#include "response.h"
 #include "../logger.h"
 #include "../utils/string-builder.h"
 
@@ -15,8 +17,8 @@ class Socket
         Socket();
         Socket(int socket_id);
         virtual ~Socket();
-        void Write(Socket destination_socket, Message message);
-        Message Read(Socket origin_socket, int expected_size);
+        void Send(Socket destination_socket, Request request);
+        Message Receive(Socket origin_socket, int expected_size);
         // Receives are disallowed
         void ShutDownReceives();
         // Sends are disallowed
