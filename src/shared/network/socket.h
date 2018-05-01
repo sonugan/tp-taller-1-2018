@@ -15,8 +15,13 @@ class Socket
         Socket();
         Socket(int socket_id);
         virtual ~Socket();
-        void Send(Socket client_socket, Message message);
-        Message Read(Socket client_socket, int expected_size);
+        void Write(Socket destination_socket, Message message);
+        Message Read(Socket origin_socket, int expected_size);
+        // Receives are disallowed
+        void ShutDownReceives();
+        // Sends are disallowed
+        void ShutDownSends();
+        // Both receives and sends are disallowed
         void ShutDown();
         void Close();
     protected:

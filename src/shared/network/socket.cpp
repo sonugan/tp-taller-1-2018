@@ -18,7 +18,7 @@ Socket::Socket(int socket_id)
     this->socket_id = socket_id;
 }
 
-void Socket::Send(Socket client_socket, Message message)
+void Socket::Write(Socket client_socket, Message message)
 {
     send(client_socket.socket_id, message.GetData(), message.GetDataSize(), 0);
 }
@@ -35,14 +35,24 @@ Message Socket::Read(Socket client_socket, int expected_size)
     return m;
 }
 
+void Socket::ShutDownReceives()
+{
+    shutdown(this->socket_id, SHUT_RD);
+}
+
+void Socket::ShutDownSends()
+{
+    shutdown(this->socket_id, SHUT_WR);
+}
+
 void Socket::ShutDown()
 {
-    //shutdown(this->socket_id, )
-    //TODO
+    shutdown(this->socket_id, SHUT_RDWR);
 }
 
 void Socket::Close()
 {
+    //ShutDown();
     close(this->socket_id);
 }
 

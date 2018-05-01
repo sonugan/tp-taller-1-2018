@@ -1,9 +1,9 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-#include <string>
+#include <string.h>
 
-#include "iserializer.h"
+#include "iserializable.h"
 
 using namespace std;
 
@@ -11,8 +11,11 @@ class Message
 {
     public:
         Message(char* data, int size);
+        Message(string data);
+        Message(ISerializable* serializable);
         char* GetData();
         int GetDataSize();
+        ISerializable* GetDeserializedData(ISerializable* serializable);
         virtual ~Message();
     protected:
     private:
