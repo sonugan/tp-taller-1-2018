@@ -18,7 +18,7 @@ void ServerSocket::Bind(SocketAddress address)
     sockaddr_in addr = address.GetFormatted();
     if (HasError(bind(this->socket_id, (struct sockaddr *) &addr, sizeof(addr))))
     {
-        Logger::getInstance()->debug("Se ha producido un error durante el binding");
+        Logger::getInstance()->debug("Error durante el binding");
     }
 }
 
@@ -34,7 +34,7 @@ ServerSocket ServerSocket::Accept()
     int client_socket_id = accept(this->socket_id, (struct sockaddr *) &client_address, &client_address_size);
     if (HasError(client_socket_id))
     {
-        Logger::getInstance()->debug("Se ha producido un error mientras se esperaban conexiones");
+        Logger::getInstance()->debug("Error mientras se esperaban conexiones");
         return NULL;
     }
     else

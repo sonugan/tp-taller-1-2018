@@ -9,7 +9,7 @@ Socket::Socket()
     this->socket_id =  socket(AF_INET, SOCK_STREAM, 0);
     if (HasError(this->socket_id))
     {
-       //throw(SocketException("ERROR: Opening socket"));
+       Logger::getInstance()->debug("ERROR: Abriendo socket");
     }
 }
 
@@ -29,7 +29,7 @@ Message Socket::Receive(Socket client_socket, int expected_size)
 
     if (HasError(read(client_socket.socket_id, buffer, expected_size)))
     {
-        //throw(SocketException("ERROR reading from socket"));
+        Logger::getInstance()->debug("ERROR leyendo desde socket");
     }
     Message m(buffer, expected_size);
     return m;

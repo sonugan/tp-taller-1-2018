@@ -15,7 +15,7 @@ void ClientSocket::Connect(SocketAddress server_address)
     sockaddr_in addr = server_address.GetFormatted();
     if(HasError(connect(this->socket_id, (struct sockaddr *) &addr, sizeof(addr))))
     {
-        //throw(SocketException("ERROR connecting to server"));
+        Logger::getInstance()->debug("ERROR conectandose al servidor");
     }
 }
 
