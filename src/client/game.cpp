@@ -77,6 +77,7 @@ void Game::CreateModel() {
 
     //selecciono por default al arquero
     team_a->GetPlayers()[0]->SetSelected(true);
+    team_a->GetPlayers()[0]->SetHasBall(true);
 
     Ball* ball = new Ball();
 
@@ -89,16 +90,16 @@ void Game::CreateViews() {
     Location center(PITCH_WIDTH/2 - SCREEN_WIDTH/2, PITCH_HEIGHT/2 - SCREEN_HEIGHT/2, 0);
     this->camera = new Camera(PITCH_WIDTH, PITCH_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, this->renderer, &center);
 
-    PitchView* pitch_view = new PitchView(this->match->GetPitch(), this->renderer);
+    PitchView* pitch_view = new PitchView(this->match->GetPitch());
     std::map <unsigned int, PlayerView*> player_views_map;
     this->camera->Add(pitch_view);
 
-    BallView* ball_view = new BallView(match->GetBall(), this->renderer);
+    BallView* ball_view = new BallView(match->GetBall());
     this->camera->Add(ball_view);
 
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
         Player* player = match->GetTeamA()->GetPlayers()[i];
-        PlayerView* player_view = new PlayerView(player, this->renderer);
+        PlayerView* player_view = new PlayerView(player);
         player_views_map[i] = player_view;
         this->camera->Add(player_view);
         //selecciono por default al arquero
@@ -160,6 +161,7 @@ void Game::InitSDL() {
     {
         throw std::runtime_error(SDL_GetError());
     }
+    SpritesProvider::SetRenderer(renderer);
 
     SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 

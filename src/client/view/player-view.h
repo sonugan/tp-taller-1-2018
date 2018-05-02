@@ -10,7 +10,7 @@
 class PlayerView : public AbstractView, public IShowable
 {
     public:
-        PlayerView(Player* player, SDL_Renderer* renderer);
+        PlayerView(Player* player);
         virtual ~PlayerView();
         void Render(int x_camera, int y_camera, int max_x, int max_y);
         Location* GetLocation();

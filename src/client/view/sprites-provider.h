@@ -2,24 +2,29 @@
 #define SPRITESPROVIDER_H
 
 #include "sprite-sheet.h"
+#include "../../shared/logger.h"
 #include <string>
+#include <map>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+enum SPRITE_SHEET {TEAM_A_PLAYER, TEAM_B_PLAYER, SELECTOR_A1, SELECTOR_A2, SELECTOR_A3, SELECTOR_A4, PITCH, BALL};
 class SpritesProvider
 {
     public:
         virtual ~SpritesProvider();
-        static SpriteSheet* GetSelectorSheet(SDL_Renderer* renderer, std::string file_path);
-        static SpriteSheet* GetPlayerSheet(SDL_Renderer* renderer, std::string file_path);
+        static SpriteSheet* GetSheet(SPRITE_SHEET sprite_sheet_enum, std::string suggested_path);
+        static SpriteSheet* GetDefaultSheet(SPRITE_SHEET sprite_sheet_enum);
+        static void SetRenderer(SDL_Renderer* renderer);
         static void FreeResources();
 
     protected:
 
     private:
         SpritesProvider();
-        static SpriteSheet* player_sheet;
-        static SpriteSheet* selector_sheet;
+        static std::map <unsigned int, SpriteSheet*> sprite_sheets;
+        static SDL_Renderer* renderer;
+        static std::string GetDefaultPath(SPRITE_SHEET sprite_sheet_enum);
 };
 
 #endif // SPRITESPROVIDER_H

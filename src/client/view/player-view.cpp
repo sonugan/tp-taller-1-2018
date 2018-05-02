@@ -1,21 +1,13 @@
 #include "player-view.h"
 #include "../../shared/logger.h"
-#include <sys/stat.h>
 
-bool File_Exists (const std::string& name)
-{
-    struct stat buffer;
-    return (stat (name.c_str(), &buffer) == 0);
-}
-
-PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
+PlayerView::PlayerView(Player* player)
 {
     this->width = 62;
     this->height = 62;
 
     this->frame = 0;
     this->player = player;
-    this->renderer = renderer;
 
     std::vector<SDL_Rect*> run_clips;
 
@@ -184,7 +176,7 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
 
     animations.push_back(new Animation("selector", player_selector_clips, FRAMES_PER_EVENT));
 
-    this->selector_sheet = SpritesProvider::GetSelectorSheet(renderer, "seleccion3.png");
+    this->selector_sheet = SpritesProvider::GetDefaultSheet(SELECTOR_A1);
 
     Location* current_location = player->GetLocation();
     previous_location = new Location(current_location->GetX(), current_location->GetY(), current_location->GetZ());
@@ -194,20 +186,12 @@ PlayerView::PlayerView(Player* player, SDL_Renderer* renderer)
     kitFile.append(player->getTeam()->GetShirt());
     kitFile.append("-kit.png");
 
-    if (File_Exists("src/sprites/" + kitFile)) {
-        this->sprite_sheet = SpritesProvider::GetPlayerSheet(renderer, kitFile);
-    } else {
-        Logger::getInstance()->error("No se encontro kit de camiseta en '" + kitFile + "'. Se procede a cargar la camiseta por defecto: 'team_a/home-kit.png'");
-        //Por defecto cargo el home kit del team_a
-        this->sprite_sheet = SpritesProvider::GetPlayerSheet(renderer, "team_a/home-kit.png");
-    }
+    this->sprite_sheet = SpritesProvider::GetSheet(TEAM_A_PLAYER, kitFile);
 
 }
 
 PlayerView::~PlayerView() {
     Logger::getInstance()->debug("DESTRUYENDO PLAYERVIEW");
-    //delete sprite_sheet;
-    //delete selector_sheet;
 
     //TODO: delete clips in animation destructor
     for (unsigned int i = 0; i < animations.size(); i++) {

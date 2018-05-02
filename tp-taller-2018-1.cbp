@@ -23,6 +23,7 @@
 					<Add directory="src/configuration" />
 					<Add directory="src/sound" />
 					<Add directory="src/shared/model" />
+					<Add directory="src/client/view" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -42,6 +43,7 @@
 					<Add directory="src/configuration" />
 					<Add directory="src/sound" />
 					<Add directory="src/shared/model" />
+					<Add directory="src/client/view" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -69,6 +71,8 @@
 		<Unit filename="src/client/view/abstract-view.h" />
 		<Unit filename="src/client/view/animation.cpp" />
 		<Unit filename="src/client/view/animation.h" />
+		<Unit filename="src/client/view/ball-view.cpp" />
+		<Unit filename="src/client/view/ball-view.h" />
 		<Unit filename="src/client/view/camera.cpp" />
 		<Unit filename="src/client/view/camera.h" />
 		<Unit filename="src/client/view/ishowable.h" />

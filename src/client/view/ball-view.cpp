@@ -1,9 +1,8 @@
 #include "ball-view.h"
 
-BallView::BallView(Ball* ball, SDL_Renderer* renderer)
+BallView::BallView(Ball* ball)
 {
     this->ball = ball;
-    this->renderer = renderer;
 
     SDL_Rect* sprite1 = new SDL_Rect();
     sprite1->x = 0;
@@ -17,7 +16,7 @@ BallView::BallView(Ball* ball, SDL_Renderer* renderer)
     animations.push_back(new Animation("ball", clips));
     current_animation_index = 0;
 
-	this->sprite_sheet = new SpriteSheet(renderer, "ball.png");
+	this->sprite_sheet = SpritesProvider::GetDefaultSheet(BALL);
 }
 
 BallView::~BallView()
