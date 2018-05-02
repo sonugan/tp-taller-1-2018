@@ -2,16 +2,18 @@
 #include "../../shared/logger.h"
 
 
-SpriteSheet::SpriteSheet(SDL_Renderer* renderer, std::string path)
+SpriteSheet::SpriteSheet(SDL_Renderer* renderer, std::string path, bool isImage)
 {
     Logger::getInstance()->debug("CREANDO SPRITESHEET");
 	this->renderer = renderer;
 	// TODO: deberia levantarse desde config.
 	this->path = "src/client/sprites/" + path;
-	texture = NULL;
-	width = 0;
-	height = 0;
-	LoadFromFile();
+	this->texture = NULL;
+	this->width = 0;
+	this->height = 0;
+	if (isImage) {
+        LoadFromFile();
+	}
 }
 
 SpriteSheet::~SpriteSheet()
@@ -22,7 +24,7 @@ SpriteSheet::~SpriteSheet()
 
 bool SpriteSheet::LoadFromFile()
 {
-	Free();
+	this->Free();
 	SDL_Texture* newTexture = NULL;
 	SDL_Surface* loadedSurface = LoadSurface();
 	if( loadedSurface == NULL )
@@ -55,12 +57,12 @@ bool SpriteSheet::LoadFromFile()
 
 void SpriteSheet::Free()
 {
-	if( texture != NULL )
+	if( this->texture != NULL )
 	{
-		SDL_DestroyTexture( texture );
-		texture = NULL;
-		width = 0;
-		height = 0;
+		SDL_DestroyTexture( this->texture );
+		this->texture = NULL;
+		this->width = 0;
+		this->height = 0;
 	}
 }
 
@@ -77,13 +79,56 @@ SDL_Surface* SpriteSheet::LoadSurface()
     return surfaceLoad;
 }
 
-void SpriteSheet::Render( int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
+void SpriteSheet::Render( int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
 {
-	SDL_Rect renderQuad = { x, y, width, height };
+	SDL_Rect renderQuad = { x, y, this->width, this->height };
 	if( clip != NULL )
 	{
 		renderQuad.w = clip->w;
 		renderQuad.h = clip->h;
 	}
-	SDL_RenderCopyEx( renderer, texture, clip, &renderQuad, angle, center, flip);
+	SDL_RenderCopyEx( this->renderer, texture, clip, &renderQuad, angle, center, flip);
+}
+
+bool SpriteSheet::LoadFromRenderedText( TTF_Font * font, std::string textureText, SDL_Color textColor )
+{
+	//Get rid of preexisting texture
+	this->Free();
+
+	//Render text surface
+	SDL_Surface* textSurface = TTF_RenderText_Solid( font, textureText.c_str(), textColor );
+	if( textSurface != NULL )
+	{
+		//Create texture from surface pixels
+        this->texture = SDL_CreateTextureFromSurface( this->renderer, textSurface );
+		if( this->texture == NULL )
+		{
+			printf( "Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError() );
+		}
+		else
+		{
+			this->width = textSurface->w;
+			this->height = textSurface->h;
+		}
+
+		SDL_FreeSurface( textSurface );
+	}
+	else
+	{
+		printf( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError() );
+	}
+
+
+	//Return success
+	return this->texture != NULL;
+}
+
+int SpriteSheet::GetWidth()
+{
+    return this->width;
+}
+
+int SpriteSheet::GetHeight()
+{
+    return this->height;
 }

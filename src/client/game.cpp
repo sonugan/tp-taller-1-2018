@@ -1,13 +1,22 @@
 #include "game.h"
 #include <iostream>
 #include "../shared/logger.h"
+#include "view/login-view.h"
 
 Game::Game(Configuration* initial_configuration) {
     this->initial_configuration = initial_configuration;
     InitSDL();
-    CreateModel();
-    CreateViews();
-    CreateControllers();
+
+    LoginView* loginView = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH);
+    //Se abre la pantalla de login con su propio "game loop"
+    loginView->Open();
+    //Libero recursos de la vista
+    loginView->Free();
+    if (loginView->IsUserAuthenticated()) {
+        CreateModel();
+        CreateViews();
+        CreateControllers();
+    }
 }
 
 Game::~Game() {
@@ -169,9 +178,14 @@ void Game::InitSDL() {
     if( !( IMG_Init( imgFlags ) & imgFlags ) )
     {
         throw std::runtime_error(IMG_GetError());
-
     }
+
     SoundManager::LoadResources();
+
+    if( TTF_Init() == -1 )
+	{
+	    throw std::runtime_error(TTF_GetError());
+	}
 
 }
 
@@ -181,6 +195,7 @@ void Game::CloseSDL() {
 	window = NULL;
 	renderer = NULL;
 
+	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
 
