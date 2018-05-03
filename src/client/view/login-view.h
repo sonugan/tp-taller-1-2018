@@ -4,6 +4,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include "sprite-sheet.h"
+#include "sprite-text.h"
 #include <string>
 
 using namespace std;
@@ -24,8 +25,8 @@ class LoginView
         bool userAuthenticated;
         TTF_Font* fontStyle = NULL;
         SDL_Renderer* renderer;
-        SpriteSheet* textSprite;
-        SpriteSheet* inputTextSprite;
+        SpriteText* textSprite;
+        SpriteText* inputTextSprite;
         SpriteSheet* backgroundSprite;
         int screenHeight;
         int screenWidth;

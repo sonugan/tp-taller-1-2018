@@ -12,21 +12,22 @@
 class SpriteSheet
 {
 	public:
-		SpriteSheet(SDL_Renderer* renderer, std::string path, bool isImage = true);
+		SpriteSheet(SDL_Renderer* renderer, std::string path);
 		~SpriteSheet();
 		void Free();
 		void Render( int x, int y, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
-		bool LoadFromRenderedText( TTF_Font * font, std::string textureText, SDL_Color textColor );
 		int GetWidth();
 		int GetHeight();
-	private:
+	protected:
 		SDL_Texture* texture;
 		SDL_Renderer* renderer;
-		SDL_Surface* LoadSurface();
-		bool LoadFromFile();
+
 		int width;
 		int height;
 		std::string path;
+    private:
+        bool LoadFromFile();
+        SDL_Surface* LoadSurface();
 };
 
 #endif // SPRITESHEET_H

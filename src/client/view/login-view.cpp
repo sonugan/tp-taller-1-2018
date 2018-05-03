@@ -5,6 +5,7 @@
 #include "login-view.h"
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include "../../shared/logger.h"
 
 LoginView::LoginView(SDL_Renderer* renderer, int height, int width)
 {
@@ -22,17 +23,12 @@ LoginView::LoginView(SDL_Renderer* renderer, int height, int width)
 	this->fontStyle = TTF_OpenFont( this->DISPLAY_FONT.c_str(), 18 );
 	if( this->fontStyle == NULL )
 	{
-		//printf( "Failed to load '" + this->DISPLAY_FONT.c_str() + "' font! SDL_ttf Error: " + TTF_GetError() );
-		printf( "Failed to load font! SDL_ttf Error: %s\n", TTF_GetError() );
+		Logger::getInstance()->error(string("No se pudo cargar la fuente. SDL_TTF Error: ") + TTF_GetError());
 	}
 	else
 	{
 		SDL_Color msgTextColor = { 255, 255, 255, 0xFF };
-		this->textSprite = new SpriteSheet(this->renderer, "", false);
-		if( !this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_ENTER_USERNAME, msgTextColor ) )
-		{
-			printf( "Failed to render prompt text!\n" );
-		}
+		this->textSprite = new SpriteText(this->renderer, this->fontStyle, MSG_ENTER_USERNAME, msgTextColor);
 	}
 
     this->backgroundSprite = new SpriteSheet(this->renderer, this->BACKGROUND_IMAGE);
@@ -46,6 +42,7 @@ void LoginView::Free()
 
 	TTF_CloseFont( this->fontStyle );
 	this->fontStyle = NULL;
+	Logger::getInstance()->debug("Liberando recursos de LoginView");
 }
 
 bool LoginView::IsUserAuthenticated()
@@ -64,8 +61,7 @@ void LoginView::Open()
 	SDL_Color textColor = { 255, 255, 255, 0xFF };
 
 	std::string inputText = " ";
-	this->inputTextSprite = new SpriteSheet(this->renderer, "", false);
-	this->inputTextSprite->LoadFromRenderedText( this->fontStyle, inputText.c_str(), textColor );
+	this->inputTextSprite = new SpriteText(this->renderer, this->fontStyle, inputText.c_str(), textColor);
 
 	SDL_StartTextInput();
 

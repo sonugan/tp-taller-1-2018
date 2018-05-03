@@ -2,7 +2,7 @@
 #include "../../shared/logger.h"
 
 
-SpriteSheet::SpriteSheet(SDL_Renderer* renderer, std::string path, bool isImage)
+SpriteSheet::SpriteSheet(SDL_Renderer* renderer, std::string path)
 {
     Logger::getInstance()->debug("CREANDO SPRITESHEET");
 	this->renderer = renderer;
@@ -11,14 +11,14 @@ SpriteSheet::SpriteSheet(SDL_Renderer* renderer, std::string path, bool isImage)
 	this->texture = NULL;
 	this->width = 0;
 	this->height = 0;
-	if (isImage) {
+	if (path != "") {
         LoadFromFile();
-	}
+    }
 }
 
 SpriteSheet::~SpriteSheet()
 {
-    Logger::getInstance()->debug("DESTRUYENDO SPRITESHEET");
+    Logger::getInstance()->debug("DESTRUYENDO SPRITESHEET" + this->path);
 	Free();
 }
 
@@ -52,7 +52,14 @@ bool SpriteSheet::LoadFromFile()
     }
 
 	this->texture = newTexture;
-	return this->texture != NULL;
+
+	if (this->texture == NULL)
+    {
+        Logger::getInstance()->error("SDL: No se pudo renderizar la imagen '" + this->path + "'");
+        return false;
+	}
+
+    return true;
 }
 
 void SpriteSheet::Free()
@@ -88,39 +95,6 @@ void SpriteSheet::Render( int x, int y, SDL_Rect* clip, double angle, SDL_Point*
 		renderQuad.h = clip->h;
 	}
 	SDL_RenderCopyEx( this->renderer, texture, clip, &renderQuad, angle, center, flip);
-}
-
-bool SpriteSheet::LoadFromRenderedText( TTF_Font * font, std::string textureText, SDL_Color textColor )
-{
-	//Get rid of preexisting texture
-	this->Free();
-
-	//Render text surface
-	SDL_Surface* textSurface = TTF_RenderText_Solid( font, textureText.c_str(), textColor );
-	if( textSurface != NULL )
-	{
-		//Create texture from surface pixels
-        this->texture = SDL_CreateTextureFromSurface( this->renderer, textSurface );
-		if( this->texture == NULL )
-		{
-			printf( "Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError() );
-		}
-		else
-		{
-			this->width = textSurface->w;
-			this->height = textSurface->h;
-		}
-
-		SDL_FreeSurface( textSurface );
-	}
-	else
-	{
-		printf( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError() );
-	}
-
-
-	//Return success
-	return this->texture != NULL;
 }
 
 int SpriteSheet::GetWidth()

@@ -82,6 +82,8 @@
 		<Unit filename="src/client/view/player-view.h" />
 		<Unit filename="src/client/view/sprite-sheet.cpp" />
 		<Unit filename="src/client/view/sprite-sheet.h" />
+		<Unit filename="src/client/view/sprite-text.cpp" />
+		<Unit filename="src/client/view/sprite-text.h" />
 		<Unit filename="src/client/view/sprites-provider.cpp" />
 		<Unit filename="src/client/view/sprites-provider.h" />
 		<Unit filename="src/main.cpp" />
