@@ -25,6 +25,11 @@ SocketAddress::SocketAddress(sockaddr_in addr)
     this->address = addr;
 }
 
+SocketAddress::SocketAddress()
+{
+    
+}
+
 sockaddr_in SocketAddress::GetFormatted()
 {
     return this->address;

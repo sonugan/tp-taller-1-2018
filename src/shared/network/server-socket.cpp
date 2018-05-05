@@ -20,6 +20,7 @@ void ServerSocket::Bind(SocketAddress address)
     {
         Logger::getInstance()->debug("Error durante el binding");
     }
+    this->address = address;
 }
 
 void ServerSocket::Listen(int max_queue_size)
@@ -44,6 +45,24 @@ ServerSocket ServerSocket::Accept()
         client.Bind(addr);
         return client;
     }
+}
+
+void ServerSocket::Send(Socket client_socket, Request request)
+{
+    send(client_socket.socket_id, request.GetData(), request.GetDataSize(), 0);
+    //sendto(client_socket.socket_id, request.GetData(), request.GetDataSize(), 0);
+}
+
+Message ServerSocket::Receive(Socket client_socket, int expected_size)
+{
+    char* buffer = (char*) malloc(expected_size);
+
+    if (HasError(read(client_socket.socket_id, buffer, expected_size)))
+    {
+        Logger::getInstance()->debug("ERROR leyendo desde socket");
+    }
+    Message m(buffer, expected_size);
+    return m;
 }
 
 ServerSocket::~ServerSocket()

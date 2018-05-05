@@ -17,8 +17,8 @@ class Socket
         Socket();
         Socket(int socket_id);
         virtual ~Socket();
-        void Send(Socket destination_socket, Request request);
-        Message Receive(Socket origin_socket, int expected_size);
+        //void Send(Socket destination_socket, Request request);
+        //Message Receive(Socket origin_socket, int expected_size);
         // Receives are disallowed
         void ShutDownReceives();
         // Sends are disallowed
@@ -26,8 +26,8 @@ class Socket
         // Both receives and sends are disallowed
         void ShutDown();
         void Close();
+        int socket_id; //TODO: No me lo toma como protected luego de agregar el metodo ClientSocket::Send
     protected:
-        int socket_id;
         bool HasError(int result);
     private:
 

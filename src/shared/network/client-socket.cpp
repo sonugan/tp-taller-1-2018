@@ -19,6 +19,23 @@ void ClientSocket::Connect(SocketAddress server_address)
     }
 }
 
+void ClientSocket::Send(Request request)
+{
+    send(socket_id, request.GetData(), request.GetDataSize(), 0);
+}
+
+Message ClientSocket::Receive(int expected_size)
+{
+    char* buffer = (char*) malloc(expected_size);
+
+    if (HasError(read(this->socket_id, buffer, expected_size)))
+    {
+        Logger::getInstance()->debug("ERROR leyendo desde socket");
+    }
+    Message m(buffer, expected_size);
+    return m;
+}
+
 ClientSocket::~ClientSocket()
 {
     //dtor

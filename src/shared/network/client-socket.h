@@ -13,6 +13,8 @@ class ClientSocket : public Socket
         ClientSocket(int socket_id);
         void Connect(SocketAddress address);
         virtual ~ClientSocket();
+        void Send(Request request);
+        Message Receive(int expected_size);
     protected:
     private:
 };
