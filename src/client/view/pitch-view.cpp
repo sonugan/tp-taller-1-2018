@@ -1,11 +1,9 @@
 #include "pitch-view.h"
 #include "../../shared/logger.h"
 
-
-PitchView::PitchView(Pitch* pitch, SDL_Renderer* renderer)
+PitchView::PitchView(Pitch* pitch)
 {
     this->pitch = pitch;
-    this->renderer = renderer;
 
     SDL_Rect* sprite1 = new SDL_Rect();
     sprite1->x = 0;
@@ -19,13 +17,12 @@ PitchView::PitchView(Pitch* pitch, SDL_Renderer* renderer)
     animations.push_back(new Animation("pitch", clips));
     current_animation_index = 0;
 
-	this->sprite_sheet = new SpriteSheet(renderer, "pitch.jpg");
+	this->sprite_sheet = SpritesProvider::GetDefaultSheet(PITCH);
 }
 
 PitchView::~PitchView()
 {
     Logger::getInstance()->debug("DESTRUYENDO LA VISTA DEL CAMPO");
-    delete sprite_sheet;
 
     for (unsigned int i = 0; i < animations.size(); i++) {
         delete (animations[i]);

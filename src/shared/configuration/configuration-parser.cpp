@@ -9,8 +9,11 @@ const string TEAM_NODE = "team";
 const string TEAM_FORMATION_NODE = "formation";
 const string TEAM_NAME_NODE = "name";
 const string TEAM_SHIRT_NODE = "shirt";
+const string INIT_MODE_NODE = "init_mode";
+const string USERS_NODE = "users";
 const string SPRITES_PATH = "sprites_path";
 const string DEFAULT_LOG_MODE = "debug";
+const string DEFAULT_INIT_MODE = "client";
 const string DEFAULT_FORMATION = "3-3";
 const string DEFAULT_SHIRT = "home";
 const string DEFAULT_SPRITES_PATH = "src/sprites";
@@ -18,55 +21,93 @@ const string DEFAULT_SPRITES_PATH = "src/sprites";
 /** Helper functions **/
 void parseConfigFile(Configuration* configuration, YAML::Node config_file)
 {
-    if(config_file[LOGGER_NODE]) {
+    if (config_file[LOGGER_NODE])
+    {
         YAML::Node logger_node = config_file[LOGGER_NODE];
-        if(logger_node[LOGGER_LEVEL_NODE]) {
+        if (logger_node[LOGGER_LEVEL_NODE])
+        {
             configuration->SetLogLevel(logger_node[LOGGER_LEVEL_NODE].as<string>());
         }
-        else {
+        else
+        {
             Logger::getInstance()->error("No se encontro el parametro '" + LOGGER_LEVEL_NODE + "' en el nodo '" + LOGGER_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_LOG_MODE + "'.");
             configuration->SetLogLevel(DEFAULT_LOG_MODE);
         }
     }
-    else {
+    else
+    {
         Logger::getInstance()->error("No se encontro el nodo '" + LOGGER_NODE + "' en la configuracion. Se procede a tomar el valor por defecto para su nivel: '" + DEFAULT_LOG_MODE + "'.");
         configuration->SetLogLevel(DEFAULT_LOG_MODE);
     }
 
-    if(config_file[TEAM_NODE]) {
+    if (config_file[TEAM_NODE])
+    {
         YAML::Node team_node = config_file[TEAM_NODE];
-        if(team_node[TEAM_FORMATION_NODE]) {
+        if (team_node[TEAM_FORMATION_NODE])
+        {
             configuration->SetFormation(team_node[TEAM_FORMATION_NODE].as<string>());
-        } else {
+        }
+        else
+        {
             Logger::getInstance()->error("No se encontro el parametro '" + TEAM_FORMATION_NODE + "' en el nodo '" + TEAM_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_FORMATION + "'.");
             configuration->SetFormation(DEFAULT_FORMATION);
         }
 
 
-        if(team_node[TEAM_SHIRT_NODE]) {
+        if (team_node[TEAM_SHIRT_NODE])
+        {
             configuration->SetShirt(team_node[TEAM_SHIRT_NODE].as<string>());
-        } else {
+        }
+        else
+        {
             Logger::getInstance()->error("No se encontro el parametro '" + TEAM_SHIRT_NODE + "' en el nodo '" + TEAM_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_SHIRT + "'.");
             configuration->SetShirt(DEFAULT_SHIRT);
         }
 
-        if(team_node[TEAM_NAME_NODE]) {
+        if (team_node[TEAM_NAME_NODE])
+        {
             configuration->SetTeamName(team_node[TEAM_NAME_NODE].as<string>());
         }
 
-    } else {
+    }
+    else
+    {
         Logger::getInstance()->error("No se encontro el nodo '" + TEAM_NODE + "' en la configuracion. Se procede a tomar los valores por defecto para formacion y remera: '" + DEFAULT_FORMATION + "' y '" + DEFAULT_SHIRT + "'.");
         configuration->SetFormation(DEFAULT_FORMATION);
         configuration->SetShirt(DEFAULT_SHIRT);
     }
 
-    if(config_file[SPRITES_PATH]){
+    if (config_file[SPRITES_PATH])
+    {
         configuration->SetSpritesPath(config_file[SPRITES_PATH].as<string>());
-    } else {
+    }
+    else
+    {
         Logger::getInstance()->error("No se encontro el parametro '" + SPRITES_PATH + "' en la configuracion. Se procede a tomar el valor por defecto: '" + DEFAULT_SPRITES_PATH + "'.");
         configuration->SetSpritesPath(DEFAULT_SPRITES_PATH);
     }
 
+    if (config_file[INIT_MODE_NODE])
+    {
+        configuration->SetInitMode(config_file[INIT_MODE_NODE].as<string>());
+    }
+    else
+    {
+        Logger::getInstance()->error("No se encontro el parametro '" + INIT_MODE_NODE + "' en la configuracion. Se procede a tomar el valor por defecto: '" + DEFAULT_INIT_MODE + "'.");
+        configuration->SetInitMode(DEFAULT_INIT_MODE);
+    }
+
+    if (config_file[USERS_NODE])
+    {
+        // OBTENGO TODOS LOS USUARIOS Y SUS PASSWORDS
+        YAML::Node users_node = config_file[USERS_NODE];
+
+        for (unsigned short i = 0; i < users_node.size(); ++i) {
+            std::string username = users_node[i]["name"].as<std::string>();
+            std::string password = users_node[i]["password"].as<std::string>();
+            configuration->AddValidCredential(username, password);
+        }
+	}
 }
 
 /** Configuration class implementation **/

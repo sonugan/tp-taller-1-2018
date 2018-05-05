@@ -1,17 +1,45 @@
 #include "game.h"
 #include <iostream>
 #include "../shared/logger.h"
+#include "view/login-view.h"
 
 Game::Game(Configuration* initial_configuration) {
+
     this->initial_configuration = initial_configuration;
+    this->correctly_initialized = false;
+
     InitSDL();
-    CreateModel();
-    CreateViews();
-    CreateControllers();
+
+    LoginView* loginView = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH);
+
+    //Se abre la pantalla de login con su propio "game loop"
+    loginView->Open(initial_configuration);
+
+    while(!loginView->IsUserAuthenticated() && !loginView->IsUserQuit())
+    {
+        // El usuario no esta autenticado
+        loginView->OpenErrorPage(initial_configuration);
+    }
+
+    if (loginView->IsUserAuthenticated() && !loginView->IsUserQuit())
+    {
+        CreateModel();
+        CreateViews();
+        CreateControllers();
+        this->correctly_initialized = true;
+    }
+
+    //Libero recursos de la vista
+    loginView->Free();
 }
 
 Game::~Game() {
 
+}
+
+bool Game::IsCorrectlyInitialized()
+{
+    return this->correctly_initialized;
 }
 
 void Game::RenderViews() {
@@ -77,6 +105,7 @@ void Game::CreateModel() {
 
     //selecciono por default al arquero
     team_a->GetPlayers()[0]->SetSelected(true);
+    team_a->GetPlayers()[0]->SetHasBall(true);
 
     Ball* ball = new Ball();
 
@@ -89,16 +118,16 @@ void Game::CreateViews() {
     Location center(PITCH_WIDTH/2 - SCREEN_WIDTH/2, PITCH_HEIGHT/2 - SCREEN_HEIGHT/2, 0);
     this->camera = new Camera(PITCH_WIDTH, PITCH_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, this->renderer, &center);
 
-    PitchView* pitch_view = new PitchView(this->match->GetPitch(), this->renderer);
+    PitchView* pitch_view = new PitchView(this->match->GetPitch());
     std::map <unsigned int, PlayerView*> player_views_map;
     this->camera->Add(pitch_view);
 
-    BallView* ball_view = new BallView(match->GetBall(), this->renderer);
+    BallView* ball_view = new BallView(match->GetBall());
     this->camera->Add(ball_view);
 
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
         Player* player = match->GetTeamA()->GetPlayers()[i];
-        PlayerView* player_view = new PlayerView(player, this->renderer);
+        PlayerView* player_view = new PlayerView(player);
         player_views_map[i] = player_view;
         this->camera->Add(player_view);
         //selecciono por default al arquero
@@ -160,6 +189,7 @@ void Game::InitSDL() {
     {
         throw std::runtime_error(SDL_GetError());
     }
+    SpritesProvider::SetRenderer(renderer);
 
     SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 
@@ -167,9 +197,14 @@ void Game::InitSDL() {
     if( !( IMG_Init( imgFlags ) & imgFlags ) )
     {
         throw std::runtime_error(IMG_GetError());
-
     }
+
     SoundManager::LoadResources();
+
+    if( TTF_Init() == -1 )
+	{
+	    throw std::runtime_error(TTF_GetError());
+	}
 
 }
 
@@ -179,6 +214,7 @@ void Game::CloseSDL() {
 	window = NULL;
 	renderer = NULL;
 
+	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
 

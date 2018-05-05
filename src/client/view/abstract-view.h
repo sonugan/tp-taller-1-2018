@@ -15,7 +15,6 @@ class AbstractView
         virtual ~AbstractView () {};
 
     protected:
-        SDL_Renderer* renderer;
         SpriteSheet* sprite_sheet;
         virtual void SetAnimation(Animation* animation) {};
         std::vector<Animation*> animations;

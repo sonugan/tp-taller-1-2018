@@ -37,7 +37,12 @@ void Logger::info(string msg) {
 }
 
 void Logger::log(LogMode mode, string msg) {
-	this->SetFileName();
+
+	if (this->logFileName == "")
+    {
+        this->SetFileName();
+    }
+
 	if (this->logFileName == "" || !this->checkPermissionsByMode(mode)) {
 		return;
 	}

@@ -1,4 +1,5 @@
 #include "client/game.h"
+#include "server/server.h"
 #include "shared/configuration/cli-options-parser.h"
 #include "shared/configuration/cli-options.h"
 #include "shared/configuration/configuration.h"
@@ -30,10 +31,25 @@ int main( int argc, char* args[] ) {
     load_configuration(argc, args, config);
     Logger::getInstance()->setMode(config->GetLogLevel());
 
-    Game* game = new Game(config);
-    game->Start();
-    game->End();
-    delete game;
+    bool isClient = config->InitModeIsClient();
+
+    if (isClient) {
+
+        // POR AHORA QUEDA IGUAL A LO QUE YA TENIAMOS
+        Game* game = new Game(config);
+        if (game->IsCorrectlyInitialized())
+        {
+            game->Start();
+            game->End();
+        }
+        delete game;
+
+    } else { // SE INICIO COMO SERVER
+        Server* server = new Server();
+        server->InitServer();
+        delete server;
+    }
+
     delete config;
 
   //Descomentame para probar sockets

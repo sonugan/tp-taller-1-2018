@@ -11,7 +11,6 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="--config=/home/patricia/Escritorio/config.yml --loglevel=ERROR" />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="src/game" />
@@ -23,6 +22,7 @@
 					<Add directory="src/configuration" />
 					<Add directory="src/sound" />
 					<Add directory="src/shared/model" />
+					<Add directory="src/server" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -42,6 +42,7 @@
 					<Add directory="src/configuration" />
 					<Add directory="src/sound" />
 					<Add directory="src/shared/model" />
+					<Add directory="src/server" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -53,7 +54,7 @@
 			<Add option="-std=c++11" />
 		</Compiler>
 		<Linker>
-			<Add option="-lSDL2 -lSDL2_image -lyaml-cpp -lSDL2_mixer" />
+			<Add option="-lSDL2 -lSDL2_image -lyaml-cpp -lSDL2_mixer -lSDL2_ttf" />
 		</Linker>
 		<Unit filename="src/client/controller/abstract-controller.h" />
 		<Unit filename="src/client/controller/game-controller.cpp" />
@@ -74,16 +75,22 @@
 		<Unit filename="src/client/view/camera.cpp" />
 		<Unit filename="src/client/view/camera.h" />
 		<Unit filename="src/client/view/ishowable.h" />
+		<Unit filename="src/client/view/login-view.cpp" />
+		<Unit filename="src/client/view/login-view.h" />
 		<Unit filename="src/client/view/pitch-view.cpp" />
 		<Unit filename="src/client/view/pitch-view.h" />
 		<Unit filename="src/client/view/player-view.cpp" />
 		<Unit filename="src/client/view/player-view.h" />
 		<Unit filename="src/client/view/sprite-sheet.cpp" />
 		<Unit filename="src/client/view/sprite-sheet.h" />
+		<Unit filename="src/client/view/sprite-text.cpp" />
+		<Unit filename="src/client/view/sprite-text.h" />
 		<Unit filename="src/client/view/sprites-provider.cpp" />
 		<Unit filename="src/client/view/sprites-provider.h" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/server/bla.txt" />
+		<Unit filename="src/server/server.cpp" />
+		<Unit filename="src/server/server.h" />
 		<Unit filename="src/shared/configuration/cli-options-parser.cpp" />
 		<Unit filename="src/shared/configuration/cli-options-parser.h" />
 		<Unit filename="src/shared/configuration/cli-options.cpp" />
