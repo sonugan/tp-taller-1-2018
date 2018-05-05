@@ -36,6 +36,7 @@ class Game
         void Start();
         void End();
         void RequestQuit();
+        bool IsCorrectlyInitialized();
         static const int SCREEN_WIDTH = 800;
         static const int SCREEN_HEIGHT = 600;
         static const unsigned int PITCH_WIDTH = 1920;
@@ -54,6 +55,7 @@ class Game
         PlayerController* player_controller;
         GameController* game_controller;
         bool quit;
+        bool correctly_initialized;
 
         void CreateModel();
         void CreateViews();

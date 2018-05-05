@@ -5,6 +5,7 @@
 #include <SDL2/SDL_ttf.h>
 #include "sprite-sheet.h"
 #include "sprite-text.h"
+#include "../shared/configuration/configuration.h"
 #include <string>
 
 using namespace std;
@@ -14,8 +15,10 @@ class LoginView
     public:
         LoginView(SDL_Renderer* renderer, int height, int width);
         void Free();
-        void Open();
+        void Open(Configuration* game_configuration);
         bool IsUserAuthenticated();
+        string GetUserName();
+        string GetUserPassword();
     protected:
         ~LoginView();
         string BACKGROUND_IMAGE = "tehkan_world_cup_menu.jpg";
