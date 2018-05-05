@@ -7,10 +7,22 @@ SpriteText::~SpriteText()
 	this->Free();
 }
 
-bool SpriteText::LoadFromRenderedText( TTF_Font * font, std::string textureText, SDL_Color textColor )
+bool SpriteText::LoadFromRenderedText( TTF_Font * font, std::string textureText, SDL_Color textColor, bool wrapped)
 {	this->Free();
 
-	SDL_Surface* textSurface = TTF_RenderText_Solid( font, textureText.c_str(), textColor );
+	SDL_Surface* textSurface = NULL;
+
+	if (!wrapped)
+    {
+        // EL TEXTO QUEDA EN UNA SOLA LINEA
+        textSurface = TTF_RenderText_Solid( font, textureText.c_str(), textColor );
+    }
+    else
+    {
+        // PARA QUE EL TEXTO QUEDE EN MAS DE UNA LINEA
+        textSurface = TTF_RenderText_Blended_Wrapped(font, textureText.c_str(), textColor, this->wrappedLength);
+    }
+
 	if( textSurface != NULL )
 	{
 	    this->texture = SDL_CreateTextureFromSurface( this->renderer, textSurface );

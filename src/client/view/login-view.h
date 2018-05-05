@@ -5,6 +5,7 @@
 #include <SDL2/SDL_ttf.h>
 #include "sprite-sheet.h"
 #include "sprite-text.h"
+#include "../shared/logger.h"
 #include "../shared/configuration/configuration.h"
 #include <string>
 
@@ -16,7 +17,9 @@ class LoginView
         LoginView(SDL_Renderer* renderer, int height, int width);
         void Free();
         void Open(Configuration* game_configuration);
+        void OpenErrorPage(Configuration* game_configuration);
         bool IsUserAuthenticated();
+        bool IsUserQuit();
         string GetUserName();
         string GetUserPassword();
     protected:
@@ -26,6 +29,7 @@ class LoginView
         string userName;
         string userPassword;
         bool userAuthenticated;
+        bool userQuit;
         TTF_Font* fontStyle = NULL;
         SDL_Renderer* renderer;
         SpriteText* textSprite;

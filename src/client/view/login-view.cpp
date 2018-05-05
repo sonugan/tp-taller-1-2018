@@ -1,6 +1,6 @@
 #define MSG_ENTER_USERNAME      "Ingrese usuario y presione enter:"
 #define MSG_ENTER_PASSWORD      "Ingrese clave y presione enter:"
-//#define MSG_INVALID_PASSWORD    "Datos incorrectos"
+#define MSG_INVALID_PASSWORD    "Error de autenticacion. Presione ESC para salir o ENTER para volver al menu principal"
 
 #include "login-view.h"
 #include <SDL2/SDL_image.h>
@@ -16,6 +16,7 @@ LoginView::LoginView(SDL_Renderer* renderer, int height, int width)
     this->userPassword = "";
 
     this->userAuthenticated = false;
+    this->userQuit = false;
 
     this->renderer = renderer;
 
@@ -50,6 +51,11 @@ bool LoginView::IsUserAuthenticated()
     return this->userAuthenticated;
 }
 
+bool LoginView::IsUserQuit()
+{
+    return this->userQuit;
+}
+
 void LoginView::Open(Configuration* game_configuration)
 {
     bool quit = false;
@@ -61,7 +67,9 @@ void LoginView::Open(Configuration* game_configuration)
     SDL_Color textColor = { 255, 255, 255, 0xFF };
 
     std::string inputText = "";
-    this->inputTextSprite = new SpriteText(this->renderer, this->fontStyle, inputText.c_str(), textColor);
+    this->inputTextSprite = new SpriteText(this->renderer, this->fontStyle, " ", textColor);
+
+    this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_ENTER_USERNAME, textColor, false );
 
     SDL_StartTextInput();
 
@@ -104,7 +112,7 @@ void LoginView::Open(Configuration* game_configuration)
                         this->userName = inputText;
                         inputText = "";
                         //Cambio el texto
-                        this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_ENTER_PASSWORD, textColor );
+                        this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_ENTER_PASSWORD, textColor, false );
                         renderText = true;
                     }
                     else
@@ -155,11 +163,11 @@ void LoginView::Open(Configuration* game_configuration)
         {
             if( inputText != "" )
             {
-                this->inputTextSprite->LoadFromRenderedText( this->fontStyle, inputText.c_str(), textColor );
+                this->inputTextSprite->LoadFromRenderedText( this->fontStyle, inputText.c_str(), textColor, false);
             }
             else
             {
-                this->inputTextSprite->LoadFromRenderedText( this->fontStyle, " ", textColor );
+                this->inputTextSprite->LoadFromRenderedText( this->fontStyle, " ", textColor, false );
             }
         }
 
@@ -187,3 +195,65 @@ string LoginView::GetUserPassword()
     return this->userPassword;
 }
 
+void LoginView::OpenErrorPage(Configuration* game_configuration)
+{
+    bool quit = false;
+
+    bool backHome = false;
+
+    SDL_Event e;
+
+    SDL_Color textColor = { 255, 255, 255, 0xFF };
+
+    // Loggeo que el usuario o pass eran erroneos
+    Logger::getInstance()->error("El usuario " + this->GetUserName() + " o la password " + this->GetUserPassword() + " son incorrectos.");
+
+
+    // Limpio el texto que quedo del usuario
+    this->inputTextSprite->LoadFromRenderedText( this->fontStyle, " ", textColor, false );
+
+    // Cargo mensaje de autenticacion erronea
+    this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_INVALID_PASSWORD, textColor, true );
+
+    SDL_StartTextInput();
+
+    while( !quit )
+    {
+        while( SDL_PollEvent( &e ) != 0 )
+        {
+            if ( e.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+            {
+                // SI PRESIONA ESC SALE DEL JUEGO
+                quit = true;
+                this->userQuit = true;
+            }
+            else if( e.type == SDL_KEYDOWN )
+            {
+                // SI PRESIONA ENTER VUELVE AL MENU PRINCIPAL
+                if ( e.key.keysym.scancode == SDL_SCANCODE_KP_ENTER || e.key.keysym.scancode == SDL_SCANCODE_RETURN)
+                {
+                    quit = true;
+                    backHome = true;
+                }
+            }
+        }
+
+
+        SDL_SetRenderDrawColor( this->renderer, 0x00, 0x00, 0x00, 0xFF );
+        SDL_RenderClear( this->renderer );
+
+        this->backgroundSprite->Render( ( this->screenWidth - this->backgroundSprite->GetWidth() ) / 2, 0 );
+        this->textSprite->Render( ( this->screenWidth - this->textSprite->GetWidth() ) / 2, 350 );
+        this->inputTextSprite->Render( ( this->screenWidth - this->inputTextSprite->GetWidth() ) / 2, 350 + this->textSprite->GetHeight() );
+
+        SDL_RenderPresent( this->renderer );
+
+    }
+
+    SDL_StopTextInput();
+
+    if (backHome)
+    {
+        this->Open(game_configuration);
+    }
+}

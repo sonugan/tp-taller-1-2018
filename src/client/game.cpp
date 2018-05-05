@@ -11,20 +11,26 @@ Game::Game(Configuration* initial_configuration) {
     InitSDL();
 
     LoginView* loginView = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH);
+
     //Se abre la pantalla de login con su propio "game loop"
     loginView->Open(initial_configuration);
-    //Libero recursos de la vista
-    loginView->Free();
-    if (loginView->IsUserAuthenticated()) {
+
+    while(!loginView->IsUserAuthenticated() && !loginView->IsUserQuit())
+    {
+        // El usuario no esta autenticado
+        loginView->OpenErrorPage(initial_configuration);
+    }
+
+    if (loginView->IsUserAuthenticated() && !loginView->IsUserQuit())
+    {
         CreateModel();
         CreateViews();
         CreateControllers();
         this->correctly_initialized = true;
     }
-    else
-    {
-        Logger::getInstance()->error("El usuario " + loginView->GetUserName() + " o la password " + loginView->GetUserPassword() + " son incorrectos.");
-    }
+
+    //Libero recursos de la vista
+    loginView->Free();
 }
 
 Game::~Game() {
