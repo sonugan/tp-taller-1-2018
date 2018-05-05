@@ -16,7 +16,7 @@ class SpriteText : public SpriteSheet
 	public:
 		SpriteText(SDL_Renderer* renderer, TTF_Font* fontStyle, std::string text, SDL_Color color) : SpriteSheet (renderer, "")
 		{
-            Logger::getInstance()->debug("CREANDO SPRITETEXT para '" + text + "'");
+            Logger::getInstance()->debug("CREANDO SPRITETEXT para '" + text + "'U");
             this->renderer = renderer;
             // TODO: deberia levantarse desde config.
             this->path = "src/client/sprites/" + text;
