@@ -5,6 +5,7 @@
 #include "trajectory.h"
 #include <cstddef>
 
+class Trajectory;
 class Ball
 {
     public:

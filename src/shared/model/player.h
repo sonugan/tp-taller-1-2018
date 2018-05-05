@@ -5,10 +5,10 @@
 #include <cmath>
 #include "location.h"
 #include "team.h"
-#include "shared-enums.h"
 
 
 enum PLAYER_ACTION { PLAYER_IS_STILL, PLAYER_IS_KICKING, PLAYER_IS_RUNNING, PLAYER_IS_RECOVERING };
+enum class DIRECTION { NORTH, SOUTH, EAST, WEST, NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST };
 class Team; //  forward declaration
 class Player
 {

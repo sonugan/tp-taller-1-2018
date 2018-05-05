@@ -4,7 +4,6 @@
 #include "../../shared/model/pitch.h"
 #include "abstract-view.h"
 #include "sprites-provider.h"
-#include "shared-enums.h"
 
 class PitchView : public AbstractView {
     public:
