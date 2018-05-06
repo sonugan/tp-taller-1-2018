@@ -4,11 +4,11 @@
 #include "shared/configuration/cli-options.h"
 #include "shared/configuration/configuration.h"
 //Descomentame para probar sockets
-/*#include "shared/network/server-socket.h"
+#include "shared/network/server-socket.h"
 #include "shared/network/client-socket.h"
 #include "shared/network/socket-address.h"
 #include "shared/network/message.h"
-#include "shared/network/request.h"*/
+#include "shared/network/request.h"
 
 
 #include <iostream>
@@ -26,31 +26,37 @@ void load_configuration(int argc, char* args[], Configuration* config)
 }
 
 int main( int argc, char* args[] ) {
-
+/*
     Configuration* config = new Configuration();
     load_configuration(argc, args, config);
     Logger::getInstance()->setMode(config->GetLogLevel());
 
     bool isClient = config->InitModeIsClient();
+*/
+    bool isClient = true;
+    if(string(args[1]) == "-server")
+    {
+        isClient = false;
+    }
 
     if (isClient) {
 
         // POR AHORA QUEDA IGUAL A LO QUE YA TENIAMOS
-        Game* game = new Game(config);
+        /*Game* game = new Game(config);
         if (game->IsCorrectlyInitialized())
         {
             game->Start();
             game->End();
         }
-        delete game;
+        delete game;*/
 
     } else { // SE INICIO COMO SERVER
-        Server* server = new Server();
+        Server* server = new Server(51717, 2);//TODO: levantar puerto de configuracion o de consola
         server->InitServer();
         delete server;
     }
 
-    delete config;
+    //delete config;
 
   //Descomentame para probar sockets
     /*if(string(args[1]) =="s")
@@ -73,6 +79,8 @@ int main( int argc, char* args[] ) {
         serverSocket.Close();
     }
     else
+    {*/
+    if(string(args[1]) =="c")
     {
         ClientSocket clientSocket;
         SocketAddress address(51717, "localhost");
@@ -92,6 +100,6 @@ int main( int argc, char* args[] ) {
         clientSocket.Send(r);
         //n = write(sockfd, buffer, strlen(buffer));
         clientSocket.Close();
-    }*/
+    }
 	return 0;
 }

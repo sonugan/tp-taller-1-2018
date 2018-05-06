@@ -40,3 +40,13 @@ ClientSocket::~ClientSocket()
 {
     //dtor
 }
+
+void ClientSocket::Bind(SocketAddress address)
+{
+    sockaddr_in addr = address.GetFormatted();
+    if (HasError(bind(this->socket_id, (struct sockaddr *) &addr, sizeof(addr))))
+    {
+        Logger::getInstance()->debug("Error durante el binding");
+    }
+    this->address = address;
+}

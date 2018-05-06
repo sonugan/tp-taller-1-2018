@@ -15,8 +15,10 @@ class ClientSocket : public Socket
         virtual ~ClientSocket();
         void Send(Request request);
         Message Receive(int expected_size);
+        void Bind(SocketAddress address);
     protected:
     private:
+        SocketAddress address;
 };
 
 #endif // CLIENTSOCKET_H

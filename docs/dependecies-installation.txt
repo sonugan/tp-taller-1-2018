@@ -52,3 +52,8 @@ SDL TTF
 sudo apt-get install libsdl2-ttf-dev
 
 Agregar el flag -lSDL2_ttf en las linker options.
+
+-----------------------------------------------------------
+Threads
+
+Agregar el flag -lpthread en las linker options.

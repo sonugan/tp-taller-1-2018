@@ -28,7 +28,7 @@ void ServerSocket::Listen(int max_queue_size)
     listen(this->socket_id,max_queue_size);
 }
 
-ServerSocket ServerSocket::Accept()
+ClientSocket ServerSocket::Accept()
 {
     sockaddr_in client_address;
     socklen_t client_address_size = sizeof(client_address);
@@ -40,7 +40,7 @@ ServerSocket ServerSocket::Accept()
     }
     else
     {
-        ServerSocket client(client_socket_id);
+        ClientSocket client(client_socket_id);
         SocketAddress addr(client_address);
         client.Bind(addr);
         return client;
