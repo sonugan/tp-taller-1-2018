@@ -23,6 +23,7 @@
 					<Add directory="src/sound" />
 					<Add directory="src/shared/model" />
 					<Add directory="src/server" />
+					<Add directory="src/shared/network" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -43,6 +44,7 @@
 					<Add directory="src/sound" />
 					<Add directory="src/shared/model" />
 					<Add directory="src/server" />
+					<Add directory="src/shared/network" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -50,11 +52,11 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-Wall" />
 			<Add option="-std=c++11" />
+			<Add option="-Wall" />
 		</Compiler>
 		<Linker>
-			<Add option="-lSDL2 -lSDL2_image -lyaml-cpp -lSDL2_mixer -lSDL2_ttf" />
+			<Add option="-lSDL2 -lSDL2_image -lyaml-cpp -lSDL2_mixer -lSDL2_ttf -lpthread" />
 		</Linker>
 		<Unit filename="src/client/controller/abstract-controller.h" />
 		<Unit filename="src/client/controller/game-controller.cpp" />
@@ -120,8 +122,13 @@
 		<Unit filename="src/shared/network/client-socket.h" />
 		<Unit filename="src/shared/network/iserializable.h" />
 		<Unit filename="src/shared/network/iserializer.h" />
+		<Unit filename="src/shared/network/login.cpp" />
+		<Unit filename="src/shared/network/message-queue.cpp" />
+		<Unit filename="src/shared/network/message-queue.h" />
 		<Unit filename="src/shared/network/message.cpp" />
 		<Unit filename="src/shared/network/message.h" />
+		<Unit filename="src/shared/network/queue.cpp" />
+		<Unit filename="src/shared/network/queue.h" />
 		<Unit filename="src/shared/network/request.cpp" />
 		<Unit filename="src/shared/network/request.h" />
 		<Unit filename="src/shared/network/response.cpp" />
@@ -134,6 +141,8 @@
 		<Unit filename="src/shared/network/socket.h" />
 		<Unit filename="src/shared/utils/string-builder.cpp" />
 		<Unit filename="src/shared/utils/string-builder.h" />
+		<Unit filename="src/shared/utils/string-utils.cpp" />
+		<Unit filename="src/shared/utils/string-utils.h" />
 		<Extensions>
 			<envvars />
 			<code_completion />

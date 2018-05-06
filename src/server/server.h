@@ -10,6 +10,7 @@
 #include "../shared/network/queue.h"
 #include "../shared/network/server-socket.h"
 #include "../shared/network/client-socket.h"
+#include "login.cpp"
 
 using namespace std;
 

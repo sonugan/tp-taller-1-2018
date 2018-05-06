@@ -74,6 +74,8 @@ void Server::ManageClientConnections()
 void Server::ManageClientConnection(ClientSocket client)
 {
     Message incommingMessage1 = this->socket->Receive(client,255);
-    printf("Mensaje del cliente: %s\n",incommingMessage1.GetData());
+    Login* l = new Login();
+    ISerializable* data = incommingMessage1.GetDeserializedData(l);
+    cout << "Mensaje del cliente: " << l->GetUsername() << "\n";
     this->clients_count++;
 }

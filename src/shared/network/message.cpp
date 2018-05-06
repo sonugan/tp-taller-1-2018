@@ -28,6 +28,7 @@ char* Message::GetData()
 
 ISerializable* Message::GetDeserializedData(ISerializable* serializable)
 {
+    serializable->Deserialize(string(this->data));
     return serializable;
 }
 

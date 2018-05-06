@@ -9,6 +9,8 @@
 #include "shared/network/socket-address.h"
 #include "shared/network/message.h"
 #include "shared/network/request.h"
+#include "shared/network/iserializable.h"
+#include "shared/network/login.cpp"
 
 
 #include <iostream>
@@ -96,7 +98,10 @@ int main( int argc, char* args[] ) {
         //Message m("Hello, dlrow!\n", 13);
         //Message m("Hello, dlrow!\n");
         string s = string(buffer);
-        Request r(s);
+        //Request r(s);
+        Login l("gperez", "123456");
+        //Request r(&l);
+        Request r(l.Serialize());
         clientSocket.Send(r);
         //n = write(sockfd, buffer, strlen(buffer));
         clientSocket.Close();
