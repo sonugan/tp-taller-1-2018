@@ -56,6 +56,7 @@ void ServerSocket::Send(Socket* client_socket, Request request)
 Message ServerSocket::Receive(Socket* client_socket, int expected_size)
 {
     char* buffer = (char*) malloc(expected_size);
+    bzero(buffer,expected_size);
 
     if (HasError(read(client_socket->socket_id, buffer, expected_size)))
     {

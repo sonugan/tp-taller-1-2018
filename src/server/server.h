@@ -36,8 +36,7 @@ class Server
         void ConnectingUsers();
         void ListenConnections();
         bool ReadyToStart();
-        void ManageClientConnection(ClientSocket* client);
-        void ManageClientConnections();
+        void ManageLoginRequests(ClientSocket* client);
         u_int MAX_SOCKET_QUEUE_SIZE = 10;
 };
 

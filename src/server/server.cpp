@@ -45,14 +45,11 @@ void Server::ConnectingUsers()
 {
     this->connected_user_count = 0;
     thread wait_connections_thread(&Server::ListenConnections, this);
-    thread attend_connections_thread(&Server::ManageClientConnections, this);
 
     while(!this->ReadyToStart()){}
 
     pthread_cancel(wait_connections_thread.native_handle());
-    pthread_cancel(attend_connections_thread.native_handle());
     wait_connections_thread.join();
-    attend_connections_thread.join();
 }
 
 void Server::ListenConnections()
@@ -60,8 +57,9 @@ void Server::ListenConnections()
     vector<thread*> client_threads;
     while(!this->ReadyToStart())
     {
-        //this->clients.push_back(this->socket->Accept());
-        this->clients->Append(this->socket->Accept());
+        ClientSocket* client = this->socket->Accept();
+        this->clients->Append(client);
+        client_threads.push_back(new thread(&Server::ManageLoginRequests, this, client));
     }
 }
 
@@ -70,39 +68,29 @@ bool Server::ReadyToStart()
     return this->connected_user_count == user_count;
 }
 
-void Server::ManageClientConnections()
+void Server::ManageLoginRequests(ClientSocket* client)
 {
-    vector<thread*> client_threads;
-    while(!this->ReadyToStart())
+    bool success_login = false;
+    while(!this->ReadyToStart() || success_login)
     {
-        if(this->clients->HasNext())
+        Message incommingMessage1 = this->socket->Receive(client,255);
+        Login* l = new Login();
+        ISerializable* data = incommingMessage1.GetDeserializedData(l);
+        if(this->config->IsValidCredential(l->GetUsername(), l->GetPassword()))
         {
-            ClientSocket* client = this->clients->Next();
-            client_threads.push_back(new thread(&Server::ManageClientConnection, this, client));
+            cout << "Se conectó: " << l->GetUsername() << "\n";
+            Logger::getInstance()->info("inició sesión el usuario:'" + l->GetUsername() + ".");
+            Request login_state_request("ok");
+            this->socket->Send(client, login_state_request);
+            this->connected_user_count++;
+            success_login = true;
         }
-        /*if(this->clients.size() > 0)
+        else
         {
-            ClientSocket client = this->clients.front();
-            this->clients.pop_back();
-            client_threads.push_back(new thread(&Server::ManageClientConnection, this, client));
-        }*/
-    }
-}
-
-void Server::ManageClientConnection(ClientSocket* client)
-{
-    Message incommingMessage1 = this->socket->Receive(client,255);
-    Login* l = new Login();
-    ISerializable* data = incommingMessage1.GetDeserializedData(l);
-    if(this->config->IsValidCredential(l->GetUsername(), l->GetPassword()))
-    {
-        cout << "Se conectó: " << l->GetUsername() << "\n";
-        Logger::getInstance()->info("inició sesión el usuario:'" + l->GetUsername() + ".");
-        this->connected_user_count++;
-    }
-    else
-    {
-        Logger::getInstance()->info("Usuario o contraseña inválidos:'" + l->GetUsername() + ".");
-        cout << "Usuario o contraseña inválidos: " << l->GetUsername() << "\n";
+            Logger::getInstance()->info("Usuario o contraseña inválidos:'" + l->GetUsername() + ".");
+            cout << "Usuario o contraseña inválidos: " << l->GetUsername() << "\n";
+            Request login_state_request("fail");
+            this->socket->Send(client, login_state_request);
+        }
     }
 }

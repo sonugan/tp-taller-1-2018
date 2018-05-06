@@ -59,25 +59,35 @@ int main( int argc, char* args[] ) {
         //SocketAddress address(51717, "localhost");
         clientSocket.Connect(address);
 
-        printf("Escribí tu usuario: ");
-        char buffer[256];
-        bzero(buffer,256);
-        fgets(buffer,255,stdin);
+        bool is_logued = false;
+        do {
+            printf("Escribí tu usuario: ");
+            char buffer[256];
+            bzero(buffer,256);
+            fgets(buffer,255,stdin);
 
-        string username = string(buffer);
-        username = StringUtils::RemoveLastNewLine(username);
+            string username = string(buffer);
+            username = StringUtils::RemoveLastNewLine(username);
 
-        printf("Escribí tu password: ");
-        bzero(buffer,256);
-        fgets(buffer,255,stdin);
+            printf("Escribí tu password: ");
+            bzero(buffer,256);
+            fgets(buffer,255,stdin);
 
-        string password = string(buffer);
-        password = StringUtils::RemoveLastNewLine(password);
-        //Request r(s);
-        Login l(username, password);
-        //Request r(&l);
-        Request r(l.Serialize());
-        clientSocket.Send(r);
+            string password = string(buffer);
+            password = StringUtils::RemoveLastNewLine(password);
+            //Request r(s);
+            Login l(username, password);
+            //Request r(&l);
+            Request r(l.Serialize());
+            clientSocket.Send(r);
+
+            Message login_status = clientSocket.Receive(255);
+            cout << login_status.GetData() << "\n";
+            if(login_status.GetData() == "ok")
+            {
+                is_logued = true;
+            }
+        } while(!is_logued);
 
         clientSocket.Close();
     }
