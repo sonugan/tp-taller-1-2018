@@ -9,7 +9,7 @@ SocketAddress::SocketAddress(u_int port, short family, u_long addr)
     this->address.sin_port = htons(port);
 }
 
-SocketAddress::SocketAddress(u_int port, char* hostname, short family)
+SocketAddress::SocketAddress(u_int port, const char* hostname, short family)
 {
     memset((char *) &(this->address), 0, sizeof(this->address));//TODO: ver si funciona con esto
     this->address.sin_family = family;
@@ -27,7 +27,7 @@ SocketAddress::SocketAddress(sockaddr_in addr)
 
 SocketAddress::SocketAddress()
 {
-    
+
 }
 
 sockaddr_in SocketAddress::GetFormatted()

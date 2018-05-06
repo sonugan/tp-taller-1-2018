@@ -58,6 +58,10 @@ public:
 
     void SetMaxPlayers(u_int max_players);
 
+    void SetServerHostname(string hostname);
+
+    string GetServerHostname();
+
 protected:
 
 private:
@@ -69,6 +73,7 @@ private:
     string init_mode;
     u_int port;
     u_int max_players;
+    string server_hostname;
 
     // Para almacenar las credenciales validas => <user,password>
     map<string, string> valid_credentials = {};

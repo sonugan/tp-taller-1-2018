@@ -22,7 +22,7 @@ class SocketAddress
         //  For server code, this will always be the IP address of the machine on which the
         //  server is running, and there is a symbolic constant INADDR_ANY which gets this address
         SocketAddress(u_int port, short family = AF_INET, u_long addr = INADDR_ANY);
-        SocketAddress(u_int port, char* hostname, short family = AF_INET);
+        SocketAddress(u_int port, const char* hostname, short family = AF_INET);
         SocketAddress(sockaddr_in addr);
         SocketAddress();
         sockaddr_in GetFormatted();

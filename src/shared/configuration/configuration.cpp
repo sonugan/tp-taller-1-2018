@@ -213,3 +213,13 @@ void Configuration::SetMaxPlayers(u_int max_players)
 {
     this->max_players = max_players;
 }
+
+void Configuration::SetServerHostname(string hostname)
+{
+    this->server_hostname = hostname;
+}
+
+string Configuration::GetServerHostname()
+{
+    return this->server_hostname;
+}

@@ -55,7 +55,8 @@ int main( int argc, char* args[] ) {
         delete game;*/
 
         ClientSocket clientSocket;
-        SocketAddress address(51717, "localhost");
+        SocketAddress address(config->GetPort(), config->GetServerHostname().c_str());
+        //SocketAddress address(51717, "localhost");
         clientSocket.Connect(address);
 
         printf("Escribí tu usuario: ");
