@@ -11,6 +11,7 @@
 #include "../shared/network/server-socket.h"
 #include "../shared/network/client-socket.h"
 #include "../shared/configuration/configuration.h"
+#include "../shared/logger.h"
 #include "login.cpp"
 
 using namespace std;
@@ -19,7 +20,7 @@ class Server
 {
     public:
         Server();
-        Server(u_int user_count, Configuration* config);
+        Server(Configuration* config);
         virtual ~Server();
 
         void InitServer();

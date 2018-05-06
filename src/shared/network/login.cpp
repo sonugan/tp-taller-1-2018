@@ -34,6 +34,7 @@ class Login : public ISerializable
             this->Password = data[1];
         }
         string GetUsername() { return this->Username; }
+        string GetPassword() { return this->Password; }
     private:
         string Username;
         string Password;

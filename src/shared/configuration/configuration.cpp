@@ -196,7 +196,7 @@ bool Configuration::IsValidCredential(string username, string password)
 
 u_int Configuration::GetPort()
 {
-
+    return this->port;
 }
 
 void Configuration::SetPort(u_int port)

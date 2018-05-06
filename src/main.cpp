@@ -30,7 +30,7 @@ void load_configuration(int argc, char* args[], Configuration* config)
 
 void InitServer(int argc, char* args[], Configuration* config)
 {
-    Server* server = new Server(2, config);//TODO: levantar puerto de configuracion o de consola
+    Server* server = new Server(config);
     server->InitServer();
     delete server;
 }
@@ -58,14 +58,22 @@ int main( int argc, char* args[] ) {
         SocketAddress address(51717, "localhost");
         clientSocket.Connect(address);
 
-        printf("Escribí algo: ");
+        printf("Escribí tu usuario: ");
         char buffer[256];
         bzero(buffer,256);
         fgets(buffer,255,stdin);
 
-        string s = string(buffer);
+        string username = string(buffer);
+        username = StringUtils::RemoveLastNewLine(username);
+
+        printf("Escribí tu password: ");
+        bzero(buffer,256);
+        fgets(buffer,255,stdin);
+
+        string password = string(buffer);
+        password = StringUtils::RemoveLastNewLine(password);
         //Request r(s);
-        Login l("gperez", "123456");
+        Login l(username, password);
         //Request r(&l);
         Request r(l.Serialize());
         clientSocket.Send(r);

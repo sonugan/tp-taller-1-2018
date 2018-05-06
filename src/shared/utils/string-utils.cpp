@@ -28,3 +28,9 @@ bool StringUtils::IsInteger(const string str)
     return !str.empty() && find_if(str.begin(),str.end(),
         [](char c){ return !isdigit(c); }) == str.end();
 }
+
+string StringUtils::RemoveLastNewLine(string str)
+{
+    str.erase(std::remove(str.end() - 1, str.end(), '\n'), str.end());
+    return str;
+}

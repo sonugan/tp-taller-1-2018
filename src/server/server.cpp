@@ -1,22 +1,31 @@
 #include "server.h"
 
-Server::Server(u_int user_count, Configuration* config)
+Server::Server(Configuration* config)
 {
+    Logger::getInstance()->info("iniciando servidor en puerto:'"
+        + to_string(config->GetPort()) + "' y capacidad para '"
+        + to_string(config->GetMaxPlayers()) + "' usuarios.");
+
     this->requests_queue = new MessageQueue();
 
-    this->user_count = user_count;
     this->config = config;
+    this->user_count = this->config->GetMaxPlayers();
 
-    //SocketAddress address(config->GetPort());
     this->socket = new ServerSocket();
     this->socket->Bind(config->GetPort());
     this->socket->Listen(MAX_SOCKET_QUEUE_SIZE);
 
+    Logger::getInstance()->info("escuchando conexiones....'");
     cout << "escuchando conexiones...." << "\n";
 
     this->ConnectingUsers();
 
+    Logger::getInstance()->info("comenzando el juego....'");
     cout << "jugando!" << "\n";
+
+    this->socket->Close();
+
+    Logger::getInstance()->info("cerrando el servidor....'");
 }
 
 Server::~Server()
@@ -77,6 +86,15 @@ void Server::ManageClientConnection(ClientSocket client)
     Message incommingMessage1 = this->socket->Receive(client,255);
     Login* l = new Login();
     ISerializable* data = incommingMessage1.GetDeserializedData(l);
-    cout << "Mensaje del cliente: " << l->GetUsername() << "\n";
-    this->clients_count++;
+    if(this->config->IsValidCredential(l->GetUsername(), l->GetPassword()))
+    {
+        cout << "Se conectó: " << l->GetUsername() << "\n";
+        Logger::getInstance()->info("inició sesión el usuario:'" + l->GetUsername() + ".");
+        this->clients_count++;
+    }
+    else
+    {
+        Logger::getInstance()->info("Usuario o contraseña inválidos:'" + l->GetUsername() + ".");
+        cout << "Usuario o contraseña inválidos: " << l->GetUsername() << "\n";
+    }
 }

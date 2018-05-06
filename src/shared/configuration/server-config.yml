@@ -6,8 +6,9 @@ team:
   name: team_a
 init_mode: server
 port: 51717
+max_players: 1
 users:
-  - name: user
+  - name: gperez
     password: 1234
   - name: user2
     password: 1234
