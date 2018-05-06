@@ -17,3 +17,10 @@ Location* Ball::GetLocation() {
 void Ball::UpdateLocation(int x, int y, int z) {
     this->location->Update(x, y, z);
 }
+
+void Ball::SetTrajectory(Trajectory* new_trajectory) {
+    if (trajectory != NULL) {
+        delete this->trajectory;
+    }
+    this->trajectory = new_trajectory;
+}

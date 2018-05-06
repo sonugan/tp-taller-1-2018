@@ -5,6 +5,7 @@
 #include "pitch.h"
 #include "ball.h"
 
+class Ball;
 class Team;
 class Match
 {

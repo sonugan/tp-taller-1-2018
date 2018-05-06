@@ -118,6 +118,8 @@
 		<Unit filename="src/shared/model/player.h" />
 		<Unit filename="src/shared/model/team.cpp" />
 		<Unit filename="src/shared/model/team.h" />
+		<Unit filename="src/shared/model/trajectory.cpp" />
+		<Unit filename="src/shared/model/trajectory.h" />
 		<Unit filename="src/shared/network/client-socket.cpp" />
 		<Unit filename="src/shared/network/client-socket.h" />
 		<Unit filename="src/shared/network/iserializable.h" />

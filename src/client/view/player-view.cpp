@@ -204,28 +204,28 @@ void PlayerView::GetPlayerAngle()
 {
     DIRECTION direction = this->player->GetDirection();
     switch(direction) {
-        case NORTH:
+        case DIRECTION::NORTH:
             angle = 0;
         break;
-        case WEST:
+        case DIRECTION::WEST:
             angle = -90;
         break;
-        case SOUTH:
+        case DIRECTION::SOUTH:
             angle = 180;
         break;
-        case EAST:
+        case DIRECTION::EAST:
             angle = 90;
         break;
-        case NORTHEAST:
+        case DIRECTION::NORTHEAST:
             angle = 45;
         break;
-        case NORTHWEST:
+        case DIRECTION::NORTHWEST:
             angle = -45;
         break;
-        case SOUTHEAST:
+        case DIRECTION::SOUTHEAST:
             angle = 135;
         break;
-        case SOUTHWEST:
+        case DIRECTION::SOUTHWEST:
             angle = -135;
         break;
         default:

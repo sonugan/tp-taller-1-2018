@@ -4,7 +4,7 @@
 Player::Player(unsigned int position_index) {
     this->position_index = position_index;
     this->selected = false;
-    this->direction = EAST;
+    this->direction = DIRECTION::EAST;
 }
 
 Player::~Player()
@@ -14,49 +14,49 @@ Player::~Player()
 }
 
 void Player::MoveLeft(bool run) {
-    this->direction = WEST;
+    this->direction = DIRECTION::WEST;
     Move(run);
 }
 
 void Player::MoveRight(bool run)
 {
-    this->direction = EAST;
+    this->direction = DIRECTION::EAST;
     Move(run);
 }
 
 void Player::MoveUp(bool run)
 {
-    this->direction = NORTH;
+    this->direction = DIRECTION::NORTH;
     Move(run);
 }
 
 void Player::MoveDown(bool run)
 {
-    this->direction = SOUTH;
+    this->direction = DIRECTION::SOUTH;
     Move(run);
 }
 
 void Player::MoveUpToRight(bool run)
 {
-    this->direction = NORTHEAST;
+    this->direction = DIRECTION::NORTHEAST;
     Move(run);
 }
 
 void Player::MoveUpToLeft(bool run)
 {
-    this->direction = NORTHWEST;
+    this->direction = DIRECTION::NORTHWEST;
     Move(run);
 }
 
 void Player::MoveDownToRight(bool run)
 {
-    this->direction = SOUTHEAST;
+    this->direction = DIRECTION::SOUTHEAST;
     Move(run);
 }
 
 void Player::MoveDownToLeft(bool run)
 {
-    this->direction = SOUTHWEST;
+    this->direction = DIRECTION::SOUTHWEST;
     Move(run);
 }
 
@@ -134,7 +134,7 @@ void Player::GoBackToDefaultPosition() {
     } else if (x == default_x && y < default_y) {
         MoveDown(false);
     }else{
-        direction = EAST;//TODO: cuando haya mas equipos debe quedar mirando para otro lado
+        direction = DIRECTION::EAST;//TODO: cuando haya mas equipos debe quedar mirando para otro lado
     }
 
     if (abs(default_y - location->GetY()) < PLAYER_SPEED) {
@@ -180,31 +180,31 @@ void Player::Move(bool run)
     }
 
     switch(direction) {
-        case NORTH:
+        case DIRECTION::NORTH:
             location->UpdateY(location->GetY() - speed);
         break;
-        case WEST:
+        case DIRECTION::WEST:
             location->UpdateX(location->GetX() - speed);
         break;
-        case SOUTH:
+        case DIRECTION::SOUTH:
             location->UpdateY(location->GetY() + speed);
         break;
-        case EAST:
+        case DIRECTION::EAST:
             location->UpdateX(location->GetX() + speed);
         break;
-        case NORTHEAST:
+        case DIRECTION::NORTHEAST:
             location->UpdateY(location->GetY() - speed);
             location->UpdateX(location->GetX() + speed);
         break;
-        case NORTHWEST:
+        case DIRECTION::NORTHWEST:
             location->UpdateY(location->GetY() - speed);
             location->UpdateX(location->GetX() - speed);
         break;
-        case SOUTHEAST:
+        case DIRECTION::SOUTHEAST:
             location->UpdateY(location->GetY() + speed);
             location->UpdateX(location->GetX() + speed);
         break;
-        case SOUTHWEST:
+        case DIRECTION::SOUTHWEST:
             location->UpdateY(location->GetY() + speed);
             location->UpdateX(location->GetX() - speed);
         break;
