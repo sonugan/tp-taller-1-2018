@@ -54,6 +54,10 @@ public:
 
     void SetPort(u_int port);
 
+    u_int GetMaxPlayers();
+
+    void SetMaxPlayers(u_int max_players);
+
 protected:
 
 private:
@@ -64,6 +68,7 @@ private:
     string team_name;
     string init_mode;
     u_int port;
+    u_int max_players;
 
     // Para almacenar las credenciales validas => <user,password>
     map<string, string> valid_credentials = {};
@@ -73,7 +78,7 @@ private:
         {"level", { "info", "debug", "error" }},
         {"formation", { "3-3", "3-1-2", "3-2-1" }},
         {"shirt", { "home", "away" }},
-        {"init_mode", { "server", "client" }},
+        {"init_mode", { "client", "server" }},
     };
     const map<string, LogMode> LOG_MODE_MAP =
     {

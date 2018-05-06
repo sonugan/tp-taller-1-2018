@@ -203,3 +203,13 @@ void Configuration::SetPort(u_int port)
 {
     this->port = port;
 }
+
+u_int Configuration::GetMaxPlayers()
+{
+    return this->max_players;
+}
+
+void Configuration::SetMaxPlayers(u_int max_players)
+{
+    this->max_players = max_players;
+}
