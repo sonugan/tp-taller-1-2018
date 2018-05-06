@@ -6,8 +6,7 @@
 #include <vector>
 #include <deque>
 
-#include "../shared/network/message-queue.h"
-#include "../shared/network/queue.h"
+#include "../shared/utils/queue.h"
 #include "../shared/network/server-socket.h"
 #include "../shared/network/client-socket.h"
 #include "../shared/configuration/configuration.h"
@@ -28,16 +27,16 @@ class Server
     protected:
 
     private:
-        MessageQueue* requests_queue;
+        Queue<Message>* requests_queue;
         ServerSocket* socket;
-        deque<ClientSocket> clients;
-        u_int clients_count;
+        Queue<ClientSocket>* clients;
+        u_int connected_user_count;
         u_int user_count;
         Configuration* config;
         void ConnectingUsers();
         void ListenConnections();
         bool ReadyToStart();
-        void ManageClientConnection(ClientSocket client);
+        void ManageClientConnection(ClientSocket* client);
         void ManageClientConnections();
         u_int MAX_SOCKET_QUEUE_SIZE = 10;
 };

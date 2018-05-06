@@ -17,9 +17,9 @@ class ServerSocket : public Socket
         ServerSocket(int socket_id);
         void Bind(SocketAddress address);
         void Listen(int max_queue_size);
-        ClientSocket Accept();
-        void Send(Socket client_socket, Request request);
-        Message Receive(Socket origin_socket, int expected_size);
+        ClientSocket* Accept();
+        void Send(Socket* client_socket, Request request);
+        Message Receive(Socket* origin_socket, int expected_size);
         virtual ~ServerSocket();
     protected:
     private:

@@ -1,4 +1,26 @@
-#include "queue.h"
+#ifndef QUEUE_H
+#define QUEUE_H
+
+#include <deque>
+
+using namespace std;
+
+template <class T>
+class Queue
+{
+    public:
+        Queue<T>();
+        Queue<T>(unsigned max_length);
+        virtual ~Queue();
+        void Append(T* m);
+        T* Next();
+        bool HasNext();
+    protected:
+    private:
+        bool has_max_length;
+        unsigned max_length;
+        deque<T*> items;
+};
 
 template <class T>
 Queue<T>::Queue()
@@ -49,3 +71,5 @@ bool Queue<T>::HasNext()
 {
     return this->items.size() > 0;
 }
+
+#endif // QUEUE_H

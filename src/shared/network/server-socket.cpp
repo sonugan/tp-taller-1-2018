@@ -28,7 +28,7 @@ void ServerSocket::Listen(int max_queue_size)
     listen(this->socket_id,max_queue_size);
 }
 
-ClientSocket ServerSocket::Accept()
+ClientSocket* ServerSocket::Accept()
 {
     sockaddr_in client_address;
     socklen_t client_address_size = sizeof(client_address);
@@ -40,24 +40,24 @@ ClientSocket ServerSocket::Accept()
     }
     else
     {
-        ClientSocket client(client_socket_id);
+        ClientSocket* client = new ClientSocket(client_socket_id);
         SocketAddress addr(client_address);
-        client.Bind(addr);
+        client->Bind(addr);
         return client;
     }
 }
 
-void ServerSocket::Send(Socket client_socket, Request request)
+void ServerSocket::Send(Socket* client_socket, Request request)
 {
-    send(client_socket.socket_id, request.GetData(), request.GetDataSize(), 0);
+    send(client_socket->socket_id, request.GetData(), request.GetDataSize(), 0);
     //sendto(client_socket.socket_id, request.GetData(), request.GetDataSize(), 0);
 }
 
-Message ServerSocket::Receive(Socket client_socket, int expected_size)
+Message ServerSocket::Receive(Socket* client_socket, int expected_size)
 {
     char* buffer = (char*) malloc(expected_size);
 
-    if (HasError(read(client_socket.socket_id, buffer, expected_size)))
+    if (HasError(read(client_socket->socket_id, buffer, expected_size)))
     {
         Logger::getInstance()->debug("ERROR leyendo desde socket");
     }

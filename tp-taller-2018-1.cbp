@@ -124,12 +124,8 @@
 		<Unit filename="src/shared/network/client-socket.h" />
 		<Unit filename="src/shared/network/iserializable.h" />
 		<Unit filename="src/shared/network/login.cpp" />
-		<Unit filename="src/shared/network/message-queue.cpp" />
-		<Unit filename="src/shared/network/message-queue.h" />
 		<Unit filename="src/shared/network/message.cpp" />
 		<Unit filename="src/shared/network/message.h" />
-		<Unit filename="src/shared/network/queue.cpp" />
-		<Unit filename="src/shared/network/queue.h" />
 		<Unit filename="src/shared/network/request.cpp" />
 		<Unit filename="src/shared/network/request.h" />
 		<Unit filename="src/shared/network/response.cpp" />
@@ -140,6 +136,7 @@
 		<Unit filename="src/shared/network/socket-address.h" />
 		<Unit filename="src/shared/network/socket.cpp" />
 		<Unit filename="src/shared/network/socket.h" />
+		<Unit filename="src/shared/utils/queue.h" />
 		<Unit filename="src/shared/utils/string-builder.cpp" />
 		<Unit filename="src/shared/utils/string-builder.h" />
 		<Unit filename="src/shared/utils/string-utils.cpp" />
