@@ -10,6 +10,7 @@
 #include "../shared/network/queue.h"
 #include "../shared/network/server-socket.h"
 #include "../shared/network/client-socket.h"
+#include "../shared/configuration/configuration.h"
 #include "login.cpp"
 
 using namespace std;
@@ -18,7 +19,7 @@ class Server
 {
     public:
         Server();
-        Server(u_int port, u_int user_count);
+        Server(u_int user_count, Configuration* config);
         virtual ~Server();
 
         void InitServer();
@@ -31,6 +32,7 @@ class Server
         deque<ClientSocket> clients;
         u_int clients_count;
         u_int user_count;
+        Configuration* config;
         void ConnectingUsers();
         void ListenConnections();
         bool ReadyToStart();

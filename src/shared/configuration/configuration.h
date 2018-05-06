@@ -50,6 +50,10 @@ public:
 
     bool IsValidCredential(string username, string password);
 
+    u_int GetPort();
+
+    void SetPort(u_int port);
+
 protected:
 
 private:
@@ -59,6 +63,7 @@ private:
     string sprites_path;
     string team_name;
     string init_mode;
+    u_int port;
 
     // Para almacenar las credenciales validas => <user,password>
     map<string, string> valid_credentials = {};

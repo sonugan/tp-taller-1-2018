@@ -123,7 +123,6 @@
 		<Unit filename="src/shared/network/client-socket.cpp" />
 		<Unit filename="src/shared/network/client-socket.h" />
 		<Unit filename="src/shared/network/iserializable.h" />
-		<Unit filename="src/shared/network/iserializer.h" />
 		<Unit filename="src/shared/network/login.cpp" />
 		<Unit filename="src/shared/network/message-queue.cpp" />
 		<Unit filename="src/shared/network/message-queue.h" />

@@ -22,3 +22,9 @@ const vector<string> StringUtils::Split(const string& s, const char& c)
 
     return v;
 }
+
+bool StringUtils::IsInteger(const string str)
+{
+    return !str.empty() && find_if(str.begin(),str.end(),
+        [](char c){ return !isdigit(c); }) == str.end();
+}

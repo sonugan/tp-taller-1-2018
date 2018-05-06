@@ -1,14 +1,15 @@
 #include "server.h"
 
-Server::Server(u_int port, u_int user_count)
+Server::Server(u_int user_count, Configuration* config)
 {
     this->requests_queue = new MessageQueue();
 
     this->user_count = user_count;
+    this->config = config;
 
-    SocketAddress address(port);
+    //SocketAddress address(config->GetPort());
     this->socket = new ServerSocket();
-    this->socket->Bind(port);
+    this->socket->Bind(config->GetPort());
     this->socket->Listen(MAX_SOCKET_QUEUE_SIZE);
 
     cout << "escuchando conexiones...." << "\n";

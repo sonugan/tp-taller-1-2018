@@ -5,6 +5,7 @@
 #include <sstream>
 #include <stdarg.h>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -24,6 +25,7 @@ class StringUtils
         //Retorna una lista de strings, particionando el string s por el caracter c
         ///
         static const vector<string> Split(const string& s, const char& c);
+        static bool IsInteger(const string str);
     protected:
     private:
 };

@@ -10,10 +10,12 @@ const string TEAM_FORMATION_NODE = "formation";
 const string TEAM_NAME_NODE = "name";
 const string TEAM_SHIRT_NODE = "shirt";
 const string INIT_MODE_NODE = "init_mode";
+const string PORT_NODE = "port";
 const string USERS_NODE = "users";
 const string SPRITES_PATH = "sprites_path";
 const string DEFAULT_LOG_MODE = "debug";
 const string DEFAULT_INIT_MODE = "client";
+const string DEFAULT_PORT_NODE = "51717";
 const string DEFAULT_FORMATION = "3-3";
 const string DEFAULT_SHIRT = "home";
 const string DEFAULT_SPRITES_PATH = "src/sprites";
@@ -95,6 +97,16 @@ void parseConfigFile(Configuration* configuration, YAML::Node config_file)
     {
         Logger::getInstance()->error("No se encontro el parametro '" + INIT_MODE_NODE + "' en la configuracion. Se procede a tomar el valor por defecto: '" + DEFAULT_INIT_MODE + "'.");
         configuration->SetInitMode(DEFAULT_INIT_MODE);
+    }
+
+    if(config_file[PORT_NODE])
+    {
+        configuration->SetPort(config_file[PORT_NODE].as<int>());//TODO: es necesario validarlo?
+    }
+    else
+    {
+        Logger::getInstance()->error("No se encontro el parametro '" + PORT_NODE + "' en la configuracion. Se procede a tomar el valor por defecto: '" + DEFAULT_PORT_NODE + "'.");
+        configuration->SetInitMode(DEFAULT_PORT_NODE);
     }
 
     if (config_file[USERS_NODE])

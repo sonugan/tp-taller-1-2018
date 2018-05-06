@@ -193,3 +193,13 @@ bool Configuration::IsValidCredential(string username, string password)
     return false; // No existe ese usuario
 
 }
+
+u_int Configuration::GetPort()
+{
+
+}
+
+void Configuration::SetPort(u_int port)
+{
+    this->port = port;
+}

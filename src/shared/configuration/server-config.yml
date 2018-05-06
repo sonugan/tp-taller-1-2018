@@ -1,0 +1,13 @@
+logger:
+  level: debug
+team:
+  formation: 3-3
+  shirt: home
+  name: team_a
+init_mode: server
+port: 51717
+users:
+  - name: user
+    password: 1234
+  - name: user2
+    password: 1234
