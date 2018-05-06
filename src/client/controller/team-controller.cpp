@@ -61,7 +61,7 @@ void TeamController::ChangePlayerSelection(const Uint8 *keyboard_state_array) {
                 selected_player->SetSelected(false);
                 selected_player = next_player;
                 selected_player->SetSelected(true);
-                camera->UpdateLocatable(selected_player->GetPositionIndex());
+//                camera->UpdateLocatable(selected_player->GetPositionIndex());
                 last_player_selection_change = std::chrono::system_clock::now();
             }
         }

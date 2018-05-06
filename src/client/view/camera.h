@@ -18,15 +18,15 @@ class Camera
         std::vector<AbstractView*> GetViews();
         SDL_Rect* area;
         void SetStartPosition(Location* position);
-        void SetPlayerViewsMap(std::map <unsigned int, PlayerView*> player_views_map);
-        void UpdateLocatable(int player_key);
+//        void SetPlayerViewsMap(std::map <unsigned int, PlayerView*> player_views_map);
+//        void UpdateLocatable(int player_key);
 
         const static unsigned int CAMERA_MARGIN = 100;
 
     protected:
     private:
         std::vector<AbstractView*> views;
-        std::map <unsigned int, PlayerView*> player_views_map;
+//        std::map <unsigned int, PlayerView*> player_views_map;
         void Move();
         IShowable* showable;
         SDL_Renderer* renderer;

@@ -2,6 +2,8 @@
 
 BallView::BallView(Ball* ball)
 {
+    this->width = 31;
+    this->height = 31;
     this->ball = ball;
 
     SDL_Rect* sprite1 = new SDL_Rect();
@@ -29,8 +31,13 @@ void BallView::Render(int x_camera, int y_camera, int max_x, int max_y) {
 
     int x, y;
 
-    x = ball->GetLocation()->GetX() - x_camera;
-    y = ball->GetLocation()->GetY() - y_camera;
+    x = ball->GetLocation()->GetX() - (SPRITE_WIDTH / 2) - x_camera;
+    y = ball->GetLocation()->GetY() - (SPRITE_HEIGHT / 2)- y_camera;
 
     sprite_sheet->Render( x, y, current_clip );
+}
+
+Location* BallView::GetLocation()
+{
+    return this->ball->GetLocation();
 }

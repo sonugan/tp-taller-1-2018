@@ -84,10 +84,6 @@ void Player::SetSelected(bool value) {
     this->selected = value;
 }
 
-void Player::SetHasBall(bool value) {
-    this->has_ball = value;
-}
-
 Location* Player::GetDefaultLocation() {
     return team->GetFormation()->GetLocationForPlayer(position_index);
 
@@ -104,7 +100,7 @@ unsigned int Player::GetPositionIndex() {
 }
 
 bool Player::HasBall() {
-    return this->has_ball;
+    return this == team->GetMatch()->GetBall()->GetPlayer();
 }
 
 bool Player::IsSelected() {
@@ -145,7 +141,7 @@ void Player::GoBackToDefaultPosition() {
     }
 }
 
-Team* Player::getTeam()
+Team* Player::GetTeam()
 {
     return this->team;
 }
@@ -168,8 +164,7 @@ void Player::SetRecoveringBall(bool recovering_ball) {
     this->recovering_ball = recovering_ball;
 }
 
-void Player::Move(bool run)
-{
+void Player::Move(bool run) {
     int speed;
     if (recovering_ball) {
         speed = PLAYER_SPEED * 0.3;
@@ -208,5 +203,29 @@ void Player::Move(bool run)
             location->UpdateY(location->GetY() + speed);
             location->UpdateX(location->GetX() - speed);
         break;
+    }
+    CatchBall();
+}
+
+void Player::CatchBall() {
+    if (!HasBall()) {
+        //std::cout << "Player::CatchBall \n";
+        Ball* ball = team->GetMatch()->GetBall();
+        //std::cout << "Player::CatchBall calculating distance \n";
+        int distance = ball->GetLocation()->Distance(location);
+        //std::cout << "Player::CatchBall distance calculated \n";
+        if (ball->IsFree() && distance < CATCH_DISTANCE) {
+            std::cout << "ball caught" << "\n";
+            Trajectory* trajectory = new Trajectory(this);
+            ball->SetTrajectory(trajectory);
+        }
+    }
+}
+
+void Player::PassBall() {
+    if (HasBall()) {
+        std::cout << "Player::PassBall \n";
+        Trajectory* trajectory = new Trajectory(direction, 250);
+        team->GetMatch()->GetBall()->SetTrajectory(trajectory);
     }
 }

@@ -20,6 +20,7 @@ void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
             bool playerRecovered = this->PlayerRecoverBall(keyboard_state_array);
             if (!playerRecovered) {
                 this->MovePlayer(keyboard_state_array);
+                this->PassBall(keyboard_state_array);
             }
         }
     }
@@ -55,6 +56,13 @@ bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array) {
         return true;
     }
     return false;
+}
+
+void PlayerController::PassBall(const Uint8 *keyboard_state_array) {
+    if (SKeySelected(keyboard_state_array)) {
+        std::cout << "PlayerController::PassBall \n";
+        team->GetSelectedPlayer()->PassBall();
+    }
 }
 
 bool PlayerController::PlayerRecoverBall(const Uint8 *keyboard_state_array) {

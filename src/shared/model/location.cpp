@@ -61,3 +61,9 @@ void Location::UpdateY(int y) {
 void Location::UpdateZ(int z) {
     Update(GetX(), GetY(), z);
 }
+
+int Location::Distance(Location* other_location) {
+    return sqrt(pow((x - other_location->GetX()), 2)
+               + pow((y - other_location->GetY()), 2)
+                     + pow((z - other_location->GetZ()), 2));
+}

@@ -78,8 +78,8 @@ void Camera::Move()
     }
 
     //Centrar el objecto en la camara
-//    this->area->x = (location->GetX() + this->showable->GetWidth()/2) - this->area->w/2;
-//    this->area->y = (location->GetY() + this->showable->GetHeight()/2)- this->area->h/2;
+    this->area->x = (location->GetX() + this->showable->GetWidth()/2) - this->area->w/2;
+    this->area->y = (location->GetY() + this->showable->GetHeight()/2)- this->area->h/2;
 
     //Keep the camera in bounds
     if( this->area->x < 0 )
@@ -101,10 +101,10 @@ void Camera::Move()
     }
 }
 
-void Camera::SetPlayerViewsMap(std::map <unsigned int, PlayerView*> player_views_map) {
-    this->player_views_map = player_views_map;
-}
+//void Camera::SetPlayerViewsMap(std::map <unsigned int, PlayerView*> player_views_map) {
+//    this->player_views_map = player_views_map;
+//}
 
-void Camera::UpdateLocatable(int player_key) {
-    SetShowable(player_views_map[player_key]);
-}
+//void Camera::UpdateLocatable(int player_key) {
+//    SetShowable(player_views_map[player_key]);
+//}
