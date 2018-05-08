@@ -264,23 +264,6 @@ void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
     y = player->GetLocation()->GetY() - y_camera;
 
     if (player->IsSelected()) {
-
-        if(x < 0) {
-            x = 0;
-        }
-
-        if(y < 0) {
-            y = 0;
-        }
-
-        if(x > max_x - this->width) {
-            x = max_x - this->width;
-        }
-
-        if(y > max_y - this->height) {
-            y = max_y - this->height;
-        }
-
         selector_sheet->Render(x - (SELECTOR_SPRITE_WIDTH / 2), y - (SELECTOR_SPRITE_HEIGHT / 2), animations[SELECTOR_ANIMATION_INDEX]->NextClip(), 0);
     }
 
