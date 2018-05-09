@@ -11,7 +11,7 @@
 #include "../shared/network/client-socket.h"
 #include "../shared/configuration/configuration.h"
 #include "../shared/logger.h"
-#include "login.cpp"
+#include "../shared/network/login.cpp"
 
 using namespace std;
 
