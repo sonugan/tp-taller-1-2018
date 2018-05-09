@@ -67,3 +67,7 @@ int Location::Distance(Location* other_location) {
                + pow((y - other_location->GetY()), 2)
                      + pow((z - other_location->GetZ()), 2));
 }
+
+std::string Location::ToString() {
+    return "x: " + to_string(x) + ", y: " + to_string(y) + ", z: " + to_string(z);
+}

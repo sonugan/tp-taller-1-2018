@@ -1,21 +1,21 @@
 #include "ball.h"
 
-Ball::Ball()
-{
+Ball::Ball() {
     this->location = new Location(200, 200, 0);
+    this->previous_location = new Location(200, 200, 0);
 }
 
-Ball::~Ball()
-{
+Ball::~Ball() {
     delete location;
+    delete previous_location;
 }
 
 Location* Ball::GetLocation() {
     return location;
 }
 
-void Ball::UpdateLocation(int x, int y, int z) {
-    this->location->Update(x, y, z);
+Location* Ball::GetPreviousLocation() {
+    return previous_location;
 }
 
 void Ball::SetTrajectory(Trajectory* new_trajectory) {
@@ -31,6 +31,7 @@ void Ball::SetTrajectory(Trajectory* new_trajectory) {
 
 void Ball::Move() {
     if (this->trajectory != NULL) {
+        this->previous_location->Update(this->location->GetX(), this->location->GetY(), this->location->GetZ());
         this->trajectory->UpdateToNextLocation(this->location);
     }
 }

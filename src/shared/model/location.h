@@ -2,6 +2,7 @@
 #define LOCATION_H
 
 #include <math.h>
+#include <string>
 
 class Location
 {
@@ -16,17 +17,11 @@ class Location
         void UpdateY(int y);
         void UpdateZ(int z);
         int Distance(Location* other_location);
+        std::string ToString();
 
     protected:
 
     private:
-        //  La imagen de la cancha es de 1920x1080.
-        //  Se le resta 32 porque la ubicación del jugador no es la misma que la del sprite
-        //  (hay un offset de 32 píxeles).
-//        static const int MAX_X_LOCATION = 1888;
-//        static const int MIN_X_LOCATION = -32;
-//        static const int MAX_Y_LOCATION = 1048;
-//        static const int MIN_Y_LOCATION = -32;
 
         static const int MAX_X_LOCATION = 1920;
         static const int MIN_X_LOCATION = 0;

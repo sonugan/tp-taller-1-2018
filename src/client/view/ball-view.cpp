@@ -37,7 +37,10 @@ void BallView::Render(int x_camera, int y_camera, int max_x, int max_y) {
     sprite_sheet->Render( x, y, current_clip );
 }
 
-Location* BallView::GetLocation()
-{
+Location* BallView::GetLocation() {
     return this->ball->GetLocation();
+}
+
+Location* BallView::GetPreviousLocation() {
+    return this->ball->GetPreviousLocation();
 }

@@ -14,7 +14,7 @@ class Ball
         Ball();
         virtual ~Ball();
         Location* GetLocation();
-        void UpdateLocation(int x, int y, int z);
+        Location* GetPreviousLocation();
         void SetTrajectory(Trajectory* new_trajectory);
         void Move();
         bool IsFree();
@@ -24,6 +24,7 @@ class Ball
 
     private:
         Location* location;
+        Location* previous_location;
         Trajectory* trajectory;
 };
 

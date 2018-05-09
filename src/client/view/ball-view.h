@@ -13,6 +13,7 @@ class BallView : public AbstractView, public IShowable
         virtual ~BallView();
         void Render(int x_camera, int y_camera, int max_x, int max_y);
         Location* GetLocation();
+        Location* GetPreviousLocation();
 
     protected:
 
