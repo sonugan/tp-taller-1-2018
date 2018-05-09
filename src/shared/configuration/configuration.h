@@ -46,6 +46,8 @@ public:
 
     bool InitModeIsClient();
 
+    map<string, string> GetCredentials();
+
     void AddValidCredential(string username, string password);
 
     bool IsValidCredential(string username, string password);

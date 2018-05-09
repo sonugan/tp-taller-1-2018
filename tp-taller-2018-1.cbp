@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters='--config=&quot;src/shared/configuration/default-config.yml&quot;' />
+				<Option parameters='--config=&quot;src/shared/configuration/server-config.yml&quot;' />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="src/game" />

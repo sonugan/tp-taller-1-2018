@@ -178,6 +178,11 @@ bool Configuration::InitModeIsClient()
     return !this->InitModeIsServer();
 }
 
+map<string, string> Configuration::GetCredentials()
+{
+    return this->valid_credentials;
+}
+
 void Configuration::AddValidCredential(string username, string password)
 {
     this->valid_credentials.insert(pair<string, string>(username, password));

@@ -5,6 +5,7 @@
 #include <thread>
 #include <vector>
 #include <deque>
+#include <map>
 
 #include "../shared/utils/queue.h"
 #include "../shared/network/server-socket.h"
@@ -27,6 +28,7 @@ class Server
     protected:
 
     private:
+        int port;
         Queue<Message>* requests_queue;
         ServerSocket* socket;
         Queue<ClientSocket>* clients;
@@ -38,6 +40,9 @@ class Server
         bool ReadyToStart();
         void ManageLoginRequests(ClientSocket* client);
         u_int MAX_SOCKET_QUEUE_SIZE = 10;
+        map<string, string> credentials = {};
+
+        bool IsValidUser(string username, string password);
 };
 
 #endif // SERVER_H
