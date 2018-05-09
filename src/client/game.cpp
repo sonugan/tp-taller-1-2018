@@ -10,27 +10,27 @@ Game::Game(Configuration* initial_configuration) {
 
     InitSDL();
 
-//    LoginView* loginView = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH);
-//
-//    //Se abre la pantalla de login con su propio "game loop"
-//    loginView->Open(initial_configuration);
-//
-//    while(!loginView->IsUserAuthenticated() && !loginView->IsUserQuit())
-//    {
-//        // El usuario no esta autenticado
-//        loginView->OpenErrorPage(initial_configuration);
-//    }
+    LoginView* loginView = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH);
 
-//    if (loginView->IsUserAuthenticated() && !loginView->IsUserQuit())
-//    {
+    //Se abre la pantalla de login con su propio "game loop"
+    loginView->Open(initial_configuration);
+
+    while(!loginView->IsUserAuthenticated() && !loginView->IsUserQuit())
+    {
+        // El usuario no esta autenticado
+        loginView->OpenErrorPage(initial_configuration);
+    }
+
+    if (loginView->IsUserAuthenticated() && !loginView->IsUserQuit())
+    {
         CreateModel();
         CreateViews();
         CreateControllers();
         this->correctly_initialized = true;
-//    }
+    }
 
     //Libero recursos de la vista
-//    loginView->Free();
+    loginView->Free();
 }
 
 Game::~Game() {
