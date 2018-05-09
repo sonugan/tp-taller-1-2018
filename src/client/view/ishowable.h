@@ -6,7 +6,8 @@
 class IShowable
 {
     public:
-        virtual Location* GetLocation(){ return NULL;};
+        virtual Location* GetLocation(){ return NULL; };
+        virtual Location* GetPreviousLocation() { return NULL; }
         virtual void SetWidth(float width){ this->width = width; }
         virtual void SetHeight(float height){ this->height = height; }
         virtual float GetWidth(){ return this->width; }

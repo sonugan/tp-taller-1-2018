@@ -181,9 +181,9 @@ PlayerView::PlayerView(Player* player)
     Location* current_location = player->GetLocation();
     previous_location = new Location(current_location->GetX(), current_location->GetY(), current_location->GetZ());
 
-    string kitFile = player->getTeam()->GetName();
+    string kitFile = player->GetTeam()->GetName();
     kitFile.append("/");
-    kitFile.append(player->getTeam()->GetShirt());
+    kitFile.append(player->GetTeam()->GetShirt());
     kitFile.append("-kit.png");
 
     this->sprite_sheet = SpritesProvider::GetSheet(TEAM_A_PLAYER, kitFile);
@@ -264,27 +264,10 @@ void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
     y = player->GetLocation()->GetY() - y_camera;
 
     if (player->IsSelected()) {
-
-        if(x < 0) {
-            x = 0;
-        }
-
-        if(y < 0) {
-            y = 0;
-        }
-
-        if(x > max_x - this->width) {
-            x = max_x - this->width;
-        }
-
-        if(y > max_y - this->height) {
-            y = max_y - this->height;
-        }
-
-        selector_sheet->Render(x, y, animations[SELECTOR_ANIMATION_INDEX]->NextClip(), 0);
+        selector_sheet->Render(x - (SELECTOR_SPRITE_WIDTH / 2), y - (SELECTOR_SPRITE_HEIGHT / 2), animations[SELECTOR_ANIMATION_INDEX]->NextClip(), 0);
     }
 
-    sprite_sheet->Render( x, y, current_clip, this->angle);
+    sprite_sheet->Render( x - (SPRITE_WIDTH / 2), y - (SPRITE_HEIGHT / 2), current_clip, this->angle);
 }
 
 Location* PlayerView::GetLocation()

@@ -37,9 +37,9 @@ Player* TeamController::FindNextPlayerToSelect() {
             } else {
                 new_selected_player_position_index++;
             }
-            // El próximo jugador tiene que estar dentro de la cámara y no tiene que estar seleccionado
+
             Player* possible_player = team->GetPlayers()[new_selected_player_position_index];
-            if (!possible_player->IsSelected() && PlayerWithinMargins(possible_player)) {
+            if (!possible_player->IsSelected()) {
                 next_player = possible_player;
                 break;
             }
@@ -52,18 +52,15 @@ void TeamController::ChangePlayerSelection(const Uint8 *keyboard_state_array) {
     int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>
                              (std::chrono::system_clock::now()-last_player_selection_change).count();
 
-    if (elapsed_millis >= PLAYER_SELECTION_DELAY_MILLIS) {
-        if(CKeySelected(keyboard_state_array)) {
-            Player* next_player = FindNextPlayerToSelect();
-            if (next_player != NULL) {
-                SoundManager::PlayPlayerSelectionSound();
-                Player* selected_player = team->GetSelectedPlayer();
-                selected_player->SetSelected(false);
-                selected_player = next_player;
-                selected_player->SetSelected(true);
-                camera->UpdateLocatable(selected_player->GetPositionIndex());
-                last_player_selection_change = std::chrono::system_clock::now();
-            }
+    if (CKeySelected(keyboard_state_array) && !team->GetSelectedPlayer()->HasBall() && elapsed_millis >= PLAYER_SELECTION_DELAY_MILLIS) {
+        Player* next_player = FindNextPlayerToSelect();
+        if (next_player != NULL) {
+            SoundManager::PlayPlayerSelectionSound();
+            Player* selected_player = team->GetSelectedPlayer();
+            selected_player->SetSelected(false);
+            selected_player = next_player;
+            selected_player->SetSelected(true);
+            last_player_selection_change = std::chrono::system_clock::now();
         }
     }
 
