@@ -100,13 +100,16 @@ void Configuration::SetSpritesPath(string sprites_path)
     Logger::getInstance()->debug("(Configuracion) SPRITES PATH: " + this->sprites_path);
 }
 
-void Configuration::Load(Configuration* config, string config_path, string log_level)
+void Configuration::Load(Configuration* config, string config_path, string log_level, string mode)
 {
     ConfigurationParser* parser = new ConfigurationParser();
     parser->ReadFile(config, config_path);
     if(log_level != "") {
         Logger::getInstance()->debug("(Configuracion-CLI MASTER) NIVEL DE LOG: " + log_level);
         config->SetLogLevel(log_level);
+    }
+    if(mode != "") {
+       config->SetInitMode(mode);
     }
     delete parser;
 }

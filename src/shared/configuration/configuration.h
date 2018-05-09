@@ -38,7 +38,7 @@ public:
 
     void SetSpritesPath(string sprites_path);
 
-    static void Load(Configuration* config, string config_path, string log_level);
+    static void Load(Configuration* config, string config_path, string log_level, string mode);
 
     bool IsValidConfigValue(string parameter, string value);
 

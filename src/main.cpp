@@ -3,15 +3,7 @@
 #include "shared/configuration/cli-options-parser.h"
 #include "shared/configuration/cli-options.h"
 #include "shared/configuration/configuration.h"
-//Descomentame para probar sockets
-#include "shared/network/server-socket.h"
-#include "shared/network/client-socket.h"
-#include "shared/network/socket-address.h"
-#include "shared/network/message.h"
-#include "shared/network/request.h"
-#include "shared/network/iserializable.h"
-#include "shared/network/login.cpp"
-#include "shared/utils/string-utils.h"
+#include "client.h"
 
 
 #include <iostream>
@@ -19,11 +11,13 @@
 
 void load_configuration(int argc, char* args[], Configuration* config)
 {
+    //TODO: ajustar option mode=client/server. AUN NO FUNCIONA BIEN!!
     CLIOptionsParser* parser = new CLIOptionsParser();
     string config_path = parser->GetConfigPath(argc, args);
     string log_level = parser->GetLogLevel(argc, args);
-    CLIOptions* cli_options = new CLIOptions(config_path, log_level);
-    Configuration::Load(config, cli_options->GetConfigPath(), cli_options->GetLogLevel());
+    string mode = parser->GetMode(argc, args);
+    CLIOptions* cli_options = new CLIOptions(config_path, log_level, mode);
+    Configuration::Load(config, cli_options->GetConfigPath(), cli_options->GetLogLevel(), cli_options->GetMode());
     delete parser;
     delete cli_options;
 }
@@ -54,42 +48,10 @@ int main( int argc, char* args[] ) {
         }
         delete game;*/
 
-        ClientSocket clientSocket;
-        SocketAddress address(config->GetPort(), config->GetServerHostname().c_str());
-        //SocketAddress address(51717, "localhost");
-        clientSocket.Connect(address);
+        Client* client = new Client(config);
+        client->Init();
+        delete client;
 
-        bool is_logued = false;
-        do {
-            printf("Escribí tu usuario: ");
-            char buffer[256];
-            bzero(buffer,256);
-            fgets(buffer,255,stdin);
-
-            string username = string(buffer);
-            username = StringUtils::RemoveLastNewLine(username);
-
-            printf("Escribí tu password: ");
-            bzero(buffer,256);
-            fgets(buffer,255,stdin);
-
-            string password = string(buffer);
-            password = StringUtils::RemoveLastNewLine(password);
-            //Request r(s);
-            Login l(username, password);
-            //Request r(&l);
-            Request r(l.Serialize());
-            clientSocket.Send(r);
-
-            Message login_status = clientSocket.Receive(255);
-            cout << login_status.GetData() << "\n";
-            if(login_status.GetData() == "ok")
-            {
-                is_logued = true;
-            }
-        } while(!is_logued);
-
-        clientSocket.Close();
     }
     else
     {

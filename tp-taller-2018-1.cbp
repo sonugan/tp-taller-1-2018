@@ -11,6 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters='--config=&quot;src/shared/configuration/default-config.yml&quot;' />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="src/game" />
@@ -24,6 +25,7 @@
 					<Add directory="src/shared/model" />
 					<Add directory="src/server" />
 					<Add directory="src/shared/network" />
+					<Add directory="src/client" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -45,6 +47,7 @@
 					<Add directory="src/shared/model" />
 					<Add directory="src/server" />
 					<Add directory="src/shared/network" />
+					<Add directory="src/client" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -52,12 +55,14 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-std=c++11" />
 			<Add option="-Wall" />
+			<Add option="-std=c++11" />
 		</Compiler>
 		<Linker>
 			<Add option="-lSDL2 -lSDL2_image -lyaml-cpp -lSDL2_mixer -lSDL2_ttf -lpthread" />
 		</Linker>
+		<Unit filename="src/client/client.cpp" />
+		<Unit filename="src/client/client.h" />
 		<Unit filename="src/client/controller/abstract-controller.h" />
 		<Unit filename="src/client/controller/game-controller.cpp" />
 		<Unit filename="src/client/controller/game-controller.h" />
@@ -90,7 +95,6 @@
 		<Unit filename="src/client/view/sprites-provider.cpp" />
 		<Unit filename="src/client/view/sprites-provider.h" />
 		<Unit filename="src/main.cpp" />
-		<Unit filename="src/server/bla.txt" />
 		<Unit filename="src/server/server.cpp" />
 		<Unit filename="src/server/server.h" />
 		<Unit filename="src/shared/configuration/cli-options-parser.cpp" />
@@ -102,6 +106,7 @@
 		<Unit filename="src/shared/configuration/configuration.cpp" />
 		<Unit filename="src/shared/configuration/configuration.h" />
 		<Unit filename="src/shared/configuration/default-config.yml" />
+		<Unit filename="src/shared/configuration/server-config.yml" />
 		<Unit filename="src/shared/logger.cpp" />
 		<Unit filename="src/shared/logger.h" />
 		<Unit filename="src/shared/model/ball.cpp" />
