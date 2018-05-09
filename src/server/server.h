@@ -22,7 +22,7 @@ class Server
         Server(Configuration* config);
         virtual ~Server();
 
-        void InitServer();
+        void Init();
 
     protected:
 

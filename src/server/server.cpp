@@ -3,8 +3,8 @@
 Server::Server(Configuration* config)
 {
     Logger::getInstance()->info("iniciando servidor en puerto:'"
-        + to_string(config->GetPort()) + "' y capacidad para '"
-        + to_string(config->GetMaxPlayers()) + "' usuarios.");
+                                + to_string(config->GetPort()) + "' y capacidad para '"
+                                + to_string(config->GetMaxPlayers()) + "' usuarios.");
 
     this->clients = new Queue<ClientSocket>();
     this->requests_queue = new Queue<Message>();
@@ -13,10 +13,22 @@ Server::Server(Configuration* config)
     this->user_count = this->config->GetMaxPlayers();
 
     this->socket = new ServerSocket();
+
+}
+
+Server::~Server()
+{
+    delete this->requests_queue;
+    delete this->clients;
+    delete this->socket;
+}
+
+void Server::Init()
+{
     this->socket->Bind(config->GetPort());
     this->socket->Listen(MAX_SOCKET_QUEUE_SIZE);
 
-    Logger::getInstance()->info("escuchando conexiones....'");
+    Logger::getInstance()->info("Escuchando conexiones....'");
     cout << "escuchando conexiones...." << "\n";
 
     this->ConnectingUsers();
@@ -29,24 +41,12 @@ Server::Server(Configuration* config)
     Logger::getInstance()->info("cerrando el servidor....'");
 }
 
-Server::~Server()
-{
-    delete this->requests_queue;
-    delete this->clients;
-    delete this->socket;
-}
-
-void Server::InitServer()
-{
-
-}
-
 void Server::ConnectingUsers()
 {
     this->connected_user_count = 0;
     thread wait_connections_thread(&Server::ListenConnections, this);
 
-    while(!this->ReadyToStart()){}
+    while(!this->ReadyToStart()) {}
 
     pthread_cancel(wait_connections_thread.native_handle());
     wait_connections_thread.join();

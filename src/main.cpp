@@ -25,7 +25,7 @@ void load_configuration(int argc, char* args[], Configuration* config)
 void InitServer(int argc, char* args[], Configuration* config)
 {
     Server* server = new Server(config);
-    server->InitServer();
+    server->Init();
     delete server;
 }
 
