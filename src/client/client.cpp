@@ -47,9 +47,10 @@ void Client::Init()
 
         Message login_status = clientSocket.Receive(255);
         cout << login_status.GetData() << "\n";
-        if(login_status.GetData() == "ok")
+        if(string(login_status.GetData()) == "ok")
         {
             is_logued = true;
+            cout << "Login success" << endl;
         }
     }
     while (!is_logued);
