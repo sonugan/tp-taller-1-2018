@@ -8,12 +8,10 @@ Server::Server(Configuration* config)
 
     this->clients = new Queue<ClientSocket>();
     this->requests_queue = new Queue<Message>();
-
-    this->config = config;
-    this->user_count = this->config->GetMaxPlayers();
-
+    this->port = config->GetPort();
+    this->user_count = config->GetMaxPlayers();
+    this->credentials = config->GetCredentials();
     this->socket = new ServerSocket();
-
 }
 
 Server::~Server()
@@ -25,7 +23,7 @@ Server::~Server()
 
 void Server::Init()
 {
-    this->socket->Bind(config->GetPort());
+    this->socket->Bind(this->port);
     this->socket->Listen(MAX_SOCKET_QUEUE_SIZE);
 
     Logger::getInstance()->info("Escuchando conexiones....'");
@@ -76,7 +74,7 @@ void Server::ManageLoginRequests(ClientSocket* client)
         Message incommingMessage1 = this->socket->Receive(client,255);
         Login* l = new Login();
         ISerializable* data = incommingMessage1.GetDeserializedData(l);
-        if(this->config->IsValidCredential(l->GetUsername(), l->GetPassword()))
+        if(this->IsValidUser(l->GetUsername(), l->GetPassword()))
         {
             cout << "Se conectó: " << l->GetUsername() << "\n";
             Logger::getInstance()->info("inició sesión el usuario:'" + l->GetUsername() + ".");
@@ -93,4 +91,18 @@ void Server::ManageLoginRequests(ClientSocket* client)
             this->socket->Send(client, login_state_request);
         }
     }
+}
+
+bool Server::IsValidUser(string username, string password)
+{
+    map<string,string>::iterator it = this->credentials.find(username);
+
+    if (it != this->credentials.end())
+    {
+        // Encontro el usuario, comparo las passwords
+        string stored_password = it->second;
+        return stored_password.compare(password) == 0;
+    }
+
+    return false; // No existe ese usuario
 }
