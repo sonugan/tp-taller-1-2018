@@ -3,6 +3,7 @@
 Ball::Ball() {
     this->location = new Location(200, 200, 0);
     this->previous_location = new Location(200, 200, 0);
+    this->trajectory = new Trajectory(DIRECTION::EAST, 0);
 }
 
 Ball::~Ball() {
