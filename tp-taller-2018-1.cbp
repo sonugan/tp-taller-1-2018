@@ -127,7 +127,9 @@
 		<Unit filename="src/shared/model/trajectory.h" />
 		<Unit filename="src/shared/network/client-socket.cpp" />
 		<Unit filename="src/shared/network/client-socket.h" />
+		<Unit filename="src/shared/network/exceptions/socket-connection-exception.h" />
 		<Unit filename="src/shared/network/iserializable.h" />
+		<Unit filename="src/shared/network/iserializer.h" />
 		<Unit filename="src/shared/network/login.cpp" />
 		<Unit filename="src/shared/network/message.cpp" />
 		<Unit filename="src/shared/network/message.h" />

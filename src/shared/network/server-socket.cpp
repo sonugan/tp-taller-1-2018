@@ -1,6 +1,7 @@
 #include<stdlib.h>
 
 #include "server-socket.h"
+#include "exceptions/socket-connection-exception.h"
 
 using namespace std;
 
@@ -52,17 +53,25 @@ void ServerSocket::Send(Socket* client_socket, Request request)
     //sendto(client_socket.socket_id, request.GetData(), request.GetDataSize(), 0);
 }
 
-Message ServerSocket::Receive(Socket* client_socket, int expected_size)
+Message* ServerSocket::Receive(Socket* client_socket, int expected_size)
 {
     char* buffer = (char*) malloc(expected_size);
     bzero(buffer,expected_size);
 
-    if (HasError(read(client_socket->socket_id, buffer, expected_size)))
+    int received_bytes = read(client_socket->socket_id, buffer, expected_size);
+
+    if (received_bytes <= 0)
     {
-        Logger::getInstance()->debug("(ServerSocket:Receive) ERROR leyendo desde socket.");
+        Logger::getInstance()->error("(ServerSocket:Receive) Read -1.");
+        throw new SocketConnectionException("Error de conexión mientras se ejecutaba read");
     }
-    Message m(buffer, expected_size);
-    return m;
+
+    Logger::getInstance()->debug("(ServerSocket::Receive) received_bytes:" + to_string(received_bytes));
+//    if (HasError(read(client_socket->socket_id, buffer, expected_size)))
+//    {
+//        Logger::getInstance()->debug("(ServerSocket:Receive) ERROR leyendo desde socket.");
+//    }
+    return new Message(buffer, expected_size);
 }
 
 ServerSocket::~ServerSocket()

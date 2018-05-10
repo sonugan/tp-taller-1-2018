@@ -1,5 +1,7 @@
 #include "server.h"
 
+#include "../shared/network/exceptions/socket-connection-exception.h"
+
 Server::Server(Configuration* config)
 {
     Logger::getInstance()->info("iniciando servidor en puerto:'"
@@ -7,7 +9,7 @@ Server::Server(Configuration* config)
                                 + to_string(config->GetMaxPlayers()) + "' usuarios.");
 
     this->clients = new Queue<ClientSocket>();
-    this->requests_queue = new Queue<Message>();
+    this->message_queue = new Queue<Message>();
     this->port = config->GetPort();
     this->user_count = config->GetMaxPlayers();
     this->credentials = config->GetCredentials();
@@ -16,7 +18,7 @@ Server::Server(Configuration* config)
 
 Server::~Server()
 {
-    delete this->requests_queue;
+    delete this->message_queue;
     delete this->clients;
     delete this->socket;
 }
@@ -76,9 +78,20 @@ void Server::ManageLoginRequests(ClientSocket* client)
     while(!this->ReadyToStart() || success_login)
     {
         Logger::getInstance()->debug("(Server:ManageLoginRequests) Esperando login request.");
-        Message incommingMessage1 = this->socket->Receive(client, 255);
+
+        Message* incommingMessage1;
+        try
+        {
+            incommingMessage1 = this->socket->Receive(client, 255);
+        }
+        catch (SocketConnectionException* e)
+        {
+            Logger::getInstance()->error("(Server) Error de conexión. Cerrando socket cliente.");
+            client->Close();
+        }
+
         Login* l = new Login();
-        ISerializable* data = incommingMessage1.GetDeserializedData(l);
+        ISerializable* data = incommingMessage1->GetDeserializedData(l);
         if(this->IsValidUser(l->GetUsername(), l->GetPassword()))
         {
             Logger::getInstance()->info("Usuario válido. Se conectó: " + l->GetUsername());

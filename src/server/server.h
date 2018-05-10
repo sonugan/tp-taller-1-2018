@@ -29,7 +29,7 @@ class Server
 
     private:
         int port;
-        Queue<Message>* requests_queue;
+        Queue<Message>* message_queue;
         ServerSocket* socket;
         Queue<ClientSocket>* clients;
         u_int connected_user_count;
