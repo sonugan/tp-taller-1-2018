@@ -26,17 +26,13 @@ void Server::Init()
     this->socket->Bind(this->port);
     this->socket->Listen(MAX_SOCKET_QUEUE_SIZE);
 
-    Logger::getInstance()->info("Escuchando conexiones....'");
-    cout << "escuchando conexiones...." << "\n";
-
     this->ConnectingUsers();
 
-    Logger::getInstance()->info("comenzando el juego....'");
-    cout << "jugando!" << "\n";
+    Logger::getInstance()->info("Comenzando el juego....'");
 
     this->socket->Close();
 
-    Logger::getInstance()->info("cerrando el servidor....'");
+    Logger::getInstance()->info("Cerrando el servidor....'");
 }
 
 void Server::ConnectingUsers()
@@ -44,7 +40,11 @@ void Server::ConnectingUsers()
     this->connected_user_count = 0;
     thread wait_connections_thread(&Server::ListenConnections, this);
 
-    while(!this->ReadyToStart()) {}
+
+    while(!this->ReadyToStart())
+    {
+        // Y este loop para que es??
+    }
 
     pthread_cancel(wait_connections_thread.native_handle());
     wait_connections_thread.join();
@@ -52,10 +52,13 @@ void Server::ConnectingUsers()
 
 void Server::ListenConnections()
 {
+    Logger::getInstance()->debug("(Server:ListenConnections) Escuchando conexiones....'");
     vector<thread*> client_threads;
     while(!this->ReadyToStart())
     {
+        Logger::getInstance()->debug("(Server:ListenConnections) Previo Accept().");
         ClientSocket* client = this->socket->Accept();
+        Logger::getInstance()->debug("(Server:ListenConnections) Agregando nuevo ClientSocket a colección de clientes.");
         this->clients->Append(client);
         client_threads.push_back(new thread(&Server::ManageLoginRequests, this, client));
     }
@@ -68,17 +71,20 @@ bool Server::ReadyToStart()
 
 void Server::ManageLoginRequests(ClientSocket* client)
 {
+    Logger::getInstance()->debug("(Server:ManageLoginRequests) Iniciando Login thread.");
     bool success_login = false;
     while(!this->ReadyToStart() || success_login)
     {
-        Message incommingMessage1 = this->socket->Receive(client,255);
+        Logger::getInstance()->debug("(Server:ManageLoginRequests) Esperando login request.");
+        Message incommingMessage1 = this->socket->Receive(client, 255);
         Login* l = new Login();
         ISerializable* data = incommingMessage1.GetDeserializedData(l);
         if(this->IsValidUser(l->GetUsername(), l->GetPassword()))
         {
-            cout << "Se conectó: " << l->GetUsername() << "\n";
-            Logger::getInstance()->info("inició sesión el usuario:'" + l->GetUsername() + ".");
+            Logger::getInstance()->info("Usuario válido. Se conectó: " + l->GetUsername());
+
             Request login_state_request("ok");
+            Logger::getInstance()->debug("(Server:ManageLoginRequests) Enviando respuesta LoginOK.");
             this->socket->Send(client, login_state_request);
             this->connected_user_count++;
             success_login = true;
@@ -86,8 +92,8 @@ void Server::ManageLoginRequests(ClientSocket* client)
         else
         {
             Logger::getInstance()->info("Usuario o contraseña inválidos:'" + l->GetUsername() + ".");
-            cout << "Usuario o contraseña inválidos: " << l->GetUsername() << "\n";
             Request login_state_request("fail");
+            Logger::getInstance()->debug("(Server:ManageLoginRequests) Enviando respuesta LoginFail.");
             this->socket->Send(client, login_state_request);
         }
     }

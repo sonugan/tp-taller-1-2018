@@ -18,7 +18,7 @@ void ServerSocket::Bind(SocketAddress address)
     sockaddr_in addr = address.GetFormatted();
     if (HasError(bind(this->socket_id, (struct sockaddr *) &addr, sizeof(addr))))
     {
-        Logger::getInstance()->debug("Error durante el binding");
+        Logger::getInstance()->debug("(ServerSocket:Bind) Error durante el binding.");
     }
     this->address = address;
 }
@@ -35,14 +35,13 @@ ClientSocket* ServerSocket::Accept()
     int client_socket_id = accept(this->socket_id, (struct sockaddr *) &client_address, &client_address_size);
     if (HasError(client_socket_id))
     {
-        Logger::getInstance()->debug("Error mientras se esperaban conexiones");
+        Logger::getInstance()->debug("(ServerSocket:Accept) Error mientras se esperaban conexiones.");
         return NULL;
     }
     else
     {
+        Logger::getInstance()->debug("(ServerSocket:Accept) Conexión aceptada. Se crea nuevo socket.");
         ClientSocket* client = new ClientSocket(client_socket_id);
-        SocketAddress addr(client_address);
-        client->Bind(addr);
         return client;
     }
 }
@@ -60,7 +59,7 @@ Message ServerSocket::Receive(Socket* client_socket, int expected_size)
 
     if (HasError(read(client_socket->socket_id, buffer, expected_size)))
     {
-        Logger::getInstance()->debug("ERROR leyendo desde socket");
+        Logger::getInstance()->debug("(ServerSocket:Receive) ERROR leyendo desde socket.");
     }
     Message m(buffer, expected_size);
     return m;

@@ -49,7 +49,7 @@ void Client::Init()
         cout << login_status.GetData() << "\n";
         if(string(login_status.GetData()) == "ok")
         {
-            is_logued = true;
+//            is_logued = true;
             cout << "Login success" << endl;
         }
     }
