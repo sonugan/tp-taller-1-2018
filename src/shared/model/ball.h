@@ -5,6 +5,7 @@
 #include "player.h"
 #include "trajectory.h"
 #include <cstddef>
+#include <chrono>
 
 class Trajectory;
 class Player;
@@ -19,13 +20,16 @@ class Ball
         void Move();
         bool IsFree();
         Player* GetPlayer();
+        bool LastFreedDelayPassed();
 
     protected:
 
     private:
+        static const unsigned int LAST_FREED_DELAY_MILLIS = 150;
         Location* location;
         Location* previous_location;
         Trajectory* trajectory;
+        std::chrono::time_point<std::chrono::system_clock> last_freed;
 };
 
 #endif // BALL_H

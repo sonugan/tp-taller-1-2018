@@ -95,10 +95,24 @@ void TeamController::MoveUnselectedPlayersToDefaultPositions() {
     }
 }
 
+void TeamController::CatchBall() {
+
+    if (team->GetMatch()->GetBall()->LastFreedDelayPassed()) {
+        for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+            Player* player = team->GetPlayers()[i];
+            player->CatchBall();
+            if (player->HasBall()) {
+
+            }
+        }
+    }
+}
+
 void TeamController::Handle(const Uint8* keyboard_state_array) {
     ChangeFormation(keyboard_state_array);
     ChangePlayerSelection(keyboard_state_array);
     MoveUnselectedPlayersToDefaultPositions();
+    CatchBall();
 }
 
 

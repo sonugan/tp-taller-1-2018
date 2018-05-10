@@ -100,7 +100,8 @@ unsigned int Player::GetPositionIndex() {
 }
 
 bool Player::HasBall() {
-    return this == team->GetMatch()->GetBall()->GetPlayer();
+    Player* player_with_ball = team->GetMatch()->GetBall()->GetPlayer();
+    return (player_with_ball != NULL) && (this->GetPositionIndex() == player_with_ball->GetPositionIndex());
 }
 
 bool Player::IsSelected() {
@@ -204,27 +205,27 @@ void Player::Move(bool run) {
             location->UpdateX(location->GetX() - speed);
         break;
     }
-    CatchBall();
 }
 
 void Player::CatchBall() {
-    if (!HasBall()) {
-        //std::cout << "Player::CatchBall \n";
+    if (!this->HasBall()) {
         Ball* ball = team->GetMatch()->GetBall();
-        //std::cout << "Player::CatchBall calculating distance \n";
         int distance = ball->GetLocation()->Distance(location);
-        //std::cout << "Player::CatchBall distance calculated \n";
         if (ball->IsFree() && distance < CATCH_DISTANCE) {
-            std::cout << "ball caught" << "\n";
             Trajectory* trajectory = new Trajectory(this);
             ball->SetTrajectory(trajectory);
+            Player* previously_selected_player = team->GetSelectedPlayer();
+            this->selected = true;
+            if (previously_selected_player != NULL && previously_selected_player->GetPositionIndex() != this->position_index) {
+                previously_selected_player->SetSelected(false);
+            }
         }
     }
 }
 
 void Player::PassBall() {
     if (HasBall()) {
-        std::cout << "Player::PassBall \n";
+        //std::cout << "Player::PassBall \n";
         Trajectory* trajectory = new Trajectory(direction, 250);
         team->GetMatch()->GetBall()->SetTrajectory(trajectory);
     }

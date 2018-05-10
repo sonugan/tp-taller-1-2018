@@ -4,6 +4,7 @@ PlayerController::PlayerController(Team* team) {
     this->team = team;
     current_action_timming = 1;
     current_action = PLAYER_IS_STILL;
+    this->last_pass = std::chrono::system_clock::now();
 }
 
 PlayerController::~PlayerController() {
@@ -59,9 +60,10 @@ bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array) {
 }
 
 void PlayerController::PassBall(const Uint8 *keyboard_state_array) {
-    if (SKeySelected(keyboard_state_array)) {
-        std::cout << "PlayerController::PassBall \n";
+    unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_pass).count();
+    if (elapsed_millis > PASS_DELAY_MILLIS && SKeySelected(keyboard_state_array)) {
         team->GetSelectedPlayer()->PassBall();
+        last_pass = std::chrono::system_clock::now();
     }
 }
 

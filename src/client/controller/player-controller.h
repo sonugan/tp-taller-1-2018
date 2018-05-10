@@ -8,6 +8,7 @@
 #include "../view/player-view.h"
 #include "../../shared/model/team.h"
 #include "../view/camera.h"
+#include <chrono>
 
 class PlayerController : public AbstractController
 {
@@ -23,6 +24,8 @@ class PlayerController : public AbstractController
         int current_action_timming;
         PLAYER_ACTION current_action;
         Player* selected_player;
+        std::chrono::time_point<std::chrono::system_clock> last_pass;
+        static const unsigned int PASS_DELAY_MILLIS = 150;
 
         void PlayerPlay(const Uint8 *keyboard_state_array);
         void MovePlayer(const Uint8 *keyboard_state_array);
