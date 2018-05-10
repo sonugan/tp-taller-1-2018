@@ -1,6 +1,7 @@
 #include "logger.h"
 #include <fstream>
 #include <time.h>
+#include <iostream>
 
 Logger* Logger::instance = NULL;
 
@@ -55,9 +56,11 @@ void Logger::log(LogMode mode, string msg) {
 	}
 
 	ofstream logFile;
+	string log_entry = this->dateAndTime() + " [" + tagMode + "] - " + msg;
 	logFile.open(this->logFileName, ofstream::app);
-	logFile <<	this->dateAndTime() << "[" << tagMode << "]" << " - " << msg << endl;
+	logFile <<	log_entry << endl;
 	logFile.close();
+	cout << log_entry << endl;
 }
 
 bool Logger::checkPermissionsByMode(LogMode mode) {
