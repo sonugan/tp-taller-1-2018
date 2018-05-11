@@ -6,6 +6,7 @@
 #include <vector>
 #include <deque>
 #include <map>
+#include <utility>
 
 #include "../shared/utils/queue.h"
 #include "../shared/network/server-socket.h"
@@ -29,7 +30,7 @@ class Server
 
     private:
         int port;
-        Queue<Message>* message_queue;
+        Queue<pair<ClientSocket*, Message*>>* message_queue;
         ServerSocket* socket;
         Queue<ClientSocket>* clients;
         u_int connected_user_count;
@@ -38,11 +39,12 @@ class Server
         void ConnectingUsers();
         void ListenConnections();
         bool ReadyToStart();
-        void ManageLoginRequests(ClientSocket* client);
+        void ReceiveMessages(ClientSocket* client);
         u_int MAX_SOCKET_QUEUE_SIZE = 10;
         map<string, string> credentials = {};
 
         bool IsValidUser(string username, string password);
+        void ProcessMessage(ClientSocket* client, Message* message);
 };
 
 #endif // SERVER_H

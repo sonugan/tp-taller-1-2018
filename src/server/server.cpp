@@ -4,12 +4,12 @@
 
 Server::Server(Configuration* config)
 {
-    Logger::getInstance()->info("iniciando servidor en puerto:'"
+    Logger::getInstance()->info("Iniciando servidor en puerto:'"
                                 + to_string(config->GetPort()) + "' y capacidad para '"
                                 + to_string(config->GetMaxPlayers()) + "' usuarios.");
 
     this->clients = new Queue<ClientSocket>();
-    this->message_queue = new Queue<Message>();
+    this->message_queue = new Queue<pair<ClientSocket*, Message*>>();
     this->port = config->GetPort();
     this->user_count = config->GetMaxPlayers();
     this->credentials = config->GetCredentials();
@@ -45,7 +45,15 @@ void Server::ConnectingUsers()
 
     while(!this->ReadyToStart())
     {
-        // Y este loop para que es??
+        // TODO: pensar bien donde meter esto!
+        while(this->message_queue->HasNext())
+        {
+            Logger::getInstance()->debug("(Server) Desencolando mensaje para procesar");
+            auto msg = this->message_queue->Next();
+            ClientSocket* client = msg->first;
+            Message* message = msg->second;
+            this->ProcessMessage(client, message);
+        }
     }
 
     pthread_cancel(wait_connections_thread.native_handle());
@@ -62,7 +70,7 @@ void Server::ListenConnections()
         ClientSocket* client = this->socket->Accept();
         Logger::getInstance()->debug("(Server:ListenConnections) Agregando nuevo ClientSocket a colección de clientes.");
         this->clients->Append(client);
-        client_threads.push_back(new thread(&Server::ManageLoginRequests, this, client));
+        client_threads.push_back(new thread(&Server::ReceiveMessages, this, client));
     }
 }
 
@@ -71,44 +79,52 @@ bool Server::ReadyToStart()
     return this->connected_user_count == user_count;
 }
 
-void Server::ManageLoginRequests(ClientSocket* client)
+void Server::ReceiveMessages(ClientSocket* client)
 {
     Logger::getInstance()->debug("(Server:ManageLoginRequests) Iniciando Login thread.");
-    bool success_login = false;
-    while(!this->ReadyToStart() || success_login)
+    bool receiving_messages = true;
+    while(receiving_messages)
     {
         Logger::getInstance()->debug("(Server:ManageLoginRequests) Esperando login request.");
 
-        Message* incommingMessage1;
+        Message* incoming_message;
         try
         {
-            incommingMessage1 = this->socket->Receive(client, 255);
+            incoming_message = this->socket->Receive(client, 255);
+            // TODO: aca va el lock MUTEX!!
+            auto p_msg = make_pair(client, incoming_message);
+            this->message_queue->Append(&p_msg);
         }
-        catch (SocketConnectionException* e)
+        catch (SocketConnectionException e)
         {
             Logger::getInstance()->error("(Server) Error de conexión. Cerrando socket cliente.");
+            receiving_messages = false;
             client->Close();
         }
+    }
+}
 
-        Login* l = new Login();
-        ISerializable* data = incommingMessage1->GetDeserializedData(l);
-        if(this->IsValidUser(l->GetUsername(), l->GetPassword()))
-        {
-            Logger::getInstance()->info("Usuario válido. Se conectó: " + l->GetUsername());
+void Server::ProcessMessage(ClientSocket* client, Message* message)
+{
+    //TODO: por ahora solo procesa mensajes de login.
+    Logger::getInstance()->debug("(Server::ProcessMessage) Procesando mensaje.");
+    Login* l = new Login();
+    ISerializable* data = message->GetDeserializedData(l);
+    if(this->IsValidUser(l->GetUsername(), l->GetPassword()))
+    {
+        Logger::getInstance()->info("Usuario válido. Se conectó: " + l->GetUsername());
 
-            Request login_state_request("ok");
-            Logger::getInstance()->debug("(Server:ManageLoginRequests) Enviando respuesta LoginOK.");
-            this->socket->Send(client, login_state_request);
-            this->connected_user_count++;
-            success_login = true;
-        }
-        else
-        {
-            Logger::getInstance()->info("Usuario o contraseña inválidos:'" + l->GetUsername() + ".");
-            Request login_state_request("fail");
-            Logger::getInstance()->debug("(Server:ManageLoginRequests) Enviando respuesta LoginFail.");
-            this->socket->Send(client, login_state_request);
-        }
+        Request login_state_request("ok");
+        Logger::getInstance()->debug("(Server:ManageLoginRequests) Enviando respuesta LoginOK.");
+        this->socket->Send(client, login_state_request);
+        this->connected_user_count++;
+    }
+    else
+    {
+        Logger::getInstance()->info("Usuario o contraseña inválidos:'" + l->GetUsername() + ".");
+        Request login_state_request("fail");
+        Logger::getInstance()->debug("(Server:ManageLoginRequests) Enviando respuesta LoginFail.");
+        this->socket->Send(client, login_state_request);
     }
 }
 

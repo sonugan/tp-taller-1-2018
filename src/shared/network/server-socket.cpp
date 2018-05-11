@@ -63,14 +63,11 @@ Message* ServerSocket::Receive(Socket* client_socket, int expected_size)
     if (received_bytes <= 0)
     {
         Logger::getInstance()->error("(ServerSocket:Receive) Read -1.");
-        throw new SocketConnectionException("Error de conexión mientras se ejecutaba read");
+        throw SocketConnectionException("Error de conexión mientras se ejecutaba read");
     }
 
     Logger::getInstance()->debug("(ServerSocket::Receive) received_bytes:" + to_string(received_bytes));
-//    if (HasError(read(client_socket->socket_id, buffer, expected_size)))
-//    {
-//        Logger::getInstance()->debug("(ServerSocket:Receive) ERROR leyendo desde socket.");
-//    }
+
     return new Message(buffer, expected_size);
 }
 
