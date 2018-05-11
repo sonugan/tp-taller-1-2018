@@ -47,9 +47,12 @@ ClientSocket* ServerSocket::Accept()
     }
 }
 
-void ServerSocket::Send(Socket* client_socket, Request request)
+void ServerSocket::Send(Socket* client_socket, Request* request)
 {
-    send(client_socket->socket_id, request.GetData(), request.GetDataSize(), 0);
+    string data(request->GetData());
+    string data_size = to_string(request->GetDataSize());
+    Logger::getInstance()->debug("(ServerSocket:Send) data: " + data + " size: " + data_size);
+    send(client_socket->socket_id, request->GetData(), request->GetDataSize(), 0);
     //sendto(client_socket.socket_id, request.GetData(), request.GetDataSize(), 0);
 }
 
@@ -62,7 +65,7 @@ Message* ServerSocket::Receive(Socket* client_socket, int expected_size)
 
     if (received_bytes <= 0)
     {
-        Logger::getInstance()->error("(ServerSocket:Receive) Read -1.");
+        Logger::getInstance()->error("(ServerSocket:Receive) Bytes recibidos: " + to_string(received_bytes));
         throw SocketConnectionException("Error de conexión mientras se ejecutaba read");
     }
 

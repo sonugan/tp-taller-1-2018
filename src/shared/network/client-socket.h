@@ -5,6 +5,7 @@
 #include "socket-address.h"
 
 #include "socket.h"
+#include "request.h"
 
 class ClientSocket : public Socket
 {

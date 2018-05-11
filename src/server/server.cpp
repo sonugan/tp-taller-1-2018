@@ -48,7 +48,7 @@ void Server::ConnectingUsers()
         // TODO: pensar bien donde meter esto!
         while(this->message_queue->HasNext())
         {
-            Logger::getInstance()->debug("(Server) Desencolando mensaje para procesar");
+            Logger::getInstance()->debug("(Server:ConnectingUsers) Desencolando mensaje para procesar");
             auto msg = this->message_queue->Next();
             ClientSocket* client = msg->first;
             Message* message = msg->second;
@@ -81,16 +81,17 @@ bool Server::ReadyToStart()
 
 void Server::ReceiveMessages(ClientSocket* client)
 {
-    Logger::getInstance()->debug("(Server:ManageLoginRequests) Iniciando Login thread.");
+    Logger::getInstance()->debug("(Server:ReceiveMessages) Iniciando hilo receptor de mensajes.");
     bool receiving_messages = true;
     while(receiving_messages)
     {
-        Logger::getInstance()->debug("(Server:ManageLoginRequests) Esperando login request.");
+        Logger::getInstance()->debug("(Server:ReceiveMessages) Esperando mensajes entrantes...");
 
         Message* incoming_message;
         try
         {
             incoming_message = this->socket->Receive(client, 255);
+            Logger::getInstance()->debug("(Server:ReceiveMessages) Mensaje recibido. Encolando para ser procesado.");
             // TODO: aca va el lock MUTEX!!
             auto p_msg = make_pair(client, incoming_message);
             this->message_queue->Append(&p_msg);
@@ -114,16 +115,16 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
     {
         Logger::getInstance()->info("Usuario válido. Se conectó: " + l->GetUsername());
 
-        Request login_state_request("ok");
-        Logger::getInstance()->debug("(Server:ManageLoginRequests) Enviando respuesta LoginOK.");
+        Request* login_state_request = new Request("login ok");
+        Logger::getInstance()->debug("(Server:ProcessMessage) Enviando respuesta LoginOK.");
         this->socket->Send(client, login_state_request);
         this->connected_user_count++;
     }
     else
     {
         Logger::getInstance()->info("Usuario o contraseña inválidos:'" + l->GetUsername() + ".");
-        Request login_state_request("fail");
-        Logger::getInstance()->debug("(Server:ManageLoginRequests) Enviando respuesta LoginFail.");
+        Request* login_state_request = new Request("login fail");
+        Logger::getInstance()->debug("(Server:ProcessMessage) Enviando respuesta LoginFail.");
         this->socket->Send(client, login_state_request);
     }
 }

@@ -1,4 +1,5 @@
 #include "client-socket.h"
+#include "../logger.h"
 
 ClientSocket::ClientSocket() : Socket()
 {
@@ -21,6 +22,9 @@ void ClientSocket::Connect(SocketAddress server_address)
 
 void ClientSocket::Send(Request request)
 {
+    string data(request.GetData());
+    string data_size = to_string(request.GetDataSize());
+    Logger::getInstance()->debug("(ClientSocket:Send) data: " + data + " size: " + data_size);
     send(socket_id, request.GetData(), request.GetDataSize(), 0);
 }
 
