@@ -43,7 +43,7 @@ void Client::Init()
         //Request r(s);
         Login l(username, password);
         //Request r(&l);
-        Request r(l.Serialize());
+        Message r(l.Serialize());
         clientSocket.Send(r);
 
         Message login_status = clientSocket.Receive(255);

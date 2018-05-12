@@ -20,7 +20,7 @@ void ClientSocket::Connect(SocketAddress server_address)
     }
 }
 
-void ClientSocket::Send(Request request)
+void ClientSocket::Send(Message request)
 {
     string data(request.GetData());
     string data_size = to_string(request.GetDataSize());
@@ -37,7 +37,8 @@ Message ClientSocket::Receive(int expected_size)
     {
         Logger::getInstance()->debug("ERROR leyendo desde socket");
     }
-    Message m(buffer, expected_size);
+    string message_data = string(buffer);
+    Message m(message_data);
     return m;
 }
 

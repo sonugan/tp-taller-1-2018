@@ -6,8 +6,6 @@
 #include <netinet/in.h>
 
 #include "message.h"
-#include "request.h"
-#include "response.h"
 #include "../logger.h"
 #include "../utils/string-builder.h"
 

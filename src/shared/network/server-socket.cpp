@@ -47,13 +47,12 @@ ClientSocket* ServerSocket::Accept()
     }
 }
 
-void ServerSocket::Send(Socket* client_socket, Request* request)
+void ServerSocket::Send(Socket* client_socket, Message* request)
 {
-    string data(request->GetData());
+    string data = string(request->GetData());
     string data_size = to_string(request->GetDataSize());
     Logger::getInstance()->debug("(ServerSocket:Send) data: " + data + " size: " + data_size);
     send(client_socket->socket_id, request->GetData(), request->GetDataSize(), 0);
-    //sendto(client_socket.socket_id, request.GetData(), request.GetDataSize(), 0);
 }
 
 Message* ServerSocket::Receive(Socket* client_socket, int expected_size)
@@ -71,7 +70,9 @@ Message* ServerSocket::Receive(Socket* client_socket, int expected_size)
 
     Logger::getInstance()->debug("(ServerSocket::Receive) received_bytes:" + to_string(received_bytes));
 
-    return new Message(buffer, expected_size);
+    string message_data = string(buffer);
+    //return new Message(buffer, expected_size);
+    return new Message(message_data);
 }
 
 ServerSocket::~ServerSocket()

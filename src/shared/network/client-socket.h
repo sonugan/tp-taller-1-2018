@@ -5,7 +5,6 @@
 #include "socket-address.h"
 
 #include "socket.h"
-#include "request.h"
 
 class ClientSocket : public Socket
 {
@@ -14,7 +13,7 @@ class ClientSocket : public Socket
         ClientSocket(int socket_id);
         void Connect(SocketAddress address);
         virtual ~ClientSocket();
-        void Send(Request request);
+        void Send(Message request);
         Message Receive(int expected_size);
         void Bind(SocketAddress address);
     protected:

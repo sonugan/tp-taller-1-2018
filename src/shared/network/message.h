@@ -19,8 +19,7 @@ class Message
         virtual ~Message();
     protected:
     private:
-        char* data;
-        int size;
+        string data;
 };
 
 #endif // MESSAGE_H

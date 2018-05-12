@@ -115,7 +115,7 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
     {
         Logger::getInstance()->info("Usuario válido. Se conectó: " + l->GetUsername());
 
-        Request* login_state_request = new Request("login ok");
+        Message* login_state_request = new Message("login ok");
         Logger::getInstance()->debug("(Server:ProcessMessage) Enviando respuesta LoginOK.");
         this->socket->Send(client, login_state_request);
         this->connected_user_count++;
@@ -123,7 +123,7 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
     else
     {
         Logger::getInstance()->info("Usuario o contraseña inválidos:'" + l->GetUsername() + ".");
-        Request* login_state_request = new Request("login fail");
+        Message* login_state_request = new Message("login fail");
         Logger::getInstance()->debug("(Server:ProcessMessage) Enviando respuesta LoginFail.");
         this->socket->Send(client, login_state_request);
     }
