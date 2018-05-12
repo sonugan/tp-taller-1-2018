@@ -6,18 +6,18 @@
 Logger* Logger::instance = NULL;
 
 Logger::Logger() {
-	this->mode = LogMode::DEBUG; //Por defecto se pone en debug
+	this->level = LogLevel::DEBUG; //Por defecto se pone en debug
 	this->SetFileName();
 }
 
 Logger::~Logger() {
 }
 
-void Logger::setMode(LogMode mode) {
-	this->mode = mode;
+void Logger::setLogLevel(LogLevel level) {
+	this->level = level;
 }
 
-Logger *Logger::getInstance() {
+Logger* Logger::getInstance() {
 	if (instance == NULL) {
 		instance = new Logger();
 	}
@@ -26,45 +26,52 @@ Logger *Logger::getInstance() {
 }
 
 void Logger::error(string msg) {
-    this->log(LogMode::ERROR, msg);
+    this->log(LogLevel::ERROR, msg);
 }
 
 void Logger::debug(string msg) {
-    log(LogMode::DEBUG, msg);
+    log(LogLevel::DEBUG, msg);
 }
 
 void Logger::info(string msg) {
-    log(LogMode::INFO, msg);
+    log(LogLevel::INFO, msg);
 }
 
-void Logger::log(LogMode mode, string msg) {
+void Logger::log(LogLevel level, string msg) {
 
 	if (this->logFileName == "")
     {
         this->SetFileName();
     }
 
-	if (this->logFileName == "" || !this->checkPermissionsByMode(mode)) {
+	if (this->logFileName == "" || !this->checkPermissionsByMode(level)) {
 		return;
 	}
 
-	string tagMode = "";
-	switch (mode) {
-		case LogMode::DEBUG: tagMode = "DEBUG"; break;
-		case LogMode::INFO: tagMode = "INFO"; break;
-		case LogMode::ERROR: tagMode = "ERROR"; break;
+	string tag_log_level = "";
+	switch (level) {
+		case LogLevel::DEBUG: tag_log_level = "DEBUG"; break;
+		case LogLevel::INFO: tag_log_level = "INFO"; break;
+		case LogLevel::ERROR: tag_log_level = "ERROR"; break;
 	}
 
 	ofstream logFile;
-	string log_entry = this->dateAndTime() + " [" + tagMode + "] - " + msg;
+	string log_entry = this->dateAndTime() + " [" + tag_log_level + "] - " + msg;
+
+	// agrego un lock para evitar problemas con cout y multiples hilos.
+	unique_lock<mutex> logger_lock(this->logger_mutex);
+
 	logFile.open(this->logFileName, ofstream::app);
 	logFile <<	log_entry << endl;
 	logFile.close();
-	cout << log_entry << endl;
+	if (this->is_cout_enabled)
+	{
+	    cout << log_entry << endl;
+	}
 }
 
-bool Logger::checkPermissionsByMode(LogMode mode) {
-	return (this->mode >= mode);
+bool Logger::checkPermissionsByMode(LogLevel level) {
+	return (this->level >= level);
 }
 
 string Logger::dateAndTime() {
