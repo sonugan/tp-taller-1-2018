@@ -49,6 +49,7 @@ void Server::ConnectingUsers()
         while(this->message_queue->HasNext())
         {
             Logger::getInstance()->debug("(Server:ConnectingUsers) Desencolando mensaje para procesar");
+            unique_lock<mutex> lock(server_mutex);
             auto msg = this->message_queue->Next();
             ClientSocket* client = msg->first;
             Message* message = msg->second;
@@ -93,6 +94,7 @@ void Server::ReceiveMessages(ClientSocket* client)
             incoming_message = this->socket->Receive(client, 255);
             Logger::getInstance()->debug("(Server:ReceiveMessages) Mensaje recibido. Encolando para ser procesado.");
             // TODO: aca va el lock MUTEX!!
+            unique_lock<mutex> lock(server_mutex);
             auto p_msg = make_pair(client, incoming_message);
             this->message_queue->Append(&p_msg);
         }
@@ -115,7 +117,7 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
     {
         Logger::getInstance()->info("Usuario válido. Se conectó: " + l->GetUsername());
 
-        Message* login_state_request = new Message("login ok");
+        Message* login_state_request = new Message("login-ok");
         Logger::getInstance()->debug("(Server:ProcessMessage) Enviando respuesta LoginOK.");
         this->socket->Send(client, login_state_request);
         this->connected_user_count++;
@@ -123,7 +125,7 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
     else
     {
         Logger::getInstance()->info("Usuario o contraseña inválidos:'" + l->GetUsername() + ".");
-        Message* login_state_request = new Message("login fail");
+        Message* login_state_request = new Message("login-fail");
         Logger::getInstance()->debug("(Server:ProcessMessage) Enviando respuesta LoginFail.");
         this->socket->Send(client, login_state_request);
     }

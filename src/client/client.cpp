@@ -49,7 +49,7 @@ void Client::Init()
         Message login_status = clientSocket.Receive(255);
         Logger::getInstance()->debug("(Client) login data: " + string(login_status.GetData()));
         Logger::getInstance()->debug("(Client) login size: " + to_string(login_status.GetDataSize()));
-        if(string(login_status.GetData()) == "ok")
+        if(string(login_status.GetData()) == "login-ok")
         {
             is_logued = true;
             cout << "Login success" << endl;

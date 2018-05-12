@@ -1,7 +1,7 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-#include <string.h>
+#include <cstring>
 
 #include "iserializable.h"
 

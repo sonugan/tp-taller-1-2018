@@ -7,6 +7,7 @@
 #include <deque>
 #include <map>
 #include <utility>
+#include <mutex>
 
 #include "../shared/utils/queue.h"
 #include "../shared/network/server-socket.h"
@@ -42,6 +43,7 @@ class Server
         void ReceiveMessages(ClientSocket* client);
         u_int MAX_SOCKET_QUEUE_SIZE = 10;
         map<string, string> credentials = {};
+        mutex server_mutex;
 
         bool IsValidUser(string username, string password);
         void ProcessMessage(ClientSocket* client, Message* message);
