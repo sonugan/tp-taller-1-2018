@@ -1,7 +1,7 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-#include <string.h>
+#include <cstring>
 
 #include "iserializable.h"
 
@@ -19,8 +19,7 @@ class Message
         virtual ~Message();
     protected:
     private:
-        char* data;
-        int size;
+        string data;
 };
 
 #endif // MESSAGE_H

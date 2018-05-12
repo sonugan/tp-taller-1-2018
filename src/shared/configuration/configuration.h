@@ -14,7 +14,7 @@ public:
     Configuration();
     virtual ~Configuration();
 
-    LogMode GetLogLevel();
+    LogLevel GetLogLevel();
 
     void SetLogLevel(string log_level);
 
@@ -67,7 +67,7 @@ public:
 protected:
 
 private:
-    LogMode log_level;
+    LogLevel log_level;
     string formation;
     string shirt;
     string sprites_path;
@@ -87,13 +87,13 @@ private:
         {"shirt", { "home", "away" }},
         {"init_mode", { "client", "server" }},
     };
-    const map<string, LogMode> LOG_MODE_MAP =
+    const map<string, LogLevel> LOG_LEVEL_MAP =
     {
-        {"error", LogMode::ERROR},
-        {"info", LogMode::INFO},
-        {"debug", LogMode::DEBUG}
+        {"error", LogLevel::ERROR},
+        {"info", LogLevel::INFO},
+        {"debug", LogLevel::DEBUG}
     };
-    LogMode ToLogMode(string log_level_str);
+    LogLevel ToLogLevel(string log_level_str);
 
 };
 

@@ -21,7 +21,7 @@ bool DirectoryExists(string dir)
     return stat(dir.c_str(), &statStruct) == 0 && S_ISDIR(statStruct.st_mode);
 }
 
-LogMode Configuration::GetLogLevel()
+LogLevel Configuration::GetLogLevel()
 {
     return this->log_level;
 }
@@ -36,14 +36,14 @@ void Configuration::SetLogLevel(string log_level)
 {
 
     if (IsValidConfigValue("level", str_to_lower(log_level))) {
-        this->log_level = this->ToLogMode(str_to_lower(log_level));
+        this->log_level = this->ToLogLevel(str_to_lower(log_level));
     }
     else {
-        this->log_level = this->ToLogMode("debug");
+        this->log_level = this->ToLogLevel("debug");
         Logger::getInstance()->error("El valor '" + log_level + "' no es valido para el nivel de log. Se procede a tomar el valor por defecto del logger: 'debug'");
     }
 
-    Logger::getInstance()->setMode(this->log_level);
+    Logger::getInstance()->setLogLevel(this->log_level);
 }
 
 string Configuration::GetFormation()
@@ -161,9 +161,9 @@ bool Configuration::IsValidConfigValue(string parameter, string value)
     return false;
 }
 
-LogMode Configuration::ToLogMode(string log_level_str)
+LogLevel Configuration::ToLogLevel(string log_level_str)
 {
-    auto it = this->LOG_MODE_MAP.find(log_level_str);
+    auto it = this->LOG_LEVEL_MAP.find(log_level_str);
     return it->second;
 }
 

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="tp-taller-2018-1" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/tp-taller-2018-1" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option parameters='--config=&quot;src/shared/configuration/server-config.yml&quot;' />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="src/game" />
+					<Add directory="src/pitch" />
+					<Add directory="src/common" />
+					<Add directory="src/player" />
+					<Add directory="src/match" />
+					<Add directory="src/team" />
+					<Add directory="src/configuration" />
+					<Add directory="src/sound" />
+					<Add directory="src/shared/model" />
+					<Add directory="src/server" />
+					<Add directory="src/shared/network" />
+					<Add directory="src/client" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/tp-taller-2018-1" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option parameters="--config /home/swandelow/config.yml" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="src/game" />
+					<Add directory="src/pitch" />
+					<Add directory="src/common" />
+					<Add directory="src/player" />
+					<Add directory="src/match" />
+					<Add directory="src/team" />
+					<Add directory="src/configuration" />
+					<Add directory="src/sound" />
+					<Add directory="src/shared/model" />
+					<Add directory="src/server" />
+					<Add directory="src/shared/network" />
+					<Add directory="src/client" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-std=c++11" />
+		</Compiler>
+		<Linker>
+			<Add option="-lSDL2 -lSDL2_image -lyaml-cpp -lSDL2_mixer -lSDL2_ttf -lpthread" />
+		</Linker>
+		<Unit filename="src/client/client.cpp" />
+		<Unit filename="src/client/client.h" />
+		<Unit filename="src/client/controller/abstract-controller.h" />
+		<Unit filename="src/client/controller/game-controller.cpp" />
+		<Unit filename="src/client/controller/game-controller.h" />
+		<Unit filename="src/client/controller/player-controller.cpp" />
+		<Unit filename="src/client/controller/player-controller.h" />
+		<Unit filename="src/client/controller/team-controller.cpp" />
+		<Unit filename="src/client/controller/team-controller.h" />
+		<Unit filename="src/client/game.cpp" />
+		<Unit filename="src/client/game.h" />
+		<Unit filename="src/client/sound/sound-manager.cpp" />
+		<Unit filename="src/client/sound/sound-manager.h" />
+		<Unit filename="src/client/view/abstract-view.h" />
+		<Unit filename="src/client/view/animation.cpp" />
+		<Unit filename="src/client/view/animation.h" />
+		<Unit filename="src/client/view/ball-view.cpp" />
+		<Unit filename="src/client/view/ball-view.h" />
+		<Unit filename="src/client/view/camera.cpp" />
+		<Unit filename="src/client/view/camera.h" />
+		<Unit filename="src/client/view/ishowable.h" />
+		<Unit filename="src/client/view/login-view.cpp" />
+		<Unit filename="src/client/view/login-view.h" />
+		<Unit filename="src/client/view/pitch-view.cpp" />
+		<Unit filename="src/client/view/pitch-view.h" />
+		<Unit filename="src/client/view/player-view.cpp" />
+		<Unit filename="src/client/view/player-view.h" />
+		<Unit filename="src/client/view/sprite-sheet.cpp" />
+		<Unit filename="src/client/view/sprite-sheet.h" />
+		<Unit filename="src/client/view/sprite-text.cpp" />
+		<Unit filename="src/client/view/sprite-text.h" />
+		<Unit filename="src/client/view/sprites-provider.cpp" />
+		<Unit filename="src/client/view/sprites-provider.h" />
+		<Unit filename="src/main.cpp" />
+		<Unit filename="src/server/server.cpp" />
+		<Unit filename="src/server/server.h" />
+		<Unit filename="src/shared/configuration/cli-options-parser.cpp" />
+		<Unit filename="src/shared/configuration/cli-options-parser.h" />
+		<Unit filename="src/shared/configuration/cli-options.cpp" />
+		<Unit filename="src/shared/configuration/cli-options.h" />
+		<Unit filename="src/shared/configuration/configuration-parser.cpp" />
+		<Unit filename="src/shared/configuration/configuration-parser.h" />
+		<Unit filename="src/shared/configuration/configuration.cpp" />
+		<Unit filename="src/shared/configuration/configuration.h" />
+		<Unit filename="src/shared/configuration/default-config.yml" />
+		<Unit filename="src/shared/configuration/server-config.yml" />
+		<Unit filename="src/shared/logger.cpp" />
+		<Unit filename="src/shared/logger.h" />
+		<Unit filename="src/shared/model/ball.cpp" />
+		<Unit filename="src/shared/model/ball.h" />
+		<Unit filename="src/shared/model/formation.cpp" />
+		<Unit filename="src/shared/model/formation.h" />
+		<Unit filename="src/shared/model/location.cpp" />
+		<Unit filename="src/shared/model/location.h" />
+		<Unit filename="src/shared/model/match.cpp" />
+		<Unit filename="src/shared/model/match.h" />
+		<Unit filename="src/shared/model/pitch.cpp" />
+		<Unit filename="src/shared/model/pitch.h" />
+		<Unit filename="src/shared/model/player.cpp" />
+		<Unit filename="src/shared/model/player.h" />
+		<Unit filename="src/shared/model/team.cpp" />
+		<Unit filename="src/shared/model/team.h" />
+		<Unit filename="src/shared/model/trajectory.cpp" />
+		<Unit filename="src/shared/model/trajectory.h" />
+		<Unit filename="src/shared/network/client-socket.cpp" />
+		<Unit filename="src/shared/network/client-socket.h" />
+		<Unit filename="src/shared/network/exceptions/socket-connection-exception.h" />
+		<Unit filename="src/shared/network/iserializable.h" />
+		<Unit filename="src/shared/network/iserializer.h" />
+		<Unit filename="src/shared/network/login.cpp" />
+		<Unit filename="src/shared/network/message.cpp" />
+		<Unit filename="src/shared/network/message.h" />
+		<Unit filename="src/shared/network/server-socket.cpp" />
+		<Unit filename="src/shared/network/server-socket.h" />
+		<Unit filename="src/shared/network/socket-address.cpp" />
+		<Unit filename="src/shared/network/socket-address.h" />
+		<Unit filename="src/shared/network/socket.cpp" />
+		<Unit filename="src/shared/network/socket.h" />
+		<Unit filename="src/shared/utils/queue.h" />
+		<Unit filename="src/shared/utils/string-builder.cpp" />
+		<Unit filename="src/shared/utils/string-builder.h" />
+		<Unit filename="src/shared/utils/string-utils.cpp" />
+		<Unit filename="src/shared/utils/string-utils.h" />
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

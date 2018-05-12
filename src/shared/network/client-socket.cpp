@@ -1,4 +1,5 @@
 #include "client-socket.h"
+#include "../logger.h"
 
 ClientSocket::ClientSocket() : Socket()
 {
@@ -19,8 +20,11 @@ void ClientSocket::Connect(SocketAddress server_address)
     }
 }
 
-void ClientSocket::Send(Request request)
+void ClientSocket::Send(Message request)
 {
+    string data(request.GetData());
+    string data_size = to_string(request.GetDataSize());
+    Logger::getInstance()->debug("(ClientSocket:Send) data: " + data + " size: " + data_size);
     send(socket_id, request.GetData(), request.GetDataSize(), 0);
 }
 
@@ -33,7 +37,8 @@ Message ClientSocket::Receive(int expected_size)
     {
         Logger::getInstance()->debug("ERROR leyendo desde socket");
     }
-    Message m(buffer, expected_size);
+    string message_data = string(buffer);
+    Message m(message_data);
     return m;
 }
 

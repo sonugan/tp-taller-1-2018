@@ -21,23 +21,6 @@ Socket::Socket(int socket_id)
     this->socket_id = socket_id;
 }
 
-//void Socket::Send(Socket client_socket, Request request)
-//{
-//    send(client_socket.socket_id, request.GetData(), request.GetDataSize(), 0);
-//}
-//
-//Message Socket::Receive(Socket client_socket, int expected_size)
-//{
-//    char* buffer = (char*) malloc(expected_size);
-//
-//    if (HasError(read(client_socket.socket_id, buffer, expected_size)))
-//    {
-//        Logger::getInstance()->debug("ERROR leyendo desde socket");
-//    }
-//    Message m(buffer, expected_size);
-//    return m;
-//}
-
 void Socket::ShutDownReceives()
 {
     shutdown(this->socket_id, SHUT_RD);

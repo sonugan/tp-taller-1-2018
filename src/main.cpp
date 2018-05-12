@@ -33,7 +33,7 @@ int main( int argc, char* args[] ) {
 
     Configuration* config = new Configuration();
     load_configuration(argc, args, config);
-    Logger::getInstance()->setMode(config->GetLogLevel());
+    Logger::getInstance()->setLogLevel(config->GetLogLevel());
 
     bool isClient = config->InitModeIsClient();
 

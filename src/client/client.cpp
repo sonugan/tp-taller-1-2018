@@ -4,6 +4,7 @@
 #include "../shared/network/socket-address.h"
 #include "../shared/utils/string-utils.h"
 #include "../shared/network/login.cpp"
+#include "../shared/logger.h"
 
 Client::Client(Configuration* config)
 {
@@ -42,18 +43,21 @@ void Client::Init()
         //Request r(s);
         Login l(username, password);
         //Request r(&l);
-        Request r(l.Serialize());
+        Message r(l.Serialize());
         clientSocket.Send(r);
 
         Message login_status = clientSocket.Receive(255);
-        cout << login_status.GetData() << "\n";
-        if(login_status.GetData() == "ok")
+        Logger::getInstance()->debug("(Client) login data: " + string(login_status.GetData()));
+        Logger::getInstance()->debug("(Client) login size: " + to_string(login_status.GetDataSize()));
+        if(string(login_status.GetData()) == "login-ok")
         {
             is_logued = true;
+            cout << "Login success" << endl;
         }
     }
     while (!is_logued);
 
-    clientSocket.Close();
+    clientSocket.ShutDownSends();
+    clientSocket.ShutDown();
 
 }
