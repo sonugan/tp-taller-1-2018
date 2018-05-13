@@ -3,6 +3,7 @@
 Ball::Ball() {
     this->location = new Location(200, 200, 0);
     this->previous_location = new Location(200, 200, 0);
+    this->trajectory = new Trajectory(DIRECTION::EAST, 0);
 }
 
 Ball::~Ball() {
@@ -19,14 +20,24 @@ Location* Ball::GetPreviousLocation() {
 }
 
 void Ball::SetTrajectory(Trajectory* new_trajectory) {
-    std::cout << "Ball::SetTrajectory \n";
+    //std::cout << "Ball::SetTrajectory \n";
     Trajectory* old_trajectory = this->trajectory;
     this->trajectory = new_trajectory;
     if (old_trajectory != NULL) {
-        std::cout << "Ball::SetTrajectory deleting old trajectory \n";
+        //std::cout << "Ball::SetTrajectory deleting old trajectory \n";
         delete old_trajectory;
-        std::cout << "Ball::SetTrajectory old trajectory deleted \n";
+        //std::cout << "Ball::SetTrajectory old trajectory deleted \n";
     }
+    if (this->trajectory->GetPlayer() == NULL) {
+        this->last_freed = std::chrono::system_clock::now();
+    }
+}
+
+bool Ball::LastFreedDelayPassed() {
+    unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>
+                             (std::chrono::system_clock::now()-last_freed).count();
+
+    return elapsed_millis > LAST_FREED_DELAY_MILLIS;
 }
 
 void Ball::Move() {

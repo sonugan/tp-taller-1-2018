@@ -32,6 +32,7 @@ class TeamController : public AbstractController
         Player* FindNextPlayerToSelect();
         void ChangeFormation(const Uint8 *keyboard_state_array);
         void MoveUnselectedPlayersToDefaultPositions();
+        void CatchBall();
 
         std::chrono::time_point<std::chrono::system_clock> last_player_selection_change;
         std::chrono::time_point<std::chrono::system_clock> last_formation_change;
