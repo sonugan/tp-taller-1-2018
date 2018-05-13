@@ -193,3 +193,14 @@ bool Configuration::IsValidCredential(string username, string password)
     return false; // No existe ese usuario
 
 }
+
+void Configuration::SetTeamNumber(TEAM_NUMBER team_number)
+{
+    this->team_number = team_number;
+}
+
+TEAM_NUMBER Configuration::GetTeamNumber()
+{
+    return this->team_number;
+}
+

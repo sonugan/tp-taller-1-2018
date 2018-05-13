@@ -51,8 +51,10 @@ class Game
         Match* match;
         Camera* camera;
         static const int FRAMES_PER_SECOND = 30;
-        TeamController* team_controller;
-        PlayerController* player_controller;
+        TeamController* team_a_controller;
+        TeamController* team_b_controller;
+        PlayerController* player_a_controller;
+        PlayerController* player_b_controller;
         GameController* game_controller;
         bool quit;
         bool correctly_initialized;

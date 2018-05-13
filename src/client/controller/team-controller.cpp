@@ -75,11 +75,11 @@ void TeamController::ChangeFormation(const Uint8 *keyboard_state_array) {
         if(FKeySelected(keyboard_state_array)) {
             FORMATION old_formation_value = team->GetFormation()->GetValue();
             if (old_formation_value == F_3_3) {
-                team->SetFormation(new Formation(F_3_2_1));
+                team->SetFormation(new Formation(F_3_2_1, this->team->GetTeamNumber()));
             } else if (old_formation_value == F_3_2_1) {
-                team->SetFormation(new Formation(F_3_1_2));
-            } else if (old_formation_value == F_3_1_2) {
-                team->SetFormation(new Formation(F_3_3));
+                team->SetFormation(new Formation(F_3_1_2, this->team->GetTeamNumber()));
+            } else if (old_formation_value == F_3_1_2, this->team->GetTeamNumber()) {
+                team->SetFormation(new Formation(F_3_3, this->team->GetTeamNumber()));
             }
             last_formation_change = std::chrono::system_clock::now();
         }

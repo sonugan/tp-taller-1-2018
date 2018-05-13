@@ -64,8 +64,10 @@ void Game::Start() {
     // GAME LOOP
     while( !quit ) {
         this->game_controller->Handle(keyboard_state_array);
-        this->player_controller->Handle(keyboard_state_array);
-        this->team_controller->Handle(keyboard_state_array);
+        this->player_a_controller->Handle(keyboard_state_array);
+        this->player_b_controller->Handle(keyboard_state_array);
+        this->team_a_controller->Handle(keyboard_state_array);
+        this->team_b_controller->Handle(keyboard_state_array);
         match->GetBall()->Move();
 
         RenderViews();
@@ -97,19 +99,26 @@ void Game::CreateModel() {
     Logger::getInstance()->debug("CREANDO EL MODELO");
     Pitch* pitch = new Pitch();
 
-    Formation* formation = new Formation(initial_configuration->GetFormation());
-    Team* team_a = new Team(formation, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt());
+    Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_A);
+    Team* team_a = new Team(formation_team_a, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt(), TEAM_A);
 
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
         team_a->AddPlayer(new Player(i));
     }
 
-    //selecciono por default al arquero
-    team_a->GetPlayers()[0]->SetSelected(true);
+    Formation* formation_team_b = new Formation(initial_configuration->GetFormation(), TEAM_B);
+    Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_B);
+
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+        team_b->AddPlayer(new Player(i));
+    }
+
+    team_a->GetPlayers()[6]->SetSelected(true);
+    //team_b->GetPlayers()[6]->SetSelected(true);
 
     Ball* ball = new Ball();
 
-    this->match = new Match(pitch, team_a, NULL, ball);
+    this->match = new Match(pitch, team_a, team_b, ball);
 }
 
 void Game::CreateViews() {
@@ -127,6 +136,12 @@ void Game::CreateViews() {
         this->camera->Add(player_view);
     }
 
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+        Player* player = match->GetTeamB()->GetPlayers()[i];
+        PlayerView* player_view = new PlayerView(player);
+        this->camera->Add(player_view);
+    }
+
     BallView* ball_view = new BallView(match->GetBall());
     this->camera->Add(ball_view);
     this->camera->SetShowable(ball_view);
@@ -134,8 +149,10 @@ void Game::CreateViews() {
 
 void Game::CreateControllers() {
     Logger::getInstance()->debug("CREANDO CONTROLLERS"); //  forward declaration
-    team_controller = new TeamController(match->GetTeamA(), camera);
-    player_controller = new PlayerController(match->GetTeamA());
+    team_a_controller = new TeamController(match->GetTeamA(), camera);
+    team_b_controller = new TeamController(match->GetTeamB(), camera);
+    player_a_controller = new PlayerController(match->GetTeamA());
+    player_b_controller = new PlayerController(match->GetTeamB());
     game_controller = new GameController(this);
 }
 
@@ -156,8 +173,10 @@ void Game::DestroyViews() {
 void Game::DestroyControllers() {
     Logger::getInstance()->debug("DESTRUYENDO LOS CONTROLLERS");
     delete game_controller;
-    delete player_controller;
-    delete team_controller;
+    delete player_a_controller;
+    delete player_b_controller;
+    delete team_a_controller;
+    delete team_b_controller;
 }
 
 void Game::InitSDL() {

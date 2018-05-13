@@ -8,10 +8,18 @@
 
 using namespace std;
 
+class Formation;
+
+enum TEAM_NUMBER {TEAM_A = 1, TEAM_B = 2};
+
+
 class Configuration
 {
 public:
+
+
     Configuration();
+
     virtual ~Configuration();
 
     LogMode GetLogLevel();
@@ -36,6 +44,10 @@ public:
 
     string GetInitMode();
 
+    void SetTeamNumber(TEAM_NUMBER team_number);
+
+    TEAM_NUMBER GetTeamNumber();
+
     void SetSpritesPath(string sprites_path);
 
     static void Load(Configuration* config, string config_path, string log_level);
@@ -59,6 +71,7 @@ private:
     string sprites_path;
     string team_name;
     string init_mode;
+    TEAM_NUMBER team_number = TEAM_A; // esto dsp lo tiene que tomar del archivo de config
 
     // Para almacenar las credenciales validas => <user,password>
     map<string, string> valid_credentials = {};
