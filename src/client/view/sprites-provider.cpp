@@ -39,11 +39,11 @@ std::string SpritesProvider::GetDefaultPath(SPRITE_SHEET sprite_sheet_enum) {
     if (SELECTOR_A1 == sprite_sheet_enum) {
         return "selectors/selector1.png";
     } else if (SELECTOR_A2 == sprite_sheet_enum) {
-        return "selectors/selector1.png";
+        return "selectors/selector2.png";
     } else if (SELECTOR_A3 == sprite_sheet_enum) {
-        return "selectors/selector1.png";
+        return "selectors/selector3.png";
     } else if (SELECTOR_A4 == sprite_sheet_enum) {
-        return "selectors/selector1.png";
+        return "selectors/selector4.png";
     } else if (TEAM_A_PLAYER == sprite_sheet_enum) {
         return "team_a/home-kit.png";
     } else if (TEAM_B_PLAYER == sprite_sheet_enum) {

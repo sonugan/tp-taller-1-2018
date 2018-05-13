@@ -4,7 +4,6 @@
 Player::Player(unsigned int position_index, TEAM_NUMBER team_number)
 {
     this->position_index = position_index;
-    this->selected = false;
 
     switch (team_number)
     {
@@ -19,6 +18,8 @@ Player::Player(unsigned int position_index, TEAM_NUMBER team_number)
         this->plays_for_team_a = false;
         break;
     }
+
+    this->color = USER_COLOR::NO_COLOR;
 
 }
 
@@ -97,11 +98,6 @@ DIRECTION Player::GetDirection()
     return this->direction;
 }
 
-void Player::SetSelected(bool value)
-{
-    this->selected = value;
-}
-
 Location* Player::GetDefaultLocation()
 {
     return team->GetFormation()->GetLocationForPlayer(position_index);
@@ -127,7 +123,7 @@ bool Player::HasBall()
 
 bool Player::IsSelected()
 {
-    return selected;
+    return this->color != USER_COLOR::NO_COLOR;
 }
 
 void Player::GoBackToDefaultPosition()
@@ -276,10 +272,9 @@ void Player::CatchBall()
             Trajectory* trajectory = new Trajectory(this);
             ball->SetTrajectory(trajectory);
             Player* previously_selected_player = team->GetSelectedPlayer();
-            this->selected = true;
             if (previously_selected_player != NULL && previously_selected_player->GetPositionIndex() != this->position_index)
             {
-                previously_selected_player->SetSelected(false);
+                previously_selected_player->SetPlayerColor(USER_COLOR::NO_COLOR);
             }
         }
     }
@@ -303,5 +298,15 @@ bool Player::PlaysForTeamA()
 bool Player::PlaysForTeamB()
 {
     return this->plays_for_team_b;
+}
+
+void Player::SetPlayerColor(USER_COLOR color)
+{
+    this->color = color;
+}
+
+USER_COLOR Player::GetPlayerColor()
+{
+    return this->color;
 }
 

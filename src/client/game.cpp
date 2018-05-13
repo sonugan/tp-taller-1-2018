@@ -115,11 +115,11 @@ void Game::CreateModel() {
 
     if (user->GetSelectedTeam() == (int)TEAM_NUMBER::TEAM_A)
     {
-        team_a->GetPlayers()[5]->SetSelected(true);
+        team_a->GetPlayers()[5]->SetPlayerColor(this->user->GetColor());
     }
     else
     {
-        team_b->GetPlayers()[5]->SetSelected(true);
+        team_b->GetPlayers()[5]->SetPlayerColor(this->user->GetColor());
     }
 
     Ball* ball = new Ball();

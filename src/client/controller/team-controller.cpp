@@ -57,9 +57,10 @@ void TeamController::ChangePlayerSelection(const Uint8 *keyboard_state_array) {
         if (next_player != NULL) {
             SoundManager::PlayPlayerSelectionSound();
             Player* selected_player = team->GetSelectedPlayer();
-            selected_player->SetSelected(false);
+            USER_COLOR color = selected_player->GetPlayerColor();
+            selected_player->SetPlayerColor(USER_COLOR::NO_COLOR);
             selected_player = next_player;
-            selected_player->SetSelected(true);
+            selected_player->SetPlayerColor(color);
             last_player_selection_change = std::chrono::system_clock::now();
         }
     }

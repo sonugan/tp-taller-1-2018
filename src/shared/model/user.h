@@ -5,6 +5,8 @@
 
 using namespace std;
 
+enum class USER_COLOR {NO_COLOR, RED, BLUE, GREEN, YELLOW};
+
 class User
 {
     public:
@@ -13,12 +15,14 @@ class User
 
         string GetUsername();
         int GetSelectedTeam();
+        USER_COLOR GetColor();
 
     protected:
 
     private:
         string username;
         int selected_team;
+        USER_COLOR user_color;
 };
 
 #endif // USER_H
