@@ -15,36 +15,40 @@
 #include "../shared/logger.h"
 #include "login.cpp"
 #include "session/session-manager.h"
+#include "game/game-server.h"
 
 using namespace std;
 
 class Server
 {
-    public:
-        Server();
-        Server(Configuration* config);
-        virtual ~Server();
+public:
+    Server();
+    Server(Configuration* config);
+    virtual ~Server();
 
-        void Init();
+    void Init();
 
-    protected:
+protected:
 
-    private:
-        int port;
-        Queue<pair<ClientSocket*, Message*>>* message_queue;
-        ServerSocket* socket;
-        Queue<ClientSocket>* clients;
-        u_int connected_user_count;
-        u_int user_count;
-        void ConnectingUsers();
-        void ListenConnections();
-        bool ReadyToStart();
-        void ReceiveMessages(ClientSocket* client);
-        u_int MAX_SOCKET_QUEUE_SIZE = 10;
-        mutex server_mutex;
-        SessionManager* session_manager;
+private:
+    int port;
+    Queue<pair<ClientSocket*, Message*>>* message_queue;
+    ServerSocket* socket;
+    Queue<ClientSocket>* clients;
+    u_int connected_user_count = 0;
+    u_int user_count;
+    u_int MAX_SOCKET_QUEUE_SIZE = 10;
+    mutex server_mutex;
+    SessionManager* session_manager;
+    GameServer* game;
 
-        void ProcessMessage(ClientSocket* client, Message* message);
+
+    /* Methods */
+    void ConnectingUsers();
+    void ListenConnections();
+    bool ReadyToStart();
+    void ReceiveMessages(ClientSocket* client);
+    void ProcessMessage(ClientSocket* client, Message* message);
 };
 
 #endif // SERVER_H

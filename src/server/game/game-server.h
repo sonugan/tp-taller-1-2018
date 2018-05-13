@@ -11,11 +11,16 @@ class GameServer
         GameServer(Configuration* initial_configuration);
         virtual ~GameServer();
 
+        void Start();
+        void Stop();
+
+
     protected:
 
     private:
         /* Attributes */
         GameState* game_state;
+        bool is_running = false;
 
 };
 

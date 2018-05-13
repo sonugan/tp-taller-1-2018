@@ -15,6 +15,7 @@ Server::Server(Configuration* config)
     this->user_count = config->GetMaxPlayers();
     this->socket = new ServerSocket();
     this->session_manager = new SessionManager(config->GetCredentials());
+    this->game = new GameServer(config);
 }
 
 Server::~Server()
@@ -22,6 +23,8 @@ Server::~Server()
     delete this->message_queue;
     delete this->clients;
     delete this->socket;
+    delete this->session_manager;
+    delete this->game;
 }
 
 void Server::Init()
@@ -65,15 +68,18 @@ void Server::ConnectingUsers()
 void Server::ListenConnections()
 {
     Logger::getInstance()->debug("(Server:ListenConnections) Escuchando conexiones....'");
+    // TODO: averiguar como manejar este vector de theards. tiene sentido??
     vector<thread*> client_threads;
     while(!this->ReadyToStart())
     {
         Logger::getInstance()->debug("(Server:ListenConnections) Previo Accept().");
         ClientSocket* client = this->socket->Accept();
+        unique_lock<mutex> lock(server_mutex);
         Logger::getInstance()->debug("(Server:ListenConnections) Agregando nuevo ClientSocket a colección de clientes.");
         this->clients->Append(client);
         client_threads.push_back(new thread(&Server::ReceiveMessages, this, client));
     }
+
 }
 
 bool Server::ReadyToStart()
