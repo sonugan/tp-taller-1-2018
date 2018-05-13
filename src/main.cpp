@@ -48,10 +48,6 @@ int main( int argc, char* args[] ) {
         }
         delete game;
 
-//        Client* client = new Client(config);
-//        client->Init();
-//        delete client;
-
     }
     else
     {

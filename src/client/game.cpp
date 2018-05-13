@@ -10,14 +10,16 @@ Game::Game(Configuration* initial_configuration) {
 
     InitSDL();
 
-    Login* login = new Login();
-    LoginView* login_view = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH, login);
-    //Se abre la pantalla de login con su propio "game loop"
-    login_view->Open(initial_configuration);
 
-    Client* client = new Client(initial_configuration);
-    client->Init(login->GetServerIp());
-    bool isLogged = client->LogIn(login);
+//    Login* login = new Login();
+//    LoginView* login_view = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH, login);
+//
+//    //Se abre la pantalla de login con su propio "game loop"
+//    login_view->Open(initial_configuration);
+//
+//    Client* client = new Client(initial_configuration);
+//    client->Init(login->GetServerIp());
+//    bool isLogged = client->LogIn(login);
 
 
 //    while(!login_view->IsUserAuthenticated() && !login_view->IsUserQuit()) {
@@ -25,7 +27,11 @@ Game::Game(Configuration* initial_configuration) {
 //        login_view->OpenErrorPage(initial_configuration);
 //    }
 
+bool isLogged = true;
     if (isLogged) {
+//        this->user = new User(login->GetUsername(), (int)login_view->GetTeamNumber());
+        this->user = new User("pepe", 1);
+
         CreateModel();
         CreateViews();
         CreateControllers();
@@ -33,9 +39,12 @@ Game::Game(Configuration* initial_configuration) {
     }
 
     //Libero recursos de la vista
-    login_view->Free();
-    delete login_view;
-    delete login;
+
+//    login_view->Free();
+//    delete login_view;
+//    delete login;
+
+
 }
 
 Game::~Game() {
@@ -102,19 +111,32 @@ void Game::CreateModel() {
     Logger::getInstance()->debug("CREANDO EL MODELO");
     Pitch* pitch = new Pitch();
 
-    Formation* formation = new Formation(initial_configuration->GetFormation());
-    Team* team_a = new Team(formation, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt());
+    Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_A);
+    Team* team_a = new Team(formation_team_a, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
 
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
-        team_a->AddPlayer(new Player(i));
+        team_a->AddPlayer(new Player(i,TEAM_NUMBER::TEAM_A));
     }
 
-    //selecciono por default al arquero
-    team_a->GetPlayers()[0]->SetSelected(true);
+    Formation* formation_team_b = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_B);
+    Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_NUMBER::TEAM_B); // TODO: TRAER NOMBRE DEL TEAM B Y CAMISETA DE CONFIG
+
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+        team_b->AddPlayer(new Player(i, TEAM_NUMBER::TEAM_B));
+    }
+
+    if (user->GetSelectedTeam() == (int)TEAM_NUMBER::TEAM_A)
+    {
+        team_a->GetPlayers()[5]->SetPlayerColor(this->user->GetColor());
+    }
+    else
+    {
+        team_b->GetPlayers()[5]->SetPlayerColor(this->user->GetColor());
+    }
 
     Ball* ball = new Ball();
 
-    this->match = new Match(pitch, team_a, NULL, ball);
+    this->match = new Match(pitch, team_a, team_b, ball);
 }
 
 void Game::CreateViews() {
@@ -132,6 +154,12 @@ void Game::CreateViews() {
         this->camera->Add(player_view);
     }
 
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+        Player* player = match->GetTeamB()->GetPlayers()[i];
+        PlayerView* player_view = new PlayerView(player);
+        this->camera->Add(player_view);
+    }
+
     BallView* ball_view = new BallView(match->GetBall());
     this->camera->Add(ball_view);
     this->camera->SetShowable(ball_view);
@@ -139,8 +167,20 @@ void Game::CreateViews() {
 
 void Game::CreateControllers() {
     Logger::getInstance()->debug("CREANDO CONTROLLERS"); //  forward declaration
-    team_controller = new TeamController(match->GetTeamA(), camera);
-    player_controller = new PlayerController(match->GetTeamA());
+
+    //OBTENER EL EQUIPO DEL USER PARA CREAR LOS CONTROLADORES
+
+    if (this->user->GetSelectedTeam() == (int)TEAM_NUMBER::TEAM_A)
+    {
+        team_controller = new TeamController(match->GetTeamA(), camera);
+        player_controller = new PlayerController(match->GetTeamA());
+    }
+    else
+    {
+        team_controller = new TeamController(match->GetTeamB(), camera);
+        player_controller = new PlayerController(match->GetTeamB());
+    }
+
     game_controller = new GameController(this);
 }
 

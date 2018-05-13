@@ -27,11 +27,11 @@ void GameState::AddUser(User* user)
 /* Private methods */
 void GameState::CreateModel(Configuration* initial_configuration)
 {
-    Logger::getInstance()->debug("(GameState:CreateModel) Instanciando el modelo.");
+/*    Logger::getInstance()->debug("(GameState:CreateModel) Instanciando el modelo.");
 
     Pitch* pitch = new Pitch();
 
-    Formation* formation = new Formation(initial_configuration->GetFormation());
+    Formation* formation = new Formation(initial_configuration->GetFormation(), TEAM_A);
     Team* team_a = new Team(formation, initial_configuration->GetTeamName(), initial_configuration->GetShirt());
 
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
@@ -45,4 +45,5 @@ void GameState::CreateModel(Configuration* initial_configuration)
     Ball* ball = new Ball();
 
     this->match = new Match(pitch, team_a, NULL, ball);
+*/
 }

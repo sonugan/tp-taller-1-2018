@@ -57,9 +57,10 @@ void TeamController::ChangePlayerSelection(const Uint8 *keyboard_state_array) {
         if (next_player != NULL) {
             SoundManager::PlayPlayerSelectionSound();
             Player* selected_player = team->GetSelectedPlayer();
-            selected_player->SetSelected(false);
+            USER_COLOR color = selected_player->GetPlayerColor();
+            selected_player->SetPlayerColor(USER_COLOR::NO_COLOR);
             selected_player = next_player;
-            selected_player->SetSelected(true);
+            selected_player->SetPlayerColor(color);
             last_player_selection_change = std::chrono::system_clock::now();
         }
     }
@@ -75,11 +76,11 @@ void TeamController::ChangeFormation(const Uint8 *keyboard_state_array) {
         if(FKeySelected(keyboard_state_array)) {
             FORMATION old_formation_value = team->GetFormation()->GetValue();
             if (old_formation_value == F_3_3) {
-                team->SetFormation(new Formation(F_3_2_1));
+                team->SetFormation(new Formation(F_3_2_1, this->team->GetTeamNumber()));
             } else if (old_formation_value == F_3_2_1) {
-                team->SetFormation(new Formation(F_3_1_2));
+                team->SetFormation(new Formation(F_3_1_2, this->team->GetTeamNumber()));
             } else if (old_formation_value == F_3_1_2) {
-                team->SetFormation(new Formation(F_3_3));
+                team->SetFormation(new Formation(F_3_3, this->team->GetTeamNumber()));
             }
             last_formation_change = std::chrono::system_clock::now();
         }

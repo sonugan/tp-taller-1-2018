@@ -21,10 +21,13 @@ class LoginView
         void OpenErrorPage(Configuration* game_configuration);
         bool IsUserAuthenticated();
         bool IsUserQuit();
+        TEAM_NUMBER GetTeamNumber();
         ~LoginView();
+
     protected:
         string BACKGROUND_IMAGE = "tehkan_world_cup_menu.jpg";
         string DISPLAY_FONT = "src/client/sprites/tehkan_world_cup.ttf";
+        TEAM_NUMBER team_number;
         bool userAuthenticated;
         bool userQuit;
         TTF_Font* fontStyle = NULL;

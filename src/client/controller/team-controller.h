@@ -40,5 +40,4 @@ class TeamController : public AbstractController
         Camera* camera;
 
 };
-
 #endif // TEAMCONTROLLER_H

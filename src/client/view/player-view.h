@@ -39,6 +39,7 @@ class PlayerView : public AbstractView, public IShowable
         bool IsRecoveringBall();
         void GetPlayerAngle();
         SpriteSheet* selector_sheet;
+        void GetSelectorSheet();
 };
 
 #endif // PLAYERVIEW_H

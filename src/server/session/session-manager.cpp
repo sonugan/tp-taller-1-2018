@@ -19,7 +19,7 @@ User* SessionManager::Authenticate(Login* login_request)
     {
         Logger::getInstance()->info("(SessionManager:Authenticate) Usuario válido. Se conectó: " + login_request->GetUsername());
         //TODO: pedir team al login request
-        User* user = new User(login_request->GetUsername(), "TEAM_A");
+        User* user = new User(login_request->GetUsername(), 1); // 1
         pair<string, User*> user_entry = pair<string, User*>(user->GetUsername(), user);
         this->authenticated_users.insert(user_entry);
         return user;

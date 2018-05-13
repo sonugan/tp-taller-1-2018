@@ -5,20 +5,24 @@
 
 using namespace std;
 
+enum class USER_COLOR {NO_COLOR, RED, BLUE, GREEN, YELLOW};
+
 class User
 {
     public:
-        User(string username, string selected_team);
+        User(string username, int selected_team);
         virtual ~User();
 
         string GetUsername();
-        string GetSelectedTeam();
+        int GetSelectedTeam();
+        USER_COLOR GetColor();
 
     protected:
 
     private:
         string username;
-        string selected_team;
+        int selected_team;
+        USER_COLOR user_color;
 };
 
 #endif // USER_H

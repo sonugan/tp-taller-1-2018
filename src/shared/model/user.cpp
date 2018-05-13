@@ -1,9 +1,10 @@
 #include "user.h"
 
-User::User(string username, string selected_team)
+User::User(string username, int selected_team)
 {
-    this->username= username;
-    this->selected_team= selected_team;
+    this->username = username;
+    this->selected_team = selected_team;
+    this->user_color = USER_COLOR::BLUE; // VER QUE SELECCIONE UNO DISTINTO PARA CADA UNO
 }
 
 User::~User()
@@ -16,7 +17,12 @@ string User::GetUsername()
     return this->username;
 }
 
-string User::GetSelectedTeam()
+int User::GetSelectedTeam()
 {
     return this->selected_team;
+}
+
+USER_COLOR User::GetColor()
+{
+    return this->user_color;
 }

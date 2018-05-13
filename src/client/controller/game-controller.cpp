@@ -17,3 +17,5 @@ void GameController::ExitGame(const Uint8 *keyboard_state_array) {
 void GameController::Handle(const Uint8* keyboard_state_array) {
     ExitGame(keyboard_state_array);
 }
+
+
