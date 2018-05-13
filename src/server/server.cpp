@@ -14,7 +14,6 @@ Server::Server(Configuration* config)
     this->port = config->GetPort();
     this->user_count = config->GetMaxPlayers();
     this->socket = new ServerSocket();
-    this->session_manager = new SessionManager(config->GetCredentials());
     this->game = new GameServer(config);
 }
 
@@ -23,7 +22,6 @@ Server::~Server()
     delete this->message_queue;
     delete this->clients;
     delete this->socket;
-    delete this->session_manager;
     delete this->game;
 }
 
@@ -123,11 +121,8 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
 
     try
     {
-        User* autheticated_user = this->session_manager->Authenticate(login_request);
-        // este contador tal vez no debería estar en el server sino en el game.
+        this->game->DoLogin(login_request);
         this->connected_user_count++;
-        // aca deberiamos hacer algo asi
-        //game->AddNewUser(autheticated_user);
         Message* login_response = new Message("login-ok");
         Logger::getInstance()->debug("(Server:ProcessMessage) Enviando respuesta LoginOK.");
         this->socket->Send(client, login_response);

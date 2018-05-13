@@ -14,7 +14,6 @@
 #include "../shared/configuration/configuration.h"
 #include "../shared/logger.h"
 #include "login.cpp"
-#include "session/session-manager.h"
 #include "game/game-server.h"
 
 using namespace std;
@@ -39,7 +38,6 @@ private:
     u_int user_count;
     u_int MAX_SOCKET_QUEUE_SIZE = 10;
     mutex server_mutex;
-    SessionManager* session_manager;
     GameServer* game;
 
 
