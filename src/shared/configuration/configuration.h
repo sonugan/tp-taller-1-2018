@@ -10,8 +10,7 @@ using namespace std;
 
 class Formation;
 
-enum TEAM_NUMBER {TEAM_A = 1, TEAM_B = 2};
-
+enum class TEAM_NUMBER {TEAM_A = 1, TEAM_B = 2};
 
 class Configuration
 {
@@ -71,7 +70,7 @@ private:
     string sprites_path;
     string team_name;
     string init_mode;
-    TEAM_NUMBER team_number = TEAM_A; // esto dsp lo tiene que tomar del archivo de config
+    TEAM_NUMBER team_number = TEAM_NUMBER::TEAM_A; // esto dsp lo tiene que tomar del archivo de config
 
     // Para almacenar las credenciales validas => <user,password>
     map<string, string> valid_credentials = {};

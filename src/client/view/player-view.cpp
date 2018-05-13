@@ -186,7 +186,14 @@ PlayerView::PlayerView(Player* player)
     kitFile.append(player->GetTeam()->GetShirt());
     kitFile.append("-kit.png");
 
-    this->sprite_sheet = SpritesProvider::GetSheet(TEAM_A_PLAYER, kitFile);
+    if (player->PlaysForTeamA())
+    {
+        this->sprite_sheet = SpritesProvider::GetSheet(TEAM_A_PLAYER, kitFile);
+    }
+    else
+    {
+        this->sprite_sheet = SpritesProvider::GetSheet(TEAM_B_PLAYER, kitFile);
+    }
 
 }
 

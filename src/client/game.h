@@ -26,8 +26,10 @@
 #include <map>
 
 class GameController; //  forward declaration
-class PlayerController; //  forward declaration
 class TeamController; //  forward declaration
+
+class Configuration;
+
 class Game
 {
     public:

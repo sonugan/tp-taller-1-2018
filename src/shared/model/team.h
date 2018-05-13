@@ -17,7 +17,7 @@ class Configuration; //  forward declaration
 class Team
 {
     public:
-        Team(Formation* formation, string name, string shirt, int team_number);
+        Team(Formation* formation, string name, string shirt, TEAM_NUMBER team_number);
         virtual ~Team();
         std::vector<Player*> GetPlayers();
         void SetFormation(Formation* formation);

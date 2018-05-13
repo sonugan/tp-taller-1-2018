@@ -6,6 +6,7 @@
 #include <string>
 #include "location.h"
 #include "../configuration/configuration.h"
+#include "team.h"
 
 class Team;
 
@@ -24,7 +25,7 @@ protected:
 
 private:
     FORMATION value;
-    int team_number;
+    TEAM_NUMBER team_number;
     std::vector<Location*> positions;
     void InitializePositions();
     void InitializePositionsTeamA();

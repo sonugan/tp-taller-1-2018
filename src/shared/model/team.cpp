@@ -2,19 +2,12 @@
 #include "../logger.h"
 
 
-Team::Team(Formation* formation, string name, string shirt, int team_number)
+Team::Team(Formation* formation, string name, string shirt, TEAM_NUMBER team_number)
 {
     this->formation = formation;
     this->name = name;
     this->shirt = shirt;
-    if (team_number == 2)
-    {
-        this->team_number = TEAM_B;
-    }
-    else
-    {
-        this->team_number = TEAM_A;
-    }
+    this->team_number = team_number;
 }
 
 Team::~Team()

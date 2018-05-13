@@ -65,9 +65,7 @@ void Game::Start() {
     while( !quit ) {
         this->game_controller->Handle(keyboard_state_array);
         this->player_a_controller->Handle(keyboard_state_array);
-        this->player_b_controller->Handle(keyboard_state_array);
         this->team_a_controller->Handle(keyboard_state_array);
-        this->team_b_controller->Handle(keyboard_state_array);
         match->GetBall()->Move();
 
         RenderViews();
@@ -99,21 +97,21 @@ void Game::CreateModel() {
     Logger::getInstance()->debug("CREANDO EL MODELO");
     Pitch* pitch = new Pitch();
 
-    Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_A);
-    Team* team_a = new Team(formation_team_a, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt(), TEAM_A);
+    Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_A);
+    Team* team_a = new Team(formation_team_a, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
 
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
-        team_a->AddPlayer(new Player(i));
+        team_a->AddPlayer(new Player(i,TEAM_NUMBER::TEAM_A));
     }
 
-    Formation* formation_team_b = new Formation(initial_configuration->GetFormation(), TEAM_B);
-    Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_B);
+    Formation* formation_team_b = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_B);
+    Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_NUMBER::TEAM_B);
 
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
-        team_b->AddPlayer(new Player(i));
+        team_b->AddPlayer(new Player(i, TEAM_NUMBER::TEAM_B));
     }
 
-    team_a->GetPlayers()[6]->SetSelected(true);
+    team_a->GetPlayers()[5]->SetSelected(true);
     //team_b->GetPlayers()[6]->SetSelected(true);
 
     Ball* ball = new Ball();
@@ -150,9 +148,7 @@ void Game::CreateViews() {
 void Game::CreateControllers() {
     Logger::getInstance()->debug("CREANDO CONTROLLERS"); //  forward declaration
     team_a_controller = new TeamController(match->GetTeamA(), camera);
-    team_b_controller = new TeamController(match->GetTeamB(), camera);
     player_a_controller = new PlayerController(match->GetTeamA());
-    player_b_controller = new PlayerController(match->GetTeamB());
     game_controller = new GameController(this);
 }
 
@@ -174,9 +170,7 @@ void Game::DestroyControllers() {
     Logger::getInstance()->debug("DESTRUYENDO LOS CONTROLLERS");
     delete game_controller;
     delete player_a_controller;
-    delete player_b_controller;
     delete team_a_controller;
-    delete team_b_controller;
 }
 
 void Game::InitSDL() {
