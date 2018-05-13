@@ -171,7 +171,14 @@ void Player::GoBackToDefaultPosition()
     }
     else
     {
-        direction = DIRECTION::EAST;//TODO: cuando haya mas equipos debe quedar mirando para otro lado
+        if (this->plays_for_team_a)
+        {
+            direction = DIRECTION::EAST;
+        }
+        else
+        {
+            direction = DIRECTION::WEST;
+        }
     }
 
     if (abs(default_y - location->GetY()) < PLAYER_SPEED)

@@ -23,6 +23,7 @@
 #include "../shared/model/formation.h"
 #include "../shared/configuration/configuration.h"
 #include "controller/game-controller.h"
+#include "../shared/model/user.h"
 #include <map>
 
 class GameController; //  forward declaration
@@ -52,11 +53,10 @@ class Game
         SDL_Renderer* renderer;
         Match* match;
         Camera* camera;
+        User* user;
         static const int FRAMES_PER_SECOND = 30;
-        TeamController* team_a_controller;
-        TeamController* team_b_controller;
-        PlayerController* player_a_controller;
-        PlayerController* player_b_controller;
+        TeamController* team_controller;
+        PlayerController* player_controller;
         GameController* game_controller;
         bool quit;
         bool correctly_initialized;

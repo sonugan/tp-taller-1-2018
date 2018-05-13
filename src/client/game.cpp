@@ -10,27 +10,29 @@ Game::Game(Configuration* initial_configuration) {
 
     InitSDL();
 
-//    LoginView* loginView = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH);
+   LoginView* loginView = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH);
 
     //Se abre la pantalla de login con su propio "game loop"
-//    loginView->Open(initial_configuration);
-//
-//    while(!loginView->IsUserAuthenticated() && !loginView->IsUserQuit())
-//    {
-//        // El usuario no esta autenticado
-//        loginView->OpenErrorPage(initial_configuration);
-//    }
-//
-//    if (loginView->IsUserAuthenticated() && !loginView->IsUserQuit())
-//    {
+    loginView->Open(initial_configuration);
+
+/*    while(!loginView->IsUserAuthenticated() && !loginView->IsUserQuit())
+    {
+        // El usuario no esta autenticado
+        loginView->OpenErrorPage(initial_configuration);
+    }
+
+    if (loginView->IsUserAuthenticated() && !loginView->IsUserQuit())
+    {*/
+        // SEGUNDA PANTALLA -- ELECCION TEAM
+        this->user = new User(loginView->GetUserName(), (int)loginView->GetTeamNumber());
         CreateModel();
         CreateViews();
         CreateControllers();
         this->correctly_initialized = true;
-//    }
+    /*}
 
     //Libero recursos de la vista
-//    loginView->Free();
+    loginView->Free();*/
 }
 
 Game::~Game() {
@@ -64,8 +66,8 @@ void Game::Start() {
     // GAME LOOP
     while( !quit ) {
         this->game_controller->Handle(keyboard_state_array);
-        this->player_a_controller->Handle(keyboard_state_array);
-        this->team_a_controller->Handle(keyboard_state_array);
+        this->player_controller->Handle(keyboard_state_array);
+        this->team_controller->Handle(keyboard_state_array);
         match->GetBall()->Move();
 
         RenderViews();
@@ -105,14 +107,20 @@ void Game::CreateModel() {
     }
 
     Formation* formation_team_b = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_B);
-    Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_NUMBER::TEAM_B);
+    Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_NUMBER::TEAM_B); // TODO: TRAER NOMBRE DEL TEAM B Y CAMISETA DE CONFIG
 
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
         team_b->AddPlayer(new Player(i, TEAM_NUMBER::TEAM_B));
     }
 
-    team_a->GetPlayers()[5]->SetSelected(true);
-    //team_b->GetPlayers()[6]->SetSelected(true);
+    if (user->GetSelectedTeam() == (int)TEAM_NUMBER::TEAM_A)
+    {
+        team_a->GetPlayers()[5]->SetSelected(true);
+    }
+    else
+    {
+        team_b->GetPlayers()[5]->SetSelected(true);
+    }
 
     Ball* ball = new Ball();
 
@@ -147,8 +155,20 @@ void Game::CreateViews() {
 
 void Game::CreateControllers() {
     Logger::getInstance()->debug("CREANDO CONTROLLERS"); //  forward declaration
-    team_a_controller = new TeamController(match->GetTeamA(), camera);
-    player_a_controller = new PlayerController(match->GetTeamA());
+
+    //OBTENER EL EQUIPO DEL USER PARA CREAR LOS CONTROLADORES
+
+    if (this->user->GetSelectedTeam() == (int)TEAM_NUMBER::TEAM_A)
+    {
+        team_controller = new TeamController(match->GetTeamA(), camera);
+        player_controller = new PlayerController(match->GetTeamA());
+    }
+    else
+    {
+        team_controller = new TeamController(match->GetTeamB(), camera);
+        player_controller = new PlayerController(match->GetTeamB());
+    }
+
     game_controller = new GameController(this);
 }
 
@@ -169,8 +189,8 @@ void Game::DestroyViews() {
 void Game::DestroyControllers() {
     Logger::getInstance()->debug("DESTRUYENDO LOS CONTROLLERS");
     delete game_controller;
-    delete player_a_controller;
-    delete team_a_controller;
+    delete player_controller;
+    delete team_controller;
 }
 
 void Game::InitSDL() {

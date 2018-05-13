@@ -257,3 +257,9 @@ void LoginView::OpenErrorPage(Configuration* game_configuration)
         this->Open(game_configuration);
     }
 }
+
+TEAM_NUMBER LoginView::GetTeamNumber()
+{
+    this->team_number = TEAM_NUMBER::TEAM_B;
+    return this->team_number;
+}

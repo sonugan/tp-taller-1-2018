@@ -4,11 +4,11 @@ team:
   formation: 3-3
   shirt: home
   name: team_a
-sprites_path: src/client/sprites
-init_mode: client
-server_hostname: localhost
+init_mode: server
+port: 51717
+max_players: 2
 users:
-  - name: user
+  - name: gperez
     password: 1234
   - name: user2
     password: 1234

@@ -1,12 +1,22 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-#include <string.h>
+#include <cstring>
 
 #include "iserializable.h"
 
 using namespace std;
 
+enum MESSAGE_TYPE {
+            LOGIN_REQUEST,
+            KICK_REQUEST,
+            RECOVER_REQUEST,
+            SELECT_REQUEST,
+            PASS_REQUEST,
+            MOVE_REQUEST,
+            QUIT_REQUEST,
+            LOGIN_RESPONSE,
+            GAME_STATE_RESPONSE};
 class Message
 {
     public:
@@ -19,8 +29,7 @@ class Message
         virtual ~Message();
     protected:
     private:
-        char* data;
-        int size;
+        string data;
 };
 
 #endif // MESSAGE_H

@@ -22,12 +22,14 @@ class LoginView
         bool IsUserQuit();
         string GetUserName();
         string GetUserPassword();
+        TEAM_NUMBER GetTeamNumber();
     protected:
         ~LoginView();
         string BACKGROUND_IMAGE = "tehkan_world_cup_menu.jpg";
         string DISPLAY_FONT = "src/client/sprites/tehkan_world_cup.ttf";
         string userName;
         string userPassword;
+        TEAM_NUMBER team_number;
         bool userAuthenticated;
         bool userQuit;
         TTF_Font* fontStyle = NULL;

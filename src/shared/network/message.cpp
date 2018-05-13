@@ -2,38 +2,30 @@
 
 #include "message.h"
 
-Message::Message(char* data, int size)
-{
-    this->data = data;
-    this->size = size;
-}
-
 Message::Message(string data)
 {
-    this->data = (char*)data.c_str();
-    this->size = strlen(this->data);
+    this->data = data;
 }
 
 Message::Message(ISerializable* serializable)
 {
-    string serialized = serializable->Serialize();
-    this->data = (char*)serialized.c_str();
-    this->size = strlen(this->data);
+    this->data = serializable->Serialize();
 }
 
 char* Message::GetData()
 {
-    return this->data;
+    return (char*)data.c_str();
 }
 
 ISerializable* Message::GetDeserializedData(ISerializable* serializable)
 {
+    serializable->Deserialize(this->data);
     return serializable;
 }
 
 int Message::GetDataSize()
 {
-    return this->size;
+    return this->data.length();
 }
 
 Message::~Message()
