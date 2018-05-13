@@ -10,19 +10,22 @@ Game::Game(Configuration* initial_configuration) {
 
     InitSDL();
 
-    LoginView* loginView = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH);
-
+    Login* login = new Login();
+    LoginView* login_view = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH, login);
     //Se abre la pantalla de login con su propio "game loop"
-    loginView->Open(initial_configuration);
+    login_view->Open(initial_configuration);
 
-    while(!loginView->IsUserAuthenticated() && !loginView->IsUserQuit())
-    {
-        // El usuario no esta autenticado
-        loginView->OpenErrorPage(initial_configuration);
-    }
+    Client* client = new Client(initial_configuration);
+    client->Init(login->GetServerIp());
+    bool isLogged = client->LogIn(login);
 
-    if (loginView->IsUserAuthenticated() && !loginView->IsUserQuit())
-    {
+
+//    while(!login_view->IsUserAuthenticated() && !login_view->IsUserQuit()) {
+//        // El usuario no esta autenticado
+//        login_view->OpenErrorPage(initial_configuration);
+//    }
+
+    if (isLogged) {
         CreateModel();
         CreateViews();
         CreateControllers();
@@ -30,7 +33,9 @@ Game::Game(Configuration* initial_configuration) {
     }
 
     //Libero recursos de la vista
-    loginView->Free();
+    login_view->Free();
+    delete login_view;
+    delete login;
 }
 
 Game::~Game() {

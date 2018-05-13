@@ -40,17 +40,17 @@ int main( int argc, char* args[] ) {
     if (isClient) {
 
         // POR AHORA QUEDA IGUAL A LO QUE YA TENIAMOS
-        /*Game* game = new Game(config);
+        Game* game = new Game(config);
         if (game->IsCorrectlyInitialized())
         {
             game->Start();
             game->End();
         }
-        delete game;*/
+        delete game;
 
-        Client* client = new Client(config);
-        client->Init();
-        delete client;
+//        Client* client = new Client(config);
+//        client->Init();
+//        delete client;
 
     }
     else

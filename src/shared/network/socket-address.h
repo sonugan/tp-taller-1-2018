@@ -2,11 +2,13 @@
 #define SOCKETADDRESS_H
 
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
+#include <string>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <arpa/inet.h>
 
 //http://www.cs.rpi.edu/~moorthy/Courses/os98/Pgms/socket.html
 class SocketAddress
@@ -23,6 +25,7 @@ class SocketAddress
         //  server is running, and there is a symbolic constant INADDR_ANY which gets this address
         SocketAddress(u_int port, short family = AF_INET, u_long addr = INADDR_ANY);
         SocketAddress(u_int port, const char* hostname, short family = AF_INET);
+        SocketAddress(u_int port, std::string server_ip);
         SocketAddress(sockaddr_in addr);
         SocketAddress();
         sockaddr_in GetFormatted();

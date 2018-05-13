@@ -23,6 +23,7 @@
 #include "../shared/model/formation.h"
 #include "../shared/configuration/configuration.h"
 #include "controller/game-controller.h"
+#include "client.h"
 #include <map>
 
 class GameController; //  forward declaration

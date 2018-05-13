@@ -20,6 +20,13 @@ SocketAddress::SocketAddress(u_int port, const char* hostname, short family)
          host->h_length);
 }
 
+SocketAddress::SocketAddress(u_int port, std::string ip)
+{
+    this->address.sin_family = AF_INET;
+    this->address.sin_port = htons(port);
+    inet_pton(AF_INET, ip.c_str(), &(this->address.sin_addr));
+}
+
 SocketAddress::SocketAddress(sockaddr_in addr)
 {
     this->address = addr;
