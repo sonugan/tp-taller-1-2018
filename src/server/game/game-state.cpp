@@ -17,6 +17,12 @@ GameState::~GameState()
     delete this->match;
 }
 
+void GameState::AddUser(User* user)
+{
+    pair<string, User*> user_entry = make_pair(user->GetUsername(), user);
+    this->active_users.insert(user_entry);
+}
+
 
 /* Private methods */
 void GameState::CreateModel(Configuration* initial_configuration)
