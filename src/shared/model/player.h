@@ -7,7 +7,6 @@
 #include "team.h"
 #include "trajectory.h"
 
-
 enum PLAYER_ACTION { PLAYER_IS_STILL, PLAYER_IS_KICKING, PLAYER_IS_RUNNING, PLAYER_IS_RECOVERING };
 enum class DIRECTION { NORTH, SOUTH, EAST, WEST, NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST };
 class Team; //  forward declaration
@@ -41,13 +40,14 @@ class Player
         Team* GetTeam();
         bool HasBall();
         void PassBall();
+        void CatchBall();
     protected:
 
     private:
         DIRECTION direction;
         static const int PLAYER_SPEED = 10;
         static const int PLAYER_RUNNING_SPEED = 15;
-        static const int CATCH_DISTANCE = 10;
+        static const int CATCH_DISTANCE = 50;
         bool selected;
         bool kicking;
         bool recovering_ball;
@@ -55,7 +55,7 @@ class Player
         unsigned int position_index;
         void Move(bool run);
         Location* location;
-        void CatchBall();
+
 };
 
 #endif // PLAYER_H

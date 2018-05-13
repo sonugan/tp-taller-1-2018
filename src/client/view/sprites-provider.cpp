@@ -51,7 +51,7 @@ std::string SpritesProvider::GetDefaultPath(SPRITE_SHEET sprite_sheet_enum) {
     } else if (PITCH == sprite_sheet_enum) {
         return "pitch.jpg";
     } else if (BALL == sprite_sheet_enum) {
-        return "ball.png";
+        return "ball2.png";
     }
     return NULL;
 }
