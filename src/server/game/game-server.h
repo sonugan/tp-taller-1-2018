@@ -11,9 +11,6 @@ class GameServer
         GameServer(Configuration* initial_configuration);
         virtual ~GameServer();
 
-        void Start();
-        void Stop();
-
 
     protected:
 
