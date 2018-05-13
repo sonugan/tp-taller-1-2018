@@ -5,7 +5,6 @@
 #include <thread>
 #include <vector>
 #include <deque>
-#include <map>
 #include <utility>
 #include <mutex>
 
@@ -15,6 +14,7 @@
 #include "../shared/configuration/configuration.h"
 #include "../shared/logger.h"
 #include "login.cpp"
+#include "session/session-manager.h"
 
 using namespace std;
 
@@ -36,16 +36,14 @@ class Server
         Queue<ClientSocket>* clients;
         u_int connected_user_count;
         u_int user_count;
-        Configuration* config;
         void ConnectingUsers();
         void ListenConnections();
         bool ReadyToStart();
         void ReceiveMessages(ClientSocket* client);
         u_int MAX_SOCKET_QUEUE_SIZE = 10;
-        map<string, string> credentials = {};
         mutex server_mutex;
+        SessionManager* session_manager;
 
-        bool IsValidUser(string username, string password);
         void ProcessMessage(ClientSocket* client, Message* message);
 };
 

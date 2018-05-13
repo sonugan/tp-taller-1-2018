@@ -1,6 +1,7 @@
 #include "server.h"
 
 #include "../shared/network/exceptions/socket-connection-exception.h"
+#include "session/authentication-exception.h"
 
 Server::Server(Configuration* config)
 {
@@ -12,8 +13,8 @@ Server::Server(Configuration* config)
     this->message_queue = new Queue<pair<ClientSocket*, Message*>>();
     this->port = config->GetPort();
     this->user_count = config->GetMaxPlayers();
-    this->credentials = config->GetCredentials();
     this->socket = new ServerSocket();
+    this->session_manager = new SessionManager(config->GetCredentials());
 }
 
 Server::~Server()
@@ -93,7 +94,7 @@ void Server::ReceiveMessages(ClientSocket* client)
         {
             incoming_message = this->socket->Receive(client, 255);
             Logger::getInstance()->debug("(Server:ReceiveMessages) Mensaje recibido. Encolando para ser procesado.");
-            // TODO: aca va el lock MUTEX!!
+            // Aplico lock (mutex)  antes de enconlar el mensaje entrante.
             unique_lock<mutex> lock(server_mutex);
             auto p_msg = make_pair(client, incoming_message);
             this->message_queue->Append(&p_msg);
@@ -111,36 +112,24 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
 {
     //TODO: por ahora solo procesa mensajes de login.
     Logger::getInstance()->debug("(Server::ProcessMessage) Procesando mensaje.");
-    Login* l = new Login();
-    ISerializable* data = message->GetDeserializedData(l);
-    if(this->IsValidUser(l->GetUsername(), l->GetPassword()))
-    {
-        Logger::getInstance()->info("Usuario válido. Se conectó: " + l->GetUsername());
+    Login* login_request = new Login();
+    message->GetDeserializedData(login_request);
 
-        Message* login_state_request = new Message("login-ok");
-        Logger::getInstance()->debug("(Server:ProcessMessage) Enviando respuesta LoginOK.");
-        this->socket->Send(client, login_state_request);
+    try
+    {
+        User* autheticated_user = this->session_manager->Authenticate(login_request);
+        // este contador tal vez no debería estar en el server sino en el game.
         this->connected_user_count++;
+        // aca deberiamos hacer algo asi
+        //game->AddNewUser(autheticated_user);
+        Message* login_response = new Message("login-ok");
+        Logger::getInstance()->debug("(Server:ProcessMessage) Enviando respuesta LoginOK.");
+        this->socket->Send(client, login_response);
     }
-    else
+    catch (AuthenticationException e)
     {
-        Logger::getInstance()->info("Usuario o contraseña inválidos:'" + l->GetUsername() + ".");
-        Message* login_state_request = new Message("login-fail");
+        Message* login_response = new Message("login-fail");
         Logger::getInstance()->debug("(Server:ProcessMessage) Enviando respuesta LoginFail.");
-        this->socket->Send(client, login_state_request);
+        this->socket->Send(client, login_response);
     }
-}
-
-bool Server::IsValidUser(string username, string password)
-{
-    map<string,string>::iterator it = this->credentials.find(username);
-
-    if (it != this->credentials.end())
-    {
-        // Encontro el usuario, comparo las passwords
-        string stored_password = it->second;
-        return stored_password.compare(password) == 0;
-    }
-
-    return false; // No existe ese usuario
 }
