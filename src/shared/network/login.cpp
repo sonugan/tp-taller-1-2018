@@ -23,7 +23,7 @@ class Login : public ISerializable
         string Serialize()
         {
             StringBuilder b;
-            return b.Concat(this->username.c_str(), "|", this->password.c_str());
+            return b.Concat(this->username.c_str(), "|", this->password.c_str(), "|", this->team.c_str());
         }
         void Deserialize(string str_obj)
         {
@@ -31,7 +31,7 @@ class Login : public ISerializable
             this->username = data[0];
             this->password = data[1];
             this->team = data[2];
-            this->server_ip = data[3];
+//            this->server_ip = data[3];
         }
         string GetUsername() { return this->username; }
         string GetPassword() { return this->password; }
