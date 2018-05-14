@@ -14,6 +14,7 @@ class Client
         virtual ~Client();
         void Init(std::string server_ip);
         bool LogIn(Login* login);
+        bool Quit();
         void Close();
 
     protected:
