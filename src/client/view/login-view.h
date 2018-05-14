@@ -15,20 +15,19 @@ using namespace std;
 class LoginView
 {
     public:
-        LoginView(SDL_Renderer* renderer, int height, int width);
+        LoginView(SDL_Renderer* renderer, int height, int width, Login* login);
         void Free();
         void Open(Configuration* game_configuration);
         void OpenErrorPage(Configuration* game_configuration);
         bool IsUserAuthenticated();
         bool IsUserQuit();
-        string GetUserName();
-        string GetUserPassword();
-    protected:
+        TEAM_NUMBER GetTeamNumber();
         ~LoginView();
+
+    protected:
         string BACKGROUND_IMAGE = "tehkan_world_cup_menu.jpg";
         string DISPLAY_FONT = "src/client/sprites/tehkan_world_cup.ttf";
-        string userName;
-        string userPassword;
+        TEAM_NUMBER team_number;
         bool userAuthenticated;
         bool userQuit;
         TTF_Font* fontStyle = NULL;
