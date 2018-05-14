@@ -71,7 +71,6 @@ Message* ServerSocket::Receive(Socket* client_socket, int expected_size)
     Logger::getInstance()->debug("(ServerSocket::Receive) received_bytes:" + to_string(received_bytes));
 
     string message_data = string(buffer);
-    //return new Message(buffer, expected_size);
     return new Message(message_data);
 }
 
