@@ -20,12 +20,19 @@ void ClientSocket::Connect(SocketAddress server_address)
     }
 }
 
-void ClientSocket::Send(Message request)
+bool ClientSocket::Send(Message request)
 {
     string data(request.GetData());
     string data_size = to_string(request.GetDataSize());
     Logger::getInstance()->debug("(ClientSocket:Send) data: " + data + " size: " + data_size);
-    send(socket_id, request.GetData(), request.GetDataSize(), 0);
+    int sent_bytes = send(socket_id, request.GetData(), request.GetDataSize(), 0);
+
+    bool sent_ok = sent_bytes > 0;
+    if (sent_bytes <= 0)
+    {
+        Logger::getInstance()->debug("(ClientSocket:Send) Error al enviar mensaje.");
+    }
+    return sent_ok;
 }
 
 Message ClientSocket::Receive(int expected_size)
