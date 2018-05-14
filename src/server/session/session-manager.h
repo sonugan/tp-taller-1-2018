@@ -25,6 +25,7 @@ class SessionManager
 
         /* Methods */
         bool IsValidUser(string username, string password);
+        bool IsAuthenticated(Login* login_request);
 };
 
 #endif // SESSIONMANAGER_H

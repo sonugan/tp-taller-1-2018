@@ -1,10 +1,11 @@
 #include "user.h"
 
-User::User(string username, int selected_team)
+User::User(string username, string password, int selected_team)
 {
-    this->username = username;
-    this->selected_team = selected_team;
-    this->user_color = USER_COLOR::BLUE; // VER QUE SELECCIONE UNO DISTINTO PARA CADA UNO
+    this->username= username;
+    this->password = password;
+    this->selected_team= selected_team;
+    this->user_color = USER_COLOR::BLUE;
 }
 
 User::~User()
@@ -22,7 +23,12 @@ int User::GetSelectedTeam()
     return this->selected_team;
 }
 
-USER_COLOR User::GetColor()
+string User::GetPassword()
+{
+    return this->password;
+}
+
+USER_COLOR User::GetUserColor()
 {
     return this->user_color;
 }

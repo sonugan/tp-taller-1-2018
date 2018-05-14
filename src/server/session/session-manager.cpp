@@ -15,11 +15,18 @@ SessionManager::~SessionManager()
 
 User* SessionManager::Authenticate(Login* login_request)
 {
+    if(IsAuthenticated(login_request))
+    {
+        string log_msg = "(SessionManager:Authenticate) El usuario: " + login_request->GetUsername() + " ya se encuentra autenticado.";
+        Logger::getInstance()->info(log_msg);
+        return this->authenticated_users.find(login_request->GetUsername())->second;
+    }
+
     if(IsValidUser(login_request->GetUsername(), login_request->GetPassword()))
     {
         Logger::getInstance()->info("(SessionManager:Authenticate) Usuario válido. Se conectó: " + login_request->GetUsername());
         //TODO: pedir team al login request
-        User* user = new User(login_request->GetUsername(), 1); // 1
+        User* user = new User(login_request->GetUsername(), login_request->GetPassword(), 1);
         pair<string, User*> user_entry = pair<string, User*>(user->GetUsername(), user);
         this->authenticated_users.insert(user_entry);
         return user;
@@ -28,6 +35,9 @@ User* SessionManager::Authenticate(Login* login_request)
         throw AuthenticationException("Invalid credentials.");
     }
 }
+
+
+/* Private Methods */
 
 bool SessionManager::IsValidUser(string username, string password)
 {
@@ -38,6 +48,20 @@ bool SessionManager::IsValidUser(string username, string password)
         // Encontro el usuario, comparo las passwords
         string stored_password = it->second;
         return stored_password.compare(password) == 0;
+    }
+
+    return false; // No existe ese usuario
+}
+
+bool SessionManager::IsAuthenticated(Login* login_request)
+{
+    map<string, User*>::iterator it = this->authenticated_users.find(login_request->GetUsername());
+
+    if (it != this->authenticated_users.end())
+    {
+        // Encontro el usuario, comparo las passwords
+        User* user = it->second;
+        return user->GetPassword().compare(login_request->GetPassword()) == 0;
     }
 
     return false; // No existe ese usuario

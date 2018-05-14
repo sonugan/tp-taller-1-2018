@@ -30,7 +30,7 @@ Game::Game(Configuration* initial_configuration) {
 bool isLogged = true;
     if (isLogged) {
 //        this->user = new User(login->GetUsername(), (int)login_view->GetTeamNumber());
-        this->user = new User("pepe", 1);
+        this->user = new User("pepe", "", 1);
 
         CreateModel();
         CreateViews();
@@ -127,11 +127,11 @@ void Game::CreateModel() {
 
     if (user->GetSelectedTeam() == (int)TEAM_NUMBER::TEAM_A)
     {
-        team_a->GetPlayers()[5]->SetPlayerColor(this->user->GetColor());
+        team_a->GetPlayers()[5]->SetPlayerColor(this->user->GetUserColor());
     }
     else
     {
-        team_b->GetPlayers()[5]->SetPlayerColor(this->user->GetColor());
+        team_b->GetPlayers()[5]->SetPlayerColor(this->user->GetUserColor());
     }
 
     Ball* ball = new Ball();

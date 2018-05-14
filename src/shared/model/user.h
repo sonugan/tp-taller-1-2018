@@ -10,17 +10,19 @@ enum class USER_COLOR {NO_COLOR, RED, BLUE, GREEN, YELLOW};
 class User
 {
     public:
-        User(string username, int selected_team);
+        User(string username, string password, int selected_team);
         virtual ~User();
 
         string GetUsername();
+        string GetPassword();
         int GetSelectedTeam();
-        USER_COLOR GetColor();
+        USER_COLOR GetUserColor();
 
     protected:
 
     private:
         string username;
+        string password;
         int selected_team;
         USER_COLOR user_color;
 };
