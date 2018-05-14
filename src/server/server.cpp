@@ -39,6 +39,8 @@ void Server::Init()
     Logger::getInstance()->info("Cerrando el servidor....'");
 }
 
+/* Private Methods */
+
 void Server::ConnectingUsers()
 {
     this->connected_user_count = 0;
@@ -132,5 +134,16 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
         Message* login_response = new Message("login-fail");
         Logger::getInstance()->debug("(Server:ProcessMessage) Enviando respuesta LoginFail.");
         this->socket->Send(client, login_response);
+    }
+}
+
+void Server::NotifyAll(Message* message)
+{
+    Logger::getInstance()->debug("(Server:NotifyAll) Enviando mensaje a todos los clientes conectados.");
+    unique_lock<mutex> lock(server_mutex);
+    while(this->clients->HasNext())
+    {
+        ClientSocket* client = this->clients->Next();
+        this->socket->Send(client, message);
     }
 }

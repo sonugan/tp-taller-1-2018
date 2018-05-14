@@ -47,6 +47,7 @@ private:
     bool ReadyToStart();
     void ReceiveMessages(ClientSocket* client);
     void ProcessMessage(ClientSocket* client, Message* message);
+    void NotifyAll(Message* message);
 };
 
 #endif // SERVER_H
