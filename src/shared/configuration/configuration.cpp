@@ -202,6 +202,16 @@ bool Configuration::IsValidCredential(string username, string password)
 
 }
 
+void Configuration::SetTeamNumber(TEAM_NUMBER team_number)
+{
+    this->team_number = team_number;
+}
+
+TEAM_NUMBER Configuration::GetTeamNumber()
+{
+    return this->team_number;
+}
+
 u_int Configuration::GetPort()
 {
     return this->port;

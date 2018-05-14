@@ -5,8 +5,9 @@
 #include <SDL2/SDL_ttf.h>
 #include "sprite-sheet.h"
 #include "sprite-text.h"
-#include "../../shared/logger.h"
-#include "../../shared/configuration/configuration.h"
+#include "../shared/logger.h"
+#include "../shared/network/login.cpp"
+#include "../shared/configuration/configuration.h"
 #include <string>
 
 using namespace std;
@@ -37,6 +38,8 @@ class LoginView
         SpriteSheet* backgroundSprite;
         int screenHeight;
         int screenWidth;
+    private:
+        Login* login;
 };
 
 #endif // LOGINVIEW_H

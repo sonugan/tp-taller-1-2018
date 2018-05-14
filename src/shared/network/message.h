@@ -7,6 +7,16 @@
 
 using namespace std;
 
+enum MESSAGE_TYPE {
+            LOGIN_REQUEST,
+            KICK_REQUEST,
+            RECOVER_REQUEST,
+            SELECT_REQUEST,
+            PASS_REQUEST,
+            MOVE_REQUEST,
+            QUIT_REQUEST,
+            LOGIN_RESPONSE,
+            GAME_STATE_RESPONSE};
 class Message
 {
     public:

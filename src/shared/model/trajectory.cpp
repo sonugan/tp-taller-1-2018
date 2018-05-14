@@ -4,7 +4,7 @@ Trajectory::Trajectory(DIRECTION direction, unsigned int drive) {
     this->direction = direction;
     this->drive = drive;
     this->player = NULL;
-    std::cout << "Trajectory::Trajectory created \n";
+    //std::cout << "Trajectory::Trajectory created \n";
 }
 
 Trajectory::Trajectory(Player* player) {

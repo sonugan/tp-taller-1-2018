@@ -23,11 +23,15 @@
 #include "../shared/model/formation.h"
 #include "../shared/configuration/configuration.h"
 #include "controller/game-controller.h"
+#include "client.h"
+#include "../shared/model/user.h"
 #include <map>
 
 class GameController; //  forward declaration
-class PlayerController; //  forward declaration
 class TeamController; //  forward declaration
+
+class Configuration;
+
 class Game
 {
     public:
@@ -50,6 +54,7 @@ class Game
         SDL_Renderer* renderer;
         Match* match;
         Camera* camera;
+        User* user;
         static const int FRAMES_PER_SECOND = 30;
         TeamController* team_controller;
         PlayerController* player_controller;

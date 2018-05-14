@@ -5,7 +5,6 @@
 #include <thread>
 #include <vector>
 #include <deque>
-#include <map>
 #include <utility>
 #include <mutex>
 
@@ -14,39 +13,40 @@
 #include "../shared/network/client-socket.h"
 #include "../shared/configuration/configuration.h"
 #include "../shared/logger.h"
-#include "../shared/network/login.cpp"
+#include "login.cpp"
+#include "game/game-server.h"
 
 using namespace std;
 
 class Server
 {
-    public:
-        Server();
-        Server(Configuration* config);
-        virtual ~Server();
+public:
+    Server();
+    Server(Configuration* config);
+    virtual ~Server();
 
-        void Init();
+    void Init();
 
-    protected:
+protected:
 
-    private:
-        int port;
-        Queue<pair<ClientSocket*, Message*>>* message_queue;
-        ServerSocket* socket;
-        Queue<ClientSocket>* clients;
-        u_int connected_user_count;
-        u_int user_count;
-        Configuration* config;
-        void ConnectingUsers();
-        void ListenConnections();
-        bool ReadyToStart();
-        void ReceiveMessages(ClientSocket* client);
-        u_int MAX_SOCKET_QUEUE_SIZE = 10;
-        map<string, string> credentials = {};
-        mutex server_mutex;
+private:
+    int port;
+    Queue<pair<ClientSocket*, Message*>>* message_queue;
+    ServerSocket* socket;
+    Queue<ClientSocket>* clients;
+    u_int connected_user_count = 0;
+    u_int user_count;
+    u_int MAX_SOCKET_QUEUE_SIZE = 10;
+    mutex server_mutex;
+    GameServer* game;
 
-        bool IsValidUser(string username, string password);
-        void ProcessMessage(ClientSocket* client, Message* message);
+
+    /* Methods */
+    void ConnectingUsers();
+    void ListenConnections();
+    bool ReadyToStart();
+    void ReceiveMessages(ClientSocket* client);
+    void ProcessMessage(ClientSocket* client, Message* message);
 };
 
 #endif // SERVER_H

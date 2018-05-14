@@ -176,8 +176,6 @@ PlayerView::PlayerView(Player* player)
 
     animations.push_back(new Animation("selector", player_selector_clips, FRAMES_PER_EVENT));
 
-    this->selector_sheet = SpritesProvider::GetDefaultSheet(SELECTOR_A1);
-
     Location* current_location = player->GetLocation();
     previous_location = new Location(current_location->GetX(), current_location->GetY(), current_location->GetZ());
 
@@ -186,7 +184,14 @@ PlayerView::PlayerView(Player* player)
     kitFile.append(player->GetTeam()->GetShirt());
     kitFile.append("-kit.png");
 
-    this->sprite_sheet = SpritesProvider::GetSheet(TEAM_A_PLAYER, kitFile);
+    if (player->PlaysForTeamA())
+    {
+        this->sprite_sheet = SpritesProvider::GetSheet(TEAM_A_PLAYER, kitFile);
+    }
+    else
+    {
+        this->sprite_sheet = SpritesProvider::GetSheet(TEAM_B_PLAYER, kitFile);
+    }
 
 }
 
@@ -263,11 +268,33 @@ void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
     x = player->GetLocation()->GetX() - x_camera;
     y = player->GetLocation()->GetY() - y_camera;
 
-    if (player->IsSelected()) {
+    this->GetSelectorSheet();
+
+    if (player->GetPlayerColor() != USER_COLOR::NO_COLOR) {
         selector_sheet->Render(x - (SELECTOR_SPRITE_WIDTH / 2), y - (SELECTOR_SPRITE_HEIGHT / 2), animations[SELECTOR_ANIMATION_INDEX]->NextClip(), 0);
     }
 
     sprite_sheet->Render( x - (SPRITE_WIDTH / 2), y - (SPRITE_HEIGHT / 2), current_clip, this->angle);
+}
+
+void PlayerView::GetSelectorSheet()
+{
+    if (this->player->GetPlayerColor() == USER_COLOR::RED)
+    {
+        this->selector_sheet = SpritesProvider::GetDefaultSheet(SELECTOR_A1);
+    }
+    else if (this->player->GetPlayerColor() == USER_COLOR::GREEN)
+    {
+        this->selector_sheet = SpritesProvider::GetDefaultSheet(SELECTOR_A2);
+    }
+    else if (this->player->GetPlayerColor() == USER_COLOR::YELLOW)
+    {
+        this->selector_sheet = SpritesProvider::GetDefaultSheet(SELECTOR_A3);
+    }
+    else if (this->player->GetPlayerColor() == USER_COLOR::BLUE)
+    {
+        this->selector_sheet = SpritesProvider::GetDefaultSheet(SELECTOR_A4);
+    }
 }
 
 Location* PlayerView::GetLocation()

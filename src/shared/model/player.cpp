@@ -1,10 +1,26 @@
 #include "player.h"
 #include "../logger.h"
 
-Player::Player(unsigned int position_index) {
+Player::Player(unsigned int position_index, TEAM_NUMBER team_number)
+{
     this->position_index = position_index;
-    this->selected = false;
-    this->direction = DIRECTION::EAST;
+
+    switch (team_number)
+    {
+    case TEAM_NUMBER::TEAM_A:
+        this->direction = DIRECTION::EAST;
+        this->plays_for_team_a = true;
+        this->plays_for_team_b = false;
+        break;
+    case TEAM_NUMBER::TEAM_B:
+        this->direction = DIRECTION::WEST;
+        this->plays_for_team_b = true;
+        this->plays_for_team_a = false;
+        break;
+    }
+
+    this->color = USER_COLOR::NO_COLOR;
+
 }
 
 Player::~Player()
@@ -13,7 +29,8 @@ Player::~Player()
     delete location;
 }
 
-void Player::MoveLeft(bool run) {
+void Player::MoveLeft(bool run)
+{
     this->direction = DIRECTION::WEST;
     Move(run);
 }
@@ -71,7 +88,8 @@ void Player::RecoverBall()
     this->Move(false);
 }
 
-Location* Player::GetLocation() {
+Location* Player::GetLocation()
+{
     return location;
 }
 
@@ -80,63 +98,91 @@ DIRECTION Player::GetDirection()
     return this->direction;
 }
 
-void Player::SetSelected(bool value) {
-    this->selected = value;
-}
-
-Location* Player::GetDefaultLocation() {
+Location* Player::GetDefaultLocation()
+{
     return team->GetFormation()->GetLocationForPlayer(position_index);
-
 }
 
-void Player::SetTeam(Team* team) {
+void Player::SetTeam(Team* team)
+{
     this->team = team;
     Location* default_location = GetDefaultLocation();
     this->location = new Location(default_location->GetX(), default_location->GetY(), default_location->GetZ());
 }
 
-unsigned int Player::GetPositionIndex() {
+unsigned int Player::GetPositionIndex()
+{
     return this->position_index;
 }
 
-bool Player::HasBall() {
-    return this == team->GetMatch()->GetBall()->GetPlayer();
+bool Player::HasBall()
+{
+    Player* player_with_ball = team->GetMatch()->GetBall()->GetPlayer();
+    return (player_with_ball != NULL) && (this->GetPositionIndex() == player_with_ball->GetPositionIndex());
 }
 
-bool Player::IsSelected() {
-    return selected;
+bool Player::IsSelected()
+{
+    return this->color != USER_COLOR::NO_COLOR;
 }
 
-void Player::GoBackToDefaultPosition() {
+void Player::GoBackToDefaultPosition()
+{
     Location* default_location = team->GetFormation()->GetLocationForPlayer(position_index);
     int default_x = default_location->GetX();
     int x = location->GetX();
     int default_y = default_location->GetY();
     int y = location->GetY();
-    if (x > default_x && y > default_y) {
+    if (x > default_x && y > default_y)
+    {
         MoveUpToLeft(false);
-    } else if (x < default_x && y > default_y) {
+    }
+    else if (x < default_x && y > default_y)
+    {
         MoveUpToRight(false);
-    } else if (x < default_x && y < default_y) {
+    }
+    else if (x < default_x && y < default_y)
+    {
         MoveDownToRight(false);
-    } else if (x > default_x && y < default_y) {
+    }
+    else if (x > default_x && y < default_y)
+    {
         MoveDownToLeft(false);
-    } else if (x > default_x && y == default_y) {
+    }
+    else if (x > default_x && y == default_y)
+    {
         MoveLeft(false);
-    } else if (x < default_x && y == default_y) {
+    }
+    else if (x < default_x && y == default_y)
+    {
         MoveRight(false);
-    } else if (x == default_x && y > default_y) {
+    }
+    else if (x == default_x && y > default_y)
+    {
         MoveUp(false);
-    } else if (x == default_x && y < default_y) {
+    }
+    else if (x == default_x && y < default_y)
+    {
         MoveDown(false);
-    }else{
-        direction = DIRECTION::EAST;//TODO: cuando haya mas equipos debe quedar mirando para otro lado
+    }
+    else
+    {
+        if (this->plays_for_team_a)
+        {
+            direction = DIRECTION::EAST;
+        }
+        else
+        {
+            direction = DIRECTION::WEST;
+        }
     }
 
-    if (abs(default_y - location->GetY()) < PLAYER_SPEED) {
+    if (abs(default_y - location->GetY()) < PLAYER_SPEED)
+    {
         location->UpdateY(default_location->GetY());
     }
-    if (abs(default_x - location->GetX()) < PLAYER_SPEED) {
+    if (abs(default_x - location->GetX()) < PLAYER_SPEED)
+    {
         location->UpdateX(default_location->GetX());
     }
 }
@@ -156,76 +202,111 @@ void Player::SetKicking(bool kicking)
     this->kicking = kicking;
 }
 
-bool Player::IsRecoveringBall() {
+bool Player::IsRecoveringBall()
+{
     return recovering_ball;
 }
 
-void Player::SetRecoveringBall(bool recovering_ball) {
+void Player::SetRecoveringBall(bool recovering_ball)
+{
     this->recovering_ball = recovering_ball;
 }
 
-void Player::Move(bool run) {
+void Player::Move(bool run)
+{
     int speed;
-    if (recovering_ball) {
+    if (recovering_ball)
+    {
         speed = PLAYER_SPEED * 0.3;
-    } else if (run) {
+    }
+    else if (run)
+    {
         speed = PLAYER_RUNNING_SPEED;
-    } else {
+    }
+    else
+    {
         speed = PLAYER_SPEED;
     }
 
-    switch(direction) {
-        case DIRECTION::NORTH:
-            location->UpdateY(location->GetY() - speed);
+    switch(direction)
+    {
+    case DIRECTION::NORTH:
+        location->UpdateY(location->GetY() - speed);
         break;
-        case DIRECTION::WEST:
-            location->UpdateX(location->GetX() - speed);
+    case DIRECTION::WEST:
+        location->UpdateX(location->GetX() - speed);
         break;
-        case DIRECTION::SOUTH:
-            location->UpdateY(location->GetY() + speed);
+    case DIRECTION::SOUTH:
+        location->UpdateY(location->GetY() + speed);
         break;
-        case DIRECTION::EAST:
-            location->UpdateX(location->GetX() + speed);
+    case DIRECTION::EAST:
+        location->UpdateX(location->GetX() + speed);
         break;
-        case DIRECTION::NORTHEAST:
-            location->UpdateY(location->GetY() - speed);
-            location->UpdateX(location->GetX() + speed);
+    case DIRECTION::NORTHEAST:
+        location->UpdateY(location->GetY() - speed);
+        location->UpdateX(location->GetX() + speed);
         break;
-        case DIRECTION::NORTHWEST:
-            location->UpdateY(location->GetY() - speed);
-            location->UpdateX(location->GetX() - speed);
+    case DIRECTION::NORTHWEST:
+        location->UpdateY(location->GetY() - speed);
+        location->UpdateX(location->GetX() - speed);
         break;
-        case DIRECTION::SOUTHEAST:
-            location->UpdateY(location->GetY() + speed);
-            location->UpdateX(location->GetX() + speed);
+    case DIRECTION::SOUTHEAST:
+        location->UpdateY(location->GetY() + speed);
+        location->UpdateX(location->GetX() + speed);
         break;
-        case DIRECTION::SOUTHWEST:
-            location->UpdateY(location->GetY() + speed);
-            location->UpdateX(location->GetX() - speed);
+    case DIRECTION::SOUTHWEST:
+        location->UpdateY(location->GetY() + speed);
+        location->UpdateX(location->GetX() - speed);
         break;
     }
-    CatchBall();
 }
 
-void Player::CatchBall() {
-    if (!HasBall()) {
-        //std::cout << "Player::CatchBall \n";
+void Player::CatchBall()
+{
+    if (!this->HasBall())
+    {
         Ball* ball = team->GetMatch()->GetBall();
-        //std::cout << "Player::CatchBall calculating distance \n";
         int distance = ball->GetLocation()->Distance(location);
-        //std::cout << "Player::CatchBall distance calculated \n";
-        if (ball->IsFree() && distance < CATCH_DISTANCE) {
-            std::cout << "ball caught" << "\n";
+        if (ball->IsFree() && distance < CATCH_DISTANCE)
+        {
             Trajectory* trajectory = new Trajectory(this);
             ball->SetTrajectory(trajectory);
+            Player* previously_selected_player = team->GetSelectedPlayer();
+            if (previously_selected_player != NULL && previously_selected_player->GetPositionIndex() != this->position_index)
+            {
+                previously_selected_player->SetPlayerColor(USER_COLOR::NO_COLOR);
+            }
         }
     }
 }
 
-void Player::PassBall() {
-    if (HasBall()) {
-        std::cout << "Player::PassBall \n";
+void Player::PassBall()
+{
+    if (HasBall())
+    {
+        //std::cout << "Player::PassBall \n";
         Trajectory* trajectory = new Trajectory(direction, 250);
         team->GetMatch()->GetBall()->SetTrajectory(trajectory);
     }
 }
+
+bool Player::PlaysForTeamA()
+{
+    return this->plays_for_team_a;
+}
+
+bool Player::PlaysForTeamB()
+{
+    return this->plays_for_team_b;
+}
+
+void Player::SetPlayerColor(USER_COLOR color)
+{
+    this->color = color;
+}
+
+USER_COLOR Player::GetPlayerColor()
+{
+    return this->color;
+}
+
