@@ -3,7 +3,7 @@
 #include "shared/configuration/cli-options-parser.h"
 #include "shared/configuration/cli-options.h"
 #include "shared/configuration/configuration.h"
-#include "client.h"
+#include "client/client.h"
 
 
 #include <iostream>
