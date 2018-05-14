@@ -63,6 +63,8 @@
 		<Linker>
 			<Add option="-lSDL2 -lSDL2_image -lyaml-cpp -lSDL2_mixer -lSDL2_ttf -lpthread" />
 		</Linker>
+		<Unit filename="src/client/client-tester.cpp" />
+		<Unit filename="src/client/client-tester.h" />
 		<Unit filename="src/client/client.cpp" />
 		<Unit filename="src/client/client.h" />
 		<Unit filename="src/client/controller/abstract-controller.h" />
