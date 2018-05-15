@@ -27,6 +27,7 @@
 					<Add directory="src/shared/network" />
 					<Add directory="src/client" />
 					<Add directory="src/server/session" />
+					<Add directory="src/shared/network/messages" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -50,6 +51,7 @@
 					<Add directory="src/shared/network" />
 					<Add directory="src/client" />
 					<Add directory="src/server/session" />
+					<Add directory="src/shared/network/messages" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -140,12 +142,16 @@
 		<Unit filename="src/shared/model/user.h" />
 		<Unit filename="src/shared/network/client-socket.cpp" />
 		<Unit filename="src/shared/network/client-socket.h" />
+		<Unit filename="src/shared/network/exceptions/socket-connection-exception.cpp" />
 		<Unit filename="src/shared/network/exceptions/socket-connection-exception.h" />
 		<Unit filename="src/shared/network/iserializable.h" />
 		<Unit filename="src/shared/network/iserializer.h" />
 		<Unit filename="src/shared/network/login.cpp" />
+		<Unit filename="src/shared/network/message-type.h" />
 		<Unit filename="src/shared/network/message.cpp" />
 		<Unit filename="src/shared/network/message.h" />
+		<Unit filename="src/shared/network/messages/quit-request.cpp" />
+		<Unit filename="src/shared/network/messages/quit-request.h" />
 		<Unit filename="src/shared/network/server-socket.cpp" />
 		<Unit filename="src/shared/network/server-socket.h" />
 		<Unit filename="src/shared/network/socket-address.cpp" />

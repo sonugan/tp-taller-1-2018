@@ -4,32 +4,28 @@
 #include <cstring>
 
 #include "iserializable.h"
+#include "message-type.h"
 
 using namespace std;
 
-enum MESSAGE_TYPE {
-            LOGIN_REQUEST,
-            KICK_REQUEST,
-            RECOVER_REQUEST,
-            SELECT_REQUEST,
-            PASS_REQUEST,
-            MOVE_REQUEST,
-            QUIT_REQUEST,
-            LOGIN_RESPONSE,
-            GAME_STATE_RESPONSE};
 class Message
 {
     public:
-        Message(char* data, int size);
+//        Message(char* data, int size);
         Message(string data);
         Message(ISerializable* serializable);
         char* GetData();
         int GetDataSize();
         ISerializable* GetDeserializedData(ISerializable* serializable);
+        MESSAGE_TYPE GetType();
         virtual ~Message();
     protected:
     private:
         string data;
+        MESSAGE_TYPE type;
+
+        /* Methods */
+        MESSAGE_TYPE ResolveType(string serialized_data);
 };
 
 #endif // MESSAGE_H

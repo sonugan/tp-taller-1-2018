@@ -118,6 +118,13 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
 {
     //TODO: por ahora solo procesa mensajes de login.
     Logger::getInstance()->debug("(Server::ProcessMessage) Procesando mensaje.");
+
+    if(MESSAGE_TYPE::LOGIN_REQUEST == message->GetType())
+    {
+        Logger::getInstance()->debug("se recibió login request");
+    }
+
+
     Login* login_request = new Login();
     message->GetDeserializedData(login_request);
 
