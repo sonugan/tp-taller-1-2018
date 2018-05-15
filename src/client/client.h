@@ -4,6 +4,7 @@
 #include "../shared/configuration/configuration.h"
 #include "../shared/network/client-socket.h"
 #include "../shared/network/login.cpp"
+#include "../shared/network/messages/quit-request.h"
 
 #include <string>
 

@@ -10,10 +10,13 @@ class QuitRequest : public ISerializable
         virtual ~QuitRequest();
 
         string Serialize();
+        void Deserialize(string str_obj);
 
     protected:
-
+        MESSAGE_TYPE GetMessageType();
     private:
+        MESSAGE_TYPE message_type = MESSAGE_TYPE::LOGIN_REQUEST;
+        std::string message;
 };
 
 #endif // QUITREQUEST_H

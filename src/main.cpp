@@ -40,16 +40,16 @@ int main( int argc, char* args[] ) {
     if (isClient) {
 
         // POR AHORA QUEDA IGUAL A LO QUE YA TENIAMOS
-//        Game* game = new Game(config);
-//        if (game->IsCorrectlyInitialized())
-//        {
-//            game->Start();
-//            game->End();
-//        }
-//        delete game;
-        ClientTester* client_tester = new ClientTester(config);
-        client_tester->TestCompleteFlow();
-        delete client_tester;
+        Game* game = new Game(config);
+        if (game->IsCorrectlyInitialized())
+        {
+            game->Start();
+            game->End();
+        }
+        delete game;
+//        ClientTester* client_tester = new ClientTester(config);
+//        client_tester->TestCompleteFlow();
+//        delete client_tester;
 
     }
     else
