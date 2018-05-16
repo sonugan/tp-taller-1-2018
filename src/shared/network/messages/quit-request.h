@@ -6,6 +6,7 @@
 class QuitRequest : public ISerializable
 {
     public:
+        QuitRequest();
         QuitRequest(string username);
         virtual ~QuitRequest();
 

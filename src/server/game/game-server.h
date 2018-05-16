@@ -6,6 +6,7 @@
 #include "game/game-state.h"
 #include "../../shared/network/login.cpp"
 #include "session/session-manager.h"
+#include "../../shared/network/messages/quit-request.h"
 
 using namespace std;
 
@@ -17,6 +18,7 @@ public:
 
     GameState* GetGameState();
     void DoLogin(Login* login_request);
+    void DoQuit(QuitRequest* quit_request);
 
 
 protected:

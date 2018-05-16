@@ -16,6 +16,7 @@ class GameState
         virtual ~GameState();
 
         void AddUser(User* user);
+        void RemoveUser(string username);
 
     protected:
 

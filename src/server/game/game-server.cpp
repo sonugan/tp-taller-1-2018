@@ -26,3 +26,9 @@ void GameServer::DoLogin(Login* login_request)
     this->game_state->AddUser(authenticated_user);
 }
 
+void GameServer::DoQuit(QuitRequest* quit_request)
+{
+    this->session_manager->RemoveSession(quit_request->GetUsername());
+    this->game_state->RemoveUser(quit_request->GetUsername());
+
+}

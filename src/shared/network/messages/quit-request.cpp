@@ -5,6 +5,8 @@
 #include "../../utils/string-utils.h"
 
 
+QuitRequest::QuitRequest() {}
+
 QuitRequest::QuitRequest(std::string username)
 {
     this->username = username;

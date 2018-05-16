@@ -23,6 +23,11 @@ void GameState::AddUser(User* user)
     this->active_users.insert(user_entry);
 }
 
+void GameState::RemoveUser(string username)
+{
+    this->active_users.erase(username);
+}
+
 
 /* Private methods */
 void GameState::CreateModel(Configuration* initial_configuration)
