@@ -7,6 +7,7 @@
 #include <deque>
 #include <utility>
 #include <mutex>
+#include <map>
 
 #include "../shared/utils/queue.h"
 #include "../shared/network/server-socket.h"
@@ -33,7 +34,7 @@ private:
     int port;
     Queue<pair<ClientSocket*, Message*>>* message_queue;
     ServerSocket* socket;
-    Queue<ClientSocket>* clients;
+    map<int, ClientSocket*> clients = {};
     u_int connected_user_count = 0;
     u_int user_count;
     u_int MAX_SOCKET_QUEUE_SIZE = 10;
@@ -47,6 +48,9 @@ private:
     bool ReadyToStart();
     void ReceiveMessages(ClientSocket* client);
     void ProcessMessage(ClientSocket* client, Message* message);
+    void NotifyAll(Message* message);
+    void HandleLoginRequest(ClientSocket* client, Message* message);
+    void HandleQuitRequest(ClientSocket* client, Message* message);
 };
 
 #endif // SERVER_H

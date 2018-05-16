@@ -1,5 +1,7 @@
 #include "game.h"
 #include <iostream>
+#include <thread>
+#include <chrono>
 #include "../shared/logger.h"
 #include "view/login-view.h"
 
@@ -11,15 +13,15 @@ Game::Game(Configuration* initial_configuration) {
     InitSDL();
 
 
-//    Login* login = new Login();
-//    LoginView* login_view = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH, login);
-//
-//    //Se abre la pantalla de login con su propio "game loop"
-//    login_view->Open(initial_configuration);
-//
-//    Client* client = new Client(initial_configuration);
-//    client->Init(login->GetServerIp());
-//    bool isLogged = client->LogIn(login);
+    Login* login = new Login();
+    LoginView* login_view = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH, login);
+
+    //Se abre la pantalla de login con su propio "game loop"
+    login_view->Open(initial_configuration);
+
+    this->client = new Client(initial_configuration);
+    client->Init(login->GetServerIp());
+    bool isLogged = client->LogIn(login);
 
 
 //    while(!login_view->IsUserAuthenticated() && !login_view->IsUserQuit()) {
@@ -27,10 +29,8 @@ Game::Game(Configuration* initial_configuration) {
 //        login_view->OpenErrorPage(initial_configuration);
 //    }
 
-bool isLogged = true;
     if (isLogged) {
-//        this->user = new User(login->GetUsername(), (int)login_view->GetTeamNumber());
-        this->user = new User("pepe", "", 1);
+        this->user = new User(login->GetUsername(), login->GetPassword(), (int)login_view->GetTeamNumber());
 
         CreateModel();
         CreateViews();
@@ -40,9 +40,9 @@ bool isLogged = true;
 
     //Libero recursos de la vista
 
-//    login_view->Free();
-//    delete login_view;
-//    delete login;
+    login_view->Free();
+    delete login_view;
+    delete login;
 
 
 }
@@ -261,5 +261,8 @@ void Game::CloseSDL() {
 }
 
 void Game::RequestQuit() {
-    this->quit = true;
+    QuitRequest* quit_request = new QuitRequest(user->GetUsername());
+    client->Quit(quit_request);
+    //std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+    //this->quit = true;
 }

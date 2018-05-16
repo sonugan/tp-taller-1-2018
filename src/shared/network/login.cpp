@@ -22,16 +22,20 @@ class Login : public ISerializable
         ~Login(){};
         string Serialize()
         {
-            StringBuilder b;
-            return b.Concat(this->username.c_str(), "|", this->password.c_str());
+            StringBuilder string_builder;
+            string msg_type = to_string(this->GetMessageType());
+            cout << msg_type << endl;
+            string msg = msg_type + "|" + this->username + "|" + this->password + "|" + this->team;
+            return msg;
+//            return string_builder.Concat(msg_type.c_str(), "|", this->username.c_str(), "|", this->password.c_str(), "|", this->team.c_str());
         }
         void Deserialize(string str_obj)
         {
             std::vector<std::string> data = StringUtils::Split(str_obj, '|');
-            this->username = data[0];
-            this->password = data[1];
-            this->team = data[2];
-            this->server_ip = data[3];
+            this->message_type = static_cast<MESSAGE_TYPE>(stoi(data[0]));
+            this->username = data[1];
+            this->password = data[2];
+            this->team = data[3];
         }
         string GetUsername() { return this->username; }
         string GetPassword() { return this->password; }
@@ -44,11 +48,17 @@ class Login : public ISerializable
         string ToString() {
             return username + "-" + password + "-" + server_ip + "-" + team;
         }
+    protected:
+        MESSAGE_TYPE GetMessageType()
+        {
+            return this->message_type;
+        }
     private:
         string username;
         string password;
         string team;
         string server_ip;
+        MESSAGE_TYPE message_type = MESSAGE_TYPE::LOGIN_REQUEST;
 
 };
 

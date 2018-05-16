@@ -27,10 +27,19 @@ bool Client::LogIn(Login* login) {
         Message r(login->Serialize());
         clientSocket->Send(r);
 
+        // OJO con esto. Recibe bloquea el thread.
         Message login_status = clientSocket->Receive(255);
         Logger::getInstance()->debug("(Client) login data: " + string(login_status.GetData()));
         Logger::getInstance()->debug("(Client) login size: " + to_string(login_status.GetDataSize()));
         return string(login_status.GetData()) == "login-ok";
+}
+
+bool Client::Quit(QuitRequest* quit_request)
+{
+    Logger::getInstance()->debug("(Client:Quit) Enviando quit request.");
+    Message message_quit_request(quit_request->Serialize());
+    delete quit_request;
+    return this->clientSocket->Send(message_quit_request);
 }
 
 void Client::Close() {

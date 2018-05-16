@@ -2,6 +2,7 @@
 
 #include "../shared/network/exceptions/socket-connection-exception.h"
 #include "session/authentication-exception.h"
+#include "../shared/network/messages/quit-request.h"
 
 Server::Server(Configuration* config)
 {
@@ -9,7 +10,6 @@ Server::Server(Configuration* config)
                                 + to_string(config->GetPort()) + "' y capacidad para '"
                                 + to_string(config->GetMaxPlayers()) + "' usuarios.");
 
-    this->clients = new Queue<ClientSocket>();
     this->message_queue = new Queue<pair<ClientSocket*, Message*>>();
     this->port = config->GetPort();
     this->user_count = config->GetMaxPlayers();
@@ -20,7 +20,6 @@ Server::Server(Configuration* config)
 Server::~Server()
 {
     delete this->message_queue;
-    delete this->clients;
     delete this->socket;
     delete this->game;
 }
@@ -38,6 +37,8 @@ void Server::Init()
 
     Logger::getInstance()->info("Cerrando el servidor....'");
 }
+
+/* Private Methods */
 
 void Server::ConnectingUsers()
 {
@@ -58,7 +59,6 @@ void Server::ConnectingUsers()
             this->ProcessMessage(client, message);
         }
     }
-
     pthread_cancel(wait_connections_thread.native_handle());
     wait_connections_thread.join();
 }
@@ -74,10 +74,9 @@ void Server::ListenConnections()
         ClientSocket* client = this->socket->Accept();
         unique_lock<mutex> lock(server_mutex);
         Logger::getInstance()->debug("(Server:ListenConnections) Agregando nuevo ClientSocket a colección de clientes.");
-        this->clients->Append(client);
+        this->clients[client->socket_id] = client;
         client_threads.push_back(new thread(&Server::ReceiveMessages, this, client));
     }
-
 }
 
 bool Server::ReadyToStart()
@@ -114,8 +113,25 @@ void Server::ReceiveMessages(ClientSocket* client)
 
 void Server::ProcessMessage(ClientSocket* client, Message* message)
 {
-    //TODO: por ahora solo procesa mensajes de login.
     Logger::getInstance()->debug("(Server::ProcessMessage) Procesando mensaje.");
+
+    switch(message->GetType())
+    {
+    case MESSAGE_TYPE::LOGIN_REQUEST:
+        this->HandleLoginRequest(client, message);
+        break;
+    case MESSAGE_TYPE::QUIT_REQUEST:
+        this->HandleQuitRequest(client, message);
+        break;
+
+    default:
+        Logger::getInstance()->debug("(Server::ProcessMessage) No hay handler para este tipo de mensaje.");
+    }
+}
+
+void Server::HandleLoginRequest(ClientSocket* client, Message* message)
+{
+    Logger::getInstance()->debug("(Server:HandleLoginRequest) Procesando login request.");
     Login* login_request = new Login();
     message->GetDeserializedData(login_request);
 
@@ -133,4 +149,33 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
         Logger::getInstance()->debug("(Server:ProcessMessage) Enviando respuesta LoginFail.");
         this->socket->Send(client, login_response);
     }
+}
+
+void Server::HandleQuitRequest(ClientSocket* client, Message* message)
+{
+    Logger::getInstance()->debug("(Server:HandleQuitRequest) Procesando quit request.");
+    QuitRequest* quit_request = new QuitRequest();
+    message->GetDeserializedData(quit_request);
+    this->game->DoQuit(quit_request);
+
+    // Hack! estoy usando message_type: quit_request ya que falta definir quit_response.
+    Message* quit_response= new Message("7|quit-ok");
+    this->socket->Send(client, quit_response);
+
+    this->clients.erase(client->socket_id);
+    client->ShutDown();
+    client->Close();
+    delete quit_request;
+    delete quit_response;
+}
+
+void Server::NotifyAll(Message* message)
+{
+    Logger::getInstance()->debug("(Server:NotifyAll) Enviando mensaje a todos los clientes conectados.");
+//    unique_lock<mutex> lock(server_mutex);
+//    while(this->clients->HasNext())
+//    {
+//        ClientSocket* client = this->clients->Next();
+//        this->socket->Send(client, message);
+//    }
 }

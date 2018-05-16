@@ -15,6 +15,7 @@ class SessionManager
         virtual ~SessionManager();
 
         User* Authenticate(Login* login_request);
+        void RemoveSession(string username);
 
     protected:
 

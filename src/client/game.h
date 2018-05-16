@@ -55,6 +55,7 @@ class Game
         Match* match;
         Camera* camera;
         User* user;
+        Client* client;
         static const int FRAMES_PER_SECOND = 30;
         TeamController* team_controller;
         PlayerController* player_controller;

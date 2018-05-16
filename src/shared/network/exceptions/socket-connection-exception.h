@@ -7,9 +7,8 @@
 class SocketConnectionException : public std::runtime_error
 {
     public:
-        explicit SocketConnectionException(const std::string& error_message) :
-            std::runtime_error(error_message) {};
-        virtual ~SocketConnectionException(){};
+        SocketConnectionException(const std::string& error_message);
+        virtual ~SocketConnectionException();
 
     protected:
 

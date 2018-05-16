@@ -3,7 +3,7 @@
 #include "shared/configuration/cli-options-parser.h"
 #include "shared/configuration/cli-options.h"
 #include "shared/configuration/configuration.h"
-#include "client/client.h"
+#include "client/client-tester.h"
 
 
 #include <iostream>
@@ -47,6 +47,9 @@ int main( int argc, char* args[] ) {
             game->End();
         }
         delete game;
+//        ClientTester* client_tester = new ClientTester(config);
+//        client_tester->TestCompleteFlow();
+//        delete client_tester;
 
     }
     else

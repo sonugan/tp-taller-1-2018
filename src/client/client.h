@@ -4,6 +4,7 @@
 #include "../shared/configuration/configuration.h"
 #include "../shared/network/client-socket.h"
 #include "../shared/network/login.cpp"
+#include "../shared/network/messages/quit-request.h"
 
 #include <string>
 
@@ -14,6 +15,7 @@ class Client
         virtual ~Client();
         void Init(std::string server_ip);
         bool LogIn(Login* login);
+        bool Quit(QuitRequest* quit_request);
         void Close();
 
     protected:
