@@ -39,7 +39,7 @@ bool Client::Quit(QuitRequest* quit_request)
     Logger::getInstance()->debug("(Client:Quit) Enviando quit request.");
     Message message_quit_request(quit_request->Serialize());
     delete quit_request;
-    return this->clientSocket->Send(quit_request);
+    return this->clientSocket->Send(message_quit_request);
 }
 
 void Client::Close() {

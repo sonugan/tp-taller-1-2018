@@ -1,5 +1,7 @@
 #include "game.h"
 #include <iostream>
+#include <thread>
+#include <chrono>
 #include "../shared/logger.h"
 #include "view/login-view.h"
 
@@ -22,10 +24,10 @@ Game::Game(Configuration* initial_configuration) {
     bool isLogged = client->LogIn(login);
 
 
-    while(!login_view->IsUserAuthenticated() && !login_view->IsUserQuit()) {
-        // El usuario no esta autenticado
-        login_view->OpenErrorPage(initial_configuration);
-    }
+//    while(!login_view->IsUserAuthenticated() && !login_view->IsUserQuit()) {
+//        // El usuario no esta autenticado
+//        login_view->OpenErrorPage(initial_configuration);
+//    }
 
     if (isLogged) {
         this->user = new User(login->GetUsername(), login->GetPassword(), (int)login_view->GetTeamNumber());
@@ -261,5 +263,6 @@ void Game::CloseSDL() {
 void Game::RequestQuit() {
     QuitRequest* quit_request = new QuitRequest(user->GetUsername());
     client->Quit(quit_request);
-    this->quit = true;
+    //std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+    //this->quit = true;
 }

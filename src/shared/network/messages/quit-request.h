@@ -17,7 +17,7 @@ class QuitRequest : public ISerializable
     protected:
         MESSAGE_TYPE GetMessageType();
     private:
-        MESSAGE_TYPE message_type = MESSAGE_TYPE::LOGIN_REQUEST;
+        MESSAGE_TYPE message_type = MESSAGE_TYPE::QUIT_REQUEST;
         std::string username;
 };
 
