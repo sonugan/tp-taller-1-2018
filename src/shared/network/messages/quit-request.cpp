@@ -5,9 +5,9 @@
 #include "../../utils/string-utils.h"
 
 
-QuitRequest::QuitRequest()
+QuitRequest::QuitRequest(std::string username)
 {
-    //ctor
+    this->username = username;
 }
 
 QuitRequest::~QuitRequest()
@@ -18,7 +18,7 @@ QuitRequest::~QuitRequest()
 std::string QuitRequest::Serialize()
 {
     std::string msg_type = to_string(this->GetMessageType());
-    std::string msg = msg_type + "|" + "quit-request";
+    std::string msg = msg_type + "|" + username;
     return msg;
 }
 
@@ -26,7 +26,7 @@ void QuitRequest::Deserialize(std::string str_obj)
 {
     std::vector<std::string> data = StringUtils::Split(str_obj, '|');
     this->message_type = static_cast<MESSAGE_TYPE>(stoi(data[0]));
-    this->message = data[1];
+    this->username = data[1];
 }
 
 MESSAGE_TYPE QuitRequest::GetMessageType()

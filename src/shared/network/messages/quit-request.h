@@ -6,7 +6,7 @@
 class QuitRequest : public ISerializable
 {
     public:
-        QuitRequest();
+        QuitRequest(string username);
         virtual ~QuitRequest();
 
         string Serialize();
@@ -16,7 +16,7 @@ class QuitRequest : public ISerializable
         MESSAGE_TYPE GetMessageType();
     private:
         MESSAGE_TYPE message_type = MESSAGE_TYPE::LOGIN_REQUEST;
-        std::string message;
+        std::string username;
 };
 
 #endif // QUITREQUEST_H

@@ -34,10 +34,9 @@ bool Client::LogIn(Login* login) {
         return string(login_status.GetData()) == "login-ok";
 }
 
-bool Client::Quit()
+bool Client::Quit(QuitRequest* quit_request)
 {
     Logger::getInstance()->debug("(Client:Quit) Enviando quit request.");
-    QuitRequest* quit_request = new QuitRequest();
     Message message_quit_request(quit_request->Serialize());
     delete quit_request;
     return this->clientSocket->Send(quit_request);

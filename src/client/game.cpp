@@ -259,6 +259,7 @@ void Game::CloseSDL() {
 }
 
 void Game::RequestQuit() {
-    client->Quit();
+    QuitRequest* quit_request = new QuitRequest(user->GetUsername());
+    client->Quit(quit_request);
     this->quit = true;
 }
