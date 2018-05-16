@@ -1,7 +1,8 @@
 #include "team-controller.h"
 
-TeamController::TeamController(Team* team, Camera* camera) {
+TeamController::TeamController(Team* team, Client* client, Camera* camera) {
     this->team = team;
+    this->client = client;
     this->camera = camera;
     this->last_player_selection_change = std::chrono::system_clock::now();
     this->last_formation_change = std::chrono::system_clock::now();

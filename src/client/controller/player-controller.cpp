@@ -1,7 +1,8 @@
 #include "player-controller.h"
 
-PlayerController::PlayerController(Team* team) {
+PlayerController::PlayerController(Team* team, Client* client) {
     this->team = team;
+    this->client = client;
     current_action_timming = 1;
     current_action = PLAYER_IS_STILL;
     this->last_pass = std::chrono::system_clock::now();

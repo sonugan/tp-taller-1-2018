@@ -39,8 +39,10 @@ class Game
         virtual ~Game();
         void Start();
         void End();
-        void RequestQuit();
+        void Quit();
         bool IsCorrectlyInitialized();
+        User* GetUser();
+
         static const int SCREEN_WIDTH = 800;
         static const int SCREEN_HEIGHT = 600;
         static const unsigned int PITCH_WIDTH = 1920;

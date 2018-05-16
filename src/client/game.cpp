@@ -172,16 +172,16 @@ void Game::CreateControllers() {
 
     if (this->user->GetSelectedTeam() == (int)TEAM_NUMBER::TEAM_A)
     {
-        team_controller = new TeamController(match->GetTeamA(), camera);
-        player_controller = new PlayerController(match->GetTeamA());
+        team_controller = new TeamController(match->GetTeamA(), this->client, camera);
+        player_controller = new PlayerController(match->GetTeamA(), this->client);
     }
     else
     {
-        team_controller = new TeamController(match->GetTeamB(), camera);
-        player_controller = new PlayerController(match->GetTeamB());
+        team_controller = new TeamController(match->GetTeamB(), this->client, camera);
+        player_controller = new PlayerController(match->GetTeamB(), this->client);
     }
 
-    game_controller = new GameController(this);
+    game_controller = new GameController(this, this->client);
 }
 
 void Game::DestroyModel() {
@@ -260,9 +260,10 @@ void Game::CloseSDL() {
 	Logger::getInstance()->debug("TERMINANDO PROGRAMA");
 }
 
-void Game::RequestQuit() {
-    QuitRequest* quit_request = new QuitRequest(user->GetUsername());
-    client->Quit(quit_request);
-    //std::this_thread::sleep_for(std::chrono::milliseconds(10000));
-    //this->quit = true;
+void Game::Quit() {
+    this->quit = true;
+}
+
+User* Game::GetUser() {
+    return user;
 }

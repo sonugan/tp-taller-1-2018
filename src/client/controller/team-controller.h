@@ -16,7 +16,7 @@
 class TeamController : public AbstractController
 {
     public:
-        TeamController(Team* team, Camera* camera);
+        TeamController(Team* team, Client* client, Camera* camera);
         virtual ~TeamController();
         void Handle(const Uint8* keyboard_state_array);
 

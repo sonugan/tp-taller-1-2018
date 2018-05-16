@@ -13,7 +13,7 @@
 class PlayerController : public AbstractController
 {
     public:
-        PlayerController(Team* team);
+        PlayerController(Team* team, Client* client);
         virtual ~PlayerController();
         void Handle(const Uint8* keyboard_state_array);
 
