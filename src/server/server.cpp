@@ -77,7 +77,6 @@ void Server::ListenConnections()
         this->clients[client->socket_id] = client;
         client_threads.push_back(new thread(&Server::ReceiveMessages, this, client));
     }
-
 }
 
 bool Server::ReadyToStart()
@@ -114,7 +113,6 @@ void Server::ReceiveMessages(ClientSocket* client)
 
 void Server::ProcessMessage(ClientSocket* client, Message* message)
 {
-    //TODO: por ahora solo procesa mensajes de login.
     Logger::getInstance()->debug("(Server::ProcessMessage) Procesando mensaje.");
 
     switch(message->GetType())
@@ -160,10 +158,15 @@ void Server::HandleQuitRequest(ClientSocket* client, Message* message)
     message->GetDeserializedData(quit_request);
     this->game->DoQuit(quit_request);
 
+    // Hack! estoy usando message_type: quit_request ya que falta definir quit_response.
+    Message* quit_response= new Message("7|quit-ok");
+    this->socket->Send(client, quit_response);
+
     this->clients.erase(client->socket_id);
     client->ShutDown();
     client->Close();
-    // falta cerrar socket
+    delete quit_request;
+    delete quit_response;
 }
 
 void Server::NotifyAll(Message* message)
