@@ -33,3 +33,8 @@ MESSAGE_TYPE QuitRequest::GetMessageType()
 {
     return this->message_type;
 }
+
+std::string QuitRequest::GetUsername()
+{
+    return this->username;
+}

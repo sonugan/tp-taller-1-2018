@@ -11,6 +11,7 @@ class QuitRequest : public ISerializable
 
         string Serialize();
         void Deserialize(string str_obj);
+        std::string GetUsername();
 
     protected:
         MESSAGE_TYPE GetMessageType();
