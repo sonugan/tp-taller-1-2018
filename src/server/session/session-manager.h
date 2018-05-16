@@ -3,7 +3,7 @@
 
 #include <map>
 #include <string>
-#include "../../shared/network/login.cpp"
+#include "../../shared/network/messages/login-request.h"
 #include "../../shared/model/user.h"
 
 using namespace std;
@@ -14,7 +14,7 @@ class SessionManager
         SessionManager(map<string, string> credentials);
         virtual ~SessionManager();
 
-        User* Authenticate(Login* login_request);
+        User* Authenticate(LoginRequest* login_request);
         void RemoveSession(string username);
 
     protected:
@@ -26,7 +26,7 @@ class SessionManager
 
         /* Methods */
         bool IsValidUser(string username, string password);
-        bool IsAuthenticated(Login* login_request);
+        bool IsAuthenticated(LoginRequest* login_request);
 };
 
 #endif // SESSIONMANAGER_H

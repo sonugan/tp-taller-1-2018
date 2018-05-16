@@ -13,7 +13,7 @@ SessionManager::~SessionManager()
     //dtor
 }
 
-User* SessionManager::Authenticate(Login* login_request)
+User* SessionManager::Authenticate(LoginRequest* login_request)
 {
     if(IsAuthenticated(login_request))
     {
@@ -59,7 +59,7 @@ bool SessionManager::IsValidUser(string username, string password)
     return false; // No existe ese usuario
 }
 
-bool SessionManager::IsAuthenticated(Login* login_request)
+bool SessionManager::IsAuthenticated(LoginRequest* login_request)
 {
     map<string, User*>::iterator it = this->authenticated_users.find(login_request->GetUsername());
 

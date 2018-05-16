@@ -13,15 +13,15 @@ Game::Game(Configuration* initial_configuration) {
     InitSDL();
 
 
-    Login* login = new Login();
-    LoginView* login_view = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH, login);
+    LoginRequest* login_request = new LoginRequest();
+    LoginView* login_view = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH, login_request);
 
     //Se abre la pantalla de login con su propio "game loop"
     login_view->Open(initial_configuration);
 
     this->client = new Client(initial_configuration);
-    client->Init(login->GetServerIp());
-    bool isLogged = client->LogIn(login);
+    client->Init(login_request->GetServerIp());
+    bool isLogged = client->LogIn(login_request);
 
 
 //    while(!login_view->IsUserAuthenticated() && !login_view->IsUserQuit()) {
@@ -30,7 +30,7 @@ Game::Game(Configuration* initial_configuration) {
 //    }
 
     if (isLogged) {
-        this->user = new User(login->GetUsername(), login->GetPassword(), (int)login_view->GetTeamNumber());
+        this->user = new User(login_request->GetUsername(), login_request->GetPassword(), (int)login_view->GetTeamNumber());
 
         CreateModel();
         CreateViews();
@@ -42,7 +42,7 @@ Game::Game(Configuration* initial_configuration) {
 
     login_view->Free();
     delete login_view;
-    delete login;
+    delete login_request;
 
 
 }

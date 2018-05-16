@@ -14,7 +14,7 @@ void ClientTester::TestCompleteFlow()
 {
     client->Init("127.0.0.1");
 
-    Login* login_request = new Login();
+    LoginRequest* login_request = new LoginRequest();
     login_request->SetUsername("gperez");
     login_request->SetPassword("1234");
     login_request->SetTeam("team_a");

@@ -14,7 +14,7 @@
 #include "../shared/network/client-socket.h"
 #include "../shared/configuration/configuration.h"
 #include "../shared/logger.h"
-#include "login.cpp"
+#include "messages/login-request.h"
 #include "game/game-server.h"
 
 using namespace std;

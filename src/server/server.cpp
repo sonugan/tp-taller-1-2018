@@ -132,7 +132,7 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
 void Server::HandleLoginRequest(ClientSocket* client, Message* message)
 {
     Logger::getInstance()->debug("(Server:HandleLoginRequest) Procesando login request.");
-    Login* login_request = new Login();
+    LoginRequest* login_request = new LoginRequest();
     message->GetDeserializedData(login_request);
 
     try

@@ -3,7 +3,7 @@
 
 #include "../shared/configuration/configuration.h"
 #include "../shared/network/client-socket.h"
-#include "../shared/network/login.cpp"
+#include "../shared/network/messages/login-request.h"
 #include "../shared/network/messages/quit-request.h"
 
 #include <string>
@@ -14,7 +14,7 @@ class Client
         Client(Configuration * configuration);
         virtual ~Client();
         void Init(std::string server_ip);
-        bool LogIn(Login* login);
+        bool LogIn(LoginRequest* login_request);
         bool Quit(QuitRequest* quit_request);
         void Close();
 
