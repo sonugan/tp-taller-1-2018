@@ -3,7 +3,7 @@
 #include "../shared/network/client-socket.h"
 #include "../shared/network/socket-address.h"
 #include "../shared/utils/string-utils.h"
-#include "../shared/network/login.cpp"
+#include "../shared/network/messages/login-request.h"
 #include "../shared/logger.h"
 
 Client::Client(Configuration* config)
@@ -23,8 +23,8 @@ void Client::Init(string server_ip)
 
 }
 
-bool Client::LogIn(Login* login) {
-        Message r(login->Serialize());
+bool Client::LogIn(LoginRequest* login_request) {
+        Message r(login_request->Serialize());
         clientSocket->Send(r);
 
         // OJO con esto. Recibe bloquea el thread.

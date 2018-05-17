@@ -20,9 +20,9 @@ GameState* GameServer::GetGameState()
     return this->game_state;
 }
 
-void GameServer::DoLogin(Login* login_request)
+void GameServer::DoLogin(ClientSocket* client, LoginRequest* login_request)
 {
-    User* authenticated_user = this->session_manager->Authenticate(login_request);
+    User* authenticated_user = this->session_manager->Authenticate(client, login_request);
     this->game_state->AddUser(authenticated_user);
 }
 

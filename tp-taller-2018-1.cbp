@@ -146,10 +146,11 @@
 		<Unit filename="src/shared/network/exceptions/socket-connection-exception.h" />
 		<Unit filename="src/shared/network/iserializable.h" />
 		<Unit filename="src/shared/network/iserializer.h" />
-		<Unit filename="src/shared/network/login.cpp" />
 		<Unit filename="src/shared/network/message-type.h" />
 		<Unit filename="src/shared/network/message.cpp" />
 		<Unit filename="src/shared/network/message.h" />
+		<Unit filename="src/shared/network/messages/login-request.cpp" />
+		<Unit filename="src/shared/network/messages/login-request.h" />
 		<Unit filename="src/shared/network/messages/quit-request.cpp" />
 		<Unit filename="src/shared/network/messages/quit-request.h" />
 		<Unit filename="src/shared/network/server-socket.cpp" />
@@ -159,6 +160,7 @@
 		<Unit filename="src/shared/network/socket.cpp" />
 		<Unit filename="src/shared/network/socket.h" />
 		<Unit filename="src/shared/utils/queue.h" />
+		<Unit filename="src/shared/utils/safe-queue.h" />
 		<Unit filename="src/shared/utils/string-builder.cpp" />
 		<Unit filename="src/shared/utils/string-builder.h" />
 		<Unit filename="src/shared/utils/string-utils.cpp" />

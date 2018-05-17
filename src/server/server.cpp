@@ -76,6 +76,12 @@ void Server::ListenConnections()
         Logger::getInstance()->debug("(Server:ListenConnections) Agregando nuevo ClientSocket a colección de clientes.");
         this->clients[client->socket_id] = client;
         client_threads.push_back(new thread(&Server::ReceiveMessages, this, client));
+
+        Queue<Message>* outgoing_msg_queue = new Queue<Message>();
+        this->outgoing_msg_queues[client->socket_id] = outgoing_msg_queue;
+        // Disparo thread para enviar mensajes a este ClienteSocket.
+        thread outgoing_msg_thread(&Server::SendMessage, this, client);
+        outgoing_msg_thread.detach();
     }
 }
 
@@ -132,22 +138,22 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
 void Server::HandleLoginRequest(ClientSocket* client, Message* message)
 {
     Logger::getInstance()->debug("(Server:HandleLoginRequest) Procesando login request.");
-    Login* login_request = new Login();
+    LoginRequest* login_request = new LoginRequest();
     message->GetDeserializedData(login_request);
 
     try
     {
-        this->game->DoLogin(login_request);
+        this->game->DoLogin(client, login_request);
         this->connected_user_count++;
         Message* login_response = new Message("login-ok");
-        Logger::getInstance()->debug("(Server:ProcessMessage) Enviando respuesta LoginOK.");
-        this->socket->Send(client, login_response);
+        Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta LoginOK.");
+        this->outgoing_msg_queues[client->socket_id]->Append(login_response);
     }
     catch (AuthenticationException e)
     {
         Message* login_response = new Message("login-fail");
-        Logger::getInstance()->debug("(Server:ProcessMessage) Enviando respuesta LoginFail.");
-        this->socket->Send(client, login_response);
+        Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta LoginFail.");
+        this->outgoing_msg_queues[client->socket_id]->Append(login_response);
     }
 }
 
@@ -160,7 +166,7 @@ void Server::HandleQuitRequest(ClientSocket* client, Message* message)
 
     // Hack! estoy usando message_type: quit_request ya que falta definir quit_response.
     Message* quit_response= new Message("7|quit-ok");
-    this->socket->Send(client, quit_response);
+    this->outgoing_msg_queues[client->socket_id]->Append(quit_response);
 
     this->clients.erase(client->socket_id);
     client->ShutDown();
@@ -168,6 +174,24 @@ void Server::HandleQuitRequest(ClientSocket* client, Message* message)
     delete quit_request;
     delete quit_response;
 }
+
+void Server::SendMessage(ClientSocket* client)
+{
+    Logger::getInstance()->debug("(Server:SendMessage) Iniciando hilo para enviar mensajes a cliente: " + to_string(client->socket_id));
+    Queue<Message>* outgoing_msg_queue = this->outgoing_msg_queues[client->socket_id];
+    bool sending_msg = true; // Ver como desactivar y activar esto. (condition variables ??)
+    while(sending_msg)
+    {
+        if (outgoing_msg_queue->HasNext())
+        {
+            //TODO: esto debería ir con mutex!
+            auto msg = outgoing_msg_queue->Next();
+            Logger::getInstance()->debug("(Server:SendMessage) Enviando mensaje a cliente: " + to_string(client->socket_id));
+            this->socket->Send(client, msg);
+        }
+    }
+}
+
 
 void Server::NotifyAll(Message* message)
 {

@@ -4,9 +4,10 @@
 #include <map>
 #include "../../shared/configuration/configuration.h"
 #include "game/game-state.h"
-#include "../../shared/network/login.cpp"
+#include "../../shared/network/messages/login-request.h"
 #include "session/session-manager.h"
 #include "../../shared/network/messages/quit-request.h"
+#include "../../shared/network/client-socket.h"
 
 using namespace std;
 
@@ -17,7 +18,7 @@ public:
     virtual ~GameServer();
 
     GameState* GetGameState();
-    void DoLogin(Login* login_request);
+    void DoLogin(ClientSocket* client, LoginRequest* login_request);
     void DoQuit(QuitRequest* quit_request);
 
 

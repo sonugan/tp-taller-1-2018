@@ -13,15 +13,15 @@ Game::Game(Configuration* initial_configuration) {
     InitSDL();
 
 
-    Login* login = new Login();
-    LoginView* login_view = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH, login);
+    LoginRequest* login_request = new LoginRequest();
+    LoginView* login_view = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH, login_request);
 
     //Se abre la pantalla de login con su propio "game loop"
     login_view->Open(initial_configuration);
 
     this->client = new Client(initial_configuration);
-    client->Init(login->GetServerIp());
-    bool isLogged = client->LogIn(login);
+    client->Init(login_request->GetServerIp());
+    bool isLogged = client->LogIn(login_request);
 
 
 //    while(!login_view->IsUserAuthenticated() && !login_view->IsUserQuit()) {
@@ -30,7 +30,7 @@ Game::Game(Configuration* initial_configuration) {
 //    }
 
     if (isLogged) {
-        this->user = new User(login->GetUsername(), login->GetPassword(), (int)login_view->GetTeamNumber());
+        this->user = new User(login_request->GetUsername(), login_request->GetPassword(), (int)login_view->GetTeamNumber());
 
         CreateModel();
         CreateViews();
@@ -42,7 +42,7 @@ Game::Game(Configuration* initial_configuration) {
 
     login_view->Free();
     delete login_view;
-    delete login;
+    delete login_request;
 
 
 }
@@ -172,16 +172,16 @@ void Game::CreateControllers() {
 
     if (this->user->GetSelectedTeam() == (int)TEAM_NUMBER::TEAM_A)
     {
-        team_controller = new TeamController(match->GetTeamA(), camera);
-        player_controller = new PlayerController(match->GetTeamA());
+        team_controller = new TeamController(match->GetTeamA(), this->client, camera);
+        player_controller = new PlayerController(match->GetTeamA(), this->client);
     }
     else
     {
-        team_controller = new TeamController(match->GetTeamB(), camera);
-        player_controller = new PlayerController(match->GetTeamB());
+        team_controller = new TeamController(match->GetTeamB(), this->client, camera);
+        player_controller = new PlayerController(match->GetTeamB(), this->client);
     }
 
-    game_controller = new GameController(this);
+    game_controller = new GameController(this, this->client);
 }
 
 void Game::DestroyModel() {
@@ -260,9 +260,10 @@ void Game::CloseSDL() {
 	Logger::getInstance()->debug("TERMINANDO PROGRAMA");
 }
 
-void Game::RequestQuit() {
-    QuitRequest* quit_request = new QuitRequest(user->GetUsername());
-    client->Quit(quit_request);
-    //std::this_thread::sleep_for(std::chrono::milliseconds(10000));
-    //this->quit = true;
+void Game::Quit() {
+    this->quit = true;
+}
+
+User* Game::GetUser() {
+    return user;
 }

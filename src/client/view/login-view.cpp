@@ -10,7 +10,7 @@
 #include <SDL2/SDL_ttf.h>
 #include "../../shared/logger.h"
 
-LoginView::LoginView(SDL_Renderer* renderer, int height, int width, Login* login) {
+LoginView::LoginView(SDL_Renderer* renderer, int height, int width, LoginRequest* login_request) {
     this->screenHeight = height;
     this->screenWidth = width;
 
@@ -18,7 +18,7 @@ LoginView::LoginView(SDL_Renderer* renderer, int height, int width, Login* login
     this->userQuit = false;
 
     this->renderer = renderer;
-    this->login = login;
+    this->login_request = login_request;
 
     //Cargando el .ttf
     this->fontStyle = TTF_OpenFont( this->DISPLAY_FONT.c_str(), 18 );
@@ -80,37 +80,37 @@ void LoginView::Open(Configuration* game_configuration) {
                     inputText.pop_back();
                     renderText = true;
                 } else if ( e.key.keysym.scancode == SDL_SCANCODE_KP_ENTER || e.key.keysym.scancode == SDL_SCANCODE_RETURN) {
-                    if ( this->login->GetUsername().empty() ) {
+                    if ( this->login_request->GetUsername().empty() ) {
                         cout << "setting username: " << inputText << "\n";
-                        login->SetUsername(inputText);
-                        cout << login->ToString() << "\n";
+                        login_request->SetUsername(inputText);
+                        cout << login_request->ToString() << "\n";
                         if (!inputText.empty()) {
                             this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_ENTER_PASSWORD, textColor, false );
                             renderText = true;
                         }
                         inputText = "";
-                    } else if (this->login->GetPassword().empty()) {
+                    } else if (this->login_request->GetPassword().empty()) {
                         cout << "setting password: " << inputText << "\n";
-                        login->SetPassword(inputText);
-                        cout << login->ToString() << "\n";
+                        login_request->SetPassword(inputText);
+                        cout << login_request->ToString() << "\n";
                         if (!inputText.empty()) {
                             this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_ENTER_SERVER_IP, textColor, false );
                             renderText = true;
                         }
                         inputText = "";
-                    } else if (this->login->GetServerIp().empty()) {
+                    } else if (this->login_request->GetServerIp().empty()) {
                         cout << "setting server_ip: " << inputText << "\n";
-                        login->SetServerIp(inputText);
-                        cout << login->ToString() << "\n";
+                        login_request->SetServerIp(inputText);
+                        cout << login_request->ToString() << "\n";
                         if (!inputText.empty()) {
                             this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_ENTER_TEAM, textColor, false );
                             renderText = true;
                         }
                         inputText = "";
-                    } else if (this->login->GetTeam().empty()) {
+                    } else if (this->login_request->GetTeam().empty()) {
                         cout << "setting team: " << inputText << "\n";
-                        login->SetTeam(inputText);
-                        cout << login->ToString() << "\n";
+                        login_request->SetTeam(inputText);
+                        cout << login_request->ToString() << "\n";
                         if (!inputText.empty()) {
 //                            if (game_configuration->IsValidCredential(login->GetUsername(), login->GetPassword() )) {
 //                                this->userAuthenticated = true;
@@ -164,7 +164,7 @@ void LoginView::OpenErrorPage(Configuration* game_configuration)
     SDL_Color textColor = { 255, 255, 255, 0xFF };
 
     // Loggeo que el usuario o pass eran erroneos
-    Logger::getInstance()->error("El usuario " + login->GetUsername() + " o la password " + login->GetPassword() + " son incorrectos.");
+    Logger::getInstance()->error("El usuario " + login_request->GetUsername() + " o la password " + login_request->GetPassword() + " son incorrectos.");
 
 
     // Limpio el texto que quedo del usuario
@@ -190,10 +190,10 @@ void LoginView::OpenErrorPage(Configuration* game_configuration)
             }
         }
 
-        this->login->SetUsername("");
-        this->login->SetPassword("");
-        this->login->SetTeam("");
-        this->login->SetServerIp("");
+        this->login_request->SetUsername("");
+        this->login_request->SetPassword("");
+        this->login_request->SetTeam("");
+        this->login_request->SetServerIp("");
 
 
         SDL_SetRenderDrawColor( this->renderer, 0x00, 0x00, 0x00, 0xFF );

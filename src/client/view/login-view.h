@@ -6,7 +6,7 @@
 #include "sprite-sheet.h"
 #include "sprite-text.h"
 #include "../../shared/logger.h"
-#include "../../shared/network/login.cpp"
+#include "../../shared/network/messages/login-request.h"
 #include "../../shared/configuration/configuration.h"
 #include <string>
 
@@ -15,7 +15,7 @@ using namespace std;
 class LoginView
 {
     public:
-        LoginView(SDL_Renderer* renderer, int height, int width, Login* login);
+        LoginView(SDL_Renderer* renderer, int height, int width, LoginRequest* login_request);
         void Free();
         void Open(Configuration* game_configuration);
         void OpenErrorPage(Configuration* game_configuration);
@@ -38,7 +38,7 @@ class LoginView
         int screenHeight;
         int screenWidth;
     private:
-        Login* login;
+        LoginRequest* login_request;
 };
 
 #endif // LOGINVIEW_H
