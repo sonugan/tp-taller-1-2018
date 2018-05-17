@@ -40,6 +40,7 @@ private:
     u_int MAX_SOCKET_QUEUE_SIZE = 10;
     mutex server_mutex;
     GameServer* game;
+    map<int, Queue<Message> *> outgoing_msg_queues = {};
 
 
     /* Methods */
@@ -51,6 +52,7 @@ private:
     void NotifyAll(Message* message);
     void HandleLoginRequest(ClientSocket* client, Message* message);
     void HandleQuitRequest(ClientSocket* client, Message* message);
+    void SendMessage(ClientSocket* client);
 };
 
 #endif // SERVER_H

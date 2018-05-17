@@ -1,5 +1,7 @@
 #include "client-tester.h"
 
+#include <iostream>
+
 ClientTester::ClientTester(Configuration* config)
 {
     this->client = new Client(config);
@@ -20,6 +22,8 @@ void ClientTester::TestCompleteFlow()
     login_request->SetTeam("team_a");
     login_request->SetServerIp("127.0.0.1");
     client->LogIn(login_request);
+
+    cin.get();
 
     client->Close();
 }
