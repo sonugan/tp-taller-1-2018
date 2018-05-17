@@ -160,6 +160,7 @@
 		<Unit filename="src/shared/network/socket.cpp" />
 		<Unit filename="src/shared/network/socket.h" />
 		<Unit filename="src/shared/utils/queue.h" />
+		<Unit filename="src/shared/utils/safe-queue.h" />
 		<Unit filename="src/shared/utils/string-builder.cpp" />
 		<Unit filename="src/shared/utils/string-builder.h" />
 		<Unit filename="src/shared/utils/string-utils.cpp" />
