@@ -25,8 +25,8 @@ void ClientTester::TestCompleteFlow()
 
     for (int i = 0; i < 10; i++)
     {
-        //int seconds = rand() % 5;
-        sleep(3);
+        int seconds = rand() % 5;
+        sleep(seconds);
         this->client->SendEvent();
     }
 

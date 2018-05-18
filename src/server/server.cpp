@@ -138,7 +138,7 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
         this->HandleQuitRequest(client, message);
         break;
     case MESSAGE_TYPE::MOVE_REQUEST:
-        this->HandleLoginRequest(client, message);
+        this->HandleMoveRequest(client, message);
         break;
     default:
         Logger::getInstance()->debug("(Server::ProcessMessage) No hay handler para este tipo de mensaje.");
