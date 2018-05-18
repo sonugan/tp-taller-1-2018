@@ -1,11 +1,11 @@
 #include "user.h"
 
-User::User(string username, string password, int selected_team)
+User::User(string username, string password, int selected_team, USER_COLOR color)
 {
     this->username= username;
     this->password = password;
     this->selected_team= selected_team;
-    this->user_color = USER_COLOR::BLUE;
+    this->user_color = color;
 }
 
 User::~User()
