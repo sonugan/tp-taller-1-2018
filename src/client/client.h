@@ -18,6 +18,9 @@ class Client
         bool Quit(QuitRequest* quit_request);
         void Close();
 
+        // TODO: Tipar mensaje. esto es solo para una prueba
+        void SendEvent();
+
     protected:
 
     private:
