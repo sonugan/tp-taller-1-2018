@@ -82,6 +82,7 @@ void Server::ListenConnections()
         this->clients[client->socket_id] = client;
         client_threads.push_back(new thread(&Server::ReceiveMessages, this, client));
 
+
         Queue<Message>* outgoing_msg_queue = new Queue<Message>();
         this->outgoing_msg_queues[client->socket_id] = outgoing_msg_queue;
         // Disparo thread para enviar mensajes a este ClienteSocket.
@@ -227,7 +228,9 @@ void Server::NotifyAll(Message* message)
     auto it = this->outgoing_msg_queues.begin();
     while(it != this->outgoing_msg_queues.end())
     {
+        Logger::getInstance()->debug("(Server:NotifyAll) Encolando mensaje para ser cliente: " + to_string(it->first));
         it->second->Append(message);
+        it++;
     }
     output_msg_condition_variable.notify_all();
 }
