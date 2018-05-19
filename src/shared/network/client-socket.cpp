@@ -37,7 +37,8 @@ bool ClientSocket::Send(Message request)
 
 Message ClientSocket::Receive(int expected_size)
 {
-    char* buffer = (char*) malloc(expected_size);
+    //char* buffer = (char*) malloc(expected_size);
+    char buffer[expected_size];
     bzero(buffer,expected_size);
 
     if (HasError(read(this->socket_id, buffer, expected_size)))

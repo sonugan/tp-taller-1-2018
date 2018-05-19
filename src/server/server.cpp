@@ -69,7 +69,7 @@ void Server::ListenConnections()
 {
     Logger::getInstance()->debug("(Server:ListenConnections) Escuchando conexiones....'");
     // TODO: averiguar como manejar este vector de theards. tiene sentido??
-    vector<thread*> client_threads;
+    vector<thread> client_threads;
     while(!this->ReadyToStart())
     {
         Logger::getInstance()->debug("(Server:ListenConnections) Previo Accept().");
@@ -80,8 +80,7 @@ void Server::ListenConnections()
 
         Logger::getInstance()->debug("(Server:ListenConnections) Agregando nuevo ClientSocket a colección de clientes.");
         this->clients[client->socket_id] = client;
-        client_threads.push_back(new thread(&Server::ReceiveMessages, this, client));
-
+        client_threads.push_back(thread(&Server::ReceiveMessages, this, client));
 
         Queue<Message>* outgoing_msg_queue = new Queue<Message>();
         this->outgoing_msg_queues[client->socket_id] = outgoing_msg_queue;
@@ -149,12 +148,12 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
 void Server::HandleLoginRequest(ClientSocket* client, Message* message)
 {
     Logger::getInstance()->debug("(Server:HandleLoginRequest) Procesando login request.");
-    LoginRequest* login_request = new LoginRequest();
-    message->GetDeserializedData(login_request);
+    LoginRequest login_request;
+    message->GetDeserializedData(&login_request);
 
     try
     {
-        this->game->DoLogin(client, login_request);
+        this->game->DoLogin(client, &login_request);
         this->connected_user_count++;
         Message* login_response = new Message("login-ok");
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta LoginOK.");
