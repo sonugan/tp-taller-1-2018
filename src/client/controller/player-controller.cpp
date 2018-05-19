@@ -1,5 +1,7 @@
 #include "player-controller.h"
 
+//Agregar los request que son los que se van a mandar al servidor.
+
 PlayerController::PlayerController(Team* team, Client* client) {
     this->team = team;
     this->client = client;
@@ -147,3 +149,4 @@ bool PlayerController::ContinueCurrentAction()
         return false;
     }
 }
+

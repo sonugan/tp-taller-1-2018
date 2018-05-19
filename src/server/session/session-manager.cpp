@@ -26,7 +26,7 @@ User* SessionManager::Authenticate(ClientSocket* client, LoginRequest* login_req
     {
         Logger::getInstance()->info("(SessionManager:Authenticate) Usuario válido. Se conectó: " + login_request->GetUsername());
         //TODO: pedir team al login request
-        User* user = new User(login_request->GetUsername(), login_request->GetPassword(), 1);
+        User* user = new User(login_request->GetUsername(), login_request->GetPassword(), 1, USER_COLOR::RED);
         this->authenticated_users[user->GetUsername()] = user;
         this->clientsocket_user_association[client->socket_id] = user;
 

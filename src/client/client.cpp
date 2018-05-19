@@ -34,6 +34,28 @@ bool Client::LogIn(LoginRequest* login_request) {
         return string(login_status.GetData()) == "login-ok";
 }
 
+bool Client::KickBall(KickBallRequest* kick_ball_request){
+    Message r(kick_ball_request->Serialize());
+    return clientSocket->Send(r);
+}
+
+bool Client::Move(MoveRequest* move_request){
+    Message r(move_request->Serialize());
+    return clientSocket->Send(r);
+}
+
+bool Client::PassBall(PassBallRequest* pass_ball_request){
+    Message r(pass_ball_request->Serialize());
+    return clientSocket->Send(r);
+}
+
+bool Client::RecoverBall(RecoverBallRequest* recover_ball_request){
+    Message r(recover_ball_request->Serialize());
+    return clientSocket->Send(r);
+}
+
+
+
 bool Client::Quit(QuitRequest* quit_request)
 {
     Logger::getInstance()->debug("(Client:Quit) Enviando quit request.");

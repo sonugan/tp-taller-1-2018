@@ -30,7 +30,7 @@ Game::Game(Configuration* initial_configuration) {
 //    }
 
     if (isLogged) {
-        this->user = new User(login_request->GetUsername(), login_request->GetPassword(), (int)login_view->GetTeamNumber());
+        this->user = new User(login_request->GetUsername(), login_request->GetPassword(), (int)login_view->GetTeamNumber(), USER_COLOR::RED);
 
         CreateModel();
         CreateViews();
