@@ -20,12 +20,12 @@ GameState::~GameState()
 void GameState::AddUser(User* user)
 {
     pair<string, User*> user_entry = make_pair(user->GetUsername(), user);
-    this->active_users.insert(user_entry);
+//    this->active_users.insert(user_entry);
 }
 
 void GameState::RemoveUser(string username)
 {
-    this->active_users.erase(username);
+//    this->active_users.erase(username);
 }
 
 
@@ -52,3 +52,9 @@ void GameState::CreateModel(Configuration* initial_configuration)
     this->match = new Match(pitch, team_a, NULL, ball);
 */
 }
+
+Match* GameState::GetMatch()
+{
+    return this->match;
+}
+

@@ -15,6 +15,8 @@ class GameState
         GameState(Configuration* initial_configuration);
         virtual ~GameState();
 
+        Match* GetMatch();
+
         void AddUser(User* user);
         void RemoveUser(string username);
 
@@ -23,7 +25,6 @@ class GameState
     private:
         /* Attributes */
         Match* match;
-        map<string, User*> active_users;
 
         /* Methods */
         void CreateModel(Configuration* initial_configuration);
