@@ -2,6 +2,7 @@
 
 #include "../shared/network/exceptions/socket-connection-exception.h"
 #include "session/authentication-exception.h"
+#include "session/max-allowed-user-exception.h"
 #include "../shared/network/messages/quit-request.h"
 
 Server::Server(Configuration* config)
@@ -42,11 +43,10 @@ void Server::Init()
 
 void Server::ConnectingUsers()
 {
-    this->connected_user_count = 0;
     thread wait_connections_thread(&Server::ListenConnections, this);
 
-
-    while(!this->ReadyToStart())
+    // TODO: ver cómo cortar este loop, si es que tiene sentido hacerlo
+    while(true)
     {
         // TODO: pensar bien donde meter esto!
         unique_lock<mutex> lock(input_msg_mutex);
@@ -70,7 +70,9 @@ void Server::ListenConnections()
     Logger::getInstance()->debug("(Server:ListenConnections) Escuchando conexiones....'");
     // TODO: averiguar como manejar este vector de theards. tiene sentido??
     vector<thread> client_threads;
-    while(!this->ReadyToStart())
+
+    // TODO: ver cómo cortar este loop, si es que tiene sentido hacerlo
+    while(true)
     {
         Logger::getInstance()->debug("(Server:ListenConnections) Previo Accept().");
         // Accept() bloquea el hilo hasta que un cliente intenta conectarse.
@@ -88,11 +90,6 @@ void Server::ListenConnections()
         thread outgoing_msg_thread(&Server::SendMessage, this, client);
         outgoing_msg_thread.detach();
     }
-}
-
-bool Server::ReadyToStart()
-{
-    return this->connected_user_count == user_count;
 }
 
 void Server::ReceiveMessages(ClientSocket* client)
@@ -154,7 +151,6 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
     try
     {
         this->game->DoLogin(client, &login_request);
-        this->connected_user_count++;
         Message* login_response = new Message("login-ok");
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta LoginOK.");
 
@@ -170,6 +166,17 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
         Message* login_response = new Message("login-fail");
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta LoginFail.");
         this->outgoing_msg_queues[client->socket_id]->Append(login_response);
+    }
+    catch(MaxAllowedUsersException e)
+    {
+        Message* login_response = new Message("too-many-users");
+        Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta TooManyUsers.");
+        this->outgoing_msg_queues[client->socket_id]->Append(login_response);
+
+        //TODO: mover esta logica a un metodo DisconnectClientSocket()
+        this->clients.erase(client->socket_id);
+        client->ShutDown();
+        client->Close();
     }
 }
 

@@ -20,7 +20,6 @@ void Client::Init(string server_ip)
 {
     SocketAddress address(this->config->GetPort(), server_ip);
     clientSocket->Connect(address);
-
 }
 
 bool Client::LogIn(LoginRequest* login_request) {

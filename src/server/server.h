@@ -36,7 +36,6 @@ private:
     Queue<pair<ClientSocket*, Message*>>* message_queue;
     ServerSocket* socket;
     map<int, ClientSocket*> clients = {};
-    u_int connected_user_count = 0;
     u_int user_count;
     u_int MAX_SOCKET_QUEUE_SIZE = 10;
     std::mutex server_mutex;
@@ -51,7 +50,6 @@ private:
     /* Methods */
     void ConnectingUsers();
     void ListenConnections();
-    bool ReadyToStart();
     void ReceiveMessages(ClientSocket* client);
     void ProcessMessage(ClientSocket* client, Message* message);
     void NotifyAll(Message* message);

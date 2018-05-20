@@ -6,7 +6,7 @@
 GameServer::GameServer(Configuration* initial_configuration)
 {
     this->game_state = new GameState(initial_configuration);
-    this->session_manager = new SessionManager(initial_configuration->GetCredentials());
+    this->session_manager = new SessionManager(initial_configuration->GetCredentials(), initial_configuration->GetMaxPlayers());
 }
 
 GameServer::~GameServer()
@@ -23,12 +23,9 @@ GameState* GameServer::GetGameState()
 void GameServer::DoLogin(ClientSocket* client, LoginRequest* login_request)
 {
     User* authenticated_user = this->session_manager->Authenticate(client, login_request);
-    this->game_state->AddUser(authenticated_user);
 }
 
 void GameServer::DoQuit(QuitRequest* quit_request)
 {
     this->session_manager->RemoveSession(quit_request->GetUsername());
-    this->game_state->RemoveUser(quit_request->GetUsername());
-
 }
