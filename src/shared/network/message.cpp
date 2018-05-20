@@ -19,7 +19,7 @@ Message::Message(ISerializable* serializable)
 
 char* Message::GetData()
 {
-    return (char*)data.c_str();
+    return (char*) data.c_str();
 }
 
 ISerializable* Message::GetDeserializedData(ISerializable* serializable)

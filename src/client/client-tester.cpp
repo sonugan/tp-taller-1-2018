@@ -34,6 +34,23 @@ void ClientTester::TestCompleteFlow()
 //        this->client->SendEvent();
 //    }
 
+
+    cin.get();
+    MoveRequest* move_request = new MoveRequest(DIRECTION::EAST, true);
+
+    for (int i = 0; i < 10; i++)
+    {
+        int seconds = rand() % 5;
+        sleep(seconds);
+        client->Move(move_request);
+    }
+
+    cin.get();
+
+    KickBallRequest* kick_request = new KickBallRequest();
+    client->KickBall(kick_request);
+
+
     cin.get();
 
     QuitRequest* quit_request = new QuitRequest(username);
@@ -45,4 +62,6 @@ void ClientTester::TestCompleteFlow()
 
     delete login_request;
     delete quit_request;
+    delete move_request;
+    delete kick_request;
 }

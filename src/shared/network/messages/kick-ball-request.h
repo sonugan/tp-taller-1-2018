@@ -1,5 +1,5 @@
-#ifndef KICK-BALL-REQUEST_H
-#define KICK-BALL-REQUEST_H
+#ifndef KICKBALLREQUEST_H
+#define KICKBALLREQUEST_H
 
 #include "../iserializable.h"
 #include <string>
@@ -18,4 +18,4 @@ class KickBallRequest : public ISerializable
         MESSAGE_TYPE message_type;
 };
 
-#endif // KICK-BALL-REQUEST_H
+#endif // KICKBALLREQUEST_H

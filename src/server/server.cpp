@@ -159,7 +159,7 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
     try
     {
         this->game->DoLogin(client, &login_request);
-        Message* login_response = new Message("login-ok");
+        Message* login_response = new Message("9|960|540|3|0|0|0|360|540|3|0|0|0|660|240|3|0|0|0|660|540|3|0|0|0|660|840|3|0|0|0|800|240|3|0|0|0|900|540|3|0|0|0|800|740|4|0|0|0|1560|540|4|0|0|0|1260|240|4|0|0|0|1260|540|4|0|0|0|1260|840|3|4|1|0|1135|240|4|0|0|0|1020|540|4|0|0|0|1120|740");
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta LoginOK.");
 
         unique_lock<mutex> lock(output_msg_mutex);
@@ -216,8 +216,8 @@ void Server::HandleMoveRequest(ClientSocket* client, Message* message)
     MoveRequest* move_request = new MoveRequest();
     message->GetDeserializedData(move_request);
     string game_serialize = this->game->DoMove(move_request, client->socket_id);
-    Message move_response(game_serialize);
-    this->NotifyAll(&move_response);
+    Message* move_response = new Message(game_serialize);
+    this->NotifyAll(move_response);
 }
 
 void Server::HandleRecoverBallRequest(ClientSocket* client, Message* message)
@@ -226,8 +226,8 @@ void Server::HandleRecoverBallRequest(ClientSocket* client, Message* message)
     RecoverBallRequest* recover_ball_request = new RecoverBallRequest();
     message->GetDeserializedData(recover_ball_request);
     string game_serialize = this->game->DoRecoverBall(recover_ball_request, client->socket_id);
-    Message recover_ball_response(game_serialize);
-    this->NotifyAll(&recover_ball_response);
+    Message* recover_ball_response = new Message(game_serialize);
+    this->NotifyAll(recover_ball_response);
 }
 
 void Server::HandleKickRequest(ClientSocket* client, Message* message)
@@ -237,9 +237,9 @@ void Server::HandleKickRequest(ClientSocket* client, Message* message)
     KickBallRequest* kick_ball_request = new KickBallRequest();
     message->GetDeserializedData(kick_ball_request);
 
-    Message game_serialized(this->game->DoKick(kick_ball_request, client->socket_id));
+    Message* game_serialized = new Message(this->game->DoKick(kick_ball_request, client->socket_id));
 
-    this->NotifyAll(&game_serialized);
+    this->NotifyAll(game_serialized);
 }
 
 void Server::HandlePassBallRequest(ClientSocket* client, Message* message)
@@ -248,8 +248,8 @@ void Server::HandlePassBallRequest(ClientSocket* client, Message* message)
     Logger::getInstance()->debug("(Server:HandlePassBallRequest) Procesando pass ball request. cliente: " + client_id);
     PassBallRequest* pass_ball_request = new PassBallRequest();
     message->GetDeserializedData(pass_ball_request);
-    Message response = this->game->DoPassBall(client, pass_ball_request);
-    this->NotifyAll(&response);
+    Message* response = this->game->DoPassBall(client, pass_ball_request);
+    this->NotifyAll(response);
 }
 
 void Server::SendMessage(ClientSocket* client)

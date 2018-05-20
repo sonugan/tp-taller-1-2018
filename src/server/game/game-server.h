@@ -27,7 +27,7 @@ public:
     std::string DoRecoverBall(RecoverBallRequest* recover_ball_request, int socket_id);
     std::string DoMove(MoveRequest* move_request, int socket_id);
     string DoKick(KickBallRequest* kick_ball_request, int client_socket_id);
-    Message DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request);
+    Message* DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request);
 
 protected:
 
