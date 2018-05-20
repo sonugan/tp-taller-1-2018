@@ -1,6 +1,8 @@
 #include "move-request.h"
 #include "../../logger.h"
 
+MoveRequest::MoveRequest(){}
+
 MoveRequest::MoveRequest(DIRECTION direction, bool run)
 {
     this->direction = direction;

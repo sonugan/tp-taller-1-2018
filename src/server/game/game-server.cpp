@@ -85,6 +85,26 @@ Message GameServer::DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_
 }
 
 std::string GameServer::DoMove(MoveRequest* move_request, int socket_id){
-
+    User* user = this->session_manager->GetUserBySocketID(socket_id);
+    DIRECTION direction = move_request->GetDirection();
+    bool running = move_request->IsRunning();
+    if (direction == DIRECTION::NORTH){
+        user->GetSelectedPlayer()->MoveUp(running);
+    }else if (direction == DIRECTION::SOUTH){
+        user->GetSelectedPlayer()->MoveDown(running);
+    }else if (direction == DIRECTION::EAST){
+        user->GetSelectedPlayer()->MoveRight(running);
+    }else if (direction == DIRECTION::WEST){
+        user->GetSelectedPlayer()->MoveLeft(running);
+    }else if (direction == DIRECTION::NORTHEAST){
+        user->GetSelectedPlayer()->MoveUpToRight(running);
+    }else if (direction == DIRECTION::NORTHWEST){
+        user->GetSelectedPlayer()->MoveUpToLeft(running);
+    }else if (direction == DIRECTION::SOUTHEAST){
+        user->GetSelectedPlayer()->MoveDownToRight(running);
+    }else if (direction == DIRECTION::SOUTHWEST){
+        user->GetSelectedPlayer()->MoveDownToLeft(running);
+    }
+    return this->game_state->GetMatch()->Serialize();
 
 }

@@ -3,11 +3,13 @@
 
 #include "../iserializable.h"
 #include <string>
+#include "../../model/player.h"
 
 
 class MoveRequest : public ISerializable
 {
     public:
+        MoveRequest();
         MoveRequest(DIRECTION direction, bool run);
         virtual ~MoveRequest();
         string Serialize();
@@ -19,6 +21,8 @@ class MoveRequest : public ISerializable
 
     private:
         MESSAGE_TYPE message_type;
+        DIRECTION direction;
+        bool run;
 };
 
 #endif // MOVEREQUEST_H
