@@ -33,7 +33,6 @@ Player* GameServer::GetUserSelectedPlayer(std::vector<Player*> available_players
     }
 
     return NULL;
-
 }
 
 void GameServer::DoLogin(ClientSocket* client, LoginRequest* login_request)
