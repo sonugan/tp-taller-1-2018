@@ -12,4 +12,5 @@ class AuthenticationException: public std::runtime_error
         virtual ~AuthenticationException() {}
 };
 
+
 #endif // AUTHENTICATIONEXCEPTION_H

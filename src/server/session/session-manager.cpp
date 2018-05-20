@@ -2,10 +2,12 @@
 
 #include "../../shared/logger.h"
 #include "authentication-exception.h"
+#include "max-allowed-user-exception.h"
 
-SessionManager::SessionManager(map<string, string> credentials)
+SessionManager::SessionManager(map<string, string> credentials, int max_allowed_users)
 {
     this->credentials = credentials;
+    this->max_allowed_users = max_allowed_users;
 
     colors.push(USER_COLOR::BLUE);
     colors.push(USER_COLOR::GREEN);
@@ -21,6 +23,11 @@ SessionManager::~SessionManager()
 
 User* SessionManager::Authenticate(ClientSocket* client, LoginRequest* login_request)
 {
+    if(GetAutheticatedUsersCount() == this->max_allowed_users)
+    {
+        throw MaxAllowedUsersException("No es posible agregar más usuarios al juego.");
+    }
+
 //    if(IsAuthenticated(login_request))
 //    {
 //        string log_msg = "(SessionManager:Authenticate) El usuario: " + login_request->GetUsername() + " ya se encuentra autenticado.";
@@ -56,6 +63,11 @@ void SessionManager::RemoveSession(string username)
     this->authenticated_users.erase(username);
 }
 
+
+int SessionManager::GetAutheticatedUsersCount()
+{
+    return this->authenticated_users.size();
+}
 
 /* Private Methods */
 
