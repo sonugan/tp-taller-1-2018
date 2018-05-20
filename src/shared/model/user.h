@@ -5,7 +5,7 @@
 
 using namespace std;
 
-enum class USER_COLOR {NO_COLOR, RED, BLUE, GREEN, YELLOW};
+enum class USER_COLOR {NO_COLOR = 1, RED = 2, BLUE = 3, GREEN = 4, YELLOW = 5};
 
 class Player;
 

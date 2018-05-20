@@ -10,7 +10,7 @@
 #include "trajectory.h"
 
 enum PLAYER_ACTION { PLAYER_IS_STILL, PLAYER_IS_KICKING, PLAYER_IS_RUNNING, PLAYER_IS_RECOVERING };
-enum class DIRECTION { NORTH, SOUTH, EAST, WEST, NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST };
+enum class DIRECTION { NORTH = 1, SOUTH = 2, EAST = 3, WEST = 4, NORTHEAST = 5, SOUTHEAST = 6, SOUTHWEST = 7, NORTHWEST = 8 };
 
 class Team; //  forward declaration
 
@@ -48,6 +48,7 @@ class Player
         bool PlaysForTeamA();
         bool PlaysForTeamB();
         void SetPlayerColor(USER_COLOR color);
+        void SetDirection(DIRECTION direction);
         USER_COLOR GetPlayerColor();
 
     protected:

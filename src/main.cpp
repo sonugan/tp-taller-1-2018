@@ -41,6 +41,7 @@ int main( int argc, char* args[] ) {
 
         // POR AHORA QUEDA IGUAL A LO QUE YA TENIAMOS
         Game* game = new Game(config);
+        game->LogIn();
         if (game->IsCorrectlyInitialized())
         {
             game->Start();
