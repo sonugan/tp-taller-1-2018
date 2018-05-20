@@ -198,19 +198,13 @@ void Server::HandleQuitRequest(ClientSocket* client, Message* message)
     message->GetDeserializedData(quit_request);
     this->game->DoQuit(quit_request);
 
-    // Hack! estoy usando message_type: quit_request ya que falta definir quit_response.
-
-    Logger::getInstance()->debug("(Server:HandleQuitRequest) Encolando respuesta logout");
-    Message* quit_response= new Message("7|quit-ok");
-    this->outgoing_msg_queues[client->socket_id]->Append(quit_response);
-
+    // NO se manda mensaje de logout para evitar problemas.
 
     Logger::getInstance()->debug("(Server:HandleQuitRequest) Cerrando clientsocket.");
     this->clients.erase(client->socket_id);
     client->ShutDown();
     client->Close();
     delete quit_request;
-    delete quit_response;
 }
 
 void Server::HandleMoveRequest(ClientSocket* client, Message* message)
@@ -294,9 +288,15 @@ void Server::NotifyAll(Message* message)
     auto it = this->outgoing_msg_queues.begin();
     while(it != this->outgoing_msg_queues.end())
     {
+        /*
+        * Se instancia una copia de Message para c/client para poder hacer delete en el scope del método SocketServer:Send();
+        */
+        Message* per_client_copy_msg = new Message(string(message->GetData()));
         Logger::getInstance()->debug("(Server:NotifyAll) Encolando mensaje para ser cliente: " + to_string(it->first));
-        it->second->Append(message);
+        it->second->Append(per_client_copy_msg);
         it++;
     }
+
+    delete message;
     output_msg_condition_variable.notify_all();
 }
