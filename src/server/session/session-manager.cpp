@@ -61,6 +61,7 @@ void SessionManager::RemoveSession(string username)
 {
     Logger::getInstance()->info("(SessionManager:RemoveSession) Removiendo usuario: " + username);
     this->authenticated_users.erase(username);
+
 }
 
 
