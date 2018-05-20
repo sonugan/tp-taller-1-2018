@@ -32,3 +32,13 @@ USER_COLOR User::GetUserColor()
 {
     return this->user_color;
 }
+
+Player* User::GetSelectedPlayer()
+{
+    return this->selected_player;
+}
+
+void User::SetSelectedPlayer(Player* player)
+{
+    this->selected_player = player;
+}

@@ -26,6 +26,22 @@ std::vector<Player*> Team::GetPlayers()
     return players;
 }
 
+std::vector<Player*> Team::GetAvailablePlayers()
+{
+    std::vector<Player*> available_players;
+
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+        Player* player = GetPlayers()[i];
+
+        if (!player->IsSelected()) {
+            available_players.push_back(player);
+        }
+
+    }
+
+    return available_players;
+}
+
 void Team::SetFormation(Formation* formation)
 {
     Formation* old_formation = this->formation;

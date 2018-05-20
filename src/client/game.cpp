@@ -30,6 +30,7 @@ Game::Game(Configuration* initial_configuration) {
 //    }
 
     if (isLogged) {
+
         this->user = new User(login_request->GetUsername(), login_request->GetPassword(), (int)login_view->GetTeamNumber(), USER_COLOR::RED);
 
         CreateModel();
@@ -125,6 +126,7 @@ void Game::CreateModel() {
         team_b->AddPlayer(new Player(i, TEAM_NUMBER::TEAM_B));
     }
 
+    // DEFINIR COMO SE SELECCIONA EL JUGADOR
     if (user->GetSelectedTeam() == (int)TEAM_NUMBER::TEAM_A)
     {
         team_a->GetPlayers()[5]->SetPlayerColor(this->user->GetUserColor());

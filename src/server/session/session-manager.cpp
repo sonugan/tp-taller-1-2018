@@ -6,6 +6,12 @@
 SessionManager::SessionManager(map<string, string> credentials)
 {
     this->credentials = credentials;
+
+    colors.push(USER_COLOR::BLUE);
+    colors.push(USER_COLOR::GREEN);
+    colors.push(USER_COLOR::RED);
+    colors.push(USER_COLOR::YELLOW);
+
 }
 
 SessionManager::~SessionManager()
@@ -26,12 +32,19 @@ User* SessionManager::Authenticate(ClientSocket* client, LoginRequest* login_req
     {
         Logger::getInstance()->info("(SessionManager:Authenticate) Usuario válido. Se conectó: " + login_request->GetUsername());
         //TODO: pedir team al login request
-        User* user = new User(login_request->GetUsername(), login_request->GetPassword(), 1, USER_COLOR::RED);
+
+        USER_COLOR color = colors.top(); // Obtengo el color para el usuario
+        colors.pop(); // Lo saco de la cola para que no se lo de a otro
+
+        User* user = new User(login_request->GetUsername(), login_request->GetPassword(), 1, color);
+
         this->authenticated_users[user->GetUsername()] = user;
         this->clientsocket_user_association[client->socket_id] = user;
 
         return user;
-    } else {
+    }
+    else
+    {
         Logger::getInstance()->debug("(SessionManager:Authenticate) No se pudo autenticar usuario. Credenciales inválidas.");
         throw AuthenticationException("Invalid credentials.");
     }

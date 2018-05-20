@@ -6,6 +6,7 @@
 #include "../../shared/configuration/configuration.h"
 #include "../../shared/model/match.h"
 #include "../../shared/model/user.h"
+#include "../../shared/model/player.h"
 
 using namespace std;
 
@@ -19,8 +20,7 @@ class GameState
 
         void AddUser(User* user);
         void RemoveUser(string username);
-
-    protected:
+        protected:
 
     private:
         /* Attributes */
@@ -28,6 +28,7 @@ class GameState
 
         /* Methods */
         void CreateModel(Configuration* initial_configuration);
+        Player* GetUserSelectedPlayer(std::vector<Player*> available_players);
 
 };
 

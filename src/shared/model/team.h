@@ -20,6 +20,7 @@ class Team
         Team(Formation* formation, string name, string shirt, TEAM_NUMBER team_number);
         virtual ~Team();
         std::vector<Player*> GetPlayers();
+        std::vector<Player*> GetAvailablePlayers();
         void SetFormation(Formation* formation);
         void SetMatch(Match* match);
         Formation* GetFormation();

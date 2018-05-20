@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <stack>
 #include "../../shared/network/messages/login-request.h"
 #include "../../shared/model/user.h"
 #include "../../shared/network/client-socket.h"
@@ -25,6 +26,8 @@ class SessionManager
         map<string, string> credentials = {};
         map<string, User*> authenticated_users = {};
         map<int, User*> clientsocket_user_association = {};
+
+        stack<USER_COLOR> colors;
 
         /* Methods */
         bool IsValidUser(string username, string password);
