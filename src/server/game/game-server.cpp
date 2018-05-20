@@ -59,3 +59,10 @@ void GameServer::DoQuit(QuitRequest* quit_request)
 {
     this->session_manager->RemoveSession(quit_request->GetUsername());
 }
+
+std::string GameServer::DoRecoverBall(RecoverBallRequest* recover_ball_request, int socket_id){
+    User* user = this->session_manager->GetUserBySocketID(socket_id);
+    user->GetSelectedPlayer()->RecoverBall();
+    string game_state_serialize = this->game_state->GetMatch()->Serialize();
+    return game_state_serialize;
+}

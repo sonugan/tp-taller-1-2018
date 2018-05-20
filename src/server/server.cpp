@@ -138,6 +138,9 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
     case MESSAGE_TYPE::MOVE_REQUEST:
         this->HandleMoveRequest(client, message);
         break;
+    case MESSAGE_TYPE::RECOVER_REQUEST:
+        this->HandleRecoverBallRequest(client, message);
+        break;
     default:
         Logger::getInstance()->debug("(Server::ProcessMessage) No hay handler para este tipo de mensaje.");
     }
@@ -203,6 +206,16 @@ void Server::HandleMoveRequest(ClientSocket* client, Message* message)
     Logger::getInstance()->debug("(Server:HandleMoveRequest) Procesando move request.");
     Message move_response("move-response originado por client: " + to_string(client->socket_id));
     this->NotifyAll(&move_response);
+}
+
+void Server::HandleRecoverBallRequest(ClientSocket* client, Message* message)
+{
+    Logger::getInstance()->debug("(Server:HandleRecoverBallRequest) Procesando recover ball request.");
+    RecoverBallRequest* recover_ball_request = new RecoverBallRequest();
+    message->GetDeserializedData(recover_ball_request);
+    string game_serialize = this->game->DoRecoverBall(recover_ball_request, client->socket_id);
+    Message recover_ball_response(game_serialize);
+    this->NotifyAll(&recover_ball_response);
 }
 
 void Server::SendMessage(ClientSocket* client)

@@ -56,6 +56,7 @@ private:
     void HandleLoginRequest(ClientSocket* client, Message* message);
     void HandleQuitRequest(ClientSocket* client, Message* message);
     void HandleMoveRequest(ClientSocket* client, Message* message);
+    void HandleRecoverBallRequest(ClientSocket* client, Message* message);
     void SendMessage(ClientSocket* client);
 };
 
