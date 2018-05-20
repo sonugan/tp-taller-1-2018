@@ -13,7 +13,6 @@ SessionManager::SessionManager(map<string, string> credentials, int max_allowed_
     colors.push(USER_COLOR::GREEN);
     colors.push(USER_COLOR::RED);
     colors.push(USER_COLOR::YELLOW);
-
 }
 
 SessionManager::~SessionManager()
@@ -42,7 +41,9 @@ User* SessionManager::Authenticate(ClientSocket* client, LoginRequest* login_req
 
         USER_COLOR color = this->GetColorToAssign();
 
-        User* user = new User(login_request->GetUsername(), login_request->GetPassword(), 1, color);
+        TEAM_NUMBER selected_team = this->ParseSelectedTeam(login_request->GetTeam());
+
+        User* user = new User(login_request->GetUsername(), login_request->GetPassword(), selected_team, color);
 
         this->authenticated_users[user->GetUsername()] = user;
         this->clientsocket_user_association[client->socket_id] = user;
@@ -125,4 +126,13 @@ USER_COLOR SessionManager::GetColorToAssign()
     USER_COLOR color = this->colors.top();
     this->colors.pop();
     return color;
+}
+
+TEAM_NUMBER SessionManager::ParseSelectedTeam(string selected_team)
+{
+    if("a" == selected_team)
+    {
+        return TEAM_NUMBER::TEAM_A;
+    }
+    return TEAM_NUMBER::TEAM_B;
 }

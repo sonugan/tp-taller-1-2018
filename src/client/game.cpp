@@ -34,7 +34,7 @@ Game::Game(Configuration* initial_configuration) {
             while (!gameStarted) {
                 gameStarted = client->WaitForGameStart();
             }
-            this->user = new User(login_request->GetUsername(), login_request->GetPassword(), (int)login_view->GetTeamNumber(), USER_COLOR::RED);
+//            this->user = new User(login_request->GetUsername(), login_request->GetPassword(), (int)login_view->GetTeamNumber(), USER_COLOR::RED);
 
             CreateModel();
             CreateViews();
@@ -131,7 +131,7 @@ void Game::CreateModel() {
     }
 
     // DEFINIR COMO SE SELECCIONA EL JUGADOR
-    if (user->GetSelectedTeam() == (int)TEAM_NUMBER::TEAM_A)
+    if (user->GetSelectedTeam() == TEAM_NUMBER::TEAM_A)
     {
         team_a->GetPlayers()[5]->SetPlayerColor(this->user->GetUserColor());
     }
@@ -176,7 +176,7 @@ void Game::CreateControllers() {
 
     //OBTENER EL EQUIPO DEL USER PARA CREAR LOS CONTROLADORES
 
-    if (this->user->GetSelectedTeam() == (int)TEAM_NUMBER::TEAM_A)
+    if (this->user->GetSelectedTeam() == TEAM_NUMBER::TEAM_A)
     {
         team_controller = new TeamController(match->GetTeamA(), this->client, camera);
         player_controller = new PlayerController(match->GetTeamA(), this->client);

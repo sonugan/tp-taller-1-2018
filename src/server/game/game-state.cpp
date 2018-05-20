@@ -17,17 +17,10 @@ GameState::~GameState()
     delete this->match;
 }
 
-void GameState::AddUser(User* user)
+Match* GameState::GetMatch()
 {
-//    pair<string, User*> user_entry = make_pair(user->GetUsername(), user);
-//    this->active_users.insert(user_entry);
+    return this->match;
 }
-
-void GameState::RemoveUser(string username)
-{
-//    this->active_users.erase(username);
-}
-
 
 /* Private methods */
 void GameState::CreateModel(Configuration* initial_configuration)
@@ -52,10 +45,5 @@ void GameState::CreateModel(Configuration* initial_configuration)
     Ball* ball = new Ball();
 
     this->match = new Match(pitch, team_a, team_b, ball);
-}
-
-Match* GameState::GetMatch()
-{
-    return this->match;
 }
 

@@ -94,7 +94,8 @@ void Server::ListenConnections()
 
 void Server::ReceiveMessages(ClientSocket* client)
 {
-    Logger::getInstance()->debug("(Server:ReceiveMessages) Iniciando hilo receptor de mensajes.");
+    string socket_id = to_string(client->socket_id);
+    Logger::getInstance()->debug("(Server:ReceiveMessages) Iniciando hilo receptor de mensajes. ClientSocket: " + socket_id);
     bool receiving_messages = true;
     while(receiving_messages)
     {
