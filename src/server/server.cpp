@@ -213,6 +213,10 @@ void Server::HandleQuitRequest(ClientSocket* client, Message* message)
 void Server::HandleMoveRequest(ClientSocket* client, Message* message)
 {
     Logger::getInstance()->debug("(Server:HandleMoveRequest) Procesando move request.");
+    MoveRequest* move_request = new MoveRequest();
+    message->GetDeserializedData(recover_ball_request);
+    string game_serialize = this->game->DoRecoverBall(recover_ball_request, client->socket_id);
+    Message recover_ball_response(game_serialize);
     Message move_response("move-response originado por client: " + to_string(client->socket_id));
     this->NotifyAll(&move_response);
 }

@@ -68,12 +68,13 @@ std::string GameServer::DoRecoverBall(RecoverBallRequest* recover_ball_request, 
     return game_state_serialize;
 }
 
-string GameServer::DoKick(KickBallRequest* kick_request, int socket_id)
+std::string GameServer::DoKick(KickBallRequest* kick_request, int socket_id)
 {
     User* user = this->session_manager->GetUserBySocketID(socket_id);
     user->GetSelectedPlayer()->Kick();
     return this->game_state->GetMatch()->Serialize();
 }
+
 
 Message GameServer::DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request)
 {
@@ -81,4 +82,9 @@ Message GameServer::DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_
     user->GetSelectedPlayer()->PassBall();
     Message response(this->game_state->GetMatch()->Serialize());
     return response;
+}
+
+std::string GameServer::DoMove(MoveRequest* move_request, int socket_id){
+
+
 }

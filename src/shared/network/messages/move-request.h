@@ -8,11 +8,13 @@
 class MoveRequest : public ISerializable
 {
     public:
-        MoveRequest();
+        MoveRequest(DIRECTION direction, bool run);
         virtual ~MoveRequest();
         string Serialize();
         void Deserialize(string str_obj);
         MESSAGE_TYPE GetMessageType();
+        DIRECTION GetDirection();
+        bool IsRunning();
     protected:
 
     private:
