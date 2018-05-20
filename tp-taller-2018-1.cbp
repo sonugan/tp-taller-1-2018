@@ -139,6 +139,7 @@
 		<Unit filename="src/shared/model/team.h" />
 		<Unit filename="src/shared/model/trajectory.cpp" />
 		<Unit filename="src/shared/model/trajectory.h" />
+		<Unit filename="src/shared/model/user-color.h" />
 		<Unit filename="src/shared/model/user.cpp" />
 		<Unit filename="src/shared/model/user.h" />
 		<Unit filename="src/shared/network/client-socket.cpp" />

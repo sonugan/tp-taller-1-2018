@@ -5,9 +5,9 @@
 #include <cmath>
 #include "location.h"
 #include "team.h"
-#include "user.h"
 #include "../configuration/configuration.h"
 #include "trajectory.h"
+#include "user-color.h"
 
 enum PLAYER_ACTION { PLAYER_IS_STILL, PLAYER_IS_KICKING, PLAYER_IS_RUNNING, PLAYER_IS_RECOVERING };
 enum class DIRECTION { NORTH = 1, SOUTH = 2, EAST = 3, WEST = 4, NORTHEAST = 5, SOUTHEAST = 6, SOUTHWEST = 7, NORTHWEST = 8 };

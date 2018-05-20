@@ -2,13 +2,12 @@
 #define USER_H
 
 #include <string>
+#include "user-color.h"
+#include "player.h"
 
 using namespace std;
 
-enum class USER_COLOR {NO_COLOR = 1, RED = 2, BLUE = 3, GREEN = 4, YELLOW = 5};
-
 class Player;
-
 class User
 {
     public:

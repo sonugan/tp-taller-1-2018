@@ -30,6 +30,7 @@ private:
     bool is_running = false;
     SessionManager* session_manager;
 
+    Player* GetUserSelectedPlayer(std::vector<Player*> available_players);
 
 };
 

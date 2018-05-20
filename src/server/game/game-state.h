@@ -28,7 +28,6 @@ class GameState
 
         /* Methods */
         void CreateModel(Configuration* initial_configuration);
-        Player* GetUserSelectedPlayer(std::vector<Player*> available_players);
 
 };
 
