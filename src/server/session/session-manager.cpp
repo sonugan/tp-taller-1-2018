@@ -91,6 +91,16 @@ int SessionManager::GetAutheticatedUsersCount()
     return this->authenticated_users.size();
 }
 
+User* SessionManager::GetUserBySocketID(int socket_id)
+{
+    map<int, User*>::iterator it = this->clientsocket_user_association.find(socket_id);
+    if(it != this->clientsocket_user_association.end())
+    {
+        return it->second;
+    }
+    return NULL;
+}
+
 /* Private Methods */
 
 bool SessionManager::IsValidUser(string username, string password)

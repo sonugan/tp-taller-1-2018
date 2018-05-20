@@ -23,6 +23,8 @@ class SessionManager
         map<string, User*> GetAuthenticatedUsers();
         int GetAutheticatedUsersCount();
 
+        User* GetUserBySocketID(int socket_id);
+
     protected:
 
     private:
