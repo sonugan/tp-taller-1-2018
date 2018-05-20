@@ -24,14 +24,20 @@ void Client::Init(string server_ip)
 }
 
 bool Client::LogIn(LoginRequest* login_request) {
+    try {
         Message r(login_request->Serialize());
         clientSocket->Send(r);
 
         // OJO con esto. Recibe bloquea el thread.
         Message login_status = clientSocket->Receive(255);
+
         Logger::getInstance()->debug("(Client) login data: " + string(login_status.GetData()));
         Logger::getInstance()->debug("(Client) login size: " + to_string(login_status.GetDataSize()));
         return string(login_status.GetData()) == "login-ok";
+    } catch (...) {
+        return false;
+    }
+
 }
 
 bool Client::KickBall(KickBallRequest* kick_ball_request){
