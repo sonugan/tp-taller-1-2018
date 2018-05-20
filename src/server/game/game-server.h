@@ -12,6 +12,7 @@
 #include "../../shared/network/client-socket.h"
 #include "../../shared/network/messages/pass-ball-request.h"
 #include "../../shared/network/messages/move-request.h"
+#include "../../shared/network/messages/change-player-request.h"
 
 using namespace std;
 
@@ -28,6 +29,7 @@ public:
     std::string DoMove(MoveRequest* move_request, int socket_id);
     string DoKick(KickBallRequest* kick_ball_request, int client_socket_id);
     Message* DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request);
+    string ChangePlayer(ChangePlayerRequest* change_player_request, int socket_id);
 
 protected:
 

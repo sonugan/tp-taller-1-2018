@@ -145,6 +145,9 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
     case MESSAGE_TYPE::KICK_REQUEST:
         this->HandleKickRequest(client, message);
         break;
+    case MESSAGE_TYPE::SELECT_REQUEST:
+        this->HandleChangePlayerRequest(client, message);
+        break;
     default:
         Logger::getInstance()->debug("(Server::ProcessMessage) No hay handler para este tipo de mensaje.");
     }
@@ -250,6 +253,16 @@ void Server::HandlePassBallRequest(ClientSocket* client, Message* message)
     message->GetDeserializedData(pass_ball_request);
     Message* response = this->game->DoPassBall(client, pass_ball_request);
     this->NotifyAll(response);
+}
+
+void Server::HandleChangePlayerRequest(ClientSocket* client, Message* message)
+{
+    string client_id = to_string(client->socket_id);
+    Logger::getInstance()->debug("(Server:HandleChangePlayerRequest) Procesando change player request. cliente: " + client_id);
+    ChangePlayerRequest* change_player_request = new ChangePlayerRequest();
+    message->GetDeserializedData(change_player_request);
+    Message* game_serialized = new Message(this->game->ChangePlayer(change_player_request, client->socket_id));
+    this->NotifyAll(game_serialized);
 }
 
 void Server::SendMessage(ClientSocket* client)
