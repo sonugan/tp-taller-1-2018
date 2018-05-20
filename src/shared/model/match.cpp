@@ -36,3 +36,119 @@ Pitch* Match::GetPitch() {
 Ball* Match::GetBall() {
     return ball;
 }
+
+string Match::Serialize() {
+    Logger::getInstance()->debug("Serializando Match...");
+    string result;
+    //  MESSAGE TYPE
+    result.append(std::to_string(MESSAGE_TYPE::GAME_STATE_RESPONSE));
+    result.append("|");
+
+    //  BALL
+    //  X
+    result.append(std::to_string(ball->GetLocation()->GetX()));
+    result.append("|");
+    //  Y
+    result.append(std::to_string(ball->GetLocation()->GetY()));
+    result.append("|");
+    //  Z
+//    result.append(std::to_string(ball->GetLocation()->GetZ()));
+//    result.append("|");
+
+    //  TEAM A
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+        //  PLAYER i
+        Player* player = GetTeamA()->GetPlayers()[i];
+        //  DIRECTION
+        result.append(std::to_string((int) player->GetDirection()));
+        result.append("|");
+        //  COLOR
+        result.append(std::to_string((int) player->GetPlayerColor()));
+        result.append("|");
+        // KICKING
+        result.append(std::to_string((int) player->IsKicking()));
+        result.append("|");
+        // KICKING
+        result.append(std::to_string((int) player->IsRecoveringBall()));
+        result.append("|");
+        //  X
+        result.append(std::to_string(player->GetLocation()->GetX()));
+        result.append("|");
+        //  Y
+        result.append(std::to_string(player->GetLocation()->GetY()));
+        result.append("|");
+        //  Z
+//        result.append(std::to_string(player->GetLocation()->GetZ()));
+//        result.append("|");
+    }
+
+    //  TEAM B
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+        //  PLAYER i
+        Player* player = GetTeamB()->GetPlayers()[i];
+        //  DIRECTION
+        result.append(std::to_string((int) player->GetDirection()));
+        result.append("|");
+        //  COLOR
+        result.append(std::to_string((int) player->GetPlayerColor()));
+        result.append("|");
+        // KICKING
+        result.append(std::to_string((int) player->IsKicking()));
+        result.append("|");
+        // KICKING
+        result.append(std::to_string((int) player->IsRecoveringBall()));
+        result.append("|");
+        //  X
+        result.append(std::to_string(player->GetLocation()->GetX()));
+        result.append("|");
+        //  Y
+        result.append(std::to_string(player->GetLocation()->GetY()));
+        result.append("|");
+        //  Z
+//        result.append(std::to_string(player->GetLocation()->GetZ()));
+//        result.append("|");
+    }
+    result.pop_back();
+
+    Logger::getInstance()->debug(result.c_str());
+    return result;
+}
+
+void Match::DeserializeAndUpdate(string serialized) {
+    Logger::getInstance()->debug("Deserializando Match...");
+    std::vector<std::string> data = StringUtils::Split(serialized, '|');
+
+    //  BALL
+    ball->GetLocation()->Update(stoi(data[1]), stoi(data[2]), 0);
+    Logger::getInstance()->debug(ball->GetLocation()->ToString());
+
+    //  TEAM A
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+
+        int base_index = 3 + (i*6);
+        Player* player = GetTeamA()->GetPlayers()[i];
+
+        player->SetDirection(static_cast<DIRECTION>(stoi(data[base_index])));
+        player->SetPlayerColor(static_cast<USER_COLOR>(stoi(data[base_index + 1])));
+        player->SetKicking((bool)(stoi(data[base_index + 2])));
+        player->SetRecoveringBall((bool)(stoi(data[base_index + 3])));
+        player->GetLocation()->Update(stoi(data[base_index + 4]), stoi(data[base_index + 5]), 0);
+
+    }
+
+    //  TEAM B
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+
+        int base_index = 3 + 42 + (i*6);
+        Player* player = GetTeamB()->GetPlayers()[i];
+
+        player->SetDirection(static_cast<DIRECTION>(stoi(data[base_index])));
+        player->SetPlayerColor(static_cast<USER_COLOR>(stoi(data[base_index + 1])));
+        player->SetKicking((bool)(stoi(data[base_index + 2])));
+        player->SetRecoveringBall((bool)(stoi(data[base_index + 3])));
+        player->GetLocation()->Update(stoi(data[base_index + 4]), stoi(data[base_index + 5]), 0);
+
+    }
+
+    Logger::getInstance()->debug("Match deserializado");
+}
