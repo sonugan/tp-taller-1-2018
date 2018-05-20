@@ -4,6 +4,8 @@
 Player::Player(unsigned int position_index, TEAM_NUMBER team_number)
 {
     this->position_index = position_index;
+    this->kicking = false;
+    this->recovering_ball = false;
 
     switch (team_number)
     {
@@ -305,8 +307,12 @@ void Player::SetPlayerColor(USER_COLOR color)
     this->color = color;
 }
 
+void Player::SetDirection(DIRECTION direction)
+{
+    this->direction = direction;
+}
+
 USER_COLOR Player::GetPlayerColor()
 {
     return this->color;
 }
-

@@ -7,6 +7,7 @@
 #include "../../shared/network/messages/login-request.h"
 #include "../../shared/model/user.h"
 #include "../../shared/network/client-socket.h"
+#include "../../shared/model/team-number.h"
 
 using namespace std;
 
@@ -38,6 +39,7 @@ class SessionManager
         bool IsAuthenticated(LoginRequest* login_request);
 
         USER_COLOR GetColorToAssign();
+        TEAM_NUMBER ParseSelectedTeam(string selected_team);
 };
 
 #endif // SESSIONMANAGER_H

@@ -44,7 +44,7 @@ void GameServer::DoLogin(ClientSocket* client, LoginRequest* login_request)
 
     Team* selected_team = this->game_state->GetMatch()->GetTeamB();
 
-    if (authenticated_user->GetSelectedTeam() == (int)TEAM_NUMBER::TEAM_A)
+    if (authenticated_user->GetSelectedTeam() == TEAM_NUMBER::TEAM_A)
     {
         selected_team = this->game_state->GetMatch()->GetTeamA();
     }

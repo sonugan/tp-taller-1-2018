@@ -10,6 +10,9 @@ Game::Game(Configuration* initial_configuration) {
     this->initial_configuration = initial_configuration;
     this->correctly_initialized = false;
 
+}
+
+void Game::LogIn() {
     InitSDL();
 
 
@@ -34,7 +37,7 @@ Game::Game(Configuration* initial_configuration) {
             while (!gameStarted) {
                 gameStarted = client->WaitForGameStart();
             }
-            this->user = new User(login_request->GetUsername(), login_request->GetPassword(), (int)login_view->GetTeamNumber(), USER_COLOR::RED);
+//            this->user = new User(login_request->GetUsername(), login_request->GetPassword(), (int)login_view->GetTeamNumber(), USER_COLOR::RED);
 
             CreateModel();
             CreateViews();
@@ -48,8 +51,6 @@ Game::Game(Configuration* initial_configuration) {
     login_view->Free();
     delete login_view;
     delete login_request;
-
-
 }
 
 Game::~Game() {
@@ -131,7 +132,7 @@ void Game::CreateModel() {
     }
 
     // DEFINIR COMO SE SELECCIONA EL JUGADOR
-    if (user->GetSelectedTeam() == (int)TEAM_NUMBER::TEAM_A)
+    if (user->GetSelectedTeam() == TEAM_NUMBER::TEAM_A)
     {
         team_a->GetPlayers()[5]->SetPlayerColor(this->user->GetUserColor());
     }
@@ -143,6 +144,32 @@ void Game::CreateModel() {
     Ball* ball = new Ball();
 
     this->match = new Match(pitch, team_a, team_b, ball);
+}
+
+Match* Game::CreateTestMatch(Configuration* initial_configuration) {
+    Logger::getInstance()->debug("CREANDO TEST MATCH");
+    Pitch* pitch = new Pitch();
+
+    Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_A);
+    Team* team_a = new Team(formation_team_a, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
+
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+        team_a->AddPlayer(new Player(i,TEAM_NUMBER::TEAM_A));
+    }
+
+    Formation* formation_team_b = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_B);
+    Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_NUMBER::TEAM_B); // TODO: TRAER NOMBRE DEL TEAM B Y CAMISETA DE CONFIG
+
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+        team_b->AddPlayer(new Player(i, TEAM_NUMBER::TEAM_B));
+    }
+
+    team_a->GetPlayers()[5]->SetPlayerColor(USER_COLOR::BLUE);
+    team_b->GetPlayers()[5]->SetPlayerColor(USER_COLOR::GREEN);
+
+    Ball* ball = new Ball();
+
+    return new Match(pitch, team_a, team_b, ball);
 }
 
 void Game::CreateViews() {
@@ -176,7 +203,7 @@ void Game::CreateControllers() {
 
     //OBTENER EL EQUIPO DEL USER PARA CREAR LOS CONTROLADORES
 
-    if (this->user->GetSelectedTeam() == (int)TEAM_NUMBER::TEAM_A)
+    if (this->user->GetSelectedTeam() == TEAM_NUMBER::TEAM_A)
     {
         team_controller = new TeamController(match->GetTeamA(), this->client, camera);
         player_controller = new PlayerController(match->GetTeamA(), this->client);

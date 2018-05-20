@@ -34,3 +34,4 @@ string StringUtils::RemoveLastNewLine(string str)
     str.erase(std::remove(str.end() - 1, str.end(), '\n'), str.end());
     return str;
 }
+

@@ -36,7 +36,7 @@ void ClientTester::TestCompleteFlow()
 
     cin.get();
 
-    QuitRequest* quit_request = new QuitRequest("gperez");
+    QuitRequest* quit_request = new QuitRequest(username);
     client->Quit(quit_request);
 
 

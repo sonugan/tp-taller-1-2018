@@ -13,11 +13,10 @@ LoginRequest::~LoginRequest(){};
 string LoginRequest::Serialize()
 {
     string msg_type = to_string(this->GetMessageType());
-    cout << msg_type << endl;
     string msg = msg_type + "|" + this->username + "|" + this->password + "|" + this->team;
     return msg;
-//            return string_builder.Concat(msg_type.c_str(), "|", this->username.c_str(), "|", this->password.c_str(), "|", this->team.c_str());
 }
+
 void LoginRequest::Deserialize(string str_obj)
 {
     std::vector<std::string> data = StringUtils::Split(str_obj, '|');
@@ -26,6 +25,7 @@ void LoginRequest::Deserialize(string str_obj)
     this->password = data[2];
     this->team = data[3];
 }
+
 string LoginRequest::GetUsername() { return this->username; }
 string LoginRequest::GetPassword() { return this->password; }
 string LoginRequest::GetTeam() { return this->team; }

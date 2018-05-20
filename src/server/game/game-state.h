@@ -18,8 +18,6 @@ class GameState
 
         Match* GetMatch();
 
-        void AddUser(User* user);
-        void RemoveUser(string username);
         protected:
 
     private:

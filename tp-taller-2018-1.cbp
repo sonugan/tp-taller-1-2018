@@ -135,6 +135,7 @@
 		<Unit filename="src/shared/model/pitch.h" />
 		<Unit filename="src/shared/model/player.cpp" />
 		<Unit filename="src/shared/model/player.h" />
+		<Unit filename="src/shared/model/team-number.h" />
 		<Unit filename="src/shared/model/team.cpp" />
 		<Unit filename="src/shared/model/team.h" />
 		<Unit filename="src/shared/model/trajectory.cpp" />

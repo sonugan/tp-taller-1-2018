@@ -5,12 +5,11 @@
 #include <map>
 #include <vector>
 #include "../logger.h"
+#include "../model/team-number.h"
 
 using namespace std;
 
 class Formation;
-
-enum class TEAM_NUMBER {TEAM_A = 1, TEAM_B = 2};
 
 class Configuration
 {
