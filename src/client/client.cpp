@@ -39,6 +39,19 @@ bool Client::LogIn(LoginRequest* login_request) {
 
 }
 
+bool Client::WaitForGameStart() {
+    try {
+
+        // OJO con esto. Recibe bloquea el thread.
+        Message server_message = clientSocket->Receive(255);
+
+        return true;
+    } catch (...) {
+        return false;
+    }
+
+}
+
 bool Client::KickBall(KickBallRequest* kick_ball_request){
     Message r(kick_ball_request->Serialize());
     return clientSocket->Send(r);

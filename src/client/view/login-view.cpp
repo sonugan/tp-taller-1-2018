@@ -3,6 +3,7 @@
 #define MSG_ENTER_TEAM          "Ingrese equipo (A o B) y presione enter:"
 #define MSG_ENTER_SERVER_IP     "Ingrese la direccion IP del server:"
 #define MSG_INVALID_PASSWORD    "Error de autenticacion. Presione ESC para salir o ENTER para volver al menu principal"
+#define MSG_WAITING             "Esperando que se conecten todos los jugadores..."
 
 
 #include "login-view.h"
@@ -212,6 +213,63 @@ void LoginView::OpenErrorPage(Configuration* game_configuration)
     if (backHome) {
         this->Open(game_configuration);
     }
+}
+
+void LoginView::OpenWaitingPage()
+{
+    bool quit = false;
+
+    bool backHome = false;
+
+    SDL_Event e;
+
+    SDL_Color textColor = { 255, 255, 255, 0xFF };
+
+    // Limpio el texto que quedo del usuario
+    this->inputTextSprite->LoadFromRenderedText( this->fontStyle, " ", textColor, false );
+
+    // Cargo mensaje de autenticacion erronea
+    this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_WAITING, textColor, true );
+
+    SDL_StartTextInput();
+
+//    while( !quit ) {
+//        while( SDL_PollEvent( &e ) != 0 ) {
+//            if ( e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+//                // SI PRESIONA ESC SALE DEL JUEGO
+//                quit = true;
+//                this->userQuit = true;
+//            } else if( e.type == SDL_KEYDOWN ) {
+//                // SI PRESIONA ENTER VUELVE AL MENU PRINCIPAL
+//                if ( e.key.keysym.scancode == SDL_SCANCODE_KP_ENTER || e.key.keysym.scancode == SDL_SCANCODE_RETURN) {
+//                    quit = true;
+//                    backHome = true;
+//                }
+//            }
+//        }
+
+//        this->login_request->SetUsername("");
+//        this->login_request->SetPassword("");
+//        this->login_request->SetTeam("");
+//        this->login_request->SetServerIp("");
+
+
+        SDL_SetRenderDrawColor( this->renderer, 0x00, 0x00, 0x00, 0xFF );
+        SDL_RenderClear( this->renderer );
+
+        this->backgroundSprite->Render( ( this->screenWidth - this->backgroundSprite->GetWidth() ) / 2, 0 );
+        this->textSprite->Render( ( this->screenWidth - this->textSprite->GetWidth() ) / 2, 350 );
+        this->inputTextSprite->Render( ( this->screenWidth - this->inputTextSprite->GetWidth() ) / 2, 350 + this->textSprite->GetHeight() );
+
+        SDL_RenderPresent( this->renderer );
+
+//    }
+
+    SDL_StopTextInput();
+
+//    if (backHome) {
+//        this->Open(game_configuration);
+//    }
 }
 
 TEAM_NUMBER LoginView::GetTeamNumber()

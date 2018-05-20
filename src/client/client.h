@@ -19,6 +19,7 @@ class Client
         virtual ~Client();
         void Init(std::string server_ip);
         bool LogIn(LoginRequest* login_request);
+        bool WaitForGameStart();
         bool Quit(QuitRequest* quit_request);
         void Close();
         bool KickBall(KickBallRequest* kick_ball_request);

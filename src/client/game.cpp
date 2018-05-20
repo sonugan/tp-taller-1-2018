@@ -22,13 +22,18 @@ Game::Game(Configuration* initial_configuration) {
     this->client = new Client(initial_configuration);
 
     bool isLogged = false;
+    bool gameStarted = false;
 
-    while (!isLogged) {
+    while (!isLogged && !login_view->IsUserQuit()) {
         client->Init(login_request->GetServerIp());
-        bool isLogged = client->LogIn(login_request);
+        isLogged = client->LogIn(login_request);
         if (!isLogged) {
             login_view->OpenErrorPage(initial_configuration);
         } else {
+            login_view->OpenWaitingPage();
+            while (!gameStarted) {
+                gameStarted = client->WaitForGameStart();
+            }
             this->user = new User(login_request->GetUsername(), login_request->GetPassword(), (int)login_view->GetTeamNumber(), USER_COLOR::RED);
 
             CreateModel();
@@ -37,22 +42,6 @@ Game::Game(Configuration* initial_configuration) {
             this->correctly_initialized = true;
         }
     }
-
-
-//    while(!login_view->IsUserAuthenticated() && !login_view->IsUserQuit()) {
-//        // El usuario no esta autenticado
-//        login_view->OpenErrorPage(initial_configuration);
-//    }
-//
-//    if (isLogged) {
-//
-//        this->user = new User(login_request->GetUsername(), login_request->GetPassword(), (int)login_view->GetTeamNumber(), USER_COLOR::RED);
-//
-//        CreateModel();
-//        CreateViews();
-//        CreateControllers();
-//        this->correctly_initialized = true;
-//    }
 
     //Libero recursos de la vista
 
