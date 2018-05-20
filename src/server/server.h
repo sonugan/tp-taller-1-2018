@@ -59,6 +59,7 @@ private:
     void HandleRecoverBallRequest(ClientSocket* client, Message* message);
     void HandleKickRequest(ClientSocket* client, Message* message);
     void HandlePassBallRequest(ClientSocket* client, Message* message);
+    void HandleChangePlayerRequest(ClientSocket* client, Message* message);
     void SendMessage(ClientSocket* client);
 };
 
