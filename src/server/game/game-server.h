@@ -10,6 +10,7 @@
 #include "../../shared/network/messages/recover-ball-request.h"
 #include "../../shared/network/messages/kick-ball-request.h"
 #include "../../shared/network/client-socket.h"
+#include "../../shared/network/messages/pass-ball-request.h"
 
 using namespace std;
 
@@ -24,6 +25,7 @@ public:
     void DoQuit(QuitRequest* quit_request);
     std::string DoRecoverBall(RecoverBallRequest* recover_ball_request, int socket_id);
     string DoKick(KickBallRequest* kick_ball_request, int client_socket_id);
+    Message DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request);
 
 protected:
 

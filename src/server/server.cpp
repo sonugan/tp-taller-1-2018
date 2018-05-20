@@ -4,6 +4,7 @@
 #include "session/authentication-exception.h"
 #include "session/max-allowed-user-exception.h"
 #include "../shared/network/messages/quit-request.h"
+#include "../shared/network/messages/pass-ball-request.h"
 
 Server::Server(Configuration* config)
 {
@@ -238,6 +239,16 @@ void Server::HandleKickRequest(ClientSocket* client, Message* message)
     this->NotifyAll(&game_serialized);
 }
 
+void Server::HandlePassBallRequest(ClientSocket* client, Message* message)
+{
+    string client_id = to_string(client->socket_id);
+    Logger::getInstance()->debug("(Server:HandlePassBallRequest) Procesando pass ball request. cliente: " + client_id);
+    PassBallRequest* pass_ball_request = new PassBallRequest();
+    message->GetDeserializedData(pass_ball_request);
+    Message response = this->game->DoPassBall(client, pass_ball_request);
+    this->NotifyAll(&response);
+}
+
 void Server::SendMessage(ClientSocket* client)
 {
     Logger::getInstance()->debug("(Server:SendMessage) Iniciando hilo para enviar mensajes a cliente: " + to_string(client->socket_id));
@@ -250,7 +261,6 @@ void Server::SendMessage(ClientSocket* client)
         while(!outgoing_msg_queue->HasNext())
         {
             output_msg_condition_variable.wait(lock);
-
         }
         auto msg = outgoing_msg_queue->Next();
         Logger::getInstance()->debug("(Server:SendMessage) Enviando mensaje a cliente: " + to_string(client->socket_id));

@@ -74,3 +74,11 @@ string GameServer::DoKick(KickBallRequest* kick_request, int socket_id)
     user->GetSelectedPlayer()->Kick();
     return this->game_state->GetMatch()->Serialize();
 }
+
+Message GameServer::DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request)
+{
+    User* user = this->session_manager->GetUserBySocketID(client->socket_id);
+    user->GetSelectedPlayer()->PassBall();
+    Message response(this->game_state->GetMatch()->Serialize());
+    return response;
+}
