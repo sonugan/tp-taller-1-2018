@@ -145,6 +145,9 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
     case MESSAGE_TYPE::KICK_REQUEST:
         this->HandleKickRequest(client, message);
         break;
+//    case MESSAGE_TYPE::SELECT_REQUEST:
+//        this->HandleChangePlayerRequest(client,message);
+//        break;
     default:
         Logger::getInstance()->debug("(Server::ProcessMessage) No hay handler para este tipo de mensaje.");
     }

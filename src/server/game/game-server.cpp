@@ -82,3 +82,22 @@ Message GameServer::DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_
     Message response(this->game_state->GetMatch()->Serialize());
     return response;
 }
+
+/*string GameServer::ChangePlayer(ChangePlayerRequest* change_player_request, int socket_id)
+{
+    std::vector<Player*> players = team->GetPlayers();
+    Player* player = NULL;
+
+    for (unsigned int i = 0; i < (Team::TEAM_SIZE - 1); i++) {
+        if (players[i]->GetPlayerColor() == this->color){
+            player = players[i];
+        }
+    }
+
+    if (CKeySelected(keyboard_state_array) && !player->HasBall() && elapsed_millis >= PLAYER_SELECTION_DELAY_MILLIS) {
+        ChangePlayerRequest r;
+        this->client->ChangePlayer(&r);
+        last_player_selection_change = std::chrono::system_clock::now();
+    }
+}
+*/
