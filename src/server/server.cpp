@@ -86,7 +86,7 @@ void Server::ListenConnections()
 
         Queue<Message>* outgoing_msg_queue = new Queue<Message>();
         this->outgoing_msg_queues[client->socket_id] = outgoing_msg_queue;
-        // Disparo thread para enviar mensajes a este ClienteSocket.
+        // Disparo thread para envi ar mensajes a este ClienteSocket.
         thread outgoing_msg_thread(&Server::SendMessage, this, client);
         outgoing_msg_thread.detach();
     }
@@ -141,6 +141,9 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
     case MESSAGE_TYPE::RECOVER_REQUEST:
         this->HandleRecoverBallRequest(client, message);
         break;
+    case MESSAGE_TYPE::KICK_REQUEST:
+        this->HandleKickRequest(client, message);
+        break;
     default:
         Logger::getInstance()->debug("(Server::ProcessMessage) No hay handler para este tipo de mensaje.");
     }
@@ -191,14 +194,19 @@ void Server::HandleQuitRequest(ClientSocket* client, Message* message)
     message->GetDeserializedData(quit_request);
     this->game->DoQuit(quit_request);
 
+    // Hack! estoy usando message_type: quit_request ya que falta definir quit_response.
 
-    // NO hace falta mandar mensaje de logout (creo)
+    Logger::getInstance()->debug("(Server:HandleQuitRequest) Encolando respuesta logout");
+    Message* quit_response= new Message("7|quit-ok");
+    this->outgoing_msg_queues[client->socket_id]->Append(quit_response);
+
 
     Logger::getInstance()->debug("(Server:HandleQuitRequest) Cerrando clientsocket.");
     this->clients.erase(client->socket_id);
     client->ShutDown();
     client->Close();
     delete quit_request;
+    delete quit_response;
 }
 
 void Server::HandleMoveRequest(ClientSocket* client, Message* message)
@@ -218,6 +226,18 @@ void Server::HandleRecoverBallRequest(ClientSocket* client, Message* message)
     this->NotifyAll(&recover_ball_response);
 }
 
+void Server::HandleKickRequest(ClientSocket* client, Message* message)
+{
+    Logger::getInstance()->debug("(Server:HandleKickRequest) Procesando kick request.");
+
+    KickBallRequest* kick_ball_request = new KickBallRequest();
+    message->GetDeserializedData(kick_ball_request);
+
+    Message game_serialized(this->game->DoKick(kick_ball_request, client->socket_id));
+
+    this->NotifyAll(&game_serialized);
+}
+
 void Server::SendMessage(ClientSocket* client)
 {
     Logger::getInstance()->debug("(Server:SendMessage) Iniciando hilo para enviar mensajes a cliente: " + to_string(client->socket_id));
@@ -230,6 +250,7 @@ void Server::SendMessage(ClientSocket* client)
         while(!outgoing_msg_queue->HasNext())
         {
             output_msg_condition_variable.wait(lock);
+
         }
         auto msg = outgoing_msg_queue->Next();
         Logger::getInstance()->debug("(Server:SendMessage) Enviando mensaje a cliente: " + to_string(client->socket_id));

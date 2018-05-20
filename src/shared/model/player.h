@@ -34,7 +34,6 @@ class Player
         bool IsSelected();
         bool IsKicking();
         bool IsRecoveringBall();
-        void SetSelected(bool value);
         void SetKicking(bool kicking);
         void SetRecoveringBall(bool recoveringBall);
         Location* GetDefaultLocation();

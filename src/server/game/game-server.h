@@ -8,6 +8,7 @@
 #include "session/session-manager.h"
 #include "../../shared/network/messages/quit-request.h"
 #include "../../shared/network/messages/recover-ball-request.h"
+#include "../../shared/network/messages/kick-ball-request.h"
 #include "../../shared/network/client-socket.h"
 
 using namespace std;
@@ -22,7 +23,7 @@ public:
     void DoLogin(ClientSocket* client, LoginRequest* login_request);
     void DoQuit(QuitRequest* quit_request);
     std::string DoRecoverBall(RecoverBallRequest* recover_ball_request, int socket_id);
-
+    string DoKick(KickBallRequest* kick_ball_request, int client_socket_id);
 
 protected:
 
