@@ -11,8 +11,8 @@ users:
   - name: gperez
     password: 1234
   - name: user2
-    password: 2
+    password: 1234
   - name: user3
-    password: 3
+    password: 1234
   - name: user4
-    password: 4
+    password: 1234

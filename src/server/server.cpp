@@ -188,9 +188,13 @@ void Server::HandleQuitRequest(ClientSocket* client, Message* message)
     this->game->DoQuit(quit_request);
 
     // Hack! estoy usando message_type: quit_request ya que falta definir quit_response.
+
+    Logger::getInstance()->debug("(Server:HandleQuitRequest) Encolando respuesta logout");
     Message* quit_response= new Message("7|quit-ok");
     this->outgoing_msg_queues[client->socket_id]->Append(quit_response);
 
+
+    Logger::getInstance()->debug("(Server:HandleQuitRequest) Cerrando clientsocket.");
     this->clients.erase(client->socket_id);
     client->ShutDown();
     client->Close();

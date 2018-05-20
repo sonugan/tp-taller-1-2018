@@ -36,6 +36,8 @@ class SessionManager
         /* Methods */
         bool IsValidUser(string username, string password);
         bool IsAuthenticated(LoginRequest* login_request);
+
+        USER_COLOR GetColorToAssign();
 };
 
 #endif // SESSIONMANAGER_H

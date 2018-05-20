@@ -40,13 +40,15 @@ User* SessionManager::Authenticate(ClientSocket* client, LoginRequest* login_req
         Logger::getInstance()->info("(SessionManager:Authenticate) Usuario válido. Se conectó: " + login_request->GetUsername());
         //TODO: pedir team al login request
 
-        USER_COLOR color = colors.top(); // Obtengo el color para el usuario
-        colors.pop(); // Lo saco de la cola para que no se lo de a otro
+        USER_COLOR color = this->GetColorToAssign();
 
         User* user = new User(login_request->GetUsername(), login_request->GetPassword(), 1, color);
 
         this->authenticated_users[user->GetUsername()] = user;
         this->clientsocket_user_association[client->socket_id] = user;
+
+        string created_user = "Usuario creado: " + user->GetUsername() + " color: "+ to_string((int) user->GetUserColor());
+        Logger::getInstance()->info(created_user);
 
         return user;
     }
@@ -60,8 +62,26 @@ User* SessionManager::Authenticate(ClientSocket* client, LoginRequest* login_req
 void SessionManager::RemoveSession(string username)
 {
     Logger::getInstance()->info("(SessionManager:RemoveSession) Removiendo usuario: " + username);
-    this->authenticated_users.erase(username);
+    map<string, User*>::iterator it = this->authenticated_users.find(username);
+    if(it != this->authenticated_users.end())
+    {
+        // Recupero color de usuario para poder reasignarlo
+        User* user = it->second;
+        Logger::getInstance()->debug("(SessionManager:RemoveSession) Sesion encontrada. user: " + user->GetUsername());
+        USER_COLOR user_color = user->GetUserColor();
+        this->colors.push(user_color);
 
+        // Remuevo seleccion del player.
+        Logger::getInstance()->debug("(SessionManager:RemoveSession) quitando seleccion al player");
+        user->GetSelectedPlayer()->SetPlayerColor(USER_COLOR::NO_COLOR);
+
+
+         Logger::getInstance()->debug("(SessionManager:RemoveSession) Borrando user de coleccion de autenticados.");
+        // Lo elimino de la colección de usuarios autenticados.
+        this->authenticated_users.erase(username);
+
+        delete user;
+    }
 }
 
 
@@ -98,4 +118,11 @@ bool SessionManager::IsAuthenticated(LoginRequest* login_request)
     }
 
     return false; // No existe ese usuario
+}
+
+USER_COLOR SessionManager::GetColorToAssign()
+{
+    USER_COLOR color = this->colors.top();
+    this->colors.pop();
+    return color;
 }
