@@ -162,7 +162,7 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
     try
     {
         this->game->DoLogin(client, &login_request);
-        Message* login_response = new Message("9|960|540|3|0|0|0|360|540|3|0|0|0|660|240|3|0|0|0|660|540|3|0|0|0|660|840|3|0|0|0|800|240|3|0|0|0|900|540|3|0|0|0|800|740|4|0|0|0|1560|540|4|0|0|0|1260|240|4|0|0|0|1260|540|4|0|0|0|1260|840|3|4|1|0|1135|240|4|0|0|0|1020|540|4|0|0|0|1120|740");
+        Message* login_response = new Message("login-ok");
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta LoginOK.");
 
         unique_lock<mutex> lock(output_msg_mutex);
