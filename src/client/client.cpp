@@ -72,6 +72,10 @@ bool Client::RecoverBall(RecoverBallRequest* recover_ball_request){
     return clientSocket->Send(r);
 }
 
+bool Client::ChangePlayer(ChangePlayerRequest* change_player_request){
+    Message r(change_player_request->Serialize());
+    return clientSocket->Send(r);
+}
 
 
 bool Client::Quit(QuitRequest* quit_request)

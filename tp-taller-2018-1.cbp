@@ -151,6 +151,8 @@
 		<Unit filename="src/shared/network/message-type.h" />
 		<Unit filename="src/shared/network/message.cpp" />
 		<Unit filename="src/shared/network/message.h" />
+		<Unit filename="src/shared/network/messages/change-player-request.cpp" />
+		<Unit filename="src/shared/network/messages/change-player-request.h" />
 		<Unit filename="src/shared/network/messages/kick-ball-request.cpp" />
 		<Unit filename="src/shared/network/messages/kick-ball-request.h" />
 		<Unit filename="src/shared/network/messages/login-request.cpp" />

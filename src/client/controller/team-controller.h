@@ -12,6 +12,7 @@
 #include <vector>
 #include <chrono>
 #include "../sound/sound-manager.h"
+#include "../../shared/model/user-color.h"
 
 class TeamController : public AbstractController
 {
@@ -33,11 +34,13 @@ class TeamController : public AbstractController
         void ChangeFormation(const Uint8 *keyboard_state_array);
         void MoveUnselectedPlayersToDefaultPositions();
         void CatchBall();
+        void SetColor(USER_COLOR color);
 
         std::chrono::time_point<std::chrono::system_clock> last_player_selection_change;
         std::chrono::time_point<std::chrono::system_clock> last_formation_change;
         Team* team;
         Camera* camera;
+        USER_COLOR color;
 
 };
 #endif // TEAMCONTROLLER_H

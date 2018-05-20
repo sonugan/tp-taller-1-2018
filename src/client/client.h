@@ -9,6 +9,7 @@
 #include "../shared/network/messages/pass-ball-request.h"
 #include "../shared/network/messages/recover-ball-request.h"
 #include "../shared/network/messages/move-request.h"
+#include "../shared/network/messages/change-player-request.h"
 
 #include <string>
 
@@ -26,6 +27,7 @@ class Client
         bool PassBall(PassBallRequest* pass_ball_request);
         bool RecoverBall(RecoverBallRequest* recover_ball_request);
         bool Move(MoveRequest* move_request);
+        bool ChangePlayer(ChangePlayerRequest* change_player_request);
 
         // TODO: Tipar mensaje. esto es solo para una prueba
         void SendEvent();
