@@ -35,9 +35,8 @@ bool ClientSocket::Send(Message request)
     return sent_ok;
 }
 
-Message ClientSocket::Receive(int expected_size)
+Message* ClientSocket::Receive(int expected_size)
 {
-    //char* buffer = (char*) malloc(expected_size);
     char buffer[expected_size];
     bzero(buffer,expected_size);
 
@@ -46,8 +45,7 @@ Message ClientSocket::Receive(int expected_size)
         Logger::getInstance()->debug("ERROR leyendo desde socket");
     }
     string message_data = string(buffer);
-    Message m(message_data);
-    return m;
+    return new Message(message_data);
 }
 
 ClientSocket::~ClientSocket()

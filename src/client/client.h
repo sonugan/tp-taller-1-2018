@@ -10,8 +10,11 @@
 #include "../shared/network/messages/recover-ball-request.h"
 #include "../shared/network/messages/move-request.h"
 #include "../shared/network/messages/change-player-request.h"
+#include "../shared/utils/safe-queue.h"
+#include "../shared/model/match.h"
 
 #include <string>
+#include <thread>
 
 class Client
 {
@@ -28,6 +31,8 @@ class Client
         bool RecoverBall(RecoverBallRequest* recover_ball_request);
         bool Move(MoveRequest* move_request);
         bool ChangePlayer(ChangePlayerRequest* change_player_request);
+        void SetMatch(Match* match);
+        string GetGameState();
 
         // TODO: Tipar mensaje. esto es solo para una prueba
         void SendEvent();
@@ -37,6 +42,11 @@ class Client
     private:
         Configuration* config;
         ClientSocket* clientSocket;
+        SafeQueue<Message>* message_queue;
+        Match* match;
+
+        thread* receive_messages_thread;
+        void ReceiveMessages();
 };
 
 #endif // CLIENT_H

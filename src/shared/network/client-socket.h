@@ -14,7 +14,7 @@ class ClientSocket : public Socket
         void Connect(SocketAddress address);
         virtual ~ClientSocket();
         bool Send(Message request);
-        Message Receive(int expected_size);
+        Message* Receive(int expected_size);
         void Bind(SocketAddress address);
     protected:
     private:

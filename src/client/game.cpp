@@ -33,11 +33,11 @@ void Game::LogIn() {
         if (!isLogged) {
             login_view->OpenErrorPage(initial_configuration);
         } else {
-            login_view->OpenWaitingPage();
+            /*login_view->OpenWaitingPage();
             while (!gameStarted) {
                 gameStarted = client->WaitForGameStart();
-            }
-//            this->user = new User(login_request->GetUsername(), login_request->GetPassword(), (int)login_view->GetTeamNumber(), USER_COLOR::RED);
+            }*/
+            this->user = new User(login_request->GetUsername(), login_request->GetPassword(), login_view->GetTeamNumber(), USER_COLOR::RED);
 
             CreateModel();
             CreateViews();
@@ -86,6 +86,13 @@ void Game::Start() {
         this->game_controller->Handle(keyboard_state_array);
         this->player_controller->Handle(keyboard_state_array);
         this->team_controller->Handle(keyboard_state_array);
+
+        /*string serialized_match = this->client->GetGameState();
+        if(serialized_match != "")
+        {
+            this->match->DeserializeAndUpdate(serialized_match);
+        }*/
+
         match->GetBall()->Move();
 
         RenderViews();
@@ -144,6 +151,7 @@ void Game::CreateModel() {
     Ball* ball = new Ball();
 
     this->match = new Match(pitch, team_a, team_b, ball);
+    this->client->SetMatch(this->match);
 }
 
 Match* Game::CreateTestMatch(Configuration* initial_configuration) {

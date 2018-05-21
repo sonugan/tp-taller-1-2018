@@ -33,29 +33,40 @@ void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
 void PlayerController::MovePlayer(const Uint8 *keyboard_state_array)
 {
     bool run = ShiftKeySelected(keyboard_state_array);
+    u_int selected_player_id = this->team->GetSelectedPlayer()->GetPositionIndex();
+
     if (UpKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveUpToRight(run);
+        MoveRequest m(DIRECTION::NORTHEAST, run);
+        this->client->Move(&m);
     } else if (UpKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveUpToLeft(run);
+        MoveRequest m(DIRECTION::NORTHWEST, run);
+        this->client->Move(&m);
     } else if (DownKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveDownToRight(run);
+        MoveRequest m(DIRECTION::SOUTHEAST, run);
+        this->client->Move(&m);
     } else if (DownKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveDownToLeft(run);
+        MoveRequest m(DIRECTION::SOUTHWEST, run);
+        this->client->Move(&m);
     } else if (UpKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveUp(run);
+        MoveRequest m(DIRECTION::NORTH, run);
+        this->client->Move(&m);
     } else if(RightKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveRight(run);
+        MoveRequest m(DIRECTION::EAST, run);
+        this->client->Move(&m);
     } else if(LeftKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveLeft(run);
+        MoveRequest m(DIRECTION::WEST, run);
+        this->client->Move(&m);
     } else if(DownKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveDown(run);
+        MoveRequest m(DIRECTION::SOUTH, run);
+        this->client->Move(&m);
     }
     current_action = PLAYER_IS_RUNNING;
 }
 
 bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array) {
     if (DKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->Kick();
+        KickBallRequest r;
+        this->client->KickBall(&r);
         current_action = PLAYER_IS_KICKING;
         return true;
     }
@@ -65,14 +76,16 @@ bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array) {
 void PlayerController::PassBall(const Uint8 *keyboard_state_array) {
     unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_pass).count();
     if (elapsed_millis > PASS_DELAY_MILLIS && SKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->PassBall();
+        PassBallRequest r;
+        this->client->PassBall(&r);
         last_pass = std::chrono::system_clock::now();
     }
 }
 
 bool PlayerController::PlayerRecoverBall(const Uint8 *keyboard_state_array) {
     if (AKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->RecoverBall();
+        RecoverBallRequest r;
+        this->client->RecoverBall(&r);
         current_action = PLAYER_IS_RECOVERING;
         return true;
     }
@@ -128,13 +141,15 @@ bool PlayerController::ContinueCurrentAction()
         if(current_action == PLAYER_IS_KICKING &&
             (current_action_timming * PlayerView::FRAMES_PER_EVENT) < PlayerView::KICKING_FRAME_COUNT)
         {
-            this->team->GetSelectedPlayer()->Kick();
+            KickBallRequest r;
+            this->client->KickBall(&r);
             return true;
         }
         else if(current_action == PLAYER_IS_RECOVERING &&
             (current_action_timming * PlayerView::FRAMES_PER_EVENT) < PlayerView::RECOVERING_FRAME_COUNT)
         {
-            this->team->GetSelectedPlayer()->RecoverBall();
+            RecoverBallRequest r;
+            this->client->RecoverBall(&r);
             return true;
         }
         else
@@ -147,6 +162,5 @@ bool PlayerController::ContinueCurrentAction()
     {
         current_action_timming = 1; //Es la segunda vez por la que debo entrar acá
         return false;
-    }
 }
-
+}
