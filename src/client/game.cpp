@@ -87,11 +87,11 @@ void Game::Start() {
         this->player_controller->Handle(keyboard_state_array);
         this->team_controller->Handle(keyboard_state_array);
 
-        /*string serialized_match = this->client->GetGameState();
+        string serialized_match = this->client->GetGameState();
         if(serialized_match != "")
         {
             this->match->DeserializeAndUpdate(serialized_match);
-        }*/
+        }
 
         match->GetBall()->Move();
 
