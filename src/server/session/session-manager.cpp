@@ -101,6 +101,11 @@ User* SessionManager::GetUserBySocketID(int socket_id)
     return NULL;
 }
 
+bool SessionManager::IsReadyToStart()
+{
+    return this->GetAutheticatedUsersCount() == this->max_allowed_users;
+}
+
 /* Private Methods */
 
 bool SessionManager::IsValidUser(string username, string password)

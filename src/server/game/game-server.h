@@ -30,13 +30,15 @@ public:
     string DoKick(KickBallRequest* kick_ball_request, int client_socket_id);
     Message* DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request);
     string ChangePlayer(ChangePlayerRequest* change_player_request, int socket_id);
+    bool IsReadyToStart();
+    Message* StartGame();
 
 protected:
 
 private:
     /* Attributes */
     GameState* game_state;
-    bool is_running = false;
+    bool is_game_started = false;
     SessionManager* session_manager;
 
     Player* GetUserSelectedPlayer(std::vector<Player*> available_players);

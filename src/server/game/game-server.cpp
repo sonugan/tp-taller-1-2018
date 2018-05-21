@@ -144,3 +144,15 @@ string GameServer::ChangePlayer(ChangePlayerRequest* change_player_request, int 
 
     return this->game_state->GetMatch()->Serialize();
 }
+
+bool GameServer::IsReadyToStart()
+{
+    return this->session_manager->IsReadyToStart();
+}
+
+Message* GameServer::StartGame()
+{
+    Logger::getInstance()->info("(GameServer:StartGame) Comenzando el juego.");
+    this->is_game_started = true;
+    return new Message(this->game_state->GetMatch()->Serialize());
+}

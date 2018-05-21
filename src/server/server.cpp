@@ -171,6 +171,13 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
 
         output_msg_condition_variable.notify_all();
 
+        // Si ya se loguearon todos, se notifica a todos los usuarios para empezar a jugar.
+        if (this->game->IsReadyToStart())
+        {
+            Message* start_game_msg = this->game->StartGame();
+            this->NotifyAll(start_game_msg);
+        }
+
     }
     catch (AuthenticationException e)
     {

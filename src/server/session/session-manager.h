@@ -24,6 +24,7 @@ class SessionManager
         int GetAutheticatedUsersCount();
 
         User* GetUserBySocketID(int socket_id);
+        bool IsReadyToStart();
 
     protected:
 
