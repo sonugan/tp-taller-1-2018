@@ -148,9 +148,15 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
     case MESSAGE_TYPE::SELECT_REQUEST:
         this->HandleChangePlayerRequest(client, message);
         break;
+    case MESSAGE_TYPE::PASS_REQUEST:
+        this->HandlePassBallRequest(client, message);
+        break;
     default:
         Logger::getInstance()->debug("(Server::ProcessMessage) No hay handler para este tipo de mensaje.");
     }
+
+
+
 }
 
 void Server::HandleLoginRequest(ClientSocket* client, Message* message)

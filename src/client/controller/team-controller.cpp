@@ -77,14 +77,7 @@ void TeamController::ChangePlayerSelection(const Uint8 *keyboard_state_array) {
     int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>
                              (std::chrono::system_clock::now()-last_player_selection_change).count();
 
-    std::vector<Player*> players = team->GetPlayers();
-    Player* player = NULL;
-    for (unsigned int i = 0; i < (Team::TEAM_SIZE - 1); i++) {
-        if (players[i]->GetPlayerColor() == this->color){
-            player = players[i];
-        }
-    }
-    if (CKeySelected(keyboard_state_array) && !player->HasBall() && elapsed_millis >= PLAYER_SELECTION_DELAY_MILLIS) {
+    if (CKeySelected(keyboard_state_array) && elapsed_millis >= PLAYER_SELECTION_DELAY_MILLIS) {
         ChangePlayerRequest r;
         this->client->ChangePlayer(&r);
         last_player_selection_change = std::chrono::system_clock::now();

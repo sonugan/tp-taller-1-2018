@@ -32,6 +32,7 @@ public:
     string ChangePlayer(ChangePlayerRequest* change_player_request, int socket_id);
     bool IsReadyToStart();
     Message* StartGame();
+    void PlayerCatchBall(int socket_id);
 
 protected:
 

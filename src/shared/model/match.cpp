@@ -150,7 +150,7 @@ void Match::DeserializeAndUpdate(string serialized) {
         Player* player = GetTeamB()->GetPlayers()[i];
 
         player->SetDirection(static_cast<DIRECTION>(stoi(data[base_index])));
-//        player->SetPlayerColor(static_cast<USER_COLOR>(stoi(data[base_index + 1])));
+        //player->SetPlayerColor(static_cast<USER_COLOR>(stoi(data[base_index + 1])));
         player->SetKicking((bool)(stoi(data[base_index + 2])));
         player->SetRecoveringBall((bool)(stoi(data[base_index + 3])));
         player->GetLocation()->Update(stoi(data[base_index + 4]), stoi(data[base_index + 5]), 0);
