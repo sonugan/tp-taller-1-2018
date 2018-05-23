@@ -176,7 +176,6 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
         if (this->game->IsReadyToStart())
         {
             Message* start_game_msg = this->game->StartGame();
-            this->NotifyAll(start_game_msg);
 
             // Disparo thread para notificar game-state periodicamente.
             std::thread game_state_notifier_thread(&Server::NotifyGameState, this);
@@ -241,7 +240,7 @@ void Server::HandleKickRequest(ClientSocket* client, Message* message)
 
     KickBallRequest* kick_ball_request = new KickBallRequest();
     message->GetDeserializedData(kick_ball_request);
-    this->game->DoKick(kick_ball_request, client->socket_id)
+    this->game->DoKick(kick_ball_request, client->socket_id);
 }
 
 void Server::HandlePassBallRequest(ClientSocket* client, Message* message)
@@ -259,7 +258,7 @@ void Server::HandleChangePlayerRequest(ClientSocket* client, Message* message)
     Logger::getInstance()->debug("(Server:HandleChangePlayerRequest) Procesando change player request. cliente: " + client_id);
     ChangePlayerRequest* change_player_request = new ChangePlayerRequest();
     message->GetDeserializedData(change_player_request);
-    this->game->ChangePlayer(change_player_request, client->socket_id))
+    this->game->ChangePlayer(change_player_request, client->socket_id);
 }
 
 void Server::SendMessage(ClientSocket* client)

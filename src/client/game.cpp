@@ -103,7 +103,7 @@ void Game::Start() {
             this->match->DeserializeAndUpdate(serialized_match);
         }
 
-        match->GetBall()->Move();
+        //match->GetBall()->Move();
 
         RenderViews();
 
@@ -171,32 +171,6 @@ void Game::CreateModel(std::string serialized_model) {
     this->match->DeserializeAndUpdate(serialized_model);
 
     this->client->SetMatch(this->match);
-}
-
-Match* Game::CreateTestMatch(Configuration* initial_configuration) {
-    Logger::getInstance()->debug("CREANDO TEST MATCH");
-    Pitch* pitch = new Pitch();
-
-    Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_A);
-    Team* team_a = new Team(formation_team_a, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
-
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
-        team_a->AddPlayer(new Player(i,TEAM_NUMBER::TEAM_A));
-    }
-
-    Formation* formation_team_b = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_B);
-    Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_NUMBER::TEAM_B); // TODO: TRAER NOMBRE DEL TEAM B Y CAMISETA DE CONFIG
-
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
-        team_b->AddPlayer(new Player(i, TEAM_NUMBER::TEAM_B));
-    }
-
-    team_a->GetPlayers()[5]->SetPlayerColor(USER_COLOR::BLUE);
-    team_b->GetPlayers()[5]->SetPlayerColor(USER_COLOR::GREEN);
-
-    Ball* ball = new Ball();
-
-    return new Match(pitch, team_a, team_b, ball);
 }
 
 void Game::CreateViews() {

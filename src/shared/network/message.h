@@ -12,9 +12,9 @@ class Message
 {
     public:
 //        Message(char* data, int size);
-        Message(string data);
+        Message(const string& data);
         Message(ISerializable* serializable);
-        char* GetData();
+        const char* GetData();
         int GetDataSize();
         ISerializable* GetDeserializedData(ISerializable* serializable);
         MESSAGE_TYPE GetType();

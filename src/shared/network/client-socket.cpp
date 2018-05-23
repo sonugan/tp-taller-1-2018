@@ -50,7 +50,7 @@ Message* ClientSocket::Receive(int expected_size)
         Logger::getInstance()->debug("ERROR leyendo desde socket");
         throw SocketConnectionException("Error de conexión mientras se ejecutaba recv");
     }
-    string message_data = string(buffer);
+    const string message_data = string(buffer);
     Logger::getInstance()->debug("(ClientSocket:Receive) Mensaje recibido: " + message_data);
     return new Message(message_data);
 }

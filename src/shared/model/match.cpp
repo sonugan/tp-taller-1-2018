@@ -39,6 +39,7 @@ Ball* Match::GetBall() {
 
 string Match::Serialize() {
     Logger::getInstance()->debug("(Match:Serialize) Serializando Match...");
+
     string result;
     //  MESSAGE TYPE
     result.append(std::to_string(MESSAGE_TYPE::GAME_STATE_RESPONSE));
@@ -127,13 +128,12 @@ void Match::DeserializeAndUpdate(string serialized) {
 
     //  BALL
     ball->GetLocation()->Update(SafeStoi(data[1]), SafeStoi(data[2]), 0);
-    Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Ball location: " + ball->GetLocation()->ToString());
+//    Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Ball location: " + ball->GetLocation()->ToString());
 
     //  TEAM A
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
 
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Team A - Player: " + to_string(i));
-
+        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Team A - Player: " + to_string(i));
 
         int base_index = 3 + (i*6);
         Player* player = GetTeamA()->GetPlayers()[i];
@@ -157,7 +157,7 @@ void Match::DeserializeAndUpdate(string serialized) {
     //  TEAM B
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
 
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Team B - Player: " + to_string(i));
+        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Team B - Player: " + to_string(i));
         int base_index = 3 + 42 + (i*6);
         Player* player = GetTeamB()->GetPlayers()[i];
 

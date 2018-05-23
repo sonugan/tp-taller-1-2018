@@ -49,8 +49,8 @@ ClientSocket* ServerSocket::Accept()
 
 void ServerSocket::Send(Socket* client_socket, Message* request)
 {
-    string data = string(request->GetData());
-    string data_size = to_string(request->GetDataSize());
+    const string data = string(request->GetData());
+    const string data_size = to_string(request->GetDataSize());
     Logger::getInstance()->debug("(ServerSocket:Send) data: " + data + " size: " + data_size);
     send(client_socket->socket_id, request->GetData(), request->GetDataSize(), 0);
     delete request;
