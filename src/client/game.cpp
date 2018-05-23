@@ -84,6 +84,15 @@ void Game::Start() {
 
     // GAME LOOP
     while( !quit ) {
+
+        if (!this->client->IsConnected())
+        {
+            Logger::getInstance()->debug("(Game:Start) Desconectado.");
+            // TODO: agregar pantalla de desconexion!!
+            this->quit = true;
+            continue;
+        }
+
         this->game_controller->Handle(keyboard_state_array);
         this->player_controller->Handle(keyboard_state_array);
         this->team_controller->Handle(keyboard_state_array);
@@ -124,6 +133,11 @@ void Game::End() {
 void Game::CreateModel(std::string serialized_model) {
     Logger::getInstance()->debug("CREANDO EL MODELO");
 
+    /*
+    ACA ESTAMOS INSTANCIANDO EL MODELO COMO CUANDO NO HABÍA SERVER
+    Y LUEGO LO ACTUALIZAMOS CON LO QUE MANDA EL SERVER.
+    POR QUE? PORQUE NO QUEREMOS ROMPER COSAS QUE ANTES FUNCIONABAN.
+     */
     Pitch* pitch = new Pitch();
 
     Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_A);
