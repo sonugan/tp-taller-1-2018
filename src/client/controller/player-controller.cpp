@@ -134,8 +134,8 @@ void PlayerController::Handle(const Uint8* keyboard_state_array) {
 bool PlayerController::SelectedPlayerHasChange()
 {
     Logger::getInstance()->debug("(PlayerController::SelectedPlayerHasChange)");
-//    return team->GetSelectedPlayer() != this->selected_player;
-    return false;
+    return team->GetSelectedPlayer() != this->selected_player;
+
 }
 
 bool PlayerController::ContinueCurrentAction()

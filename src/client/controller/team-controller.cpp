@@ -52,27 +52,6 @@ Player* TeamController::FindNextPlayerToSelect() {
     return next_player;
 }
 
-/*
-void TeamController::ChangePlayerSelection(const Uint8 *keyboard_state_array) {
-
-    int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>
-                             (std::chrono::system_clock::now()-last_player_selection_change).count();
-
-    if (CKeySelected(keyboard_state_array) && !team->GetSelectedPlayer()->HasBall() && elapsed_millis >= PLAYER_SELECTION_DELAY_MILLIS) {
-        Player* next_player = FindNextPlayerToSelect();
-        if (next_player != NULL) {
-            SoundManager::PlayPlayerSelectionSound();
-            Player* selected_player = team->GetSelectedPlayer();
-            USER_COLOR color = selected_player->GetPlayerColor();
-            selected_player->SetPlayerColor(USER_COLOR::NO_COLOR);
-            selected_player = next_player;
-            selected_player->SetPlayerColor(color);
-            last_player_selection_change = std::chrono::system_clock::now();
-        }
-    }
-
-}*/
-
 void TeamController::ChangePlayerSelection(const Uint8 *keyboard_state_array) {
     int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>
                              (std::chrono::system_clock::now()-last_player_selection_change).count();
@@ -129,8 +108,6 @@ void TeamController::CatchBall() {
 void TeamController::Handle(const Uint8* keyboard_state_array) {
     ChangeFormation(keyboard_state_array);
     ChangePlayerSelection(keyboard_state_array);
-    MoveUnselectedPlayersToDefaultPositions();
-    CatchBall();
 }
 
 
