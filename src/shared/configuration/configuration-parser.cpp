@@ -56,68 +56,110 @@ void parseConfigFile(Configuration* configuration, YAML::Node config_file)
         configuration->SetLogLevel(DEFAULT_LOG_MODE);
     }
 
-
-    if (config_file[TEAM_NODE])
+    if(configuration->InitModeIsClient())
     {
-        YAML::Node team_node = config_file[TEAM_NODE];
-        if (team_node[TEAM_FORMATION_NODE])
+
+        if (config_file[TEAM_NODE])
         {
-            configuration->SetFormation(team_node[TEAM_FORMATION_NODE].as<string>());
+            YAML::Node team_node = config_file[TEAM_NODE];
+            if (team_node[TEAM_FORMATION_NODE])
+            {
+                configuration->SetFormation(team_node[TEAM_FORMATION_NODE].as<string>());
+            }
+            else
+            {
+                Logger::getInstance()->error("No se encontro el parametro '" + TEAM_FORMATION_NODE + "' en el nodo '" + TEAM_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_FORMATION + "'.");
+                configuration->SetFormation(DEFAULT_FORMATION);
+            }
+
+
+            if (team_node[TEAM_SHIRT_NODE])
+            {
+                Logger::getInstance()->debug("parseando nodo shirt.");
+                configuration->SetShirt(team_node[TEAM_SHIRT_NODE].as<string>());
+            }
+            else
+            {
+                Logger::getInstance()->error("No se encontro el parametro '" + TEAM_SHIRT_NODE + "' en el nodo '" + TEAM_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_SHIRT + "'.");
+                configuration->SetShirt(DEFAULT_SHIRT);
+            }
+
+            if (team_node[TEAM_NAME_NODE])
+            {
+                configuration->SetTeamName(team_node[TEAM_NAME_NODE].as<string>());
+            }
+
         }
         else
         {
-            Logger::getInstance()->error("No se encontro el parametro '" + TEAM_FORMATION_NODE + "' en el nodo '" + TEAM_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_FORMATION + "'.");
+            Logger::getInstance()->error("No se encontro el nodo '" + TEAM_NODE + "' en la configuracion. Se procede a tomar los valores por defecto para formacion y remera: '" + DEFAULT_FORMATION + "' y '" + DEFAULT_SHIRT + "'.");
             configuration->SetFormation(DEFAULT_FORMATION);
-        }
-
-
-        if (team_node[TEAM_SHIRT_NODE])
-        {
-            Logger::getInstance()->debug("parseando nodo shirt.");
-            configuration->SetShirt(team_node[TEAM_SHIRT_NODE].as<string>());
-        }
-        else
-        {
-            Logger::getInstance()->error("No se encontro el parametro '" + TEAM_SHIRT_NODE + "' en el nodo '" + TEAM_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_SHIRT + "'.");
             configuration->SetShirt(DEFAULT_SHIRT);
         }
 
-        if (team_node[TEAM_NAME_NODE])
+        if (config_file[SPRITES_PATH])
         {
-            configuration->SetTeamName(team_node[TEAM_NAME_NODE].as<string>());
+            configuration->SetSpritesPath(config_file[SPRITES_PATH].as<string>());
+        }
+        else
+        {
+            Logger::getInstance()->error("No se encontro el parametro '" + SPRITES_PATH + "' en la configuracion. Se procede a tomar el valor por defecto: '" + DEFAULT_SPRITES_PATH + "'.");
+            configuration->SetSpritesPath(DEFAULT_SPRITES_PATH);
         }
 
-    }
-    else
-    {
-        Logger::getInstance()->error("No se encontro el nodo '" + TEAM_NODE + "' en la configuracion. Se procede a tomar los valores por defecto para formacion y remera: '" + DEFAULT_FORMATION + "' y '" + DEFAULT_SHIRT + "'.");
-        configuration->SetFormation(DEFAULT_FORMATION);
-        configuration->SetShirt(DEFAULT_SHIRT);
-    }
-
-    if (config_file[SPRITES_PATH])
-    {
-        configuration->SetSpritesPath(config_file[SPRITES_PATH].as<string>());
-    }
-    else
-    {
-        Logger::getInstance()->error("No se encontro el parametro '" + SPRITES_PATH + "' en la configuracion. Se procede a tomar el valor por defecto: '" + DEFAULT_SPRITES_PATH + "'.");
-        configuration->SetSpritesPath(DEFAULT_SPRITES_PATH);
+        if (config_file[SERVER_HOSTNAME])
+        {
+            configuration->SetServerHostname(config_file[SERVER_HOSTNAME].as<string>());
+        }
+        else
+        {
+            Logger::getInstance()->error("No se encontro el parametro '" + SERVER_HOSTNAME + "' en la configuracion. Se procede a tomar el valor por defecto: '" + SERVER_HOSTNAME + "'.");
+            configuration->SetServerHostname(DEFAUT_SERVER_HOSTNAME);
+        }
     }
 
-    if (config_file[SERVER_HOSTNAME])
-    {
-        configuration->SetServerHostname(config_file[SERVER_HOSTNAME].as<string>());
-    }
-    else
-    {
-        Logger::getInstance()->error("No se encontro el parametro '" + SERVER_HOSTNAME + "' en la configuracion. Se procede a tomar el valor por defecto: '" + SERVER_HOSTNAME + "'.");
-        configuration->SetServerHostname(DEFAUT_SERVER_HOSTNAME);
-    }
 
 
     if(configuration->InitModeIsServer())
     {
+        if (config_file[TEAM_NODE])
+        {
+            YAML::Node team_node = config_file[TEAM_NODE];
+            if (team_node[TEAM_FORMATION_NODE])
+            {
+                configuration->SetFormation(team_node[TEAM_FORMATION_NODE].as<string>());
+            }
+            else
+            {
+                Logger::getInstance()->error("No se encontro el parametro '" + TEAM_FORMATION_NODE + "' en el nodo '" + TEAM_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_FORMATION + "'.");
+                configuration->SetFormation(DEFAULT_FORMATION);
+            }
+
+
+            if (team_node[TEAM_SHIRT_NODE])
+            {
+                Logger::getInstance()->debug("parseando nodo shirt.");
+                configuration->SetShirt(team_node[TEAM_SHIRT_NODE].as<string>());
+            }
+            else
+            {
+                Logger::getInstance()->error("No se encontro el parametro '" + TEAM_SHIRT_NODE + "' en el nodo '" + TEAM_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_SHIRT + "'.");
+                configuration->SetShirt(DEFAULT_SHIRT);
+            }
+
+            if (team_node[TEAM_NAME_NODE])
+            {
+                configuration->SetTeamName(team_node[TEAM_NAME_NODE].as<string>());
+            }
+
+        }
+        else
+        {
+            Logger::getInstance()->error("No se encontro el nodo '" + TEAM_NODE + "' en la configuracion. Se procede a tomar los valores por defecto para formacion y remera: '" + DEFAULT_FORMATION + "' y '" + DEFAULT_SHIRT + "'.");
+            configuration->SetFormation(DEFAULT_FORMATION);
+            configuration->SetShirt(DEFAULT_SHIRT);
+        }
+
         if(config_file[MAX_PLAYERS_NODE])
         {
             configuration->SetMaxPlayers(config_file[MAX_PLAYERS_NODE].as<int>());//TODO: es necesario validarlo?
