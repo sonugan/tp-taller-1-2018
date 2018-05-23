@@ -155,9 +155,6 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
     default:
         Logger::getInstance()->debug("(Server::ProcessMessage) No hay handler para este tipo de mensaje.");
     }
-
-
-
 }
 
 void Server::HandleLoginRequest(ClientSocket* client, Message* message)
@@ -227,9 +224,7 @@ void Server::HandleMoveRequest(ClientSocket* client, Message* message)
     Logger::getInstance()->debug("(Server:HandleMoveRequest) Procesando move request.");
     MoveRequest* move_request = new MoveRequest();
     message->GetDeserializedData(move_request);
-    string game_serialize = this->game->DoMove(move_request, client->socket_id);
-//    Message* move_response = new Message(game_serialize);
-//    this->NotifyAll(move_response);
+    this->game->DoMove(move_request, client->socket_id);
 }
 
 void Server::HandleRecoverBallRequest(ClientSocket* client, Message* message)
@@ -237,9 +232,7 @@ void Server::HandleRecoverBallRequest(ClientSocket* client, Message* message)
     Logger::getInstance()->debug("(Server:HandleRecoverBallRequest) Procesando recover ball request.");
     RecoverBallRequest* recover_ball_request = new RecoverBallRequest();
     message->GetDeserializedData(recover_ball_request);
-    string game_serialize = this->game->DoRecoverBall(recover_ball_request, client->socket_id);
-//    Message* recover_ball_response = new Message(game_serialize);
-//    this->NotifyAll(recover_ball_response);
+    this->game->DoRecoverBall(recover_ball_request, client->socket_id);
 }
 
 void Server::HandleKickRequest(ClientSocket* client, Message* message)
@@ -248,10 +241,7 @@ void Server::HandleKickRequest(ClientSocket* client, Message* message)
 
     KickBallRequest* kick_ball_request = new KickBallRequest();
     message->GetDeserializedData(kick_ball_request);
-
-//    Message* game_serialized = new Message(this->game->DoKick(kick_ball_request, client->socket_id));
-
-//    this->NotifyAll(game_serialized);
+    this->game->DoKick(kick_ball_request, client->socket_id)
 }
 
 void Server::HandlePassBallRequest(ClientSocket* client, Message* message)
@@ -260,8 +250,7 @@ void Server::HandlePassBallRequest(ClientSocket* client, Message* message)
     Logger::getInstance()->debug("(Server:HandlePassBallRequest) Procesando pass ball request. cliente: " + client_id);
     PassBallRequest* pass_ball_request = new PassBallRequest();
     message->GetDeserializedData(pass_ball_request);
-    Message* response = this->game->DoPassBall(client, pass_ball_request);
-//    this->NotifyAll(response);
+    this->game->DoPassBall(client, pass_ball_request);
 }
 
 void Server::HandleChangePlayerRequest(ClientSocket* client, Message* message)
@@ -270,8 +259,7 @@ void Server::HandleChangePlayerRequest(ClientSocket* client, Message* message)
     Logger::getInstance()->debug("(Server:HandleChangePlayerRequest) Procesando change player request. cliente: " + client_id);
     ChangePlayerRequest* change_player_request = new ChangePlayerRequest();
     message->GetDeserializedData(change_player_request);
-//    Message* game_serialized = new Message(this->game->ChangePlayer(change_player_request, client->socket_id));
-//    this->NotifyAll(game_serialized);
+    this->game->ChangePlayer(change_player_request, client->socket_id))
 }
 
 void Server::SendMessage(ClientSocket* client)
