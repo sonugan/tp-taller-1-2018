@@ -34,10 +34,16 @@ void Game::LogIn() {
             login_view->OpenErrorPage(initial_configuration);
         } else {
             login_view->OpenWaitingPage();
+<<<<<<< Updated upstream
             while (serialized_model.empty()) {
                 serialized_model = client->WaitForGameStart();
             }
             //TODO sacar esto y ver que se rompe
+=======
+            while (!gameStarted) {
+                gameStarted = client->WaitForGameStart();
+            }
+>>>>>>> Stashed changes
             this->user = new User(login_request->GetUsername(), login_request->GetPassword(), login_view->GetTeamNumber(), USER_COLOR::RED);
 
             CreateModel(serialized_model);
