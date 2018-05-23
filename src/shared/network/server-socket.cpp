@@ -62,7 +62,7 @@ Message* ServerSocket::Receive(Socket* client_socket, int expected_size)
     char buffer[expected_size];
     bzero(buffer,expected_size);
 
-    int received_bytes = read(client_socket->socket_id, buffer, expected_size);
+    int received_bytes = recv(client_socket->socket_id, buffer, expected_size, 0);
 
     if (received_bytes <= 0)
     {

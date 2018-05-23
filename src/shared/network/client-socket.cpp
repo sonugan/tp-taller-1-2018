@@ -1,5 +1,6 @@
 #include "client-socket.h"
 #include "../logger.h"
+#include "exceptions/socket-connection-exception.h"
 
 ClientSocket::ClientSocket() : Socket()
 {
@@ -40,13 +41,14 @@ Message* ClientSocket::Receive(int expected_size)
     char buffer[expected_size];
     bzero(buffer,expected_size);
 
-    Logger::getInstance()->debug("(ClientSocket:Receive) Ejecutando read sobre el socket");
+    Logger::getInstance()->debug("(ClientSocket:Receive) Ejecutando recv sobre el socket");
 
-    int received_bytes = read(this->socket_id, buffer, expected_size);
+    int received_bytes = recv(this->socket_id, buffer, expected_size, 0);
 
     if (received_bytes <= 0)
     {
         Logger::getInstance()->debug("ERROR leyendo desde socket");
+        throw SocketConnectionException("Error de conexión mientras se ejecutaba recv");
     }
     string message_data = string(buffer);
     Logger::getInstance()->debug("(ClientSocket:Receive) Mensaje recibido: " + message_data);
