@@ -163,7 +163,8 @@ void Match::DeserializeAndUpdate(string serialized) {
 
 //        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) direction");
         player->SetDirection(static_cast<DIRECTION>(SafeStoi(data[base_index])));
-//        player->SetPlayerColor(static_cast<USER_COLOR>(stoi(data[base_index + 1])));
+
+        player->SetPlayerColor(static_cast<USER_COLOR>(SafeStoi(data[base_index + 1])));
 
 //        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_kicking");
         player->SetKicking((bool)(SafeStoi(data[base_index + 2])));

@@ -15,6 +15,7 @@ PlayerController::~PlayerController() {
 }
 
 void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
+    Logger::getInstance()->debug("(PlayerController::PlayerPlay)");
     if(!ContinueCurrentAction())
     {
         selected_player = this->team->GetSelectedPlayer();
@@ -32,8 +33,8 @@ void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
 
 void PlayerController::MovePlayer(const Uint8 *keyboard_state_array)
 {
+    Logger::getInstance()->debug("(PlayerController::MovePlayer)");
     bool run = ShiftKeySelected(keyboard_state_array);
-    u_int selected_player_id = this->team->GetSelectedPlayer()->GetPositionIndex();
 
     if (UpKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array)) {
         MoveRequest m(DIRECTION::NORTHEAST, run);
@@ -74,6 +75,7 @@ bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array) {
 }
 
 void PlayerController::PassBall(const Uint8 *keyboard_state_array) {
+    Logger::getInstance()->debug("(PlayerController::PassBall)");
     unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_pass).count();
     if (elapsed_millis > PASS_DELAY_MILLIS && SKeySelected(keyboard_state_array)) {
         PassBallRequest r;
@@ -83,6 +85,7 @@ void PlayerController::PassBall(const Uint8 *keyboard_state_array) {
 }
 
 bool PlayerController::PlayerRecoverBall(const Uint8 *keyboard_state_array) {
+    Logger::getInstance()->debug("(PlayerController::PlayerRecoverBall)");
     if (AKeySelected(keyboard_state_array)) {
         RecoverBallRequest r;
         this->client->RecoverBall(&r);
@@ -130,11 +133,14 @@ void PlayerController::Handle(const Uint8* keyboard_state_array) {
 
 bool PlayerController::SelectedPlayerHasChange()
 {
-    return team->GetSelectedPlayer() != this->selected_player;
+    Logger::getInstance()->debug("(PlayerController::SelectedPlayerHasChange)");
+//    return team->GetSelectedPlayer() != this->selected_player;
+    return false;
 }
 
 bool PlayerController::ContinueCurrentAction()
 {
+    Logger::getInstance()->debug("(PlayerController::ContinueCurrentAction)");
     if(!SelectedPlayerHasChange())
     {
         current_action_timming++;
