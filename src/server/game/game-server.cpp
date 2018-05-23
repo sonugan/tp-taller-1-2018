@@ -58,9 +58,10 @@ void GameServer::DoLogin(ClientSocket* client, LoginRequest* login_request)
 
 }
 
-void GameServer::DoQuit(QuitRequest* quit_request)
+void GameServer::DoQuit(ClientSocket* client)
 {
-    this->session_manager->RemoveSession(quit_request->GetUsername());
+//    this->session_manager->CloseSession(client);
+    this->DisconnectClient(client);
 }
 
 std::string GameServer::DoRecoverBall(RecoverBallRequest* recover_ball_request, int socket_id)
@@ -77,6 +78,7 @@ std::string GameServer::DoKick(KickBallRequest* kick_request, int socket_id)
     user->GetSelectedPlayer()->Kick();
     return this->game_state->GetMatch()->Serialize();
 }
+
 
 Message* GameServer::DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request)
 {
@@ -176,7 +178,7 @@ bool GameServer::IsReadyToStart()
 Message* GameServer::StartGame()
 {
     Logger::getInstance()->info("(GameServer:StartGame) Comenzando el juego.");
-    this->is_game_started = true;
+    this->is_running = true;
     return new Message(this->game_state->GetMatch()->Serialize());
 }
 
@@ -188,4 +190,21 @@ void GameServer::PlayerCatchBall(int socket_id)
     User* user = this->session_manager->GetUserBySocketID(socket_id);
     user->GetSelectedPlayer()->CatchBall();
     Logger::getInstance()->info("(GameServer:PlayerCatchBall) Jugador agarro la pelota.");
+}
+
+bool GameServer::IsRunning()
+{
+    return this->is_running;
+}
+
+void GameServer::DisconnectClient(ClientSocket* client)
+{
+    if(this->session_manager->IsAuthenticatedClient(client))
+    {
+        this->session_manager->CloseSession(client);
+        if(this->session_manager->GetAutheticatedUsersCount() == 0)
+        {
+            this->is_running = false;
+        }
+    }
 }

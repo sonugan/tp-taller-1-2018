@@ -24,7 +24,7 @@ public:
 
     GameState* GetGameState();
     void DoLogin(ClientSocket* client, LoginRequest* login_request);
-    void DoQuit(QuitRequest* quit_request);
+    void DoQuit(ClientSocket* client);
     std::string DoRecoverBall(RecoverBallRequest* recover_ball_request, int socket_id);
     std::string DoMove(MoveRequest* move_request, int socket_id);
     string DoKick(KickBallRequest* kick_ball_request, int client_socket_id);
@@ -33,13 +33,15 @@ public:
     bool IsReadyToStart();
     Message* StartGame();
     void PlayerCatchBall(int socket_id);
+    bool IsRunning();
+    void DisconnectClient(ClientSocket* client);
 
 protected:
 
 private:
     /* Attributes */
     GameState* game_state;
-    bool is_game_started = false;
+    bool is_running = false;
     SessionManager* session_manager;
 
     Player* GetUserSelectedPlayer(std::vector<Player*> available_players);

@@ -27,13 +27,6 @@ User* SessionManager::Authenticate(ClientSocket* client, LoginRequest* login_req
         throw MaxAllowedUsersException("No es posible agregar más usuarios al juego.");
     }
 
-//    if(IsAuthenticated(login_request))
-//    {
-//        string log_msg = "(SessionManager:Authenticate) El usuario: " + login_request->GetUsername() + " ya se encuentra autenticado.";
-//        Logger::getInstance()->info(log_msg);
-//        return this->authenticated_users.find(login_request->GetUsername())->second;
-//    }
-
     if(IsValidUser(login_request->GetUsername(), login_request->GetPassword()))
     {
         Logger::getInstance()->info("(SessionManager:Authenticate) Usuario válido. Se conectó: " + login_request->GetUsername());
@@ -77,7 +70,7 @@ void SessionManager::RemoveSession(string username)
         user->GetSelectedPlayer()->SetPlayerColor(USER_COLOR::NO_COLOR);
 
 
-         Logger::getInstance()->debug("(SessionManager:RemoveSession) Borrando user de coleccion de autenticados.");
+        Logger::getInstance()->debug("(SessionManager:RemoveSession) Borrando user de coleccion de autenticados.");
         // Lo elimino de la colección de usuarios autenticados.
         this->authenticated_users.erase(username);
 
@@ -104,6 +97,36 @@ User* SessionManager::GetUserBySocketID(int socket_id)
 bool SessionManager::IsReadyToStart()
 {
     return this->GetAutheticatedUsersCount() == this->max_allowed_users;
+}
+
+bool SessionManager::IsAuthenticatedClient(ClientSocket* client)
+{
+    return GetUserBySocketID(client->socket_id) != NULL;
+}
+
+void SessionManager::CloseSession(ClientSocket* client)
+{
+    User* user = GetUserBySocketID(client->socket_id);
+
+    if(user != NULL)
+    {
+        Logger::getInstance()->debug("(SessionManager:CloseSession) Sesión encontrada. User: " + user->GetUsername());
+        USER_COLOR user_color = user->GetUserColor();
+        this->colors.push(user_color);
+
+        // Remuevo seleccion del player.
+        Logger::getInstance()->debug("(SessionManager:CloseSession) Quitando selección al player");
+        user->GetSelectedPlayer()->SetPlayerColor(USER_COLOR::NO_COLOR);
+
+        Logger::getInstance()->debug("(SessionManager:CloseSession) Borrando user de colección de autenticados.");
+        // Lo elimino de la colección de usuarios autenticados.
+        this->authenticated_users.erase(user->GetUsername());
+
+        this->clientsocket_user_association.erase(client->socket_id);
+
+        delete user;
+    }
+
 }
 
 /* Private Methods */

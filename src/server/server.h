@@ -61,6 +61,8 @@ private:
     void HandlePassBallRequest(ClientSocket* client, Message* message);
     void HandleChangePlayerRequest(ClientSocket* client, Message* message);
     void SendMessage(ClientSocket* client);
+    void NotifyGameState();
+    void DisconnectClient(ClientSocket* client);
 };
 
 #endif // SERVER_H

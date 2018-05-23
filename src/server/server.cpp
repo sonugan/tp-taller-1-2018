@@ -1,5 +1,6 @@
 #include "server.h"
 
+#include <chrono>
 #include "../shared/network/exceptions/socket-connection-exception.h"
 #include "session/authentication-exception.h"
 #include "session/max-allowed-user-exception.h"
@@ -105,7 +106,7 @@ void Server::ReceiveMessages(ClientSocket* client)
         Message* incoming_message;
         try
         {
-            incoming_message = this->socket->Receive(client, 255);
+            incoming_message = this->socket->Receive(client, 300);
             Logger::getInstance()->debug("(Server:ReceiveMessages) Mensaje recibido. Encolando para ser procesado.");
             // Aplico lock (mutex)  antes de enconlar el mensaje entrante.
             unique_lock<mutex> lock(input_msg_mutex);
@@ -117,9 +118,9 @@ void Server::ReceiveMessages(ClientSocket* client)
         }
         catch (SocketConnectionException e)
         {
-            Logger::getInstance()->error("(Server) Error de conexión. Cerrando socket cliente.");
+            Logger::getInstance()->error("(Server:ReceiveMessages) Error de conexión. Cerrando socket cliente.");
             receiving_messages = false;
-            client->Close();
+            this->DisconnectClient(client);
         }
     }
 }
@@ -171,19 +172,18 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
         Message* login_response = new Message("login-ok");
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta login-ok.");
 
-//        unique_lock<mutex> lock(output_msg_mutex);
-
-        this->outgoing_msg_queues[client->socket_id]->Append(login_response);
-
-//        lock.unlock();
-
-//        output_msg_condition_variable.notify_all();
+        this->socket->Send(client, login_response);
+//        this->outgoing_msg_queues[client->socket_id]->Append(login_response);
 
         // Si ya se loguearon todos, se notifica a todos los usuarios para empezar a jugar.
         if (this->game->IsReadyToStart())
         {
             Message* start_game_msg = this->game->StartGame();
             this->NotifyAll(start_game_msg);
+
+            // Disparo thread para notificar game-state periodicamente.
+            std::thread game_state_notifier_thread(&Server::NotifyGameState, this);
+            game_state_notifier_thread.detach();
         }
 
     }
@@ -211,7 +211,7 @@ void Server::HandleQuitRequest(ClientSocket* client, Message* message)
     Logger::getInstance()->debug("(Server:HandleQuitRequest) Procesando quit request.");
     QuitRequest* quit_request = new QuitRequest();
     message->GetDeserializedData(quit_request);
-    this->game->DoQuit(quit_request);
+    this->game->DoQuit(client);
 
     // NO se manda mensaje de logout para evitar problemas.
 
@@ -228,8 +228,8 @@ void Server::HandleMoveRequest(ClientSocket* client, Message* message)
     MoveRequest* move_request = new MoveRequest();
     message->GetDeserializedData(move_request);
     string game_serialize = this->game->DoMove(move_request, client->socket_id);
-    Message* move_response = new Message(game_serialize);
-    this->NotifyAll(move_response);
+//    Message* move_response = new Message(game_serialize);
+//    this->NotifyAll(move_response);
 }
 
 void Server::HandleRecoverBallRequest(ClientSocket* client, Message* message)
@@ -238,8 +238,8 @@ void Server::HandleRecoverBallRequest(ClientSocket* client, Message* message)
     RecoverBallRequest* recover_ball_request = new RecoverBallRequest();
     message->GetDeserializedData(recover_ball_request);
     string game_serialize = this->game->DoRecoverBall(recover_ball_request, client->socket_id);
-    Message* recover_ball_response = new Message(game_serialize);
-    this->NotifyAll(recover_ball_response);
+//    Message* recover_ball_response = new Message(game_serialize);
+//    this->NotifyAll(recover_ball_response);
 }
 
 void Server::HandleKickRequest(ClientSocket* client, Message* message)
@@ -249,9 +249,9 @@ void Server::HandleKickRequest(ClientSocket* client, Message* message)
     KickBallRequest* kick_ball_request = new KickBallRequest();
     message->GetDeserializedData(kick_ball_request);
 
-    Message* game_serialized = new Message(this->game->DoKick(kick_ball_request, client->socket_id));
+//    Message* game_serialized = new Message(this->game->DoKick(kick_ball_request, client->socket_id));
 
-    this->NotifyAll(game_serialized);
+//    this->NotifyAll(game_serialized);
 }
 
 void Server::HandlePassBallRequest(ClientSocket* client, Message* message)
@@ -261,7 +261,7 @@ void Server::HandlePassBallRequest(ClientSocket* client, Message* message)
     PassBallRequest* pass_ball_request = new PassBallRequest();
     message->GetDeserializedData(pass_ball_request);
     Message* response = this->game->DoPassBall(client, pass_ball_request);
-    this->NotifyAll(response);
+//    this->NotifyAll(response);
 }
 
 void Server::HandleChangePlayerRequest(ClientSocket* client, Message* message)
@@ -270,8 +270,8 @@ void Server::HandleChangePlayerRequest(ClientSocket* client, Message* message)
     Logger::getInstance()->debug("(Server:HandleChangePlayerRequest) Procesando change player request. cliente: " + client_id);
     ChangePlayerRequest* change_player_request = new ChangePlayerRequest();
     message->GetDeserializedData(change_player_request);
-    Message* game_serialized = new Message(this->game->ChangePlayer(change_player_request, client->socket_id));
-    this->NotifyAll(game_serialized);
+//    Message* game_serialized = new Message(this->game->ChangePlayer(change_player_request, client->socket_id));
+//    this->NotifyAll(game_serialized);
 }
 
 void Server::SendMessage(ClientSocket* client)
@@ -281,13 +281,6 @@ void Server::SendMessage(ClientSocket* client)
     bool sending_msg = true; // Ver como desactivar y activar esto. (condition variables ??)
     while(sending_msg)
     {
-//        unique_lock<mutex> lock(output_msg_mutex);
-//
-//        while(!outgoing_msg_queue->HasNext())
-//        {
-//            output_msg_condition_variable.wait(lock);
-//        }
-
         if(outgoing_msg_queue->HasNext())
         {
             auto msg = outgoing_msg_queue->Next();
@@ -302,8 +295,6 @@ void Server::NotifyAll(Message* message)
 {
     Logger::getInstance()->debug("(Server:NotifyAll) Encolando mensaje para ser enviado a todos los clientes conectados.");
 
-//    unique_lock<mutex> lock(output_msg_mutex);
-
     auto it = this->outgoing_msg_queues.begin();
     while(it != this->outgoing_msg_queues.end())
     {
@@ -317,5 +308,25 @@ void Server::NotifyAll(Message* message)
     }
 
     delete message;
-//    output_msg_condition_variable.notify_all();
+}
+
+void Server::NotifyGameState()
+{
+    while(this->game->IsRunning())
+    {
+        Logger::getInstance()->debug("(Server:NotifyGameState) Enviando game state a todos los clientes.");
+        Message* game_state_msg = new Message(this->game->GetGameState()->GetMatch()->Serialize());
+        this->NotifyAll(game_state_msg);
+        std::this_thread::sleep_for(std::chrono::milliseconds(40));
+    }
+}
+
+void Server::DisconnectClient(ClientSocket* client)
+{
+    this->game->DisconnectClient(client);
+
+    // TODO: eliminar cola de envio de msj
+    this->clients.erase(client->socket_id);
+    client->ShutDown();
+    client->Close();
 }

@@ -25,6 +25,8 @@ class SessionManager
 
         User* GetUserBySocketID(int socket_id);
         bool IsReadyToStart();
+        bool IsAuthenticatedClient(ClientSocket* client);
+        void CloseSession(ClientSocket* client);
 
     protected:
 
