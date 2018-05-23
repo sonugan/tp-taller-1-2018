@@ -72,6 +72,7 @@ string Configuration::GetShirt()
 void Configuration::SetShirt(string shirt)
 {
     if (IsValidConfigValue("shirt", shirt)) {
+        Logger::getInstance()->debug("Se asigna el valor de shirt: " + shirt);
         this->shirt = shirt;
     }
     else {

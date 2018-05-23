@@ -11,6 +11,7 @@
 #include <condition_variable>
 
 #include "../shared/utils/queue.h"
+#include "../shared/utils/safe-queue.h"
 #include "../shared/network/server-socket.h"
 #include "../shared/network/client-socket.h"
 #include "../shared/configuration/configuration.h"
@@ -41,10 +42,9 @@ private:
     std::mutex server_mutex;
     std::mutex input_msg_mutex;
     std::condition_variable input_msg_condition_variable;
-    std::mutex output_msg_mutex;
-    std::condition_variable output_msg_condition_variable;
+
     GameServer* game;
-    map<int, Queue<Message> *> outgoing_msg_queues = {};
+    map<int, SafeQueue<Message> *> outgoing_msg_queues = {};
 
 
     /* Methods */

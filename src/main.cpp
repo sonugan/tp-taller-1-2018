@@ -25,6 +25,7 @@ void load_configuration(int argc, char* args[], Configuration* config)
 void InitServer(int argc, char* args[], Configuration* config)
 {
     Server* server = new Server(config);
+    std::cout << config->GetShirt() << std::endl;
     server->Init();
     delete server;
 }

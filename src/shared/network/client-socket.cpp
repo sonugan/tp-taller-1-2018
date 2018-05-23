@@ -40,11 +40,16 @@ Message* ClientSocket::Receive(int expected_size)
     char buffer[expected_size];
     bzero(buffer,expected_size);
 
-    if (HasError(read(this->socket_id, buffer, expected_size)))
+    Logger::getInstance()->debug("(ClientSocket:Receive) Ejecutando read sobre el socket");
+
+    int received_bytes = read(this->socket_id, buffer, expected_size);
+
+    if (received_bytes <= 0)
     {
         Logger::getInstance()->debug("ERROR leyendo desde socket");
     }
     string message_data = string(buffer);
+    Logger::getInstance()->debug("(ClientSocket:Receive) Mensaje recibido: " + message_data);
     return new Message(message_data);
 }
 

@@ -108,7 +108,14 @@ string Match::Serialize() {
 //        result.append(std::to_string(player->GetLocation()->GetZ()));
 //        result.append("|");
     }
-    result.pop_back();
+
+    result.append(std::to_string((int) GetTeamA()->GetFormation()->GetValue()));
+    result.append("|");
+    result.append(std::to_string((int) GetTeamB()->GetFormation()->GetValue()));
+    result.append("|");
+    result.append(GetTeamA()->GetShirt());
+    result.append("|");
+    result.append(GetTeamB()->GetShirt());
 
     Logger::getInstance()->debug(result.c_str());
     return result;
@@ -143,12 +150,23 @@ void Match::DeserializeAndUpdate(string serialized) {
         Player* player = GetTeamB()->GetPlayers()[i];
 
         player->SetDirection(static_cast<DIRECTION>(stoi(data[base_index])));
-        player->SetPlayerColor(static_cast<USER_COLOR>(stoi(data[base_index + 1])));
+//        player->SetPlayerColor(static_cast<USER_COLOR>(stoi(data[base_index + 1])));
         player->SetKicking((bool)(stoi(data[base_index + 2])));
         player->SetRecoveringBall((bool)(stoi(data[base_index + 3])));
         player->GetLocation()->Update(stoi(data[base_index + 4]), stoi(data[base_index + 5]), 0);
 
     }
+
+    int base_index = 87;
+
+    Formation* formation_a = new Formation(static_cast<FORMATION>(stoi(data[base_index])), TEAM_NUMBER::TEAM_A);
+    GetTeamA()->SetFormation(formation_a);
+    Formation* formation_b = new Formation(static_cast<FORMATION>(stoi(data[base_index + 1])), TEAM_NUMBER::TEAM_B);
+    GetTeamB()->SetFormation(formation_b);
+
+    GetTeamA()->SetShirt(data[base_index + 2]);
+    GetTeamB()->SetShirt(data[base_index + 3]);
+
 
     Logger::getInstance()->debug("Match deserializado");
 }

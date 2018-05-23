@@ -56,65 +56,65 @@ void parseConfigFile(Configuration* configuration, YAML::Node config_file)
         configuration->SetLogLevel(DEFAULT_LOG_MODE);
     }
 
-    if(configuration->InitModeIsClient())
+
+    if (config_file[TEAM_NODE])
     {
-        if (config_file[TEAM_NODE])
+        YAML::Node team_node = config_file[TEAM_NODE];
+        if (team_node[TEAM_FORMATION_NODE])
         {
-            YAML::Node team_node = config_file[TEAM_NODE];
-            if (team_node[TEAM_FORMATION_NODE])
-            {
-                configuration->SetFormation(team_node[TEAM_FORMATION_NODE].as<string>());
-            }
-            else
-            {
-                Logger::getInstance()->error("No se encontro el parametro '" + TEAM_FORMATION_NODE + "' en el nodo '" + TEAM_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_FORMATION + "'.");
-                configuration->SetFormation(DEFAULT_FORMATION);
-            }
-
-
-            if (team_node[TEAM_SHIRT_NODE])
-            {
-                configuration->SetShirt(team_node[TEAM_SHIRT_NODE].as<string>());
-            }
-            else
-            {
-                Logger::getInstance()->error("No se encontro el parametro '" + TEAM_SHIRT_NODE + "' en el nodo '" + TEAM_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_SHIRT + "'.");
-                configuration->SetShirt(DEFAULT_SHIRT);
-            }
-
-            if (team_node[TEAM_NAME_NODE])
-            {
-                configuration->SetTeamName(team_node[TEAM_NAME_NODE].as<string>());
-            }
-
+            configuration->SetFormation(team_node[TEAM_FORMATION_NODE].as<string>());
         }
         else
         {
-            Logger::getInstance()->error("No se encontro el nodo '" + TEAM_NODE + "' en la configuracion. Se procede a tomar los valores por defecto para formacion y remera: '" + DEFAULT_FORMATION + "' y '" + DEFAULT_SHIRT + "'.");
+            Logger::getInstance()->error("No se encontro el parametro '" + TEAM_FORMATION_NODE + "' en el nodo '" + TEAM_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_FORMATION + "'.");
             configuration->SetFormation(DEFAULT_FORMATION);
+        }
+
+
+        if (team_node[TEAM_SHIRT_NODE])
+        {
+            Logger::getInstance()->debug("parseando nodo shirt.");
+            configuration->SetShirt(team_node[TEAM_SHIRT_NODE].as<string>());
+        }
+        else
+        {
+            Logger::getInstance()->error("No se encontro el parametro '" + TEAM_SHIRT_NODE + "' en el nodo '" + TEAM_NODE + "'. Se procede a tomar el valor por defecto: '" + DEFAULT_SHIRT + "'.");
             configuration->SetShirt(DEFAULT_SHIRT);
         }
 
-        if (config_file[SPRITES_PATH])
+        if (team_node[TEAM_NAME_NODE])
         {
-            configuration->SetSpritesPath(config_file[SPRITES_PATH].as<string>());
-        }
-        else
-        {
-            Logger::getInstance()->error("No se encontro el parametro '" + SPRITES_PATH + "' en la configuracion. Se procede a tomar el valor por defecto: '" + DEFAULT_SPRITES_PATH + "'.");
-            configuration->SetSpritesPath(DEFAULT_SPRITES_PATH);
+            configuration->SetTeamName(team_node[TEAM_NAME_NODE].as<string>());
         }
 
-        if (config_file[SERVER_HOSTNAME])
-        {
-            configuration->SetServerHostname(config_file[SERVER_HOSTNAME].as<string>());
-        }
-        else
-        {
-            Logger::getInstance()->error("No se encontro el parametro '" + SERVER_HOSTNAME + "' en la configuracion. Se procede a tomar el valor por defecto: '" + SERVER_HOSTNAME + "'.");
-            configuration->SetServerHostname(DEFAUT_SERVER_HOSTNAME);
-        }
     }
+    else
+    {
+        Logger::getInstance()->error("No se encontro el nodo '" + TEAM_NODE + "' en la configuracion. Se procede a tomar los valores por defecto para formacion y remera: '" + DEFAULT_FORMATION + "' y '" + DEFAULT_SHIRT + "'.");
+        configuration->SetFormation(DEFAULT_FORMATION);
+        configuration->SetShirt(DEFAULT_SHIRT);
+    }
+
+    if (config_file[SPRITES_PATH])
+    {
+        configuration->SetSpritesPath(config_file[SPRITES_PATH].as<string>());
+    }
+    else
+    {
+        Logger::getInstance()->error("No se encontro el parametro '" + SPRITES_PATH + "' en la configuracion. Se procede a tomar el valor por defecto: '" + DEFAULT_SPRITES_PATH + "'.");
+        configuration->SetSpritesPath(DEFAULT_SPRITES_PATH);
+    }
+
+    if (config_file[SERVER_HOSTNAME])
+    {
+        configuration->SetServerHostname(config_file[SERVER_HOSTNAME].as<string>());
+    }
+    else
+    {
+        Logger::getInstance()->error("No se encontro el parametro '" + SERVER_HOSTNAME + "' en la configuracion. Se procede a tomar el valor por defecto: '" + SERVER_HOSTNAME + "'.");
+        configuration->SetServerHostname(DEFAUT_SERVER_HOSTNAME);
+    }
+
 
     if(configuration->InitModeIsServer())
     {
@@ -133,12 +133,13 @@ void parseConfigFile(Configuration* configuration, YAML::Node config_file)
             // OBTENGO TODOS LOS USUARIOS Y SUS PASSWORDS
             YAML::Node users_node = config_file[USERS_NODE];
 
-            for (unsigned short i = 0; i < users_node.size(); ++i) {
+            for (unsigned short i = 0; i < users_node.size(); ++i)
+            {
                 std::string username = users_node[i]["name"].as<std::string>();
                 std::string password = users_node[i]["password"].as<std::string>();
                 configuration->AddValidCredential(username, password);
             }
-    	}
+        }
     }
 
     if(config_file[PORT_NODE])
@@ -164,18 +165,23 @@ ConfigurationParser::~ConfigurationParser()
     //dtor
 }
 
-void ConfigurationParser::ReadFile(Configuration* config, string file_path) {
+void ConfigurationParser::ReadFile(Configuration* config, string file_path)
+{
     Logger::getInstance()->debug("Leyendo archivo de configuracion desde '" + file_path + "'...");
-    try {
+    try
+    {
         YAML::Node config_file = YAML::LoadFile(file_path);
         parseConfigFile(config, config_file);
-    } catch (YAML::BadFile e) {
+    }
+    catch (YAML::BadFile e)
+    {
         Logger::getInstance()->error("No se encontro el archivo '" + file_path + "'. Se procede a cargar el archivo por defecto: '" + DEFAULT_CONFIG_FILE + "'.");
         this->ReadDefaultConfig(config);
     }
 }
 
-void ConfigurationParser::ReadDefaultConfig(Configuration* config) {
+void ConfigurationParser::ReadDefaultConfig(Configuration* config)
+{
     YAML::Node config_file = YAML::LoadFile(DEFAULT_CONFIG_FILE);
     parseConfigFile(config, config_file);
 }

@@ -54,6 +54,11 @@ void Team::SetMatch(Match* match)
     this->match = match;
 }
 
+void Team::SetShirt(string shirt)
+{
+    this->shirt = shirt;
+}
+
 Formation* Team::GetFormation()
 {
     return this->formation;

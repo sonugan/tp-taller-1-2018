@@ -85,7 +85,7 @@ void Server::ListenConnections()
         this->clients[client->socket_id] = client;
         client_threads.push_back(thread(&Server::ReceiveMessages, this, client));
 
-        Queue<Message>* outgoing_msg_queue = new Queue<Message>();
+        SafeQueue<Message>* outgoing_msg_queue = new SafeQueue<Message>();
         this->outgoing_msg_queues[client->socket_id] = outgoing_msg_queue;
         // Disparo thread para envi ar mensajes a este ClienteSocket.
         thread outgoing_msg_thread(&Server::SendMessage, this, client);
@@ -163,13 +163,15 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
     {
         this->game->DoLogin(client, &login_request);
         Message* login_response = new Message("login-ok");
-        Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta LoginOK.");
+        Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta login-ok.");
 
-        unique_lock<mutex> lock(output_msg_mutex);
+//        unique_lock<mutex> lock(output_msg_mutex);
 
         this->outgoing_msg_queues[client->socket_id]->Append(login_response);
 
-        output_msg_condition_variable.notify_all();
+//        lock.unlock();
+
+//        output_msg_condition_variable.notify_all();
 
         // Si ya se loguearon todos, se notifica a todos los usuarios para empezar a jugar.
         if (this->game->IsReadyToStart())
@@ -269,19 +271,23 @@ void Server::HandleChangePlayerRequest(ClientSocket* client, Message* message)
 void Server::SendMessage(ClientSocket* client)
 {
     Logger::getInstance()->debug("(Server:SendMessage) Iniciando hilo para enviar mensajes a cliente: " + to_string(client->socket_id));
-    Queue<Message>* outgoing_msg_queue = this->outgoing_msg_queues[client->socket_id];
+    SafeQueue<Message>* outgoing_msg_queue = this->outgoing_msg_queues[client->socket_id];
     bool sending_msg = true; // Ver como desactivar y activar esto. (condition variables ??)
     while(sending_msg)
     {
-        unique_lock<mutex> lock(output_msg_mutex);
+//        unique_lock<mutex> lock(output_msg_mutex);
+//
+//        while(!outgoing_msg_queue->HasNext())
+//        {
+//            output_msg_condition_variable.wait(lock);
+//        }
 
-        while(!outgoing_msg_queue->HasNext())
+        if(outgoing_msg_queue->HasNext())
         {
-            output_msg_condition_variable.wait(lock);
+            auto msg = outgoing_msg_queue->Next();
+            Logger::getInstance()->debug("(Server:SendMessage) Enviando mensaje a cliente: " + to_string(client->socket_id));
+            this->socket->Send(client, msg);
         }
-        auto msg = outgoing_msg_queue->Next();
-        Logger::getInstance()->debug("(Server:SendMessage) Enviando mensaje a cliente: " + to_string(client->socket_id));
-        this->socket->Send(client, msg);
     }
 }
 
@@ -290,7 +296,7 @@ void Server::NotifyAll(Message* message)
 {
     Logger::getInstance()->debug("(Server:NotifyAll) Encolando mensaje para ser enviado a todos los clientes conectados.");
 
-    unique_lock<mutex> lock(output_msg_mutex);
+//    unique_lock<mutex> lock(output_msg_mutex);
 
     auto it = this->outgoing_msg_queues.begin();
     while(it != this->outgoing_msg_queues.end())
@@ -305,5 +311,5 @@ void Server::NotifyAll(Message* message)
     }
 
     delete message;
-    output_msg_condition_variable.notify_all();
+//    output_msg_condition_variable.notify_all();
 }

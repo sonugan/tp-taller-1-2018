@@ -22,13 +22,16 @@ void Client::Init(string server_ip)
     SocketAddress address(this->config->GetPort(), server_ip);
     clientSocket->Connect(address);
 
-    receive_messages_thread = new thread(&Client::ReceiveMessages, this);
 }
 
 bool Client::LogIn(LoginRequest* login_request) {
     try {
         Message r(login_request->Serialize());
+
+        Logger::getInstance()->debug("(Client:LogIn) Enviando login request");
         clientSocket->Send(r);
+
+        Logger::getInstance()->debug("(Client:LogIn) Esperando login response");
 
         // OJO con esto. Recibe bloquea el thread.
         Message* login_status = clientSocket->Receive(255);
@@ -42,13 +45,17 @@ bool Client::LogIn(LoginRequest* login_request) {
 
 }
 
-bool Client::WaitForGameStart() {
+std::string Client::WaitForGameStart() {
     try {
 
         // OJO con esto. Recibe bloquea el thread.
+        // Espero el primer estado del juego para instanciar el modelo.
         Message* server_message = clientSocket->Receive(255);
 
-        return true;
+        //Empiezo a escuchar actualizaciones del modelo.
+        receive_messages_thread = new thread(&Client::ReceiveMessages, this);
+
+        return std::string(server_message->GetData());
     } catch (...) {
         return false;
     }

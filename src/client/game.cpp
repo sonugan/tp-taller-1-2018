@@ -24,22 +24,23 @@ void Game::LogIn() {
 
     this->client = new Client(initial_configuration);
 
-    bool isLogged = false;
-    bool gameStarted = false;
+    bool is_logged = false;
+    std::string serialized_model;
 
-    while (!isLogged && !login_view->IsUserQuit()) {
+    while (!is_logged && !login_view->IsUserQuit()) {
         client->Init(login_request->GetServerIp());
-        isLogged = client->LogIn(login_request);
-        if (!isLogged) {
+        is_logged = client->LogIn(login_request);
+        if (!is_logged) {
             login_view->OpenErrorPage(initial_configuration);
         } else {
-            /*login_view->OpenWaitingPage();
-            while (!gameStarted) {
-                gameStarted = client->WaitForGameStart();
-            }*/
+            login_view->OpenWaitingPage();
+            while (serialized_model.empty()) {
+                serialized_model = client->WaitForGameStart();
+            }
+            //TODO sacar esto y ver que se rompe
             this->user = new User(login_request->GetUsername(), login_request->GetPassword(), login_view->GetTeamNumber(), USER_COLOR::RED);
 
-            CreateModel();
+            CreateModel(serialized_model);
             CreateViews();
             CreateControllers();
             this->correctly_initialized = true;
@@ -120,8 +121,9 @@ void Game::End() {
     CloseSDL();
 }
 
-void Game::CreateModel() {
+void Game::CreateModel(std::string serialized_model) {
     Logger::getInstance()->debug("CREANDO EL MODELO");
+
     Pitch* pitch = new Pitch();
 
     Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_A);
@@ -151,6 +153,9 @@ void Game::CreateModel() {
     Ball* ball = new Ball();
 
     this->match = new Match(pitch, team_a, team_b, ball);
+
+    this->match->DeserializeAndUpdate(serialized_model);
+
     this->client->SetMatch(this->match);
 }
 

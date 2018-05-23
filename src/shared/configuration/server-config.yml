@@ -1,18 +1,22 @@
 logger:
-  level: debug
+    level: debug
 team:
-  formation: 3-3
-  shirt: home
-  name: team_a
+    formation: 3-3
+    shirt: home
+    name: team_a
 init_mode: server
 port: 51717
-max_players: 3
+max_players: 1
 users:
-  - name: gperez
-    password: 1234
-  - name: user2
-    password: 1234
-  - name: user3
-    password: 1234
-  - name: user4
-    password: 1234
+    -
+        name: gperez
+        password: 1234
+    -
+        name: user2
+        password: 1234
+    -
+        name: user3
+        password: 1234
+    -
+        name: user4
+        password: 1234

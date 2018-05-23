@@ -30,6 +30,7 @@ class Team
         static const unsigned int TEAM_SIZE = 7;
         string GetName();
         string GetShirt();
+        void SetShirt(string shirt);
         Player* GetSelectedPlayer();
     private:
         std::vector<Player*> players;

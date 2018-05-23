@@ -67,7 +67,7 @@ class Game
         bool quit;
         bool correctly_initialized;
 
-        void CreateModel();
+        void CreateModel(std::string serialized_model);
         void CreateViews();
         void CreateControllers();
         void DestroyModel();
