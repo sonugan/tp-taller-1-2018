@@ -3,9 +3,9 @@
 
 #include <map>
 #include "../../shared/configuration/configuration.h"
-#include "game/game-state.h"
+#include "game-state.h"
 #include "../../shared/network/messages/login-request.h"
-#include "session/session-manager.h"
+#include "../session/session-manager.h"
 #include "../../shared/network/messages/quit-request.h"
 #include "../../shared/network/messages/recover-ball-request.h"
 #include "../../shared/network/messages/kick-ball-request.h"
