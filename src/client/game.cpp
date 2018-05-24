@@ -5,14 +5,16 @@
 #include "../shared/logger.h"
 #include "view/login-view.h"
 
-Game::Game(Configuration* initial_configuration) {
+Game::Game(Configuration* initial_configuration)
+{
 
     this->initial_configuration = initial_configuration;
     this->correctly_initialized = false;
 
 }
 
-void Game::LogIn() {
+void Game::LogIn()
+{
     InitSDL();
 
 
@@ -27,14 +29,22 @@ void Game::LogIn() {
     bool is_logged = false;
     std::string serialized_model;
 
-    while (!is_logged && !login_view->IsUserQuit()) {
+    while (!is_logged && !login_view->IsUserQuit())
+    {
         client->Init(login_request->GetServerIp());
-        is_logged = client->LogIn(login_request);
-        if (!is_logged) {
-            login_view->OpenErrorPage(initial_configuration);
-        } else {
+        std::string login_response = client->LogIn(login_request);
+
+
+        if ("login-fail" == login_response || "too-many-users" == login_response)
+        {
+            login_view->OpenErrorPage(initial_configuration, login_response);
+        }
+        else if("login-ok" == login_response)
+        {
+            is_logged = true;
             login_view->OpenWaitingPage();
-            while (serialized_model.empty()) {
+            while (serialized_model.empty())
+            {
                 serialized_model = client->WaitForGameStart();
             }
             //TODO sacar esto y ver que se rompe
@@ -54,7 +64,8 @@ void Game::LogIn() {
     delete login_request;
 }
 
-Game::~Game() {
+Game::~Game()
+{
 
 }
 
@@ -63,7 +74,8 @@ bool Game::IsCorrectlyInitialized()
     return this->correctly_initialized;
 }
 
-void Game::RenderViews() {
+void Game::RenderViews()
+{
     SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
     SDL_RenderClear( renderer );
 
@@ -71,7 +83,8 @@ void Game::RenderViews() {
     SDL_RenderPresent( renderer );
 }
 
-void Game::Start() {
+void Game::Start()
+{
     Logger::getInstance()->info("==================COMIENZA EL JUEGO==================");
     this->quit = false;
 
@@ -83,7 +96,8 @@ void Game::Start() {
     const Uint8* keyboard_state_array = SDL_GetKeyboardState(NULL);
 
     // GAME LOOP
-    while( !quit ) {
+    while( !quit )
+    {
 
         if (!this->client->IsConnected())
         {
@@ -111,7 +125,8 @@ void Game::Start() {
         SDL_Delay( ( 1000 / FRAMES_PER_SECOND ));
 
         // Esto maneja el cierre del juego desde la cruz de la ventana
-        while( SDL_PollEvent( &e ) != 0 ) {
+        while( SDL_PollEvent( &e ) != 0 )
+        {
             //Apreta ESCAPE
             quit = ( e.type == SDL_QUIT );
         }
@@ -119,7 +134,8 @@ void Game::Start() {
 
 }
 
-void Game::End() {
+void Game::End()
+{
     Logger::getInstance()->info("==================JUEGO TERMINADO==================");
 
     DestroyModel();
@@ -130,7 +146,8 @@ void Game::End() {
     CloseSDL();
 }
 
-void Game::CreateModel(std::string serialized_model) {
+void Game::CreateModel(std::string serialized_model)
+{
     Logger::getInstance()->debug("CREANDO EL MODELO");
 
     /*
@@ -143,14 +160,16 @@ void Game::CreateModel(std::string serialized_model) {
     Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_A);
     Team* team_a = new Team(formation_team_a, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
 
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    {
         team_a->AddPlayer(new Player(i,TEAM_NUMBER::TEAM_A));
     }
 
     Formation* formation_team_b = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_B);
     Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_NUMBER::TEAM_B); // TODO: TRAER NOMBRE DEL TEAM B Y CAMISETA DE CONFIG
 
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    {
         team_b->AddPlayer(new Player(i, TEAM_NUMBER::TEAM_B));
     }
 
@@ -173,7 +192,8 @@ void Game::CreateModel(std::string serialized_model) {
     this->client->SetMatch(this->match);
 }
 
-void Game::CreateViews() {
+void Game::CreateViews()
+{
 
     Logger::getInstance()->debug("CREANDO LAS VISTAS");
     Location center(PITCH_WIDTH/2 - SCREEN_WIDTH/2, PITCH_HEIGHT/2 - SCREEN_HEIGHT/2, 0);
@@ -182,13 +202,15 @@ void Game::CreateViews() {
     PitchView* pitch_view = new PitchView(this->match->GetPitch());
     this->camera->Add(pitch_view);
 
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    {
         Player* player = match->GetTeamA()->GetPlayers()[i];
         PlayerView* player_view = new PlayerView(player);
         this->camera->Add(player_view);
     }
 
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    {
         Player* player = match->GetTeamB()->GetPlayers()[i];
         PlayerView* player_view = new PlayerView(player);
         this->camera->Add(player_view);
@@ -199,7 +221,8 @@ void Game::CreateViews() {
     this->camera->SetShowable(ball_view);
 }
 
-void Game::CreateControllers() {
+void Game::CreateControllers()
+{
     Logger::getInstance()->debug("CREANDO CONTROLLERS"); //  forward declaration
 
     //OBTENER EL EQUIPO DEL USER PARA CREAR LOS CONTROLADORES
@@ -218,33 +241,38 @@ void Game::CreateControllers() {
     game_controller = new GameController(this, this->client);
 }
 
-void Game::DestroyModel() {
+void Game::DestroyModel()
+{
     Logger::getInstance()->debug("DESTRUYENDO EL MODELO");
     delete this->match;
 }
 
-void Game::DestroyViews() {
+void Game::DestroyViews()
+{
     Logger::getInstance()->debug("DESTRUYENDO LAS VISTAS");
     std::vector<AbstractView*> views = this->camera->GetViews();
-    for (unsigned int i = 0; i < views.size(); i++) {
+    for (unsigned int i = 0; i < views.size(); i++)
+    {
         delete (views[i]);
     }
     delete this->camera;
 }
 
-void Game::DestroyControllers() {
+void Game::DestroyControllers()
+{
     Logger::getInstance()->debug("DESTRUYENDO LOS CONTROLLERS");
     delete game_controller;
     delete player_controller;
     delete team_controller;
 }
 
-void Game::InitSDL() {
+void Game::InitSDL()
+{
     Logger::getInstance()->debug("INICIALIZANDO SDL");
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-	{
-	    throw std::runtime_error(SDL_GetError());
-	}
+    if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+    {
+        throw std::runtime_error(SDL_GetError());
+    }
 
     if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
     {
@@ -275,29 +303,32 @@ void Game::InitSDL() {
     SoundManager::LoadResources();
 
     if( TTF_Init() == -1 )
-	{
-	    throw std::runtime_error(TTF_GetError());
-	}
+    {
+        throw std::runtime_error(TTF_GetError());
+    }
 
 }
 
-void Game::CloseSDL() {
-	SDL_DestroyRenderer( renderer );
-	SDL_DestroyWindow( window );
-	window = NULL;
-	renderer = NULL;
+void Game::CloseSDL()
+{
+    SDL_DestroyRenderer( renderer );
+    SDL_DestroyWindow( window );
+    window = NULL;
+    renderer = NULL;
 
-	TTF_Quit();
-	IMG_Quit();
-	SDL_Quit();
+    TTF_Quit();
+    IMG_Quit();
+    SDL_Quit();
 
-	Logger::getInstance()->debug("TERMINANDO PROGRAMA");
+    Logger::getInstance()->debug("TERMINANDO PROGRAMA");
 }
 
-void Game::Quit() {
+void Game::Quit()
+{
     this->quit = true;
 }
 
-User* Game::GetUser() {
+User* Game::GetUser()
+{
     return user;
 }

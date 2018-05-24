@@ -25,7 +25,7 @@ void Client::Init(string server_ip)
 
 }
 
-bool Client::LogIn(LoginRequest* login_request) {
+std::string Client::LogIn(LoginRequest* login_request) {
     try {
         Message r(login_request->Serialize());
 
@@ -36,12 +36,13 @@ bool Client::LogIn(LoginRequest* login_request) {
 
         // OJO con esto. Recibe bloquea el thread.
         Message* login_status = clientSocket->Receive(300);
-
-        Logger::getInstance()->debug("(Client) login data: " + string(login_status->GetData()));
+        string login_response(login_status->GetData());
+        Logger::getInstance()->debug("(Client) login data: " + login_response);
         Logger::getInstance()->debug("(Client) login size: " + to_string(login_status->GetDataSize()));
-        return string(login_status->GetData()) == "login-ok";
+        return login_response;
     } catch (...) {
-        return false;
+        Logger::getInstance()->error("(Client:LogIn) Error al intentar loguearse.");
+        return "login-fail";
     }
 
 }

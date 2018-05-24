@@ -3,6 +3,7 @@
 #define MSG_ENTER_TEAM          "Ingrese equipo (A o B) y presione enter:"
 #define MSG_ENTER_SERVER_IP     "Ingrese la direccion IP del server:"
 #define MSG_INVALID_PASSWORD    "Error de autenticacion. Presione ESC para salir o ENTER para volver al menu principal"
+#define MSG_TOO_MANY_USERS      "Lo siento, no es posible conectarse en este momento! Cantidad máxima de usuarios alcanzada. Presione ESC para salir o ENTER para volver al menu principal"
 #define MSG_WAITING             "Esperando que se conecten todos los jugadores..."
 
 
@@ -189,7 +190,7 @@ void LoginView::Open(Configuration* game_configuration)
     SDL_StopTextInput();
 }
 
-void LoginView::OpenErrorPage(Configuration* game_configuration)
+void LoginView::OpenErrorPage(Configuration* game_configuration, const std::string& login_response)
 {
     bool quit = false;
 
@@ -199,15 +200,26 @@ void LoginView::OpenErrorPage(Configuration* game_configuration)
 
     SDL_Color textColor = { 255, 255, 255, 0xFF };
 
-    // Loggeo que el usuario o pass eran erroneos
-    Logger::getInstance()->error("El usuario " + login_request->GetUsername() + " o la password " + login_request->GetPassword() + " son incorrectos.");
+    string error_message = MSG_INVALID_PASSWORD;
+
+    if ("login-fail" == login_response)
+    {
+        // Loggeo que el usuario o pass eran erroneos
+        Logger::getInstance()->error("El usuario " + login_request->GetUsername() + " o la password " + login_request->GetPassword() + " son incorrectos.");
+    }
+    if ("too-many-users" == login_response)
+    {
+        error_message = MSG_TOO_MANY_USERS;
+        Logger::getInstance()->error("(LoginView:OpenErrorPage) No se puede conectar. Cantidad maxima de usuarios alcanza.");
+    }
+
 
 
     // Limpio el texto que quedo del usuario
     this->inputTextSprite->LoadFromRenderedText( this->fontStyle, " ", textColor, false );
 
     // Cargo mensaje de autenticacion erronea
-    this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_INVALID_PASSWORD, textColor, true );
+    this->textSprite->LoadFromRenderedText( this->fontStyle, error_message, textColor, true );
 
     SDL_StartTextInput();
 

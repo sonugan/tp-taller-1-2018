@@ -22,7 +22,7 @@ class Client
         Client(Configuration * configuration);
         virtual ~Client();
         void Init(std::string server_ip);
-        bool LogIn(LoginRequest* login_request);
+        string LogIn(LoginRequest* login_request);
         string WaitForGameStart();
         bool Quit(QuitRequest* quit_request);
         void Close();

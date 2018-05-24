@@ -194,11 +194,6 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
         Message* login_response = new Message("too-many-users");
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta TooManyUsers.");
         this->outgoing_msg_queues[client->socket_id]->Append(login_response);
-
-        //TODO: mover esta logica a un metodo DisconnectClientSocket()
-        this->clients.erase(client->socket_id);
-        client->ShutDown();
-        client->Close();
     }
 }
 
@@ -340,7 +335,8 @@ void Server::DisconnectClient(ClientSocket* client)
 {
     this->game->DisconnectClient(client);
 
-    // TODO: eliminar cola de envio de msj
+    // TODO ver si hay que hacer delete la cola que se elimino del mapa
+    this->outgoing_msg_queues.erase(client->socket_id);
     this->clients.erase(client->socket_id);
     client->ShutDown();
     client->Close();
