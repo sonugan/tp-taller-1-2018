@@ -4,8 +4,14 @@
 Player::Player(unsigned int position_index, TEAM_NUMBER team_number)
 {
     this->position_index = position_index;
-    this->kicking = false;
+    //this->kicking = false;
     this->recovering_ball = false;
+    this->still_state = new PlayerStillState(this);
+    this->move_state = new PlayerMoveState(this);
+    this->kick_state = new PlayerKickState(this);
+    this->recover_ball_state = new PlayerRecoverBallState(this);
+
+    this->current_state = this->still_state;
 
     switch (team_number)
     {
@@ -29,6 +35,10 @@ Player::~Player()
 {
     Logger::getInstance()->debug("DESTRUYENDO PLAYER");
     delete location;
+    delete still_state;
+    delete move_state;
+    delete kick_state;
+    delete recover_ball_state;
 }
 
 void Player::MoveLeft(bool run)
@@ -81,13 +91,15 @@ void Player::MoveDownToLeft(bool run)
 
 void Player::Kick()
 {
-    this->kicking = true;
+    this->current_state->Kick();
+    //this->kicking = true;
 }
 
 void Player::RecoverBall()
 {
-    this->recovering_ball = true;
-    this->Move(false);
+    this->current_state->RecoverBall();
+    //this->recovering_ball = true;
+    //this->Move(false);
 }
 
 Location* Player::GetLocation()
@@ -196,22 +208,29 @@ Team* Player::GetTeam()
 
 bool Player::IsKicking()
 {
-    return kicking;
+    return this->current_state->IsKicking();
 }
 
 void Player::SetKicking(bool kicking)
 {
-    this->kicking = kicking;
+    if(kicking)
+    {
+        this->current_state = kick_state;
+    }
 }
 
 bool Player::IsRecoveringBall()
 {
-    return recovering_ball;
+    return this->current_state->IsRecoveringBall();
 }
 
 void Player::SetRecoveringBall(bool recovering_ball)
 {
-    this->recovering_ball = recovering_ball;
+    //this->recovering_ball = recovering_ball;
+    if(recovering_ball)
+    {
+        this->current_state = recover_ball_state;
+    }
 }
 
 void Player::Move(bool run)
@@ -315,4 +334,34 @@ void Player::SetDirection(DIRECTION direction)
 USER_COLOR Player::GetPlayerColor()
 {
     return this->color;
+}
+
+void Player::ChangeToMove()
+{
+    this->current_state = this->move_state;
+}
+void Player::ChangeToKick()
+{
+    this->current_state = this->kick_state;
+}
+void Player::ChangeToRecover()
+{
+    this->current_state = this->recover_ball_state;
+}
+void Player::ChangeToPass()
+{
+
+}
+void Player::ChangeToCatchBall()
+{
+
+}
+void Player::ChangeToStill()
+{
+    this->current_state = this->still_state;
+}
+
+void Player::Play()
+{
+    this->current_state->Play();
 }

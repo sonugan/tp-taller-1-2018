@@ -16,7 +16,7 @@ PlayerController::~PlayerController() {
 
 void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
     Logger::getInstance()->debug("(PlayerController::PlayerPlay)");
-    if(!ContinueCurrentAction())
+    /*if(!ContinueCurrentAction())
     {
         selected_player = this->team->GetSelectedPlayer();
         bool playerKicked = this->KickPlayer(keyboard_state_array);
@@ -28,7 +28,11 @@ void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
                 this->PassBall(keyboard_state_array);
             }
         }
-    }
+    }*/
+    this->MovePlayer(keyboard_state_array);
+    this->KickPlayer(keyboard_state_array);
+    this->PlayerRecoverBall(keyboard_state_array);
+    this->PassBall(keyboard_state_array);//TODO: Ver como implementar PassBall en el modelo
 }
 
 void PlayerController::MovePlayer(const Uint8 *keyboard_state_array)

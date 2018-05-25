@@ -8,12 +8,19 @@
 #include "../configuration/configuration.h"
 #include "trajectory.h"
 #include "user-color.h"
+#include "player-states/player-still-state.h"
+#include "player-states/player-move-state.h"
+#include "player-states/player-kick-state.h"
+#include "player-states/player-recover-ball-state.h"
 
 enum PLAYER_ACTION { PLAYER_IS_STILL, PLAYER_IS_KICKING, PLAYER_IS_RUNNING, PLAYER_IS_RECOVERING };
 enum class DIRECTION { NORTH = 1, SOUTH = 2, EAST = 3, WEST = 4, NORTHEAST = 5, SOUTHEAST = 6, SOUTHWEST = 7, NORTHWEST = 8 };
 
 class Team; //  forward declaration
-
+class PlayerStillState;
+class PlayerMoveState;
+class PlayerKickState;
+class PlayerRecoverBallState;
 class Player
 {
     public:
@@ -50,6 +57,16 @@ class Player
         void SetDirection(DIRECTION direction);
         USER_COLOR GetPlayerColor();
 
+        void ChangeToMove();
+        void ChangeToKick();
+        void ChangeToRecover();
+        void ChangeToPass();
+        void ChangeToCatchBall();
+        void ChangeToStill();
+
+        void Move(bool run);
+        void Play();
+
     protected:
 
     private:
@@ -58,15 +75,18 @@ class Player
         static const int PLAYER_RUNNING_SPEED = 15;
         static const int CATCH_DISTANCE = 50;
         USER_COLOR color;
-        bool kicking;
+        //bool kicking;
         bool recovering_ball;
         bool plays_for_team_a;
         bool plays_for_team_b;
         Team* team;
         unsigned int position_index;
-        void Move(bool run);
         Location* location;
-
+        PlayerStillState* still_state;
+        PlayerMoveState* move_state;
+        PlayerKickState* kick_state;
+        PlayerRecoverBallState* recover_ball_state;
+        IPlayerState* current_state;
 };
 
 #endif // PLAYER_H

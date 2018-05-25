@@ -28,6 +28,7 @@
 					<Add directory="src/client" />
 					<Add directory="src/server/session" />
 					<Add directory="src/shared/network/messages" />
+					<Add directory="src/shared/model/player-states" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -52,6 +53,7 @@
 					<Add directory="src/client" />
 					<Add directory="src/server/session" />
 					<Add directory="src/shared/network/messages" />
+					<Add directory="src/shared/model/player-states" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -87,9 +89,9 @@
 		<Unit filename="src/client/view/ball-view.h" />
 		<Unit filename="src/client/view/camera.cpp" />
 		<Unit filename="src/client/view/camera.h" />
-		<Unit filename="src/client/view/ishowable.h" />
 		<Unit filename="src/client/view/disconect-view.cpp" />
 		<Unit filename="src/client/view/disconect-view.h" />
+		<Unit filename="src/client/view/ishowable.h" />
 		<Unit filename="src/client/view/login-view.cpp" />
 		<Unit filename="src/client/view/login-view.h" />
 		<Unit filename="src/client/view/pitch-view.cpp" />
@@ -135,6 +137,11 @@
 		<Unit filename="src/shared/model/match.h" />
 		<Unit filename="src/shared/model/pitch.cpp" />
 		<Unit filename="src/shared/model/pitch.h" />
+		<Unit filename="src/shared/model/player-states/iplayer-state.h" />
+		<Unit filename="src/shared/model/player-states/player-move-state.cpp" />
+		<Unit filename="src/shared/model/player-states/player-move-state.h" />
+		<Unit filename="src/shared/model/player-states/player-still-state.cpp" />
+		<Unit filename="src/shared/model/player-states/player-still-state.h" />
 		<Unit filename="src/shared/model/player.cpp" />
 		<Unit filename="src/shared/model/player.h" />
 		<Unit filename="src/shared/model/team-number.h" />
