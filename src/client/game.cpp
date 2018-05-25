@@ -99,19 +99,19 @@ void Game::Start()
     // GAME LOOP
     while( !quit )
     {
-
         if (!this->client->IsConnected())
         {
             Logger::getInstance()->debug("(Game:Start) Desconectado.");
             DisconetView* disconect_view = new DisconetView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH);
-            disconect_view->Open();
+            disconect_view->OpenConectionErrorPage();
             if(disconect_view->ExitGame())
             {
                 quit = true;
             }
             else if(disconect_view->Reconnect())
             {
-                //TODO: Reconexion
+                //TODO: reconexion
+                disconect_view->OpenConectingPage();
             }
             delete disconect_view;
             continue;

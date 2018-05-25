@@ -1,4 +1,5 @@
 #define MSG_ERROR_DESCONECT "Se ha producido un error con la conexión. Presione enter para volver a conectarse y esc para salir"
+#define MSG_CONNECTING "Intentando reconectarse al servidor. Por favor espere"
 
 
 #include "login-view.h"
@@ -43,9 +44,9 @@ void DisconetView::Free()
     this->fontStyle = NULL;
 }
 
-void DisconetView::Open()
+void DisconetView::OpenConectionErrorPage()
 {
-    Logger::getInstance()->debug("(DisconetView:Open) Abriendo pantalla de desconexion.");
+    Logger::getInstance()->debug("(DisconetView:OpenConectionErrorPage) Abriendo pantalla de desconexion.");
 
     SDL_Color textColor = { 255, 255, 255, 0xFF };
     this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_ERROR_DESCONECT, textColor, true );
@@ -77,6 +78,40 @@ void DisconetView::Open()
                     quit = true;
                 }
             }
+        }
+    }
+}
+
+void DisconetView::OpenConectingPage()
+{
+    Logger::getInstance()->debug("(DisconetView:OpenConectingPage) Abriendo pantalla de reconexion.");
+
+    SDL_Color textColor = { 255, 255, 255, 0xFF };
+
+    bool quit = false;
+    int points = 0;
+    while( !quit )
+    {
+        string message = MSG_CONNECTING;
+        for(int i = 0; i < points; i++)
+        {
+            message = message + ".";
+        }
+
+        this->textSprite->LoadFromRenderedText( this->fontStyle, message, textColor, true );
+
+        SDL_SetRenderDrawColor( this->renderer, 0x00, 0x00, 0x00, 0xFF );
+        SDL_RenderClear( this->renderer );
+
+        this->backgroundSprite->Render( ( this->screenWidth - this->backgroundSprite->GetWidth() ) / 2, 0 );
+        this->textSprite->Render( ( this->screenWidth - this->textSprite->GetWidth() ) / 2, 350 );
+
+        SDL_RenderPresent( this->renderer );
+
+        points++;
+        if(points > 5)
+        {
+            points = 0;
         }
     }
 }

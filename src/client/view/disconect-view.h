@@ -15,7 +15,8 @@ class DisconetView
     public:
         DisconetView(SDL_Renderer* renderer, int height, int width);
         void Free();
-        void Open();
+        void OpenConectionErrorPage();
+        void OpenConectingPage();
         ~DisconetView();
         bool ExitGame();
         bool Reconnect();
