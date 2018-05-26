@@ -43,7 +43,6 @@ class Player
         Team* GetTeam();
         bool HasBall();
         void PassBall();
-        void CatchBall();
         bool PlaysForTeamA();
         bool PlaysForTeamB();
         void SetPlayerColor(USER_COLOR color);
@@ -56,7 +55,6 @@ class Player
         DIRECTION direction;
         static const int PLAYER_SPEED = 6;
         static const int PLAYER_RUNNING_SPEED = 10;
-        static const int CATCH_DISTANCE = 30;
         USER_COLOR color;
         bool kicking;
         bool recovering_ball;

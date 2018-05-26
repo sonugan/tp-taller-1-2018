@@ -29,11 +29,7 @@ class TeamController : public AbstractController
         bool CKeySelected(const Uint8 *keyboard_state_array);
         bool FKeySelected(const Uint8 *keyboard_state_array);
         void ChangePlayerSelection(const Uint8 *keyboard_state_array);
-        bool PlayerWithinMargins(Player* player);
-        Player* FindNextPlayerToSelect();
         void ChangeFormation(const Uint8 *keyboard_state_array);
-        void MoveUnselectedPlayersToDefaultPositions();
-        void CatchBall();
         void SetColor(USER_COLOR color);
 
         std::chrono::time_point<std::chrono::system_clock> last_player_selection_change;

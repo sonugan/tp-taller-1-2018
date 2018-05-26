@@ -305,29 +305,7 @@ void Server::NotifyGameState()
 
         std::this_thread::sleep_for(std::chrono::milliseconds(40));
 
-        //Esto es el inicio del gran modulo de inteligencia artificial:
-        for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
-            Player* player_a = this->game->GetGameState()->GetMatch()->GetTeamA()->GetPlayers()[i];
-            if (!player_a->IsSelected()) {
-                player_a->GoBackToDefaultPosition();
-            }
-            Player* player_b = this->game->GetGameState()->GetMatch()->GetTeamB()->GetPlayers()[i];
-            if (!player_b->IsSelected()) {
-                player_b->GoBackToDefaultPosition();
-            }
-        }
-
-        if (this->game->GetGameState()->GetMatch()->GetBall()->LastFreedDelayPassed()) {
-            for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
-                Player* player_a = this->game->GetGameState()->GetMatch()->GetTeamA()->GetPlayers()[i];
-                player_a->CatchBall();
-                Player* player_b = this->game->GetGameState()->GetMatch()->GetTeamB()->GetPlayers()[i];
-                player_b->CatchBall();
-            }
-        }
-
-        this->game->GetGameState()->GetMatch()->GetBall()->Move();
-
+        this->game->RunArtificialIntelligence();
     }
 }
 

@@ -180,14 +180,82 @@ Message* GameServer::StartGame()
     return new Message(this->game_state->GetMatch()->Serialize());
 }
 
-void GameServer::PlayerCatchBall(int socket_id)
-{
-    // TODO => VER DONDE INCLUIR ESTO
+void GameServer::RunArtificialIntelligence() {
+    this->CatchBall();
+    this->MoveBall();
+    this->MovePlayersToDefaultPositions();
+}
 
-    game_state->GetMatch()->GetBall()->Move();
-    User* user = this->session_manager->GetUserBySocketID(socket_id);
-    user->GetSelectedPlayer()->CatchBall();
-    Logger::getInstance()->info("(GameServer:PlayerCatchBall) Jugador agarro la pelota.");
+void GameServer::CatchBall()
+{
+    if (this->GetGameState()->GetMatch()->GetBall()->LastFreedDelayPassed()) {
+        for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+            Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayers()[i];
+            MakePlayerCatchBall(player_a);
+            Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayers()[i];
+            MakePlayerCatchBall(player_b);
+        }
+    }
+
+}
+
+void GameServer::MakePlayerCatchBall(Player* player) {
+    if (!player->HasBall())
+    {
+        Ball* ball = player->GetTeam()->GetMatch()->GetBall();
+        int distance = ball->GetLocation()->Distance(player->GetLocation());
+        if (ball->IsFree() && distance < CATCH_DISTANCE)
+        {
+            Trajectory* trajectory = new Trajectory(player);
+            ball->SetTrajectory(trajectory);
+
+            /*
+            Si el jugador que agarra la pelota no estaba seleccionado,
+            es seleccionado por el jugador del mismo equipo que estaba más cerca.
+            */
+
+            if (USER_COLOR::NO_COLOR == player->GetPlayerColor()) {
+
+                std::vector<Player*> selected_players = player->GetTeam()->GetSelectedPlayers();
+                Player* closest_selected_player = NULL;
+                unsigned int closest_selected_player_distance_to_ball = 99999;
+
+                for (unsigned int i = 0; i < selected_players.size(); i++) {
+                    Player* selected_player = selected_players[i];
+                    unsigned int distance = selected_player->GetLocation()->Distance(ball->GetLocation());
+                    if (distance <= closest_selected_player_distance_to_ball) {
+                        closest_selected_player = selected_player;
+                        closest_selected_player_distance_to_ball = distance;
+                    }
+                }
+
+                if (closest_selected_player != NULL) {
+                    player->SetPlayerColor(closest_selected_player->GetPlayerColor());
+                    User* user = this->session_manager->GetUserByColor(closest_selected_player->GetPlayerColor());
+                    user->SetSelectedPlayer(player);
+                    closest_selected_player->SetPlayerColor(USER_COLOR::NO_COLOR);
+                }
+            }
+
+        }
+    }
+}
+
+void GameServer::MovePlayersToDefaultPositions() {
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+        Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayers()[i];
+        if (!player_a->IsSelected()) {
+            player_a->GoBackToDefaultPosition();
+        }
+        Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayers()[i];
+        if (!player_b->IsSelected()) {
+            player_b->GoBackToDefaultPosition();
+        }
+    }
+}
+
+void GameServer::MoveBall() {
+    this->game_state->GetMatch()->GetBall()->Move();
 }
 
 bool GameServer::IsRunning()

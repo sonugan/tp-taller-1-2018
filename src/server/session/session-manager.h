@@ -24,6 +24,7 @@ class SessionManager
         int GetAutheticatedUsersCount();
 
         User* GetUserBySocketID(int socket_id);
+        User* GetUserByColor(USER_COLOR user_color);
         bool IsReadyToStart();
         bool IsAuthenticatedClient(ClientSocket* client);
         void CloseSession(ClientSocket* client);
