@@ -23,10 +23,13 @@ GameState* GameServer::GetGameState()
 Player* GameServer::GetUserSelectedPlayer(std::vector<Player*> available_players)
 {
     // TIENE QUE SER ALGUNO DE LOS DELANTEROS = POSICIONES 4, 5 O 6
-    for (unsigned int i = 0; i < available_players.size(); i++) {
+
+    for (unsigned int i = 0; i < available_players.size(); i++)
+    {
         Player* player = available_players[i];
 
-        if (player->GetPositionIndex() >= 4 && player->GetPositionIndex() <= 6) {
+        if (player->GetPositionIndex() >= 4 && player->GetPositionIndex() <= 6)
+        {
             return player;
         }
 
@@ -55,9 +58,10 @@ void GameServer::DoLogin(ClientSocket* client, LoginRequest* login_request)
 
 }
 
-void GameServer::DoQuit(QuitRequest* quit_request)
+void GameServer::DoQuit(ClientSocket* client)
 {
-    this->session_manager->RemoveSession(quit_request->GetUsername());
+//    this->session_manager->CloseSession(client);
+    this->DisconnectClient(client);
 }
 
 std::string GameServer::DoRecoverBall(RecoverBallRequest* recover_ball_request, int socket_id)
@@ -78,32 +82,50 @@ std::string GameServer::DoKick(KickBallRequest* kick_request, int socket_id)
 
 Message* GameServer::DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request)
 {
+    Logger::getInstance()->debug("(GameServer::DoPassBall) REQUEST DE PASE RECIBIDO");
     User* user = this->session_manager->GetUserBySocketID(client->socket_id);
     user->GetSelectedPlayer()->PassBall();
     return new Message(this->game_state->GetMatch()->Serialize());
 }
 
-std::string GameServer::DoMove(MoveRequest* move_request, int socket_id){
+std::string GameServer::DoMove(MoveRequest* move_request, int socket_id)
+{
     User* user = this->session_manager->GetUserBySocketID(socket_id);
     DIRECTION direction = move_request->GetDirection();
     bool running = move_request->IsRunning();
-    if (direction == DIRECTION::NORTH){
+    if (direction == DIRECTION::NORTH)
+    {
         user->GetSelectedPlayer()->MoveUp(running);
-    }else if (direction == DIRECTION::SOUTH){
+    }
+    else if (direction == DIRECTION::SOUTH)
+    {
         user->GetSelectedPlayer()->MoveDown(running);
-    }else if (direction == DIRECTION::EAST){
+    }
+    else if (direction == DIRECTION::EAST)
+    {
         user->GetSelectedPlayer()->MoveRight(running);
-    }else if (direction == DIRECTION::WEST){
+    }
+    else if (direction == DIRECTION::WEST)
+    {
         user->GetSelectedPlayer()->MoveLeft(running);
-    }else if (direction == DIRECTION::NORTHEAST){
+    }
+    else if (direction == DIRECTION::NORTHEAST)
+    {
         user->GetSelectedPlayer()->MoveUpToRight(running);
-    }else if (direction == DIRECTION::NORTHWEST){
+    }
+    else if (direction == DIRECTION::NORTHWEST)
+    {
         user->GetSelectedPlayer()->MoveUpToLeft(running);
-    }else if (direction == DIRECTION::SOUTHEAST){
+    }
+    else if (direction == DIRECTION::SOUTHEAST)
+    {
         user->GetSelectedPlayer()->MoveDownToRight(running);
-    }else if (direction == DIRECTION::SOUTHWEST){
+    }
+    else if (direction == DIRECTION::SOUTHWEST)
+    {
         user->GetSelectedPlayer()->MoveDownToLeft(running);
     }
+
     return this->game_state->GetMatch()->Serialize();
 
 }
@@ -112,6 +134,7 @@ string GameServer::ChangePlayer(ChangePlayerRequest* change_player_request, int 
 {
     User* user = this->session_manager->GetUserBySocketID(socket_id);
     Player* last_selected_player = user->GetSelectedPlayer();
+
     Player* next_player = NULL;
     Team* team = user->GetSelectedPlayer()->GetTeam();
 
@@ -153,6 +176,101 @@ bool GameServer::IsReadyToStart()
 Message* GameServer::StartGame()
 {
     Logger::getInstance()->info("(GameServer:StartGame) Comenzando el juego.");
-    this->is_game_started = true;
+    this->is_running = true;
     return new Message(this->game_state->GetMatch()->Serialize());
+}
+
+void GameServer::RunArtificialIntelligence() {
+    this->CatchBall();
+    this->MoveBall();
+    this->MovePlayersToDefaultPositions();
+}
+
+void GameServer::CatchBall()
+{
+    if (this->GetGameState()->GetMatch()->GetBall()->LastFreedDelayPassed()) {
+        for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+            Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayers()[i];
+            MakePlayerCatchBall(player_a);
+            Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayers()[i];
+            MakePlayerCatchBall(player_b);
+        }
+    }
+
+}
+
+void GameServer::MakePlayerCatchBall(Player* player) {
+    if (!player->HasBall())
+    {
+        Ball* ball = player->GetTeam()->GetMatch()->GetBall();
+        int distance = ball->GetLocation()->Distance(player->GetLocation());
+        if (ball->IsFree() && distance < CATCH_DISTANCE)
+        {
+            Trajectory* trajectory = new Trajectory(player);
+            ball->SetTrajectory(trajectory);
+
+            /*
+            Si el jugador que agarra la pelota no estaba seleccionado,
+            es seleccionado por el jugador del mismo equipo que estaba más cerca.
+            */
+
+            if (USER_COLOR::NO_COLOR == player->GetPlayerColor()) {
+
+                std::vector<Player*> selected_players = player->GetTeam()->GetSelectedPlayers();
+                Player* closest_selected_player = NULL;
+                unsigned int closest_selected_player_distance_to_ball = 99999;
+
+                for (unsigned int i = 0; i < selected_players.size(); i++) {
+                    Player* selected_player = selected_players[i];
+                    unsigned int distance = selected_player->GetLocation()->Distance(ball->GetLocation());
+                    if (distance <= closest_selected_player_distance_to_ball) {
+                        closest_selected_player = selected_player;
+                        closest_selected_player_distance_to_ball = distance;
+                    }
+                }
+
+                if (closest_selected_player != NULL) {
+                    player->SetPlayerColor(closest_selected_player->GetPlayerColor());
+                    User* user = this->session_manager->GetUserByColor(closest_selected_player->GetPlayerColor());
+                    user->SetSelectedPlayer(player);
+                    closest_selected_player->SetPlayerColor(USER_COLOR::NO_COLOR);
+                }
+            }
+
+        }
+    }
+}
+
+void GameServer::MovePlayersToDefaultPositions() {
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+        Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayers()[i];
+        if (!player_a->IsSelected()) {
+            player_a->GoBackToDefaultPosition();
+        }
+        Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayers()[i];
+        if (!player_b->IsSelected()) {
+            player_b->GoBackToDefaultPosition();
+        }
+    }
+}
+
+void GameServer::MoveBall() {
+    this->game_state->GetMatch()->GetBall()->Move();
+}
+
+bool GameServer::IsRunning()
+{
+    return this->is_running;
+}
+
+void GameServer::DisconnectClient(ClientSocket* client)
+{
+    if(this->session_manager->IsAuthenticatedClient(client))
+    {
+        this->session_manager->CloseSession(client);
+        if(this->session_manager->GetAutheticatedUsersCount() == 0)
+        {
+            this->is_running = false;
+        }
+    }
 }

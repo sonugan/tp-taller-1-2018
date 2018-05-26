@@ -263,25 +263,6 @@ void Player::Move(bool run)
     }
 }
 
-void Player::CatchBall()
-{
-    if (!this->HasBall())
-    {
-        Ball* ball = team->GetMatch()->GetBall();
-        int distance = ball->GetLocation()->Distance(location);
-        if (ball->IsFree() && distance < CATCH_DISTANCE)
-        {
-            Trajectory* trajectory = new Trajectory(this);
-            ball->SetTrajectory(trajectory);
-            Player* previously_selected_player = team->GetSelectedPlayer();
-            if (previously_selected_player != NULL && previously_selected_player->GetPositionIndex() != this->position_index)
-            {
-                previously_selected_player->SetPlayerColor(USER_COLOR::NO_COLOR);
-            }
-        }
-    }
-}
-
 void Player::PassBall()
 {
     if (HasBall())

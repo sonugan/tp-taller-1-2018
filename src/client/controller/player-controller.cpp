@@ -15,6 +15,7 @@ PlayerController::~PlayerController() {
 }
 
 void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
+    Logger::getInstance()->debug("(PlayerController::PlayerPlay)");
     if(!ContinueCurrentAction())
     {
         selected_player = this->team->GetSelectedPlayer();
@@ -23,8 +24,8 @@ void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
         if (!playerKicked) {
             bool playerRecovered = this->PlayerRecoverBall(keyboard_state_array);
             if (!playerRecovered) {
-                this->MovePlayer(keyboard_state_array);
                 this->PassBall(keyboard_state_array);
+                this->MovePlayer(keyboard_state_array);
             }
         }
     }
@@ -32,8 +33,8 @@ void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
 
 void PlayerController::MovePlayer(const Uint8 *keyboard_state_array)
 {
+    Logger::getInstance()->debug("(PlayerController::MovePlayer)");
     bool run = ShiftKeySelected(keyboard_state_array);
-    u_int selected_player_id = this->team->GetSelectedPlayer()->GetPositionIndex();
 
     if (UpKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array)) {
         MoveRequest m(DIRECTION::NORTHEAST, run);
@@ -74,15 +75,20 @@ bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array) {
 }
 
 void PlayerController::PassBall(const Uint8 *keyboard_state_array) {
-    unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_pass).count();
-    if (elapsed_millis > PASS_DELAY_MILLIS && SKeySelected(keyboard_state_array)) {
+    if (ShouldRequestPass(keyboard_state_array)) {
         PassBallRequest r;
         this->client->PassBall(&r);
         last_pass = std::chrono::system_clock::now();
     }
 }
 
+bool PlayerController::ShouldRequestPass(const Uint8 *keyboard_state_array) {
+    unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_pass).count();
+    return (elapsed_millis > PASS_DELAY_MILLIS) && SKeySelected(keyboard_state_array) && SKeySelected(keyboard_state_array);
+}
+
 bool PlayerController::PlayerRecoverBall(const Uint8 *keyboard_state_array) {
+    Logger::getInstance()->debug("(PlayerController::PlayerRecoverBall)");
     if (AKeySelected(keyboard_state_array)) {
         RecoverBallRequest r;
         this->client->RecoverBall(&r);
@@ -130,11 +136,14 @@ void PlayerController::Handle(const Uint8* keyboard_state_array) {
 
 bool PlayerController::SelectedPlayerHasChange()
 {
+    Logger::getInstance()->debug("(PlayerController::SelectedPlayerHasChange)");
     return team->GetSelectedPlayer() != this->selected_player;
+
 }
 
 bool PlayerController::ContinueCurrentAction()
 {
+    Logger::getInstance()->debug("(PlayerController::ContinueCurrentAction)");
     if(!SelectedPlayerHasChange())
     {
         current_action_timming++;

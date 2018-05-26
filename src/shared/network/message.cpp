@@ -4,7 +4,7 @@
 
 
 /* Este constructor lo usamos en el receive del server o client */
-Message::Message(string data)
+Message::Message(const string& data)
 {
     this->data = data;
     this->type = ResolveType(data);
@@ -17,9 +17,9 @@ Message::Message(ISerializable* serializable)
     this->type = serializable->GetMessageType();
 }
 
-char* Message::GetData()
+const char* Message::GetData()
 {
-    return (char*) data.c_str();
+    return data.c_str();
 }
 
 ISerializable* Message::GetDeserializedData(ISerializable* serializable)

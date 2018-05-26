@@ -38,7 +38,8 @@ Ball* Match::GetBall() {
 }
 
 string Match::Serialize() {
-    Logger::getInstance()->debug("Serializando Match...");
+    Logger::getInstance()->debug("(Match:Serialize) Serializando Match...");
+
     string result;
     //  MESSAGE TYPE
     result.append(std::to_string(MESSAGE_TYPE::GAME_STATE_RESPONSE));
@@ -117,35 +118,46 @@ string Match::Serialize() {
     result.append("|");
     result.append(GetTeamB()->GetShirt());
 
-    Logger::getInstance()->debug(result.c_str());
+//    Logger::getInstance()->debug("(Match:Serialize) Serialize result: " + result);
     return result;
 }
 
 void Match::DeserializeAndUpdate(string serialized) {
-    Logger::getInstance()->debug("Deserializando Match...");
+    Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Deserializando Match...");
     std::vector<std::string> data = StringUtils::Split(serialized, '|');
 
     //  BALL
-    ball->GetLocation()->Update(stoi(data[1]), stoi(data[2]), 0);
-    Logger::getInstance()->debug(ball->GetLocation()->ToString());
+    ball->GetLocation()->Update(SafeStoi(data[1]), SafeStoi(data[2]), 0);
+//    Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Ball location: " + ball->GetLocation()->ToString());
 
     //  TEAM A
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
 
+        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Team A - Player: " + to_string(i));
+
         int base_index = 3 + (i*6);
         Player* player = GetTeamA()->GetPlayers()[i];
+//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) direction");
+        player->SetDirection(static_cast<DIRECTION>(SafeStoi(data[base_index])));
 
-        player->SetDirection(static_cast<DIRECTION>(stoi(data[base_index])));
-        player->SetPlayerColor(static_cast<USER_COLOR>(stoi(data[base_index + 1])));
-        player->SetKicking((bool)(stoi(data[base_index + 2])));
-        player->SetRecoveringBall((bool)(stoi(data[base_index + 3])));
-        player->GetLocation()->Update(stoi(data[base_index + 4]), stoi(data[base_index + 5]), 0);
+//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) color");
+        player->SetPlayerColor(static_cast<USER_COLOR>(SafeStoi(data[base_index + 1])));
+
+//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_kicking");
+        player->SetKicking((bool)(SafeStoi(data[base_index + 2])));
+
+//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_recovering_ball");
+        player->SetRecoveringBall((bool)(SafeStoi(data[base_index + 3])));
+
+//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) location");
+        player->GetLocation()->Update(SafeStoi(data[base_index + 4]), SafeStoi(data[base_index + 5]), 0);
 
     }
 
     //  TEAM B
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
 
+        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Team B - Player: " + to_string(i));
         int base_index = 3 + 42 + (i*6);
         Player* player = GetTeamB()->GetPlayers()[i];
 
@@ -157,18 +169,42 @@ void Match::DeserializeAndUpdate(string serialized) {
         player->SetRecoveringBall((bool)(stoi(data[base_index + 3])));
         player->GetLocation()->Update(stoi(data[base_index + 4]), stoi(data[base_index + 5]), 0);
 
+//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) direction");
+        player->SetDirection(static_cast<DIRECTION>(SafeStoi(data[base_index])));
+
+        player->SetPlayerColor(static_cast<USER_COLOR>(SafeStoi(data[base_index + 1])));
+
+//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_kicking");
+        player->SetKicking((bool)(SafeStoi(data[base_index + 2])));
+//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_recovering_ball");
+        player->SetRecoveringBall((bool)(SafeStoi(data[base_index + 3])));
+//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) location");
+        player->GetLocation()->Update(SafeStoi(data[base_index + 4]), SafeStoi(data[base_index + 5]), 0);
+
     }
 
     int base_index = 87;
 
-    Formation* formation_a = new Formation(static_cast<FORMATION>(stoi(data[base_index])), TEAM_NUMBER::TEAM_A);
+    Formation* formation_a = new Formation(static_cast<FORMATION>(SafeStoi(data[base_index])), TEAM_NUMBER::TEAM_A);
     GetTeamA()->SetFormation(formation_a);
-    Formation* formation_b = new Formation(static_cast<FORMATION>(stoi(data[base_index + 1])), TEAM_NUMBER::TEAM_B);
+    Formation* formation_b = new Formation(static_cast<FORMATION>(SafeStoi(data[base_index + 1])), TEAM_NUMBER::TEAM_B);
     GetTeamB()->SetFormation(formation_b);
 
     GetTeamA()->SetShirt(data[base_index + 2]);
     GetTeamB()->SetShirt(data[base_index + 3]);
 
 
-    Logger::getInstance()->debug("Match deserializado");
+    Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Match deserializado");
+}
+
+int Match::SafeStoi(const string& str)
+{
+    try
+    {
+        return stoi(str);
+    }
+    catch (...)
+    {
+        Logger::getInstance()->error("(Match:SafeStoi) Error con argumento: " + str);
+    }
 }

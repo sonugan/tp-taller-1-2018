@@ -18,7 +18,7 @@ class LoginView
         LoginView(SDL_Renderer* renderer, int height, int width, LoginRequest* login_request);
         void Free();
         void Open(Configuration* game_configuration);
-        void OpenErrorPage(Configuration* game_configuration);
+        void OpenErrorPage(Configuration* game_configuration, const std::string& login_response);
         void OpenWaitingPage();
         bool IsUserAuthenticated();
         bool IsUserQuit();

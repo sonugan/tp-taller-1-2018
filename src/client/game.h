@@ -43,7 +43,6 @@ class Game
         bool IsCorrectlyInitialized();
         void LogIn();
         User* GetUser();
-        Match* CreateTestMatch(Configuration* initial_configuration);
 
         static const int SCREEN_WIDTH = 800;
         static const int SCREEN_HEIGHT = 600;

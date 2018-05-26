@@ -22,7 +22,7 @@ class Client
         Client(Configuration * configuration);
         virtual ~Client();
         void Init(std::string server_ip);
-        bool LogIn(LoginRequest* login_request);
+        string LogIn(LoginRequest* login_request);
         string WaitForGameStart();
         bool Quit(QuitRequest* quit_request);
         void Close();
@@ -33,6 +33,7 @@ class Client
         bool ChangePlayer(ChangePlayerRequest* change_player_request);
         void SetMatch(Match* match);
         string GetGameState();
+        bool IsConnected();
 
         // TODO: Tipar mensaje. esto es solo para una prueba
         void SendEvent();
@@ -44,9 +45,11 @@ class Client
         ClientSocket* clientSocket;
         SafeQueue<Message>* message_queue;
         Match* match;
+        bool is_connected = false;
 
         thread* receive_messages_thread;
         void ReceiveMessages();
+
 };
 
 #endif // CLIENT_H

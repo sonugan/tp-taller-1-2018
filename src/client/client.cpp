@@ -5,6 +5,7 @@
 #include "../shared/utils/string-utils.h"
 #include "../shared/network/messages/login-request.h"
 #include "../shared/logger.h"
+#include "../shared/network/exceptions/socket-connection-exception.h"
 
 Client::Client(Configuration* config)
 {
@@ -24,7 +25,7 @@ void Client::Init(string server_ip)
 
 }
 
-bool Client::LogIn(LoginRequest* login_request) {
+std::string Client::LogIn(LoginRequest* login_request) {
     try {
         Message r(login_request->Serialize());
 
@@ -34,13 +35,14 @@ bool Client::LogIn(LoginRequest* login_request) {
         Logger::getInstance()->debug("(Client:LogIn) Esperando login response");
 
         // OJO con esto. Recibe bloquea el thread.
-        Message* login_status = clientSocket->Receive(255);
-
-        Logger::getInstance()->debug("(Client) login data: " + string(login_status->GetData()));
+        Message* login_status = clientSocket->Receive(300);
+        string login_response(login_status->GetData());
+        Logger::getInstance()->debug("(Client) login data: " + login_response);
         Logger::getInstance()->debug("(Client) login size: " + to_string(login_status->GetDataSize()));
-        return string(login_status->GetData()) == "login-ok";
+        return login_response;
     } catch (...) {
-        return false;
+        Logger::getInstance()->error("(Client:LogIn) Error al intentar loguearse.");
+        return "login-fail";
     }
 
 }
@@ -50,7 +52,8 @@ std::string Client::WaitForGameStart() {
 
         // OJO con esto. Recibe bloquea el thread.
         // Espero el primer estado del juego para instanciar el modelo.
-        Message* server_message = clientSocket->Receive(255);
+        Message* server_message = clientSocket->Receive(300);
+        this->is_connected = true;
 
         //Empiezo a escuchar actualizaciones del modelo.
         receive_messages_thread = new thread(&Client::ReceiveMessages, this);
@@ -74,7 +77,7 @@ bool Client::Move(MoveRequest* move_request){
 
 bool Client::PassBall(PassBallRequest* pass_ball_request){
     Message r(pass_ball_request->Serialize());
-    return clientSocket->Send(r);
+    return clientSocket->Send(r);;
 }
 
 bool Client::RecoverBall(RecoverBallRequest* recover_ball_request){
@@ -111,21 +114,21 @@ void Client::SendEvent()
 void Client::ReceiveMessages()
 {
     Logger::getInstance()->debug("(Client:ReceiveMessages) Iniciando hilo receptor de mensajes.");
-    bool receiving_messages = true;
-    while(receiving_messages)
+
+    while(this->is_connected)
     {
         Logger::getInstance()->debug("(Client:ReceiveMessages) Esperando mensajes entrantes...");
 
         try
         {
-            Message* incoming_message = this->clientSocket->Receive(255);
-            Logger::getInstance()->debug("(Client:ReceiveMessages) Recibido: " + string(incoming_message->GetData()));
+            Message* incoming_message = this->clientSocket->Receive(300);
+//            Logger::getInstance()->debug("(Client:ReceiveMessages) Recibido: " + string(incoming_message->GetData()));
             this->message_queue->Append(incoming_message);
         }
-        catch (...)
+        catch (SocketConnectionException e)
         {
             Logger::getInstance()->error("(Client:ReceiveMessages) Error de conexión. Cerrando socket.");
-            receiving_messages = false;
+            this->is_connected = false;
             clientSocket->Close();
         }
     }
@@ -143,6 +146,11 @@ string Client::GetGameState()
         return string(this->message_queue->Next()->GetData());
     }
     return "";
+}
+
+bool Client::IsConnected()
+{
+    return this->is_connected;
 }
 
 /*

@@ -28,6 +28,8 @@ class Match
         Team* team_b;
         Pitch* pitch;
         Ball* ball;
+
+        int SafeStoi(const std::string& str);
 };
 
 #endif // MATCH_H
