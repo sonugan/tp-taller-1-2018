@@ -125,7 +125,7 @@ void TeamController::CatchBall() {
 
     if (team->GetMatch()->GetBall()->LastFreedDelayPassed()) {
         for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
-            Player* player = team->GetPlayers()[i];
+            Player* player = team->GetPlayers()[i];5
             player->CatchBall();
             if (player->HasBall()) {
 
