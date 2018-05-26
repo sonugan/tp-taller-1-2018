@@ -144,6 +144,25 @@ string Client::GetGameState()
     if(this->message_queue->HasNext())
     {
         string data = string(this->message_queue->Next()->GetData());
+        vector<string> splited_data = StringUtils::Split(data, '|');
+        string new_id = splited_data[splited_data.size() - 1];
+
+        while(current_match_state.compare(new_id) == 0)
+        {
+            if(this->message_queue->HasNext())
+            {
+                data = string(this->message_queue->Next()->GetData());
+                splited_data = StringUtils::Split(data, '|');
+                new_id = splited_data[splited_data.size() - 1];
+            }
+            else
+            {
+                current_match_state = new_id;
+                return "";
+            }
+        }
+        current_match_state = new_id;
+
         return data;
     }
     return "";
@@ -153,13 +172,3 @@ bool Client::IsConnected()
 {
     return this->is_connected;
 }
-
-/*
-void Client::HandleMessages(Message* message)
-{
-    switch (message->GetType()) {
-        case MESSAGE_TYPE::GAME_STATE_RESPONSE:
-            MessageResponse*
-        break;
-    }
-}*/

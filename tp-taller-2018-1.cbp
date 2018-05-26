@@ -192,6 +192,8 @@
 		<Unit filename="src/shared/utils/string-builder.h" />
 		<Unit filename="src/shared/utils/string-utils.cpp" />
 		<Unit filename="src/shared/utils/string-utils.h" />
+		<Unit filename="src/shared/utils/id-generator.cpp" />
+		<Unit filename="src/shared/utils/id-generator.h" />
 		<Extensions>
 			<envvars />
 			<code_completion />

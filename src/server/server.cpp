@@ -294,12 +294,13 @@ void Server::NotifyAll(Message* message)
 
 void Server::NotifyGameState()
 {
-
+    IdGenerator id_generator;
     while(this->game->IsRunning())
     {
 
         Logger::getInstance()->debug("(Server:NotifyGameState) Enviando game state a todos los clientes.");
-        Message* game_state_msg = new Message(this->game->GetGameState()->GetMatch()->Serialize());
+        string state_id = id_generator.GetNext();
+        Message* game_state_msg = new Message(this->game->GetGameState()->GetMatch()->Serialize() + "|" + state_id);
         this->NotifyAll(game_state_msg);
 
         std::this_thread::sleep_for(std::chrono::milliseconds(SEND_GAME_STATE_EVERY_MILLISECONDS));

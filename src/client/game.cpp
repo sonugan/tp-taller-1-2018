@@ -132,7 +132,8 @@ void Game::Start()
         RenderViews();
 
         //Manejo de frames por segundo: http://lazyfoo.net/SDL_tutorials/lesson16/index.php
-        SDL_Delay( ( 100 / FRAMES_PER_SECOND ));//TODO: configurar iteracion
+        //SDL_Delay( ( 100 / FRAMES_PER_SECOND ));//TODO: configurar iteracion
+        SDL_Delay(STOP_LOOP_MILLISECONDS);
 
         // Esto maneja el cierre del juego desde la cruz de la ventana
         while( SDL_PollEvent( &e ) != 0 )
