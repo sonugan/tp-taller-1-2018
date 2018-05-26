@@ -14,14 +14,16 @@ ServerSocket::ServerSocket(int socket_id):Socket(socket_id)
 {
 }
 
-void ServerSocket::Bind(SocketAddress address)
+bool ServerSocket::Bind(SocketAddress address)
 {
     sockaddr_in addr = address.GetFormatted();
-    if (HasError(bind(this->socket_id, (struct sockaddr *) &addr, sizeof(addr))))
+    bool has_error = HasError(bind(this->socket_id, (struct sockaddr *) &addr, sizeof(addr)));
+    if (has_error)
     {
         Logger::getInstance()->debug("(ServerSocket:Bind) Error durante el binding.");
     }
     this->address = address;
+    return has_error;
 }
 
 void ServerSocket::Listen(int max_queue_size)

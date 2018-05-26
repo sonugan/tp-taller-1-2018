@@ -29,13 +29,14 @@ Server::~Server()
 
 void Server::Init()
 {
-    this->socket->Bind(this->port);
-    this->socket->Listen(MAX_SOCKET_QUEUE_SIZE);
+    bool binding_error = this->socket->Bind(this->port);
+    if (!binding_error) {
+        this->socket->Listen(MAX_SOCKET_QUEUE_SIZE);
 
-    this->ConnectingUsers();
+        this->ConnectingUsers();
 
-    Logger::getInstance()->info("Comenzando el juego....'");
-
+        Logger::getInstance()->info("Comenzando el juego....'");
+    }
     this->socket->Close();
 
     Logger::getInstance()->info("Cerrando el servidor....'");
