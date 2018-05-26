@@ -4,6 +4,7 @@
 #include <chrono>
 #include "../shared/logger.h"
 #include "view/login-view.h"
+#include "view/disconect-view.h"
 
 Game::Game(Configuration* initial_configuration)
 {
@@ -98,12 +99,21 @@ void Game::Start()
     // GAME LOOP
     while( !quit )
     {
-
         if (!this->client->IsConnected())
         {
             Logger::getInstance()->debug("(Game:Start) Desconectado.");
-            // TODO: agregar pantalla de desconexion!!
-            this->quit = true;
+            DisconetView* disconect_view = new DisconetView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH);
+            disconect_view->OpenConectionErrorPage();
+            if(disconect_view->ExitGame())
+            {
+                quit = true;
+            }
+            else if(disconect_view->Reconnect())
+            {
+                //TODO: reconexion
+                disconect_view->OpenConectingPage();
+            }
+            delete disconect_view;
             continue;
         }
 
