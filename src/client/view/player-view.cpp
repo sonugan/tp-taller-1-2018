@@ -243,9 +243,9 @@ void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
 {
     this->GetPlayerAngle();
     int animation_index = current_animation_index;
-    if(this->player->IsStill()) {
+    if(this->IsStill()) {
         current_animation_index = STILL_ANIMATION_INDEX;
-    } else if(this->player->IsMoving()){
+    } else if(!this->IsStill()){
         current_animation_index = RUN_ANIMATION_INDEX;
     } else if (this->player->IsKicking()) {
         current_animation_index = KICKING_ANIMATION_INDEX;
@@ -264,8 +264,6 @@ void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
 
     this->previous_location->UpdateX(player->GetLocation()->GetX());
     this->previous_location->UpdateY(player->GetLocation()->GetY());
-    //this->player->SetKicking(false);
-    //this->player->SetRecoveringBall(false);
 
     x = player->GetLocation()->GetX() - x_camera;
     y = player->GetLocation()->GetY() - y_camera;
@@ -307,4 +305,11 @@ Location* PlayerView::GetLocation()
 void PlayerView::SetAnimation(Animation* animation)
 {
 
+}
+
+bool PlayerView::IsStill()
+{
+    Location* location = this->player->GetLocation();
+    return location->GetX() == previous_location->GetX() &&
+        location->GetY() == previous_location->GetY();
 }

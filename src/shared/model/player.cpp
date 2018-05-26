@@ -32,7 +32,14 @@ Player::Player(unsigned int position_index, TEAM_NUMBER team_number)
 Player::~Player()
 {
     Logger::getInstance()->debug("DESTRUYENDO PLAYER");
-    delete location;
+    if(location != nullptr)
+    {
+        delete location;
+    }
+    if(previous_location != nullptr)
+    {
+        delete previous_location;
+    }
     delete still_state;
     delete move_state;
     delete kick_state;
@@ -114,6 +121,7 @@ void Player::SetTeam(Team* team)
     this->team = team;
     Location* default_location = GetDefaultLocation();
     this->location = new Location(default_location->GetX(), default_location->GetY(), default_location->GetZ());
+    this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
 }
 
 unsigned int Player::GetPositionIndex()
@@ -205,12 +213,12 @@ bool Player::IsKicking()
 
 bool Player::IsStill()
 {
-    return this->current_state->IsStill();
+    return location->GetX() == previous_location->GetX() &&
+        location->GetY() == previous_location->GetY();
 }
-
 bool Player::IsMoving()
 {
-    return this->current_state->IsMoving();
+    return !this->GetIsStill();
 }
 
 bool Player::IsRecoveringBall()
@@ -233,7 +241,7 @@ void Player::Move(bool run)
     {
         speed = PLAYER_SPEED;
     }
-
+    this->previous_location->Update(this->location->GetX(), this->location->GetY(), this->location->GetZ());
     switch(direction)
     {
     case DIRECTION::NORTH:
@@ -371,4 +379,20 @@ void Player::SetCurrentAction(PLAYER_ACTION action)
             this->current_state = still_state;
             break;
     }
+}
+
+void Player::SetIsStill(bool is_still)
+{
+    this->is_still = is_still;
+}
+
+bool Player::GetIsStill()
+{
+    return this->is_still;
+}
+
+void Player::SetLocation(Location* location)
+{
+    this->location->Update(location->GetX(), location->GetY(), location->GetZ());
+    this->previous_location->Update(location->GetX(), location->GetY(), location->GetZ());
 }

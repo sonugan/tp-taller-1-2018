@@ -72,7 +72,7 @@ string Match::Serialize() {
         //result.append(std::to_string((int) player->IsKicking()));
         //result.append("|");
         // RECOVER
-        result.append(std::to_string(0));//TODO:remover
+        result.append(std::to_string((int) player->IsStill()));//TODO:Remover
         result.append("|");
         //  X
         result.append(std::to_string(player->GetLocation()->GetX()));
@@ -102,7 +102,7 @@ string Match::Serialize() {
         //result.append(std::to_string((int) player->IsKicking()));
         //result.append("|");
         // KICKING
-        result.append(std::to_string(0));//TODO:remover
+        result.append(std::to_string((int) player->IsStill()));//TODO:Remover
         result.append("|");
         //  X
         result.append(std::to_string(player->GetLocation()->GetX()));
@@ -152,7 +152,7 @@ void Match::DeserializeAndUpdate(string serialized) {
         //player->SetKicking((bool)(SafeStoi(data[base_index + 2])));
         player->SetCurrentAction(static_cast<PLAYER_ACTION>(stoi(data[base_index + 2])));
 //        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_recovering_ball");
-        //player->SetRecoveringBall((bool)(SafeStoi(data[base_index + 3])));
+        player->SetIsStill((bool)(SafeStoi(data[base_index + 3])));
 
 //        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) location");
         player->GetLocation()->Update(SafeStoi(data[base_index + 4]), SafeStoi(data[base_index + 5]), 0);
@@ -175,7 +175,7 @@ void Match::DeserializeAndUpdate(string serialized) {
 //        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_kicking");
         //player->SetKicking((bool)(SafeStoi(data[base_index + 2])));
 //        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_recovering_ball");
-        //player->SetRecoveringBall((bool)(SafeStoi(data[base_index + 3])));
+        player->SetIsStill((bool)(SafeStoi(data[base_index + 3])));
 //        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) location");
         player->GetLocation()->Update(SafeStoi(data[base_index + 4]), SafeStoi(data[base_index + 5]), 0);
 

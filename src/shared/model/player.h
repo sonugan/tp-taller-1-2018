@@ -69,7 +69,9 @@ class Player
 
         void Move(bool run);
         void Play();
-
+        void SetIsStill(bool is_still);
+        bool GetIsStill();
+        void SetLocation(Location* location);
     protected:
 
     private:
@@ -78,18 +80,18 @@ class Player
         static const int PLAYER_RUNNING_SPEED = 15;
         static const int CATCH_DISTANCE = 50;
         USER_COLOR color;
-        //bool kicking;
-        //bool recovering_ball;
         bool plays_for_team_a;
         bool plays_for_team_b;
         Team* team;
         unsigned int position_index;
         Location* location;
+        Location* previous_location;
         PlayerStillState* still_state;
         PlayerMoveState* move_state;
         PlayerKickState* kick_state;
         PlayerRecoverBallState* recover_ball_state;
         IPlayerState* current_state;
+        bool is_still;
 };
 
 #endif // PLAYER_H

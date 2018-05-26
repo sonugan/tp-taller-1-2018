@@ -26,8 +26,6 @@ class PlayerMoveState : public IPlayerState
         void Play();
         bool IsKicking(){ return false; }
         bool IsRecoveringBall() { return false; }
-        bool IsStill() { return false; }
-        bool IsMoving() { return true; }
         PLAYER_ACTION GetName(){ return PLAYER_ACTION::PLAYER_IS_RUNNING; }
     protected:
         Player* player;

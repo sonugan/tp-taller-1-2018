@@ -138,8 +138,13 @@
 		<Unit filename="src/shared/model/pitch.cpp" />
 		<Unit filename="src/shared/model/pitch.h" />
 		<Unit filename="src/shared/model/player-states/iplayer-state.h" />
+		<Unit filename="src/shared/model/player-states/player-kick-state.cpp" />
+		<Unit filename="src/shared/model/player-states/player-kick-state.h" />
 		<Unit filename="src/shared/model/player-states/player-move-state.cpp" />
 		<Unit filename="src/shared/model/player-states/player-move-state.h" />
+		<Unit filename="src/shared/model/player-states/player-recover-ball-state.cpp" />
+		<Unit filename="src/shared/model/player-states/player-recover-ball-state.h" />
+		<Unit filename="src/shared/model/player-states/player-states.h" />
 		<Unit filename="src/shared/model/player-states/player-still-state.cpp" />
 		<Unit filename="src/shared/model/player-states/player-still-state.h" />
 		<Unit filename="src/shared/model/player.cpp" />

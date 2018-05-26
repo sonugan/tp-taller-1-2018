@@ -139,15 +139,12 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
         break;
     case MESSAGE_TYPE::MOVE_REQUEST:
         this->HandleMoveRequest(client, message);
-        cout << "move!!" << endl;
         break;
     case MESSAGE_TYPE::RECOVER_REQUEST:
         this->HandleRecoverBallRequest(client, message);
-        cout << "recover!!" << endl;
         break;
     case MESSAGE_TYPE::KICK_REQUEST:
         this->HandleKickRequest(client, message);
-        cout << "kick!!" << endl;
         break;
     case MESSAGE_TYPE::SELECT_REQUEST:
         this->HandleChangePlayerRequest(client, message);
