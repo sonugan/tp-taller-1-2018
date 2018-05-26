@@ -23,7 +23,7 @@ bool ServerSocket::Bind(SocketAddress address)
         Logger::getInstance()->debug("(ServerSocket:Bind) Error durante el binding.");
     }
     this->address = address;
-    return has_error;
+    return !has_error;
 }
 
 void ServerSocket::Listen(int max_queue_size)

@@ -24,8 +24,8 @@ void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
         if (!playerKicked) {
             bool playerRecovered = this->PlayerRecoverBall(keyboard_state_array);
             if (!playerRecovered) {
-                this->MovePlayer(keyboard_state_array);
                 this->PassBall(keyboard_state_array);
+                this->MovePlayer(keyboard_state_array);
             }
         }
     }
@@ -75,13 +75,16 @@ bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array) {
 }
 
 void PlayerController::PassBall(const Uint8 *keyboard_state_array) {
-    Logger::getInstance()->debug("(PlayerController::PassBall)");
-    unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_pass).count();
-    if (elapsed_millis > PASS_DELAY_MILLIS && SKeySelected(keyboard_state_array)) {
+    if (ShouldRequestPass(keyboard_state_array)) {
         PassBallRequest r;
         this->client->PassBall(&r);
         last_pass = std::chrono::system_clock::now();
     }
+}
+
+bool PlayerController::ShouldRequestPass(const Uint8 *keyboard_state_array) {
+    unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_pass).count();
+    return (elapsed_millis > PASS_DELAY_MILLIS) && SKeySelected(keyboard_state_array) && SKeySelected(keyboard_state_array);
 }
 
 bool PlayerController::PlayerRecoverBall(const Uint8 *keyboard_state_array) {

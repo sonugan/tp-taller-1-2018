@@ -82,6 +82,7 @@ std::string GameServer::DoKick(KickBallRequest* kick_request, int socket_id)
 
 Message* GameServer::DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request)
 {
+    Logger::getInstance()->debug("(GameServer::DoPassBall) REQUEST DE PASE RECIBIDO");
     User* user = this->session_manager->GetUserBySocketID(client->socket_id);
     user->GetSelectedPlayer()->PassBall();
     return new Message(this->game_state->GetMatch()->Serialize());
@@ -134,38 +135,35 @@ string GameServer::ChangePlayer(ChangePlayerRequest* change_player_request, int 
     User* user = this->session_manager->GetUserBySocketID(socket_id);
     Player* last_selected_player = user->GetSelectedPlayer();
 
-    if (!last_selected_player->HasBall())
+    Player* next_player = NULL;
+    Team* team = user->GetSelectedPlayer()->GetTeam();
+
+    unsigned int new_selected_player_position_index = user->GetSelectedPlayer()->GetPositionIndex();
+
+    for (unsigned int i = 0; i < (Team::TEAM_SIZE - 1); i++)
     {
-        Player* next_player = NULL;
-        Team* team = user->GetSelectedPlayer()->GetTeam();
 
-        unsigned int new_selected_player_position_index = user->GetSelectedPlayer()->GetPositionIndex();
-
-        for (unsigned int i = 0; i < (Team::TEAM_SIZE - 1); i++)
+        if (new_selected_player_position_index == Team::TEAM_SIZE-1)
         {
-
-            if (new_selected_player_position_index == Team::TEAM_SIZE-1)
-            {
-                new_selected_player_position_index = 0;
-            }
-            else
-            {
-                new_selected_player_position_index++;
-            }
-
-            Player* possible_player = team->GetPlayers()[new_selected_player_position_index];
-            if (!possible_player->IsSelected())
-            {
-                next_player = possible_player;
-                break;
-            }
+            new_selected_player_position_index = 0;
+        }
+        else
+        {
+            new_selected_player_position_index++;
         }
 
-
-        last_selected_player->SetPlayerColor(USER_COLOR::NO_COLOR);
-        next_player->SetPlayerColor(user->GetUserColor());
-        user->SetSelectedPlayer(next_player);
+        Player* possible_player = team->GetPlayers()[new_selected_player_position_index];
+        if (!possible_player->IsSelected())
+        {
+            next_player = possible_player;
+            break;
+        }
     }
+
+
+    last_selected_player->SetPlayerColor(USER_COLOR::NO_COLOR);
+    next_player->SetPlayerColor(user->GetUserColor());
+    user->SetSelectedPlayer(next_player);
 
     return this->game_state->GetMatch()->Serialize();
 }

@@ -118,7 +118,7 @@ string Match::Serialize() {
     result.append("|");
     result.append(GetTeamB()->GetShirt());
 
-    Logger::getInstance()->debug("(Match:Serialize) Serialize result: " + result);
+//    Logger::getInstance()->debug("(Match:Serialize) Serialize result: " + result);
     return result;
 }
 

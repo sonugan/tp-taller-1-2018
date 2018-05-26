@@ -29,8 +29,8 @@ Server::~Server()
 
 void Server::Init()
 {
-    bool binding_error = this->socket->Bind(this->port);
-    if (!binding_error) {
+    bool binding_success = this->socket->Bind(this->port);
+    if (binding_success) {
         this->socket->Listen(MAX_SOCKET_QUEUE_SIZE);
 
         this->ConnectingUsers();
