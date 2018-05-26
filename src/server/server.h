@@ -63,6 +63,7 @@ private:
     void SendMessage(ClientSocket* client);
     void NotifyGameState();
     void DisconnectClient(ClientSocket* client);
+    u_int SEND_GAME_STATE_EVERY_MILLISECONDS = 100;//40;
 };
 
 #endif // SERVER_H

@@ -4,6 +4,7 @@
 #include "../../client/view/player-view.h"
 #include "iplayer-state.h"
 #include "../player.h"
+#include "player-states.h"
 
 class Player;
 class PlayerRecoverBallState : public IPlayerState
@@ -26,12 +27,15 @@ class PlayerRecoverBallState : public IPlayerState
         void Play();
         bool IsKicking(){ return false; }
         bool IsRecoveringBall() { return true; }
+        bool IsStill() { return false; }
+        bool IsMoving() { return false; }
+        PLAYER_ACTION GetName(){ return PLAYER_ACTION::PLAYER_IS_RECOVERING; }
     protected:
         Player* player;
     private:
         u_int timming;
         bool ContinueRecovering();
-        u_int frames_per_event;
+        float frames_per_event;
         u_int frames_count;
 };
 

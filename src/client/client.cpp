@@ -143,7 +143,8 @@ string Client::GetGameState()
 {
     if(this->message_queue->HasNext())
     {
-        return string(this->message_queue->Next()->GetData());
+        string data = string(this->message_queue->Next()->GetData());
+        return data;
     }
     return "";
 }

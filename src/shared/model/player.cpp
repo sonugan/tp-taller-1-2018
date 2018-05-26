@@ -4,8 +4,6 @@
 Player::Player(unsigned int position_index, TEAM_NUMBER team_number)
 {
     this->position_index = position_index;
-    //this->kicking = false;
-    this->recovering_ball = false;
     this->still_state = new PlayerStillState(this);
     this->move_state = new PlayerMoveState(this);
     this->kick_state = new PlayerKickState(this);
@@ -55,38 +53,32 @@ void Player::MoveRight(bool run)
 
 void Player::MoveUp(bool run)
 {
-    this->direction = DIRECTION::NORTH;
-    Move(run);
+    this->current_state->MoveUp(run);
 }
 
 void Player::MoveDown(bool run)
 {
-    this->direction = DIRECTION::SOUTH;
-    Move(run);
+    this->current_state->MoveDown(run);
 }
 
 void Player::MoveUpToRight(bool run)
 {
-    this->direction = DIRECTION::NORTHEAST;
-    Move(run);
+    this->current_state->MoveUpToRight(run);
 }
 
 void Player::MoveUpToLeft(bool run)
 {
-    this->direction = DIRECTION::NORTHWEST;
-    Move(run);
+    this->current_state->MoveUpToLeft(run);
 }
 
 void Player::MoveDownToRight(bool run)
 {
-    this->direction = DIRECTION::SOUTHEAST;
-    Move(run);
+    this->current_state->MoveDownToRight(run);
 }
 
 void Player::MoveDownToLeft(bool run)
 {
-    this->direction = DIRECTION::SOUTHWEST;
-    Move(run);
+    this->current_state->MoveDownToLeft(run);
 }
 
 void Player::Kick()
@@ -211,12 +203,14 @@ bool Player::IsKicking()
     return this->current_state->IsKicking();
 }
 
-void Player::SetKicking(bool kicking)
+bool Player::IsStill()
 {
-    if(kicking)
-    {
-        this->current_state = kick_state;
-    }
+    return this->current_state->IsStill();
+}
+
+bool Player::IsMoving()
+{
+    return this->current_state->IsMoving();
 }
 
 bool Player::IsRecoveringBall()
@@ -224,19 +218,10 @@ bool Player::IsRecoveringBall()
     return this->current_state->IsRecoveringBall();
 }
 
-void Player::SetRecoveringBall(bool recovering_ball)
-{
-    //this->recovering_ball = recovering_ball;
-    if(recovering_ball)
-    {
-        this->current_state = recover_ball_state;
-    }
-}
-
 void Player::Move(bool run)
 {
     int speed;
-    if (recovering_ball)
+    if (this->IsRecoveringBall())
     {
         speed = PLAYER_SPEED * 0.3;
     }
@@ -305,7 +290,6 @@ void Player::PassBall()
 {
     if (HasBall())
     {
-        //std::cout << "Player::PassBall \n";
         Trajectory* trajectory = new Trajectory(direction, 250);
         team->GetMatch()->GetBall()->SetTrajectory(trajectory);
     }
@@ -364,4 +348,27 @@ void Player::ChangeToStill()
 void Player::Play()
 {
     this->current_state->Play();
+}
+
+PLAYER_ACTION Player::GetCurrentAction()
+{
+    return this->current_state->GetName();
+}
+
+void Player::SetCurrentAction(PLAYER_ACTION action)
+{
+    switch (action) {
+        case PLAYER_ACTION::PLAYER_IS_KICKING:
+            this->current_state = kick_state;
+            break;
+        case PLAYER_ACTION::PLAYER_IS_RECOVERING:
+            this->current_state = recover_ball_state;
+            break;
+        case PLAYER_ACTION::PLAYER_IS_RUNNING:
+            this->current_state = move_state;
+            break;
+        default:
+            this->current_state = still_state;
+            break;
+    }
 }

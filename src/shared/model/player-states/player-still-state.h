@@ -3,6 +3,7 @@
 
 #include "iplayer-state.h"
 #include "../player.h"
+#include "player-states.h"
 
 class Player;
 class PlayerStillState : public IPlayerState
@@ -25,9 +26,12 @@ class PlayerStillState : public IPlayerState
         void Play();
         bool IsKicking(){ return false; }
         bool IsRecoveringBall() { return false; }
+        bool IsStill() { return true; }
+        bool IsMoving() { return false; }
+        PLAYER_ACTION GetName(){ return PLAYER_ACTION::PLAYER_IS_STILL; }
     protected:
         Player* player;
-        IPlayerState* state;
+        //IPlayerState* state;
     private:
 };
 

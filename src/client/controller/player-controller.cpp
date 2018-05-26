@@ -5,8 +5,8 @@
 PlayerController::PlayerController(Team* team, Client* client) {
     this->team = team;
     this->client = client;
-    current_action_timming = 1;
-    current_action = PLAYER_IS_STILL;
+    //current_action_timming = 1;
+    //current_action = PLAYER_IS_STILL;
     this->last_pass = std::chrono::system_clock::now();
 }
 
@@ -65,14 +65,14 @@ void PlayerController::MovePlayer(const Uint8 *keyboard_state_array)
         MoveRequest m(DIRECTION::SOUTH, run);
         this->client->Move(&m);
     }
-    current_action = PLAYER_IS_RUNNING;
+    //current_action = PLAYER_IS_RUNNING;
 }
 
 bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array) {
     if (DKeySelected(keyboard_state_array)) {
         KickBallRequest r;
         this->client->KickBall(&r);
-        current_action = PLAYER_IS_KICKING;
+        //current_action = PLAYER_IS_KICKING;
         return true;
     }
     return false;
@@ -93,7 +93,7 @@ bool PlayerController::PlayerRecoverBall(const Uint8 *keyboard_state_array) {
     if (AKeySelected(keyboard_state_array)) {
         RecoverBallRequest r;
         this->client->RecoverBall(&r);
-        current_action = PLAYER_IS_RECOVERING;
+        //current_action = PLAYER_IS_RECOVERING;
         return true;
     }
     return false;
@@ -144,7 +144,7 @@ bool PlayerController::SelectedPlayerHasChange()
 
 bool PlayerController::ContinueCurrentAction()
 {
-    Logger::getInstance()->debug("(PlayerController::ContinueCurrentAction)");
+    /*Logger::getInstance()->debug("(PlayerController::ContinueCurrentAction)");
     if(!SelectedPlayerHasChange())
     {
         current_action_timming++;
@@ -172,5 +172,5 @@ bool PlayerController::ContinueCurrentAction()
     {
         current_action_timming = 1; //Es la segunda vez por la que debo entrar acá
         return false;
-}
+}*/
 }

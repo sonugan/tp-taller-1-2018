@@ -139,12 +139,15 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
         break;
     case MESSAGE_TYPE::MOVE_REQUEST:
         this->HandleMoveRequest(client, message);
+        cout << "move!!" << endl;
         break;
     case MESSAGE_TYPE::RECOVER_REQUEST:
         this->HandleRecoverBallRequest(client, message);
+        cout << "recover!!" << endl;
         break;
     case MESSAGE_TYPE::KICK_REQUEST:
         this->HandleKickRequest(client, message);
+        cout << "kick!!" << endl;
         break;
     case MESSAGE_TYPE::SELECT_REQUEST:
         this->HandleChangePlayerRequest(client, message);
@@ -302,17 +305,21 @@ void Server::NotifyGameState()
         Message* game_state_msg = new Message(this->game->GetGameState()->GetMatch()->Serialize());
         this->NotifyAll(game_state_msg);
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(40));
+        std::this_thread::sleep_for(std::chrono::milliseconds(SEND_GAME_STATE_EVERY_MILLISECONDS));
 
         //Esto es el inicio del gran modulo de inteligencia artificial:
         for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
             Player* player_a = this->game->GetGameState()->GetMatch()->GetTeamA()->GetPlayers()[i];
             if (!player_a->IsSelected()) {
                 player_a->GoBackToDefaultPosition();
+            }else{
+                player_a->Play();
             }
             Player* player_b = this->game->GetGameState()->GetMatch()->GetTeamB()->GetPlayers()[i];
             if (!player_b->IsSelected()) {
                 player_b->GoBackToDefaultPosition();
+            }else{
+                player_b->Play();
             }
         }
 

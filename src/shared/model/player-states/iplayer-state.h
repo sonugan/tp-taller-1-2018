@@ -1,6 +1,9 @@
 #ifndef IPLAYER_STATE_H
 #define IPLAYER_STATE_H
 
+//#include "../player.h"
+#include "player-states.h"
+
 class IPlayerState
 {
     public:
@@ -19,6 +22,9 @@ class IPlayerState
         void virtual Play(){};
         bool virtual IsKicking(){ return false; }
         bool virtual IsRecoveringBall() { return false; }
+        bool virtual IsStill() { return false; }
+        bool virtual IsMoving() { return false; }
+        PLAYER_ACTION virtual GetName(){ return PLAYER_ACTION::PLAYER_IS_STILL; }
     protected:
     private:
 
