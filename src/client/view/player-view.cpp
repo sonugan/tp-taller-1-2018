@@ -243,14 +243,15 @@ void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
 {
     this->GetPlayerAngle();
     int animation_index = current_animation_index;
-    if(this->IsStill()) {
-        current_animation_index = STILL_ANIMATION_INDEX;
-    } else if(!this->IsStill()){
-        current_animation_index = RUN_ANIMATION_INDEX;
-    } else if (this->player->IsKicking()) {
+
+    if (this->player->IsKicking()) {
         current_animation_index = KICKING_ANIMATION_INDEX;
     } else if (this->player->IsRecoveringBall()) {
         current_animation_index = RECOVERING_BALL_ANIMATION_INDEX;
+    } else if(this->IsStill()) {
+        current_animation_index = STILL_ANIMATION_INDEX;
+    } else if(!this->IsStill()){
+        current_animation_index = RUN_ANIMATION_INDEX;
     } else {
         current_animation_index = STILL_ANIMATION_INDEX;
     }
