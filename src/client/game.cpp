@@ -128,8 +128,6 @@ void Game::Start()
             this->match->DeserializeAndUpdate(serialized_match);
         }
 
-        //match->GetBall()->Move();
-
         RenderViews();
 
         //Manejo de frames por segundo: http://lazyfoo.net/SDL_tutorials/lesson16/index.php

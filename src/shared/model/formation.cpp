@@ -30,7 +30,7 @@ Formation::Formation(FORMATION value, TEAM_NUMBER team_number)
 
 Formation::~Formation()
 {
-    Logger::getInstance()->debug("DESTRUYENDO FORMACION");
+    //Logger::getInstance()->debug("DESTRUYENDO FORMACION");
     for (unsigned int i = 0; i < positions.size(); i++)
     {
         delete positions[i];
