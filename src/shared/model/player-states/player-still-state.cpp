@@ -71,4 +71,5 @@ void PlayerStillState::CatchBall()
 
 void PlayerStillState::Play()
 {
+    this->player->SetLocation(this->player->GetLocation());
 }

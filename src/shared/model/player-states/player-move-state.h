@@ -30,6 +30,7 @@ class PlayerMoveState : public IPlayerState
     protected:
         Player* player;
     private:
+        int has_been_moved = 0;
 };
 
 #endif // PLAYER_MOVE_STATE_H
