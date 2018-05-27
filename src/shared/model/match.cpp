@@ -72,7 +72,7 @@ string Match::Serialize() {
         //result.append(std::to_string((int) player->IsKicking()));
         //result.append("|");
         // RECOVER
-        result.append(std::to_string((int) player->IsStill()));//TODO:Remover
+        result.append(std::to_string(player->IsStill()));//TODO:Remover
         result.append("|");
         //  X
         result.append(std::to_string(player->GetLocation()->GetX()));
@@ -102,7 +102,7 @@ string Match::Serialize() {
         //result.append(std::to_string((int) player->IsKicking()));
         //result.append("|");
         // KICKING
-        result.append(std::to_string((int) player->IsStill()));//TODO:Remover
+        result.append(std::to_string(player->IsStill()));//TODO:Remover
         result.append("|");
         //  X
         result.append(std::to_string(player->GetLocation()->GetX()));

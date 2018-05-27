@@ -48,14 +48,12 @@ Player::~Player()
 
 void Player::MoveLeft(bool run)
 {
-    this->direction = DIRECTION::WEST;
-    Move(run);
+    this->current_state->MoveLeft(run);
 }
 
 void Player::MoveRight(bool run)
 {
-    this->direction = DIRECTION::EAST;
-    Move(run);
+    this->current_state->MoveRight(run);
 }
 
 void Player::MoveUp(bool run)
@@ -91,14 +89,11 @@ void Player::MoveDownToLeft(bool run)
 void Player::Kick()
 {
     this->current_state->Kick();
-    //this->kicking = true;
 }
 
 void Player::RecoverBall()
 {
     this->current_state->RecoverBall();
-    //this->recovering_ball = true;
-    //this->Move(false);
 }
 
 Location* Player::GetLocation()
