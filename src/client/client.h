@@ -11,6 +11,7 @@
 #include "../shared/network/messages/move-request.h"
 #include "../shared/network/messages/change-player-request.h"
 #include "../shared/utils/safe-queue.h"
+#include "../shared/utils/string-utils.h"
 #include "../shared/model/match.h"
 
 #include <string>
@@ -46,6 +47,7 @@ class Client
         SafeQueue<Message>* message_queue;
         Match* match;
         bool is_connected = false;
+        string current_match_state;
 
         thread* receive_messages_thread;
         void ReceiveMessages();

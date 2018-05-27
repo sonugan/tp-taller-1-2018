@@ -51,11 +51,18 @@ ClientSocket* ServerSocket::Accept()
 
 void ServerSocket::Send(Socket* client_socket, Message* request)
 {
-    const string data = string(request->GetData());
-    const string data_size = to_string(request->GetDataSize());
-    Logger::getInstance()->debug("(ServerSocket:Send) data: " + data + " size: " + data_size);
-    send(client_socket->socket_id, request->GetData(), request->GetDataSize(), 0);
-    delete request;
+    try
+    {
+        const string data = string(request->GetData());
+        const string data_size = to_string(request->GetDataSize());
+        Logger::getInstance()->debug("(ServerSocket:Send) data: " + data + " size: " + data_size);
+        send(client_socket->socket_id, request->GetData(), request->GetDataSize(), 0);
+
+        delete request;
+    }
+    catch (...) {
+        Logger::getInstance()->error("(ServerSocket::Send) Error enviando el mensaje.");
+    }
 }
 
 Message* ServerSocket::Receive(Socket* client_socket, int expected_size)

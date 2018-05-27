@@ -66,11 +66,13 @@ string Match::Serialize() {
         //  COLOR
         result.append(std::to_string((int) player->GetPlayerColor()));
         result.append("|");
-        // KICKING
-        result.append(std::to_string((int) player->IsKicking()));
+        // CURRENT ACTION
+        result.append(std::to_string((int) player->GetCurrentAction()));
         result.append("|");
-        // KICKING
-        result.append(std::to_string((int) player->IsRecoveringBall()));
+        //result.append(std::to_string((int) player->IsKicking()));
+        //result.append("|");
+        // RECOVER
+        result.append(std::to_string(player->IsStill()));//TODO:Remover
         result.append("|");
         //  X
         result.append(std::to_string(player->GetLocation()->GetX()));
@@ -93,11 +95,14 @@ string Match::Serialize() {
         //  COLOR
         result.append(std::to_string((int) player->GetPlayerColor()));
         result.append("|");
-        // KICKING
-        result.append(std::to_string((int) player->IsKicking()));
+        // CURRENT ACTION
+        result.append(std::to_string((int) player->GetCurrentAction()));
         result.append("|");
         // KICKING
-        result.append(std::to_string((int) player->IsRecoveringBall()));
+        //result.append(std::to_string((int) player->IsKicking()));
+        //result.append("|");
+        // KICKING
+        result.append(std::to_string(player->IsStill()));//TODO:Remover
         result.append("|");
         //  X
         result.append(std::to_string(player->GetLocation()->GetX()));
@@ -144,10 +149,10 @@ void Match::DeserializeAndUpdate(string serialized) {
         player->SetPlayerColor(static_cast<USER_COLOR>(SafeStoi(data[base_index + 1])));
 
 //        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_kicking");
-        player->SetKicking((bool)(SafeStoi(data[base_index + 2])));
-
+        //player->SetKicking((bool)(SafeStoi(data[base_index + 2])));
+        player->SetCurrentAction(static_cast<PLAYER_ACTION>(stoi(data[base_index + 2])));
 //        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_recovering_ball");
-        player->SetRecoveringBall((bool)(SafeStoi(data[base_index + 3])));
+        player->SetIsStill((bool)(SafeStoi(data[base_index + 3])));
 
 //        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) location");
         player->GetLocation()->Update(SafeStoi(data[base_index + 4]), SafeStoi(data[base_index + 5]), 0);
@@ -161,23 +166,16 @@ void Match::DeserializeAndUpdate(string serialized) {
         int base_index = 3 + 42 + (i*6);
         Player* player = GetTeamB()->GetPlayers()[i];
 
-        player->SetDirection(static_cast<DIRECTION>(stoi(data[base_index])));
-
-        //player->SetPlayerColor(static_cast<USER_COLOR>(stoi(data[base_index + 1])));
-
-        player->SetKicking((bool)(stoi(data[base_index + 2])));
-        player->SetRecoveringBall((bool)(stoi(data[base_index + 3])));
-        player->GetLocation()->Update(stoi(data[base_index + 4]), stoi(data[base_index + 5]), 0);
-
 //        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) direction");
         player->SetDirection(static_cast<DIRECTION>(SafeStoi(data[base_index])));
 
         player->SetPlayerColor(static_cast<USER_COLOR>(SafeStoi(data[base_index + 1])));
 
+        player->SetCurrentAction(static_cast<PLAYER_ACTION>(stoi(data[base_index + 2])));
 //        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_kicking");
-        player->SetKicking((bool)(SafeStoi(data[base_index + 2])));
+        //player->SetKicking((bool)(SafeStoi(data[base_index + 2])));
 //        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_recovering_ball");
-        player->SetRecoveringBall((bool)(SafeStoi(data[base_index + 3])));
+        player->SetIsStill((bool)(SafeStoi(data[base_index + 3])));
 //        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) location");
         player->GetLocation()->Update(SafeStoi(data[base_index + 4]), SafeStoi(data[base_index + 5]), 0);
 

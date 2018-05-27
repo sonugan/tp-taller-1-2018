@@ -4,8 +4,12 @@
 Player::Player(unsigned int position_index, TEAM_NUMBER team_number)
 {
     this->position_index = position_index;
-    this->kicking = false;
-    this->recovering_ball = false;
+    this->still_state = new PlayerStillState(this);
+    this->move_state = new PlayerMoveState(this);
+    this->kick_state = new PlayerKickState(this);
+    this->recover_ball_state = new PlayerRecoverBallState(this);
+
+    this->current_state = this->still_state;
 
     switch (team_number)
     {
@@ -28,66 +32,68 @@ Player::Player(unsigned int position_index, TEAM_NUMBER team_number)
 Player::~Player()
 {
     Logger::getInstance()->debug("DESTRUYENDO PLAYER");
-    delete location;
+    if(location != nullptr)
+    {
+        delete location;
+    }
+    if(previous_location != nullptr)
+    {
+        delete previous_location;
+    }
+    delete still_state;
+    delete move_state;
+    delete kick_state;
+    delete recover_ball_state;
 }
 
 void Player::MoveLeft(bool run)
 {
-    this->direction = DIRECTION::WEST;
-    Move(run);
+    this->current_state->MoveLeft(run);
 }
 
 void Player::MoveRight(bool run)
 {
-    this->direction = DIRECTION::EAST;
-    Move(run);
+    this->current_state->MoveRight(run);
 }
 
 void Player::MoveUp(bool run)
 {
-    this->direction = DIRECTION::NORTH;
-    Move(run);
+    this->current_state->MoveUp(run);
 }
 
 void Player::MoveDown(bool run)
 {
-    this->direction = DIRECTION::SOUTH;
-    Move(run);
+    this->current_state->MoveDown(run);
 }
 
 void Player::MoveUpToRight(bool run)
 {
-    this->direction = DIRECTION::NORTHEAST;
-    Move(run);
+    this->current_state->MoveUpToRight(run);
 }
 
 void Player::MoveUpToLeft(bool run)
 {
-    this->direction = DIRECTION::NORTHWEST;
-    Move(run);
+    this->current_state->MoveUpToLeft(run);
 }
 
 void Player::MoveDownToRight(bool run)
 {
-    this->direction = DIRECTION::SOUTHEAST;
-    Move(run);
+    this->current_state->MoveDownToRight(run);
 }
 
 void Player::MoveDownToLeft(bool run)
 {
-    this->direction = DIRECTION::SOUTHWEST;
-    Move(run);
+    this->current_state->MoveDownToLeft(run);
 }
 
 void Player::Kick()
 {
-    this->kicking = true;
+    this->current_state->Kick();
 }
 
 void Player::RecoverBall()
 {
-    this->recovering_ball = true;
-    this->Move(false);
+    this->current_state->RecoverBall();
 }
 
 Location* Player::GetLocation()
@@ -110,6 +116,7 @@ void Player::SetTeam(Team* team)
     this->team = team;
     Location* default_location = GetDefaultLocation();
     this->location = new Location(default_location->GetX(), default_location->GetY(), default_location->GetZ());
+    this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
 }
 
 unsigned int Player::GetPositionIndex()
@@ -197,28 +204,28 @@ Team* Player::GetTeam()
 
 bool Player::IsKicking()
 {
-    return kicking;
+    return this->current_state->IsKicking();
 }
 
-void Player::SetKicking(bool kicking)
+bool Player::IsStill()
 {
-    this->kicking = kicking;
+    return location->GetX() == previous_location->GetX() &&
+        location->GetY() == previous_location->GetY();
+}
+bool Player::IsMoving()
+{
+    return !this->GetIsStill();
 }
 
 bool Player::IsRecoveringBall()
 {
-    return recovering_ball;
-}
-
-void Player::SetRecoveringBall(bool recovering_ball)
-{
-    this->recovering_ball = recovering_ball;
+    return this->current_state->IsRecoveringBall();
 }
 
 void Player::Move(bool run)
 {
     int speed;
-    if (recovering_ball)
+    if (this->IsRecoveringBall())
     {
         speed = PLAYER_SPEED * 0.3;
     }
@@ -230,7 +237,7 @@ void Player::Move(bool run)
     {
         speed = PLAYER_SPEED;
     }
-
+    this->previous_location->Update(this->location->GetX(), this->location->GetY(), this->location->GetZ());
     switch(direction)
     {
     case DIRECTION::NORTH:
@@ -268,7 +275,6 @@ void Player::PassBall()
 {
     if (HasBall())
     {
-        //std::cout << "Player::PassBall \n";
         Trajectory* trajectory = new Trajectory(direction, 250);
         team->GetMatch()->GetBall()->SetTrajectory(trajectory);
     }
@@ -297,4 +303,73 @@ void Player::SetDirection(DIRECTION direction)
 USER_COLOR Player::GetPlayerColor()
 {
     return this->color;
+}
+
+void Player::ChangeToMove()
+{
+    this->current_state = this->move_state;
+}
+void Player::ChangeToKick()
+{
+    this->current_state = this->kick_state;
+}
+void Player::ChangeToRecover()
+{
+    this->current_state = this->recover_ball_state;
+}
+void Player::ChangeToPass()
+{
+
+}
+void Player::ChangeToCatchBall()
+{
+
+}
+void Player::ChangeToStill()
+{
+    this->current_state = this->still_state;
+}
+
+void Player::Play()
+{
+    this->current_state->Play();
+}
+
+PLAYER_ACTION Player::GetCurrentAction()
+{
+    return this->current_state->GetName();
+}
+
+void Player::SetCurrentAction(PLAYER_ACTION action)
+{
+    switch (action) {
+        case PLAYER_ACTION::PLAYER_IS_KICKING:
+            this->current_state = kick_state;
+            break;
+        case PLAYER_ACTION::PLAYER_IS_RECOVERING:
+            this->current_state = recover_ball_state;
+            break;
+        case PLAYER_ACTION::PLAYER_IS_RUNNING:
+            this->current_state = move_state;
+            break;
+        default:
+            this->current_state = still_state;
+            break;
+    }
+}
+
+void Player::SetIsStill(bool is_still)
+{
+    this->is_still = is_still;
+}
+
+bool Player::GetIsStill()
+{
+    return this->is_still;
+}
+
+void Player::SetLocation(Location* location)
+{
+    this->location->Update(location->GetX(), location->GetY(), location->GetZ());
+    this->previous_location->Update(location->GetX(), location->GetY(), location->GetZ());
 }

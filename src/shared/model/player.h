@@ -8,12 +8,20 @@
 #include "../configuration/configuration.h"
 #include "trajectory.h"
 #include "user-color.h"
+#include "player-states/player-still-state.h"
+#include "player-states/player-move-state.h"
+#include "player-states/player-kick-state.h"
+#include "player-states/player-recover-ball-state.h"
+#include "player-states/player-states.h"
 
-enum PLAYER_ACTION { PLAYER_IS_STILL, PLAYER_IS_KICKING, PLAYER_IS_RUNNING, PLAYER_IS_RECOVERING };
 enum class DIRECTION { NORTH = 1, SOUTH = 2, EAST = 3, WEST = 4, NORTHEAST = 5, SOUTHEAST = 6, SOUTHWEST = 7, NORTHWEST = 8 };
 
 class Team; //  forward declaration
-
+class PlayerStillState;
+class PlayerMoveState;
+class PlayerKickState;
+class PlayerRecoverBallState;
+class IPlayerState;
 class Player
 {
     public:
@@ -34,8 +42,10 @@ class Player
         bool IsSelected();
         bool IsKicking();
         bool IsRecoveringBall();
-        void SetKicking(bool kicking);
-        void SetRecoveringBall(bool recoveringBall);
+        bool IsStill();
+        bool IsMoving();
+        PLAYER_ACTION GetCurrentAction();
+        void SetCurrentAction(PLAYER_ACTION action);
         Location* GetDefaultLocation();
         void SetTeam(Team* team);
         unsigned int GetPositionIndex();
@@ -49,6 +59,18 @@ class Player
         void SetDirection(DIRECTION direction);
         USER_COLOR GetPlayerColor();
 
+        void ChangeToMove();
+        void ChangeToKick();
+        void ChangeToRecover();
+        void ChangeToPass();
+        void ChangeToCatchBall();
+        void ChangeToStill();
+
+        void Move(bool run);
+        void Play();
+        void SetIsStill(bool is_still);
+        bool GetIsStill();
+        void SetLocation(Location* location);
     protected:
 
     private:
@@ -56,15 +78,18 @@ class Player
         static const int PLAYER_SPEED = 6;
         static const int PLAYER_RUNNING_SPEED = 10;
         USER_COLOR color;
-        bool kicking;
-        bool recovering_ball;
         bool plays_for_team_a;
         bool plays_for_team_b;
         Team* team;
         unsigned int position_index;
-        void Move(bool run);
         Location* location;
-
+        Location* previous_location;
+        PlayerStillState* still_state;
+        PlayerMoveState* move_state;
+        PlayerKickState* kick_state;
+        PlayerRecoverBallState* recover_ball_state;
+        IPlayerState* current_state;
+        bool is_still;
 };
 
 #endif // PLAYER_H

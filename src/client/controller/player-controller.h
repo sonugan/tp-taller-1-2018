@@ -21,8 +21,8 @@ class PlayerController : public AbstractController
 
     private:
         Team* team;
-        int current_action_timming;
-        PLAYER_ACTION current_action;
+        //int current_action_timming;
+        //PLAYER_ACTION current_action;
         Player* selected_player;
         std::chrono::time_point<std::chrono::system_clock> last_pass;
         static const unsigned int PASS_DELAY_MILLIS = 200;

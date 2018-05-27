@@ -12,6 +12,7 @@
 
 #include "../shared/utils/queue.h"
 #include "../shared/utils/safe-queue.h"
+#include "../shared/utils/id-generator.h"
 #include "../shared/network/server-socket.h"
 #include "../shared/network/client-socket.h"
 #include "../shared/configuration/configuration.h"
@@ -63,6 +64,7 @@ private:
     void SendMessage(ClientSocket* client);
     void NotifyGameState();
     void DisconnectClient(ClientSocket* client);
+    u_int SEND_GAME_STATE_EVERY_MILLISECONDS = 40;
 };
 
 #endif // SERVER_H

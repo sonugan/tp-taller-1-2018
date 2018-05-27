@@ -28,6 +28,7 @@
 					<Add directory="src/client" />
 					<Add directory="src/server/session" />
 					<Add directory="src/shared/network/messages" />
+					<Add directory="src/shared/model/player-states" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -52,6 +53,7 @@
 					<Add directory="src/client" />
 					<Add directory="src/server/session" />
 					<Add directory="src/shared/network/messages" />
+					<Add directory="src/shared/model/player-states" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -135,6 +137,16 @@
 		<Unit filename="src/shared/model/match.h" />
 		<Unit filename="src/shared/model/pitch.cpp" />
 		<Unit filename="src/shared/model/pitch.h" />
+		<Unit filename="src/shared/model/player-states/iplayer-state.h" />
+		<Unit filename="src/shared/model/player-states/player-kick-state.cpp" />
+		<Unit filename="src/shared/model/player-states/player-kick-state.h" />
+		<Unit filename="src/shared/model/player-states/player-move-state.cpp" />
+		<Unit filename="src/shared/model/player-states/player-move-state.h" />
+		<Unit filename="src/shared/model/player-states/player-recover-ball-state.cpp" />
+		<Unit filename="src/shared/model/player-states/player-recover-ball-state.h" />
+		<Unit filename="src/shared/model/player-states/player-states.h" />
+		<Unit filename="src/shared/model/player-states/player-still-state.cpp" />
+		<Unit filename="src/shared/model/player-states/player-still-state.h" />
 		<Unit filename="src/shared/model/player.cpp" />
 		<Unit filename="src/shared/model/player.h" />
 		<Unit filename="src/shared/model/team-number.h" />
@@ -180,6 +192,8 @@
 		<Unit filename="src/shared/utils/string-builder.h" />
 		<Unit filename="src/shared/utils/string-utils.cpp" />
 		<Unit filename="src/shared/utils/string-utils.h" />
+		<Unit filename="src/shared/utils/id-generator.cpp" />
+		<Unit filename="src/shared/utils/id-generator.h" />
 		<Extensions>
 			<envvars />
 			<code_completion />

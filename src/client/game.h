@@ -60,6 +60,7 @@ class Game
         User* user;
         Client* client;
         static const int FRAMES_PER_SECOND = 30;
+        u_int STOP_LOOP_MILLISECONDS = 30;
         TeamController* team_controller;
         PlayerController* player_controller;
         GameController* game_controller;

@@ -246,10 +246,14 @@ void GameServer::MovePlayersToDefaultPositions() {
         Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayers()[i];
         if (!player_a->IsSelected()) {
             player_a->GoBackToDefaultPosition();
+        }else{
+            player_a->Play();
         }
         Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayers()[i];
         if (!player_b->IsSelected()) {
             player_b->GoBackToDefaultPosition();
+        }else{
+            player_b->Play();
         }
     }
 }
