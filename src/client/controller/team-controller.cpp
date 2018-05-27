@@ -35,6 +35,7 @@ void TeamController::ChangePlayerSelection(const Uint8 *keyboard_state_array) {
     }
 }
 
+
 void TeamController::ChangeFormation(const Uint8 *keyboard_state_array) {
 
     int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>

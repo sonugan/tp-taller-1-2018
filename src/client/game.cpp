@@ -49,6 +49,7 @@ void Game::LogIn()
                 serialized_model = client->WaitForGameStart();
             }
             //TODO sacar esto y ver que se rompe
+
             this->user = new User(login_request->GetUsername(), login_request->GetPassword(), login_view->GetTeamNumber(), USER_COLOR::RED);
 
             CreateModel(serialized_model);

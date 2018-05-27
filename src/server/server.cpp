@@ -174,14 +174,18 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
 //        this->outgoing_msg_queues[client->socket_id]->Append(login_response);
 
         // Si ya se loguearon todos, se notifica a todos los usuarios para empezar a jugar.
-        if (this->game->IsReadyToStart())
+        if (!this->game->IsRunning())
         {
-            Message* start_game_msg = this->game->StartGame();
+            if (this->game->IsReadyToStart())
+            {
+                Message* start_game_msg = this->game->StartGame();
 
-            // Disparo thread para notificar game-state periodicamente.
-            std::thread game_state_notifier_thread(&Server::NotifyGameState, this);
-            game_state_notifier_thread.detach();
+                // Disparo thread para notificar game-state periodicamente.
+                std::thread game_state_notifier_thread(&Server::NotifyGameState, this);
+                game_state_notifier_thread.detach();
+            }
         }
+
 
     }
     catch (AuthenticationException e)
