@@ -120,7 +120,8 @@ unsigned int Player::GetPositionIndex()
 bool Player::HasBall()
 {
     Player* player_with_ball = team->GetMatch()->GetBall()->GetPlayer();
-    return (player_with_ball != NULL) && (this->GetPositionIndex() == player_with_ball->GetPositionIndex());
+    //return (player_with_ball != NULL) && (this->GetPositionIndex() == player_with_ball->GetPositionIndex()) && (this->GetTeam()->GetName() == player_with_ball->GetTeam()->GetName());
+    return this == player_with_ball;
 }
 
 bool Player::IsSelected()
