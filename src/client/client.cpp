@@ -152,8 +152,14 @@ string Client::GetGameState()
             if(this->message_queue->HasNext())
             {
                 data = string(this->message_queue->Next()->GetData());
-                splited_data = StringUtils::Split(data, '|');
-                new_id = splited_data[splited_data.size() - 1];
+                if(!data.empty())
+                {
+                    splited_data = StringUtils::Split(data, '|');
+                    if(splited_data.size() > 0)
+                    {
+                        new_id = splited_data[splited_data.size() - 1];
+                    }
+                }
             }
             else
             {
