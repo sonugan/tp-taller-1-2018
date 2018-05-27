@@ -63,20 +63,17 @@ void DisconetView::OpenConectionErrorPage()
     SDL_Event e;
     while( !quit )
     {
-        while( SDL_PollEvent( &e ) != 0 )
+        if ( e.key.keysym.scancode == SDL_SCANCODE_ESCAPE || (SDL_PollEvent( &e ) != 0 && e.type == SDL_QUIT))
         {
-            if ( e.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+            this->exit_game = true;
+            quit = true;
+        }
+        else if( e.type == SDL_KEYDOWN )
+        {
+            if ( e.key.keysym.scancode == SDL_SCANCODE_KP_ENTER)
             {
-                this->exit_game = true;
+                this->reconnect = false;
                 quit = true;
-            }
-            else if( e.type == SDL_KEYDOWN )
-            {
-                if ( e.key.keysym.scancode == SDL_SCANCODE_KP_ENTER)
-                {
-                    this->reconnect = false;
-                    quit = true;
-                }
             }
         }
     }
