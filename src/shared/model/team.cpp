@@ -29,7 +29,6 @@ std::vector<Player*> Team::GetPlayers()
 std::vector<Player*> Team::GetAvailablePlayers()
 {
     std::vector<Player*> available_players;
-
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
         Player* player = GetPlayers()[i];
 

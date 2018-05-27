@@ -3,6 +3,7 @@
 #include "../../shared/logger.h"
 #include "authentication-exception.h"
 #include "max-allowed-user-exception.h"
+#include "invalid-team-exception.h"
 
 SessionManager::SessionManager(map<string, string> credentials, int max_allowed_users)
 {
@@ -30,13 +31,10 @@ User* SessionManager::Authenticate(ClientSocket* client, LoginRequest* login_req
     if(IsValidUser(login_request->GetUsername(), login_request->GetPassword()))
     {
         Logger::getInstance()->info("(SessionManager:Authenticate) Usuario válido. Se conectó: " + login_request->GetUsername());
-        //TODO: pedir team al login request
 
         USER_COLOR color = this->GetColorToAssign();
 
-        TEAM_NUMBER selected_team = this->ParseSelectedTeam(login_request->GetTeam());
-
-        User* user = new User(login_request->GetUsername(), login_request->GetPassword(), selected_team, color);
+        User* user = new User(login_request->GetUsername(), login_request->GetPassword(), this->ParseSelectedTeam(login_request->GetTeam()), color);
 
         this->authenticated_users[user->GetUsername()] = user;
         this->clientsocket_user_association[client->socket_id] = user;
@@ -184,5 +182,11 @@ TEAM_NUMBER SessionManager::ParseSelectedTeam(string selected_team)
     {
         return TEAM_NUMBER::TEAM_A;
     }
-    return TEAM_NUMBER::TEAM_B;
+    else if ("b" == selected_team)
+    {
+        return TEAM_NUMBER::TEAM_B;
+    }
+
+    Logger::getInstance()->debug("(SessionManager:ParseSelectedTeam) Equipo seleccionado invalido.");
+    throw InvalidTeamException("Invalid team.");
 }

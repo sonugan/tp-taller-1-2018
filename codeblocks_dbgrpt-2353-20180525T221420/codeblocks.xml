@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report version="1.0" kind="exception">
+  <system description="Linux 4.13.0-41-generic x86_64"/>
+  <modules>
+    <module path="/usr/bin/codeblocks" address="00400000" size="00153000"/>
+    <module path="/usr/bin/codeblocks" address="00762000" size="00006000"/>
+    <module path="[heap]" address="012c4000" size="054d4000"/>
+    <module path="/SYSV00000000" address="7fb609105000" size="00080000"/>
+    <module path="/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf" address="7fb609d33000" size="00051000"/>
+    <module path="/usr/lib/codeblocks/plugins/libSmartIndentHDL.so" address="7fb609d8b000" size="001ff000"/>
+    <module path="/usr/lib/codeblocks/plugins/libSmartIndentHDL.so" address="7fb609f8b000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/liboccurrenceshighlighting.so" address="7fb609fa4000" size="001ff000"/>
+    <module path="/usr/lib/codeblocks/plugins/liboccurrenceshighlighting.so" address="7fb60a1a5000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libSymTab.so" address="7fb60a1c2000" size="001ff000"/>
+    <module path="/usr/lib/codeblocks/plugins/libSymTab.so" address="7fb60a3c3000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libIncrementalSearch.so" address="7fb60a3dd000" size="001ff000"/>
+    <module path="/usr/lib/codeblocks/plugins/libIncrementalSearch.so" address="7fb60a5de000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libNassiShneiderman.so" address="7fb60a676000" size="00200000"/>
+    <module path="/usr/lib/codeblocks/plugins/libNassiShneiderman.so" address="7fb60a87b000" size="00004000"/>
+    <module path="/usr/lib/codeblocks/plugins/libdragscroll.so" address="7fb60a89d000" size="001ff000"/>
+    <module path="/usr/lib/codeblocks/plugins/libdragscroll.so" address="7fb60aa9e000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libcb_koders.so" address="7fb60aab0000" size="001ff000"/>
+    <module path="/usr/lib/codeblocks/plugins/libcb_koders.so" address="7fb60acb0000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libAutoVersioning.so" address="7fb60acec000" size="00200000"/>
+    <module path="/usr/lib/codeblocks/plugins/libAutoVersioning.so" address="7fb60aeee000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libSmartIndentCpp.so" address="7fb60aef8000" size="00200000"/>
+    <module path="/usr/lib/codeblocks/plugins/libSmartIndentCpp.so" address="7fb60b0f9000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libHexEditor.so" address="7fb60b162000" size="001ff000"/>
+    <module path="/usr/lib/codeblocks/plugins/libHexEditor.so" address="7fb60b365000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libDoxyBlocks.so" address="7fb60b3c3000" size="001ff000"/>
+    <module path="/usr/lib/codeblocks/plugins/libDoxyBlocks.so" address="7fb60b5c4000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libReopenEditor.so" address="7fb60b5db000" size="001ff000"/>
+    <module path="/usr/lib/codeblocks/plugins/libReopenEditor.so" address="7fb60b7dc000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libEditorConfig.so" address="7fb60b7ef000" size="00200000"/>
+    <module path="/usr/lib/codeblocks/plugins/libEditorConfig.so" address="7fb60b9f1000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libCscope.so" address="7fb60ba08000" size="00200000"/>
+    <module path="/usr/lib/codeblocks/plugins/libCscope.so" address="7fb60bc09000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libSmartIndentFortran.so" address="7fb60bc0f000" size="00200000"/>
+    <module path="/usr/lib/codeblocks/plugins/libSmartIndentFortran.so" address="7fb60be10000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libValgrind.so" address="7fb60be2b000" size="001ff000"/>
+    <module path="/usr/lib/codeblocks/plugins/libValgrind.so" address="7fb60c02c000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libSmartIndentXML.so" address="7fb60c033000" size="001ff000"/>
+    <module path="/usr/lib/codeblocks/plugins/libSmartIndentXML.so" address="7fb60c233000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libclasswizard.so" address="7fb60c24f000" size="001ff000"/>
+    <module path="/usr/lib/codeblocks/plugins/libclasswizard.so" address="7fb60c450000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libSmartIndentPython.so" address="7fb60c456000" size="001ff000"/>
+    <module path="/usr/lib/codeblocks/plugins/libSmartIndentPython.so" address="7fb60c656000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libabbreviations.so" address="7fb60c674000" size="001ff000"/>
+    <module path="/usr/lib/codeblocks/plugins/libabbreviations.so" address="7fb60c875000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libThreadSearch.so" address="7fb60c8ca000" size="001ff000"/>
+    <module path="/usr/lib/codeblocks/plugins/libThreadSearch.so" address="7fb60cacd000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libBrowseTracker.so" address="7fb60cacf000" size="0003b000"/>
+    <module path="/usr/lib/codeblocks/plugins/libBrowseTracker.so" address="7fb60cd09000" size="00003000"/>
+    <module path="/usr/lib/codeblocks/plugins/libcodesnippets.so" address="7fb60cd0e000" size="0005f000"/>
+    <module path="/usr/lib/codeblocks/plugins/libcodesnippets.so" address="7fb60cf6d000" size="00005000"/>
+    <module path="/usr/lib/codeblocks/plugins/libCccc.so" address="7fb60cf75000" size="00007000"/>
+    <module path="/usr/lib/codeblocks/plugins/libCccc.so" address="7fb60d17b000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libcopystrings.so" address="7fb60d17d000" size="00006000"/>
+    <module path="/usr/lib/codeblocks/plugins/libcopystrings.so" address="7fb60d382000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libopenfileslist.so" address="7fb60d384000" size="00009000"/>
+    <module path="/usr/lib/codeblocks/plugins/libopenfileslist.so" address="7fb60d58d000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libRegExTestbed.so" address="7fb60d58f000" size="0000d000"/>
+    <module path="/usr/lib/codeblocks/plugins/libRegExTestbed.so" address="7fb60d79c000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libMouseSap.so" address="7fb60d79e000" size="0000a000"/>
+    <module path="/usr/lib/codeblocks/plugins/libMouseSap.so" address="7fb60d9a7000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libexporter.so" address="7fb60d9a9000" size="00200000"/>
+    <module path="/usr/lib/codeblocks/plugins/libexporter.so" address="7fb60dda8000" size="00027000"/>
+    <module path="/usr/lib/codeblocks/plugins/libEditorTweaks.so" address="7fb60ddd8000" size="0001f000"/>
+    <module path="/usr/lib/codeblocks/plugins/libEditorTweaks.so" address="7fb60dff6000" size="00002000"/>
+    <module path="/usr/lib/codeblocks/plugins/libtodo.so" address="7fb60dff9000" size="0002d000"/>
+    <module path="/usr/lib/codeblocks/plugins/libtodo.so" address="7fb60e225000" size="00003000"/>
+    <module path="/usr/lib/codeblocks/plugins/libCppCheck.so" address="7fb60e229000" size="00015000"/>
+    <module path="/usr/lib/codeblocks/plugins/libCppCheck.so" address="7fb60e43d000" size="00002000"/>
+    <module path="/usr/lib/codeblocks/plugins/libSmartIndentPascal.so" address="7fb60e440000" size="00005000"/>
+    <module path="/usr/lib/codeblocks/plugins/libSmartIndentPascal.so" address="7fb60e644000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libastyle.so" address="7fb60e646000" size="00054000"/>
+    <module path="/usr/lib/codeblocks/plugins/libastyle.so" address="7fb60e89a000" size="00002000"/>
+    <module path="/usr/lib/codeblocks/plugins/libwxsmith.so" address="7fb60e89e000" size="00002000"/>
+    <module path="/usr/lib/codeblocks/plugins/libwxsmith.so" address="7fb60ea9f000" size="00001000"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libhunspell-1.3.so.0.0.0" address="7fb60eaa1000" size="0004e000" version="0.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libhunspell-1.3.so.0.0.0" address="7fb60ecee000" size="00001000" version="0.0.0"/>
+    <module path="/usr/lib/codeblocks/plugins/libSpellChecker.so" address="7fb60ecf3000" size="0006c000"/>
+    <module path="/usr/lib/codeblocks/plugins/libSpellChecker.so" address="7fb60ef5f000" size="00006000"/>
+    <module path="/usr/lib/codeblocks/plugins/libProfiler.so" address="7fb60ef67000" size="0001c000"/>
+    <module path="/usr/lib/codeblocks/plugins/libProfiler.so" address="7fb60f183000" size="00002000"/>
+    <module path="/usr/lib/codeblocks/plugins/libdebugger.so" address="7fb60f186000" size="0008e000"/>
+    <module path="/usr/lib/codeblocks/plugins/libdebugger.so" address="7fb60f414000" size="00005000"/>
+    <module path="/usr/lib/codeblocks/plugins/libSmartIndentLua.so" address="7fb60f41b000" size="00005000"/>
+    <module path="/usr/lib/codeblocks/plugins/libSmartIndentLua.so" address="7fb60f61f000" size="00001000"/>
+    <module path="/lib/x86_64-linux-gnu/libbz2.so.1.0.4" address="7fb60f621000" size="0000f000" version="1.0.4"/>
+    <module path="/lib/x86_64-linux-gnu/libbz2.so.1.0.4" address="7fb60f82f000" size="00001000" version="1.0.4"/>
+    <module path="/usr/lib/codeblocks/plugins/libhelp_plugin.so" address="7fb60f831000" size="0004b000"/>
+    <module path="/usr/lib/codeblocks/plugins/libhelp_plugin.so" address="7fb60fa7b000" size="00004000"/>
+    <module path="/usr/lib/codeblocks/plugins/libscriptedwizard.so" address="7fb60fa83000" size="00054000"/>
+    <module path="/usr/lib/codeblocks/plugins/libscriptedwizard.so" address="7fb60fcd6000" size="00007000"/>
+    <module path="/usr/lib/codeblocks/plugins/libProjectOptionsManipulator.so" address="7fb60fcdf000" size="0001f000"/>
+    <module path="/usr/lib/codeblocks/plugins/libProjectOptionsManipulator.so" address="7fb60fefe000" size="00002000"/>
+    <module path="/usr/lib/codeblocks/plugins/libautosave.so" address="7fb60ff01000" size="0000f000"/>
+    <module path="/usr/lib/codeblocks/plugins/libautosave.so" address="7fb610110000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/plugins/libcodestat.so" address="7fb610112000" size="00017000"/>
+    <module path="/usr/lib/codeblocks/plugins/libcodestat.so" address="7fb610329000" size="00002000"/>
+    <module path="/usr/lib/codeblocks/wxContribItems/libwxmathplot.so.0.0.1" address="7fb61032c000" size="00024000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/wxContribItems/libwxmathplot.so.0.0.1" address="7fb610550000" size="00002000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/wxContribItems/libwxled.so.0.0.1" address="7fb610553000" size="00023000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/wxContribItems/libwxled.so.0.0.1" address="7fb610775000" size="00003000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/wxContribItems/libwxcustombutton.so.0.0.1" address="7fb610779000" size="0000c000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/wxContribItems/libwxcustombutton.so.0.0.1" address="7fb610984000" size="00001000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/wxContribItems/libwxtreelist.so.0.0.1" address="7fb610986000" size="00031000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/wxContribItems/libwxtreelist.so.0.0.1" address="7fb610bb7000" size="00002000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/wxContribItems/libwxkwic.so.0.0.1" address="7fb610bba000" size="00027000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/wxContribItems/libwxkwic.so.0.0.1" address="7fb610de0000" size="00004000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/wxContribItems/libwxspeedbutton.so.0.0.1" address="7fb610de6000" size="0000e000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/wxContribItems/libwxspeedbutton.so.0.0.1" address="7fb610ff3000" size="00001000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/wxContribItems/libwximagepanel.so.0.0.1" address="7fb610ff5000" size="00008000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/wxContribItems/libwximagepanel.so.0.0.1" address="7fb6111fc000" size="00001000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/wxContribItems/libwxchartctrl.so.0.0.1" address="7fb6111fe000" size="0002a000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/wxContribItems/libwxchartctrl.so.0.0.1" address="7fb611428000" size="00003000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/plugins/libwxsmithcontribitems.so" address="7fb61142c000" size="000cc000"/>
+    <module path="/usr/lib/codeblocks/plugins/libwxsmithcontribitems.so" address="7fb6116f8000" size="00005000"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_gtk2u_richtext-2.8.so.0.8.0" address="7fb611717000" size="000f0000" version="0.8.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_gtk2u_richtext-2.8.so.0.8.0" address="7fb611a07000" size="0000a000" version="0.8.0"/>
+    <module path="/usr/lib/libwxsmithlib.so.0.0.1" address="7fb611a15000" size="0030e000" version="0.0.1"/>
+    <module path="/usr/lib/libwxsmithlib.so.0.0.1" address="7fb611f22000" size="00023000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/plugins/libwxSmithAui.so" address="7fb611f61000" size="00065000"/>
+    <module path="/usr/lib/codeblocks/plugins/libwxSmithAui.so" address="7fb6121c5000" size="00004000"/>
+    <module path="/usr/lib/codeblocks/plugins/libcodecompletion.so" address="7fb6123cf000" size="000f5000"/>
+    <module path="/usr/lib/codeblocks/plugins/libcodecompletion.so" address="7fb6126c3000" size="00006000"/>
+    <module path="/usr/lib/codeblocks/plugins/libprojectsimporter.so" address="7fb6126cc000" size="00036000"/>
+    <module path="/usr/lib/codeblocks/plugins/libprojectsimporter.so" address="7fb612902000" size="00001000"/>
+    <module path="/usr/lib/codeblocks/wxContribItems/libwxflatnotebook.so.0.0.1" address="7fb612904000" size="00048000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/wxContribItems/libwxflatnotebook.so.0.0.1" address="7fb612b4c000" size="00003000" version="0.0.1"/>
+    <module path="/usr/lib/codeblocks/plugins/liblib_finder.so" address="7fb612b52000" size="00076000"/>
+    <module path="/usr/lib/codeblocks/plugins/liblib_finder.so" address="7fb612dc7000" size="00005000"/>
+    <module path="/usr/lib/codeblocks/plugins/libheaderfixup.so" address="7fb612dce000" size="00097000"/>
+    <module path="/usr/lib/codeblocks/plugins/libheaderfixup.so" address="7fb613065000" size="00003000"/>
+    <module path="/usr/lib/libgamin-1.so.0.1.10" address="7fb613069000" size="00007000" version="0.1.10"/>
+    <module path="/usr/lib/libgamin-1.so.0.1.10" address="7fb61326f000" size="00001000" version="0.1.10"/>
+    <module path="/usr/lib/codeblocks/plugins/libFileManager.so" address="7fb613271000" size="0005d000"/>
+    <module path="/usr/lib/codeblocks/plugins/libFileManager.so" address="7fb6134ce000" size="00004000"/>
+    <module path="/usr/lib/codeblocks/plugins/libcompiler.so" address="7fb6134d4000" size="000ba000"/>
+    <module path="/usr/lib/codeblocks/plugins/libcompiler.so" address="7fb61378e000" size="00006000"/>
+    <module path="/usr/lib/codeblocks/plugins/libdefaultmimehandler.so" address="7fb613798000" size="00017000"/>
+    <module path="/usr/lib/codeblocks/plugins/libdefaultmimehandler.so" address="7fb6139af000" size="00002000"/>
+    <module path="/usr/lib/codeblocks/plugins/libenvvars.so" address="7fb6139b2000" size="0001e000"/>
+    <module path="/usr/lib/codeblocks/plugins/libenvvars.so" address="7fb613bd0000" size="00002000"/>
+    <module path="/usr/lib/codeblocks/plugins/libbyogames.so" address="7fb613bd3000" size="0002c000"/>
+    <module path="/usr/lib/codeblocks/plugins/libbyogames.so" address="7fb613dfe000" size="00004000"/>
+    <module path="/usr/lib/codeblocks/plugins/libkeybinder.so" address="7fb613e03000" size="0003c000"/>
+    <module path="/usr/lib/codeblocks/plugins/libkeybinder.so" address="7fb61403f000" size="00003000"/>
+    <module path="/usr/lib/codeblocks/plugins/libToolsPlus.so" address="7fb614043000" size="00040000"/>
+    <module path="/usr/lib/codeblocks/plugins/libToolsPlus.so" address="7fb614283000" size="00003000"/>
+    <module path="/SYSV00000000" address="7fb614288000" size="00060000"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-xpm.so" address="7fb6142ee000" size="001ff000" version="xpm"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-xpm.so" address="7fb6144ee000" size="00001000" version="xpm"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libicudata.so.55.1" address="7fb615da5000" size="001ff000" version="55.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libicudata.so.55.1" address="7fb615fa5000" size="00001000" version="55.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1" address="7fb616125000" size="00200000" version="55.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1" address="7fb616335000" size="00001000" version="55.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3" address="7fb61633a000" size="001b1000" version="2.9.3"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3" address="7fb6166ea000" size="00008000" version="2.9.3"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libcroco-0.6.so.3.0.1" address="7fb6166f5000" size="00037000" version="3.0.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libcroco-0.6.so.3.0.1" address="7fb61692c000" size="00003000" version="3.0.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/librsvg-2.so.2.40.13" address="7fb616930000" size="00035000" version="2.40.13"/>
+    <module path="/usr/lib/x86_64-linux-gnu/librsvg-2.so.2.40.13" address="7fb616b65000" size="00001000" version="2.40.13"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.so" address="7fb616b81000" size="00002000" version="svg"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.so" address="7fb616d82000" size="00001000" version="svg"/>
+    <module path="/usr/share/mime/mime.cache" address="7fb616d84000" size="0001f000"/>
+    <module path="/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf" address="7fb617df5000" size="00054000"/>
+    <module path="/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-B.ttf" address="7fb617f02000" size="00052000"/>
+    <module path="/usr/share/icons/hicolor/icon-theme.cache" address="7fb62c004000" size="00006000"/>
+    <module path="/usr/share/icons/ubuntu-mono-light/icon-theme.cache" address="7fb62c013000" size="0000e000"/>
+    <module path="/SYSV00000000" address="7fb62c078000" size="00003000"/>
+    <module path="/var/cache/fontconfig/2cd17615ca594fa2959ae173292e504c-le64.cache-6" address="7fb62c086000" size="00006000"/>
+    <module path="/var/cache/fontconfig/04aabc0a78ac019cf9454389977116d2-le64.cache-6" address="7fb62c08d000" size="00015000"/>
+    <module path="/var/cache/fontconfig/385c0604a188198f04d133e54aba7fe7-le64.cache-6" address="7fb62c0a3000" size="00004000"/>
+    <module path="/var/cache/fontconfig/767a8244fc0220cfb567a839d0392e0b-le64.cache-6" address="7fb62c0a8000" size="00003000"/>
+    <module path="/var/cache/fontconfig/8801497958630a81b71ace7c5f9b32a8-le64.cache-6" address="7fb62c0ac000" size="00005000"/>
+    <module path="/var/cache/fontconfig/3047814df9a2f067bd2d96a2b9c36e5a-le64.cache-6" address="7fb62c0b2000" size="00007000"/>
+    <module path="/var/cache/fontconfig/b9d506c9ac06c20b433354fa67a72993-le64.cache-6" address="7fb62c0ba000" size="00001000"/>
+    <module path="/var/cache/fontconfig/d52a8644073d54c13679302ca1180695-le64.cache-6" address="7fb62c0c1000" size="00013000"/>
+    <module path="/var/cache/fontconfig/d589a48862398ed80a3d6066f4f56f4c-le64.cache-6" address="7fb62c0d5000" size="00004000"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gvfs/libgvfscommon.so" address="7fb62d0db000" size="00036000" version="gnu/gvfs/libgvfscommon"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gvfs/libgvfscommon.so" address="7fb62d311000" size="00005000" version="gnu/gvfs/libgvfscommon"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gio/modules/libgvfsdbus.so" address="7fb62d317000" size="00030000" version="gnu/gio/modules/libgvfsdbus"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gio/modules/libgvfsdbus.so" address="7fb62d547000" size="00001000" version="gnu/gio/modules/libgvfsdbus"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libibus-1.0.so.5.0.511" address="7fb62d54a000" size="00066000" version="5.0.511"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libibus-1.0.so.5.0.511" address="7fb62d7af000" size="00002000" version="5.0.511"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gtk-2.0/2.10.0/immodules/im-ibus.so" address="7fb62d7b3000" size="00006000" version="ibus"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gtk-2.0/2.10.0/immodules/im-ibus.so" address="7fb62d9b9000" size="00001000" version="ibus"/>
+    <module path="/lib/x86_64-linux-gnu/libnss_files-2.23.so" address="7fb62d9bb000" size="0000b000" version="2.23"/>
+    <module path="/lib/x86_64-linux-gnu/libnss_files-2.23.so" address="7fb62dbc5000" size="00001000" version="2.23"/>
+    <module path="/lib/x86_64-linux-gnu/libnss_nis-2.23.so" address="7fb62dbcd000" size="0000b000" version="2.23"/>
+    <module path="/lib/x86_64-linux-gnu/libnss_nis-2.23.so" address="7fb62ddd7000" size="00001000" version="2.23"/>
+    <module path="/lib/x86_64-linux-gnu/libnsl-2.23.so" address="7fb62ddd9000" size="00016000" version="2.23"/>
+    <module path="/lib/x86_64-linux-gnu/libnsl-2.23.so" address="7fb62dfee000" size="00001000" version="2.23"/>
+    <module path="/lib/x86_64-linux-gnu/libnss_compat-2.23.so" address="7fb62dff2000" size="00008000" version="2.23"/>
+    <module path="/lib/x86_64-linux-gnu/libnss_compat-2.23.so" address="7fb62e1f9000" size="00001000" version="2.23"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gio/modules/libdconfsettings.so" address="7fb62fa69000" size="0000b000" version="gnu/gio/modules/libdconfsettings"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gio/modules/libdconfsettings.so" address="7fb62fc74000" size="00001000" version="gnu/gio/modules/libdconfsettings"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libogg.so.0.8.2" address="7fb62fc76000" size="00007000" version="0.8.2"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libogg.so.0.8.2" address="7fb62fe7d000" size="00001000" version="0.8.2"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libvorbis.so.0.4.8" address="7fb62fe7f000" size="0002a000" version="0.4.8"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libvorbis.so.0.4.8" address="7fb6300a8000" size="00001000" version="0.4.8"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libltdl.so.7.3.1" address="7fb6300aa000" size="00009000" version="7.3.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libltdl.so.7.3.1" address="7fb6302b2000" size="00001000" version="7.3.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libtdb.so.1.3.8" address="7fb6302b4000" size="00014000" version="1.3.8"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libtdb.so.1.3.8" address="7fb6304c7000" size="00001000" version="1.3.8"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libvorbisfile.so.3.3.7" address="7fb6304c9000" size="00007000" version="3.3.7"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libvorbisfile.so.3.3.7" address="7fb6306d0000" size="00001000" version="3.3.7"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libcanberra.so.0.2.5" address="7fb6306d2000" size="00010000" version="0.2.5"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libcanberra.so.0.2.5" address="7fb6308e1000" size="00001000" version="0.2.5"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libcanberra-gtk.so.0.1.9" address="7fb6308e3000" size="00004000" version="0.1.9"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libcanberra-gtk.so.0.1.9" address="7fb630ae6000" size="00001000" version="0.1.9"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gtk-2.0/modules/libcanberra-gtk-module.so" address="7fb630ae8000" size="00005000" version="module"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gtk-2.0/modules/libcanberra-gtk-module.so" address="7fb630cec000" size="00001000" version="module"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gtk-2.0/2.10.0/engines/libmurrine.so" address="7fb630cee000" size="00030000" version="2.0/2.10.0/engines/libmurrine"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gtk-2.0/2.10.0/engines/libmurrine.so" address="7fb630f1e000" size="00001000" version="2.0/2.10.0/engines/libmurrine"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libunity-gtk2-parser.so.0.0.0" address="7fb630f20000" size="00010000" version="0.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libunity-gtk2-parser.so.0.0.0" address="7fb631130000" size="00001000" version="0.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gtk-2.0/modules/libunity-gtk-module.so" address="7fb631132000" size="00005000" version="module"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gtk-2.0/modules/libunity-gtk-module.so" address="7fb631336000" size="00001000" version="module"/>
+    <module path="/lib/x86_64-linux-gnu/libgpg-error.so.0.17.0" address="7fb631338000" size="00012000" version="0.17.0"/>
+    <module path="/lib/x86_64-linux-gnu/libgpg-error.so.0.17.0" address="7fb63154a000" size="00001000" version="0.17.0"/>
+    <module path="/lib/x86_64-linux-gnu/libgcrypt.so.20.0.5" address="7fb63154c000" size="000d7000" version="20.0.5"/>
+    <module path="/lib/x86_64-linux-gnu/libgcrypt.so.20.0.5" address="7fb631823000" size="00001000" version="20.0.5"/>
+    <module path="/lib/x86_64-linux-gnu/libdbus-1.so.3.14.6" address="7fb63182d000" size="0004a000" version="3.14.6"/>
+    <module path="/lib/x86_64-linux-gnu/libdbus-1.so.3.14.6" address="7fb631a77000" size="00001000" version="3.14.6"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libatspi.so.0.0.1" address="7fb631a79000" size="0002c000" version="0.0.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libatspi.so.0.0.1" address="7fb631ca4000" size="00003000" version="0.0.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libatk-bridge-2.0.so.0.0.0" address="7fb631ca8000" size="0002d000" version="0.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libatk-bridge-2.0.so.0.0.0" address="7fb631ed4000" size="00001000" version="0.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gtk-2.0/modules/libatk-bridge.so" address="7fb631ed7000" size="00001000" version="bridge"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gtk-2.0/modules/libatk-bridge.so" address="7fb6320d7000" size="00001000" version="bridge"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libgailutil.so.18.0.1" address="7fb6320d9000" size="00007000" version="18.0.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libgailutil.so.18.0.1" address="7fb6322df000" size="00001000" version="18.0.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gtk-2.0/modules/libgail.so" address="7fb6322e1000" size="0004e000" version="2.0/modules/libgail"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gtk-2.0/modules/libgail.so" address="7fb63252e000" size="00001000" version="2.0/modules/libgail"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gtk-2.0/modules/liboverlay-scrollbar.so" address="7fb632531000" size="00011000" version="scrollbar"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gtk-2.0/modules/liboverlay-scrollbar.so" address="7fb632742000" size="00001000" version="scrollbar"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gconv/UTF-32.so" address="7fb632744000" size="00002000" version="32"/>
+    <module path="/usr/lib/x86_64-linux-gnu/gconv/UTF-32.so" address="7fb632945000" size="00001000" version="32"/>
+    <module path="/usr/lib/locale/locale-archive" address="7fb632947000" size="0054d000"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libgraphite2.so.3.0.1" address="7fb632eb8000" size="001ff000" version="3.0.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libgraphite2.so.3.0.1" address="7fb6330b9000" size="00001000" version="3.0.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0" address="7fb6330bf000" size="001ff000" version="6.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0" address="7fb6332bf000" size="00001000" version="6.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0" address="7fb6332c2000" size="00200000" version="6.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0" address="7fb6334c3000" size="00001000" version="6.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libdatrie.so.1.3.3" address="7fb6334ca000" size="00200000" version="1.3.3"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libdatrie.so.1.3.3" address="7fb6336cb000" size="00001000" version="1.3.3"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libharfbuzz.so.0.10000.1" address="7fb633728000" size="00200000" version="0.10000.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libharfbuzz.so.0.10000.1" address="7fb633929000" size="00001000" version="0.10000.1"/>
+    <module path="/lib/x86_64-linux-gnu/libresolv-2.23.so" address="7fb633941000" size="00200000" version="2.23"/>
+    <module path="/lib/x86_64-linux-gnu/libresolv-2.23.so" address="7fb633b42000" size="00001000" version="2.23"/>
+    <module path="/lib/x86_64-linux-gnu/libselinux.so.1" address="7fb633b45000" size="0001f000" version="1"/>
+    <module path="/lib/x86_64-linux-gnu/libselinux.so.1" address="7fb633d63000" size="00001000" version="1"/>
+    <module path="/lib/x86_64-linux-gnu/librt-2.23.so" address="7fb633d67000" size="00007000" version="2.23"/>
+    <module path="/lib/x86_64-linux-gnu/librt-2.23.so" address="7fb633f6d000" size="00001000" version="2.23"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libxcb-render.so.0.0.0" address="7fb633f6f000" size="00008000" version="0.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libxcb-render.so.0.0.0" address="7fb634177000" size="00001000" version="0.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libxcb-shm.so.0.0.0" address="7fb634179000" size="00002000" version="0.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libxcb-shm.so.0.0.0" address="7fb63437b000" size="00001000" version="0.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libpixman-1.so.0.33.6" address="7fb63437d000" size="0009f000" version="0.33.6"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libpixman-1.so.0.33.6" address="7fb63461c000" size="00008000" version="0.33.6"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0" address="7fb634625000" size="00021000" version="1.1.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0" address="7fb634845000" size="00001000" version="1.1.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libfreetype.so.6.12.1" address="7fb634847000" size="000a4000" version="6.12.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libfreetype.so.6.12.1" address="7fb634aea000" size="00006000" version="6.12.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libjbig.so.0" address="7fb634af1000" size="0000b000" version="0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libjbig.so.0" address="7fb634cfb000" size="00001000" version="0"/>
+    <module path="/lib/x86_64-linux-gnu/liblzma.so.5.0.0" address="7fb634cff000" size="00021000" version="5.0.0"/>
+    <module path="/lib/x86_64-linux-gnu/liblzma.so.5.0.0" address="7fb634f1f000" size="00001000" version="5.0.0"/>
+    <module path="/lib/x86_64-linux-gnu/libuuid.so.1.3.0" address="7fb634f21000" size="00004000" version="1.3.0"/>
+    <module path="/lib/x86_64-linux-gnu/libuuid.so.1.3.0" address="7fb635124000" size="00001000" version="1.3.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libICE.so.6.3.0" address="7fb635126000" size="00016000" version="6.3.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libICE.so.6.3.0" address="7fb63533b000" size="00001000" version="6.3.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libthai.so.0.2.4" address="7fb635340000" size="00008000" version="0.2.4"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libthai.so.0.2.4" address="7fb635547000" size="00001000" version="0.2.4"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXext.so.6.4.0" address="7fb635549000" size="00011000" version="6.4.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXext.so.6.4.0" address="7fb635759000" size="00001000" version="6.4.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXdamage.so.1.1.0" address="7fb63575b000" size="00002000" version="1.1.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXdamage.so.1.1.0" address="7fb63595c000" size="00001000" version="1.1.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXcomposite.so.1.0.0" address="7fb63595e000" size="00002000" version="1.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXcomposite.so.1.0.0" address="7fb635b5f000" size="00001000" version="1.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXcursor.so.1.0.2" address="7fb635b61000" size="00009000" version="1.0.2"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXcursor.so.1.0.2" address="7fb635d69000" size="00001000" version="1.0.2"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXrandr.so.2.2.0" address="7fb635d6b000" size="0000a000" version="2.2.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXrandr.so.2.2.0" address="7fb635f74000" size="00001000" version="2.2.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXi.so.6.1.0" address="7fb635f76000" size="0000f000" version="6.1.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXi.so.6.1.0" address="7fb636184000" size="00001000" version="6.1.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXrender.so.1.3.0" address="7fb636186000" size="00009000" version="1.3.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXrender.so.1.3.0" address="7fb63638e000" size="00001000" version="1.3.0"/>
+    <module path="/lib/x86_64-linux-gnu/libpcre.so.3.13.2" address="7fb636390000" size="0006e000" version="3.13.2"/>
+    <module path="/lib/x86_64-linux-gnu/libpcre.so.3.13.2" address="7fb6365fe000" size="00001000" version="3.13.2"/>
+    <module path="/lib/x86_64-linux-gnu/libexpat.so.1.6.0" address="7fb636600000" size="00026000" version="1.6.0"/>
+    <module path="/lib/x86_64-linux-gnu/libexpat.so.1.6.0" address="7fb636826000" size="00002000" version="1.6.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libffi.so.6.0.4" address="7fb636829000" size="00007000" version="6.0.4"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libffi.so.6.0.4" address="7fb636a2f000" size="00001000" version="6.0.4"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.9.0" address="7fb636a31000" size="0003d000" version="1.9.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.9.0" address="7fb636c6d000" size="00002000" version="1.9.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libpangoft2-1.0.so.0.3800.1" address="7fb636c74000" size="00014000" version="0.3800.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libpangoft2-1.0.so.0.3800.1" address="7fb636e88000" size="00001000" version="0.3800.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libgio-2.0.so.0.4800.2" address="7fb636e8a000" size="00180000" version="0.4800.2"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libgio-2.0.so.0.4800.2" address="7fb63720a000" size="00004000" version="0.4800.2"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libcairo.so.2.11400.6" address="7fb637212000" size="0010e000" version="2.11400.6"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libcairo.so.2.11400.6" address="7fb637520000" size="00003000" version="2.11400.6"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libatk-1.0.so.0.21809.1" address="7fb637526000" size="00022000" version="0.21809.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libatk-1.0.so.0.21809.1" address="7fb637747000" size="00003000" version="0.21809.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXfixes.so.3.1.0" address="7fb63774b000" size="00005000" version="3.1.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXfixes.so.3.1.0" address="7fb63794f000" size="00001000" version="3.1.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0" address="7fb637951000" size="00135000" version="6.3.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0" address="7fb637c86000" size="00001000" version="6.3.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so.0.3800.1" address="7fb637c8b000" size="0000c000" version="0.3800.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so.0.3800.1" address="7fb637e96000" size="00001000" version="0.3800.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libgmodule-2.0.so.0.4800.2" address="7fb637e98000" size="00003000" version="0.4800.2"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libgmodule-2.0.so.0.4800.2" address="7fb63809a000" size="00001000" version="0.4800.2"/>
+    <module path="/lib/x86_64-linux-gnu/libdl-2.23.so" address="7fb63809c000" size="00003000" version="2.23"/>
+    <module path="/lib/x86_64-linux-gnu/libdl-2.23.so" address="7fb63829e000" size="00001000" version="2.23"/>
+    <module path="/lib/x86_64-linux-gnu/libz.so.1.2.8" address="7fb6382a0000" size="00019000" version="1.2.8"/>
+    <module path="/lib/x86_64-linux-gnu/libz.so.1.2.8" address="7fb6384b8000" size="00001000" version="1.2.8"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libtiff.so.5.2.4" address="7fb6384ba000" size="00071000" version="5.2.4"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libtiff.so.5.2.4" address="7fb63872a000" size="00001000" version="5.2.4"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libjpeg.so.8.0.2" address="7fb63872e000" size="00057000" version="8.0.2"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libjpeg.so.8.0.2" address="7fb638985000" size="00001000" version="8.0.2"/>
+    <module path="/lib/x86_64-linux-gnu/libpng12.so.0.54.0" address="7fb638987000" size="00024000" version="0.54.0"/>
+    <module path="/lib/x86_64-linux-gnu/libpng12.so.0.54.0" address="7fb638baa000" size="00001000" version="0.54.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libSM.so.6.0.1" address="7fb638bac000" size="00007000" version="6.0.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libSM.so.6.0.1" address="7fb638db2000" size="00001000" version="6.0.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXxf86vm.so.1.0.0" address="7fb638db4000" size="00005000" version="1.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXxf86vm.so.1.0.0" address="7fb638fb8000" size="00001000" version="1.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXinerama.so.1.0.0" address="7fb638fba000" size="00002000" version="1.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libXinerama.so.1.0.0" address="7fb6391bb000" size="00001000" version="1.0.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libpango-1.0.so.0.3800.1" address="7fb6391bd000" size="00049000" version="0.3800.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libpango-1.0.so.0.3800.1" address="7fb639406000" size="00002000" version="0.3800.1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so.0.3200.2" address="7fb639409000" size="00021000" version="0.3200.2"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so.0.3200.2" address="7fb639629000" size="00001000" version="0.3200.2"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libgdk-x11-2.0.so.0.2400.30" address="7fb63962b000" size="000b0000" version="0.2400.30"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libgdk-x11-2.0.so.0.2400.30" address="7fb6398da000" size="00004000" version="0.2400.30"/>
+    <module path="/lib/x86_64-linux-gnu/libm-2.23.so" address="7fb6398e0000" size="00108000" version="2.23"/>
+    <module path="/lib/x86_64-linux-gnu/libm-2.23.so" address="7fb639be7000" size="00001000" version="2.23"/>
+    <module path="/lib/x86_64-linux-gnu/libglib-2.0.so.0.4800.2" address="7fb639be9000" size="0010f000" version="0.4800.2"/>
+    <module path="/lib/x86_64-linux-gnu/libglib-2.0.so.0.4800.2" address="7fb639ef7000" size="00001000" version="0.4800.2"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_baseu_xml-2.8.so.0.8.0" address="7fb639efa000" size="00009000" version="0.8.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_baseu_xml-2.8.so.0.8.0" address="7fb63a102000" size="00001000" version="0.8.0"/>
+    <module path="/lib/x86_64-linux-gnu/libc-2.23.so" address="7fb63a104000" size="001c0000" version="2.23"/>
+    <module path="/lib/x86_64-linux-gnu/libc-2.23.so" address="7fb63a4c4000" size="00004000" version="2.23"/>
+    <module path="/lib/x86_64-linux-gnu/libgcc_s.so.1" address="7fb63a4ce000" size="00016000" version="1"/>
+    <module path="/lib/x86_64-linux-gnu/libgcc_s.so.1" address="7fb63a6e3000" size="00001000" version="1"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.21" address="7fb63a856000" size="00200000" version="6.0.21"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.21" address="7fb63aa60000" size="00002000" version="6.0.21"/>
+    <module path="/lib/x86_64-linux-gnu/libpthread-2.23.so" address="7fb63aa66000" size="00018000" version="2.23"/>
+    <module path="/lib/x86_64-linux-gnu/libpthread-2.23.so" address="7fb63ac7d000" size="00001000" version="2.23"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.4800.2" address="7fb63ac83000" size="00052000" version="0.4800.2"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.4800.2" address="7fb63aed4000" size="00001000" version="0.4800.2"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libgtk-x11-2.0.so.0.2400.30" address="7fb63aed6000" size="0043e000" version="0.2400.30"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libgtk-x11-2.0.so.0.2400.30" address="7fb63b513000" size="00007000" version="0.2400.30"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_baseu-2.8.so.0.8.0" address="7fb63b521000" size="00140000" version="0.8.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_baseu-2.8.so.0.8.0" address="7fb63b860000" size="00007000" version="0.8.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_baseu_net-2.8.so.0.8.0" address="7fb63b873000" size="0002d000" version="0.8.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_baseu_net-2.8.so.0.8.0" address="7fb63ba9f000" size="00002000" version="0.8.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_gtk2u_core-2.8.so.0.8.0" address="7fb63baa2000" size="003bf000" version="0.8.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_gtk2u_core-2.8.so.0.8.0" address="7fb63c060000" size="00045000" version="0.8.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_gtk2u_adv-2.8.so.0.8.0" address="7fb63c0b9000" size="000ca000" version="0.8.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_gtk2u_adv-2.8.so.0.8.0" address="7fb63c382000" size="0000e000" version="0.8.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_gtk2u_html-2.8.so.0.8.0" address="7fb63c395000" size="000a9000" version="0.8.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_gtk2u_html-2.8.so.0.8.0" address="7fb63c63e000" size="00008000" version="0.8.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_gtk2u_qa-2.8.so.0.8.0" address="7fb63c64a000" size="0001c000" version="0.8.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_gtk2u_qa-2.8.so.0.8.0" address="7fb63c866000" size="00002000" version="0.8.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_gtk2u_xrc-2.8.so.0.8.0" address="7fb63c869000" size="000a6000" version="0.8.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_gtk2u_xrc-2.8.so.0.8.0" address="7fb63cb0f000" size="00004000" version="0.8.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_gtk2u_aui-2.8.so.0.8.0" address="7fb63cb17000" size="00063000" version="0.8.0"/>
+    <module path="/usr/lib/x86_64-linux-gnu/libwx_gtk2u_aui-2.8.so.0.8.0" address="7fb63cd7a000" size="00005000" version="0.8.0"/>
+    <module path="/usr/lib/libcodeblocks.so.0.0.1" address="7fb63cd81000" size="00672000" version="0.0.1"/>
+    <module path="/usr/lib/libcodeblocks.so.0.0.1" address="7fb63d5f3000" size="00025000" version="0.0.1"/>
+    <module path="/lib/x86_64-linux-gnu/ld-2.23.so" address="7fb63d627000" size="00026000" version="2.23"/>
+    <module path="/var/cache/fontconfig/75114ca45c98e8a441da0ff356701271-le64.cache-6" address="7fb63d64e000" size="00003000"/>
+    <module path="/var/cache/fontconfig/9b89f8e3dae116d678bbf48e5f21f69b-le64.cache-6" address="7fb63d65c000" size="00012000"/>
+    <module path="/var/cache/fontconfig/7ef2298fde41cc6eeb7af42e48b7d293-le64.cache-6" address="7fb63d671000" size="00004000"/>
+    <module path="/home/patricia/.config/dconf/user" address="7fb63d6d5000" size="00005000"/>
+    <module path="/lib/x86_64-linux-gnu/libsystemd.so.0.14.0" address="7fb63d723000" size="00080000" version="0.14.0"/>
+    <module path="/lib/x86_64-linux-gnu/libsystemd.so.0.14.0" address="7fb63d7a6000" size="00001000" version="0.14.0"/>
+    <module path="/var/cache/fontconfig/0c9eb80ebd1c36541ebe2852d3bb0c49-le64.cache-6" address="7fb63d7a8000" size="00001000"/>
+    <module path="/usr/share/locale-langpack/es/LC_MESSAGES/gtk20-properties.mo" address="7fb63d7c2000" size="0002a000"/>
+    <module path="/usr/share/locale-langpack/es/LC_MESSAGES/atk10.mo" address="7fb63d832000" size="00003000"/>
+    <module path="/usr/share/locale-langpack/es/LC_MESSAGES/gtk20.mo" address="7fb63d836000" size="0000f000"/>
+    <module path="/lib/x86_64-linux-gnu/ld-2.23.so" address="7fb63d84c000" size="00001000" version="2.23"/>
+    <module path="[stack]" address="7ffe0fc11000" size="00033000"/>
+    <module path="[vdso]" address="7ffe0fdf7000" size="00002000"/>
+  </modules>
+  <stack>
+    <frame level="0"/>
+    <frame level="1" function="wxEvtHandler::Disconnect(int, int, int, void (wxObject::*)(wxEvent&amp;), wxObject*, wxEvtHandler*)" offset="00000017"/>
+    <frame level="2" function="wxPropertyGrid::OnTLPChanging(wxWindow*)" offset="0000004d"/>
+    <frame level="3" function="wxPropertyGrid::OnIdle(wxIdleEvent&amp;)" offset="00000130"/>
+    <frame level="4" function="wxEvtHandler::ProcessEventIfMatches(wxEventTableEntryBase const&amp;, wxEvtHandler*, wxEvent&amp;)" offset="0000005b"/>
+    <frame level="5" function="wxEventHashTable::HandleEvent(wxEvent&amp;, wxEvtHandler*)" offset="00000073"/>
+    <frame level="6" function="wxEvtHandler::ProcessEvent(wxEvent&amp;)" offset="000000db"/>
+    <frame level="7" function="wxEvtHandler::ProcessEvent(wxEvent&amp;)" offset="00000050"/>
+    <frame level="8" function="wxScrollHelperEvtHandler::ProcessEvent(wxEvent&amp;)" offset="00000016"/>
+    <frame level="9" function="wxAppBase::SendIdleEvents(wxWindow*, wxIdleEvent&amp;)" offset="00000084"/>
+    <frame level="10" function="wxAppBase::SendIdleEvents(wxWindow*, wxIdleEvent&amp;)" offset="00000054"/>
+    <frame level="11" function="wxAppBase::SendIdleEvents(wxWindow*, wxIdleEvent&amp;)" offset="00000054"/>
+    <frame level="12" function="wxAppBase::SendIdleEvents(wxWindow*, wxIdleEvent&amp;)" offset="00000054"/>
+    <frame level="13" function="wxAppBase::SendIdleEvents(wxWindow*, wxIdleEvent&amp;)" offset="00000054"/>
+    <frame level="14" function="wxAppBase::SendIdleEvents(wxWindow*, wxIdleEvent&amp;)" offset="00000054"/>
+    <frame level="15" function="wxAppBase::SendIdleEvents(wxWindow*, wxIdleEvent&amp;)" offset="00000054"/>
+    <frame level="16" function="wxAppBase::ProcessIdle()" offset="00000084"/>
+    <frame level="17"/>
+    <frame level="18" function="g_main_context_dispatch" offset="0000015a"/>
+    <frame level="19"/>
+    <frame level="20" function="g_main_loop_run" offset="000000c2"/>
+    <frame level="21" function="gtk_main" offset="000000b7"/>
+    <frame level="22" function="wxEventLoop::Run()" offset="0000003a"/>
+    <frame level="23" function="wxAppBase::MainLoop()" offset="0000005a"/>
+  </stack>
+</report>

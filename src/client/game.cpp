@@ -36,7 +36,7 @@ void Game::LogIn()
         std::string login_response = client->LogIn(login_request);
 
 
-        if ("login-fail" == login_response || "too-many-users" == login_response)
+        if ("login-fail" == login_response || "too-many-users" == login_response || "invalid-team" == login_response)
         {
             login_view->OpenErrorPage(initial_configuration, login_response);
         }

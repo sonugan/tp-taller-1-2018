@@ -4,6 +4,7 @@
 #include "../shared/network/exceptions/socket-connection-exception.h"
 #include "session/authentication-exception.h"
 #include "session/max-allowed-user-exception.h"
+#include "session/invalid-team-exception.h"
 #include "../shared/network/messages/quit-request.h"
 #include "../shared/network/messages/pass-ball-request.h"
 
@@ -198,6 +199,12 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
     {
         Message* login_response = new Message("too-many-users");
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta TooManyUsers.");
+        this->outgoing_msg_queues[client->socket_id]->Append(login_response);
+    }
+    catch (InvalidTeamException e)
+    {
+        Message* login_response = new Message("invalid-team");
+        Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta InvalidTeam.");
         this->outgoing_msg_queues[client->socket_id]->Append(login_response);
     }
 }
