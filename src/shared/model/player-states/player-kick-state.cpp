@@ -100,7 +100,7 @@ void PlayerKickState::CatchBall()
     if(!ContinueKicking())
     {
         this->player->ChangeToCatchBall();
-        this->player->CatchBall();
+        //this->player->CatchBall();
     }
 }
 

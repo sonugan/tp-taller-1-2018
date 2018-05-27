@@ -42,6 +42,22 @@ std::vector<Player*> Team::GetAvailablePlayers()
     return available_players;
 }
 
+std::vector<Player*> Team::GetSelectedPlayers()
+{
+    std::vector<Player*> selected_players;
+
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+        Player* player = GetPlayers()[i];
+
+        if (player->IsSelected()) {
+            selected_players.push_back(player);
+        }
+
+    }
+
+    return selected_players;
+}
+
 void Team::SetFormation(Formation* formation)
 {
     Formation* old_formation = this->formation;
@@ -88,6 +104,7 @@ string Team::GetShirt()
     return this->shirt;
 }
 
+//USAR SOLO DESDE EL CLIENTE
 Player* Team::GetSelectedPlayer()
 {
     for (unsigned int i = 0; i < (Team::TEAM_SIZE); i++)

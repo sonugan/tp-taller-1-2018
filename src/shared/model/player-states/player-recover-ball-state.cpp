@@ -100,7 +100,7 @@ void PlayerRecoverBallState::CatchBall()
     if(!ContinueRecovering())
     {
         this->player->ChangeToCatchBall();
-        this->player->CatchBall();
+        //this->player->CatchBall();
     }
 }
 

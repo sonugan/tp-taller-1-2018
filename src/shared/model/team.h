@@ -21,6 +21,7 @@ class Team
         virtual ~Team();
         std::vector<Player*> GetPlayers();
         std::vector<Player*> GetAvailablePlayers();
+        std::vector<Player*> GetSelectedPlayers();
         void SetFormation(Formation* formation);
         void SetMatch(Match* match);
         Formation* GetFormation();
@@ -31,6 +32,8 @@ class Team
         string GetName();
         string GetShirt();
         void SetShirt(string shirt);
+
+        //USAR SOLO DESDE EL CLIENTE
         Player* GetSelectedPlayer();
     private:
         std::vector<Player*> players;

@@ -94,6 +94,18 @@ User* SessionManager::GetUserBySocketID(int socket_id)
     return NULL;
 }
 
+User* SessionManager::GetUserByColor(USER_COLOR color)
+{
+    for (const auto& any : clientsocket_user_association) {
+        User* user = any.second;
+        if (color == user->GetUserColor()) {
+            return user;
+        }
+    }
+
+    return NULL;
+}
+
 bool SessionManager::IsReadyToStart()
 {
     return this->GetAutheticatedUsersCount() == this->max_allowed_users;

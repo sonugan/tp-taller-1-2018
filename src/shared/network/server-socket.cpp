@@ -14,14 +14,16 @@ ServerSocket::ServerSocket(int socket_id):Socket(socket_id)
 {
 }
 
-void ServerSocket::Bind(SocketAddress address)
+bool ServerSocket::Bind(SocketAddress address)
 {
     sockaddr_in addr = address.GetFormatted();
-    if (HasError(bind(this->socket_id, (struct sockaddr *) &addr, sizeof(addr))))
+    bool has_error = HasError(bind(this->socket_id, (struct sockaddr *) &addr, sizeof(addr)));
+    if (has_error)
     {
         Logger::getInstance()->debug("(ServerSocket:Bind) Error durante el binding.");
     }
     this->address = address;
+    return !has_error;
 }
 
 void ServerSocket::Listen(int max_queue_size)
@@ -53,7 +55,11 @@ void ServerSocket::Send(Socket* client_socket, Message* request)
     const string data_size = to_string(request->GetDataSize());
     Logger::getInstance()->debug("(ServerSocket:Send) data: " + data + " size: " + data_size);
     send(client_socket->socket_id, request->GetData(), request->GetDataSize(), 0);
+    //Logger::getInstance()->debug("(ServerSocket:Send) ini");
+
     delete request;
+
+    //Logger::getInstance()->debug("(ServerSocket:Send) fin");
 }
 
 Message* ServerSocket::Receive(Socket* client_socket, int expected_size)

@@ -29,13 +29,14 @@ Server::~Server()
 
 void Server::Init()
 {
-    this->socket->Bind(this->port);
-    this->socket->Listen(MAX_SOCKET_QUEUE_SIZE);
+    bool binding_success = this->socket->Bind(this->port);
+    if (binding_success) {
+        this->socket->Listen(MAX_SOCKET_QUEUE_SIZE);
 
-    this->ConnectingUsers();
+        this->ConnectingUsers();
 
-    Logger::getInstance()->info("Comenzando el juego....'");
-
+        Logger::getInstance()->info("Comenzando el juego....'");
+    }
     this->socket->Close();
 
     Logger::getInstance()->info("Cerrando el servidor....'");
@@ -268,6 +269,7 @@ void Server::SendMessage(ClientSocket* client)
             auto msg = outgoing_msg_queue->Next();
             Logger::getInstance()->debug("(Server:SendMessage) Enviando mensaje a cliente: " + to_string(client->socket_id));
             this->socket->Send(client, msg);
+            Logger::getInstance()->debug("(Server:SendMessage) Enviado!!");
         }
     }
 }
@@ -305,6 +307,7 @@ void Server::NotifyGameState()
 
         std::this_thread::sleep_for(std::chrono::milliseconds(SEND_GAME_STATE_EVERY_MILLISECONDS));
 
+/*
         //Esto es el inicio del gran modulo de inteligencia artificial:
         for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
             Player* player_a = this->game->GetGameState()->GetMatch()->GetTeamA()->GetPlayers()[i];
@@ -331,6 +334,12 @@ void Server::NotifyGameState()
         }
 
         this->game->GetGameState()->GetMatch()->GetBall()->Move();
+
+*/
+
+    Logger::getInstance()->debug("(ServerSocket:RunArtificialIntelligence) in");
+        this->game->RunArtificialIntelligence();
+        Logger::getInstance()->debug("(ServerSocket:RunArtificialIntelligence) out");
 
     }
 }

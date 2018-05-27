@@ -66,7 +66,7 @@ void PlayerMoveState::PassBall()
 void PlayerMoveState::CatchBall()
 {
     this->player->ChangeToCatchBall();
-    this->player->CatchBall();
+    //this->player->CatchBall();
 }
 
 void PlayerMoveState::Play()

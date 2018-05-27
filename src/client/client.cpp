@@ -77,7 +77,7 @@ bool Client::Move(MoveRequest* move_request){
 
 bool Client::PassBall(PassBallRequest* pass_ball_request){
     Message r(pass_ball_request->Serialize());
-    return clientSocket->Send(r);
+    return clientSocket->Send(r);;
 }
 
 bool Client::RecoverBall(RecoverBallRequest* recover_ball_request){

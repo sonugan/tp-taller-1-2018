@@ -32,19 +32,24 @@ public:
     string ChangePlayer(ChangePlayerRequest* change_player_request, int socket_id);
     bool IsReadyToStart();
     Message* StartGame();
-    void PlayerCatchBall(int socket_id);
+    void RunArtificialIntelligence();
     bool IsRunning();
     void DisconnectClient(ClientSocket* client);
 
 protected:
 
 private:
+    static const int CATCH_DISTANCE = 30;
     /* Attributes */
     GameState* game_state;
     bool is_running = false;
     SessionManager* session_manager;
 
     Player* GetUserSelectedPlayer(std::vector<Player*> available_players);
+    void CatchBall();
+    void MakePlayerCatchBall(Player* player);
+    void MoveBall();
+    void MovePlayersToDefaultPositions();
 
 };
 
