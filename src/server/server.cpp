@@ -78,7 +78,6 @@ void Server::ListenConnections()
     // TODO: ver cómo cortar este loop, si es que tiene sentido hacerlo
     while(true)
     {
-        Logger::getInstance()->debug("(Server:ListenConnections) Previo Accept().");
         // Accept() bloquea el hilo hasta que un cliente intenta conectarse.
         ClientSocket* client = this->socket->Accept();
 
@@ -179,7 +178,7 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
         {
             if (this->game->IsReadyToStart())
             {
-                Message* start_game_msg = this->game->StartGame();
+                this->game->StartGame();
 
                 // Disparo thread para notificar game-state periodicamente.
                 std::thread game_state_notifier_thread(&Server::NotifyGameState, this);

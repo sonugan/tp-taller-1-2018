@@ -75,7 +75,6 @@ void parseConfigFile(Configuration* configuration, YAML::Node config_file)
 
             if (team_node[TEAM_SHIRT_NODE])
             {
-                Logger::getInstance()->debug("parseando nodo shirt.");
                 configuration->SetShirt(team_node[TEAM_SHIRT_NODE].as<string>());
             }
             else
@@ -138,7 +137,6 @@ void parseConfigFile(Configuration* configuration, YAML::Node config_file)
 
             if (team_node[TEAM_SHIRT_NODE])
             {
-                Logger::getInstance()->debug("parseando nodo shirt.");
                 configuration->SetShirt(team_node[TEAM_SHIRT_NODE].as<string>());
             }
             else
