@@ -1,7 +1,7 @@
 #ifndef PLAYERKICKSTATE_H
 #define PLAYERKICKSTATE_H
 
-#include "../../client/view/player-view.h"
+#include "../../../client/view/player-view.h"
 #include "iplayer-state.h"
 #include "../player.h"
 #include "player-states.h"
