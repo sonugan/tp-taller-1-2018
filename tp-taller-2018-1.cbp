@@ -168,6 +168,8 @@
 		<Unit filename="src/shared/network/message.h" />
 		<Unit filename="src/shared/network/messages/change-player-request.cpp" />
 		<Unit filename="src/shared/network/messages/change-player-request.h" />
+		<Unit filename="src/shared/network/messages/health-check.cpp" />
+		<Unit filename="src/shared/network/messages/health-check.h" />
 		<Unit filename="src/shared/network/messages/kick-ball-request.cpp" />
 		<Unit filename="src/shared/network/messages/kick-ball-request.h" />
 		<Unit filename="src/shared/network/messages/login-request.cpp" />
@@ -186,14 +188,14 @@
 		<Unit filename="src/shared/network/socket-address.h" />
 		<Unit filename="src/shared/network/socket.cpp" />
 		<Unit filename="src/shared/network/socket.h" />
+		<Unit filename="src/shared/utils/id-generator.cpp" />
+		<Unit filename="src/shared/utils/id-generator.h" />
 		<Unit filename="src/shared/utils/queue.h" />
 		<Unit filename="src/shared/utils/safe-queue.h" />
 		<Unit filename="src/shared/utils/string-builder.cpp" />
 		<Unit filename="src/shared/utils/string-builder.h" />
 		<Unit filename="src/shared/utils/string-utils.cpp" />
 		<Unit filename="src/shared/utils/string-utils.h" />
-		<Unit filename="src/shared/utils/id-generator.cpp" />
-		<Unit filename="src/shared/utils/id-generator.h" />
 		<Extensions>
 			<envvars />
 			<code_completion />
