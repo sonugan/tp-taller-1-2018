@@ -313,7 +313,7 @@ void Server::NotifyGameState()
     IdGenerator id_generator;
     while(this->game->IsRunning())
     {
-        this->CheckDisconnections();
+//        this->CheckDisconnections();
         Logger::getInstance()->debug("(Server:NotifyGameState) Enviando game state a todos los clientes.");
         string state_id = id_generator.GetNext();
         Message* game_state_msg = new Message(this->game->GetGameState()->GetMatch()->Serialize() + "|" + state_id);
@@ -346,6 +346,7 @@ void Server::HandleHealthCheck(ClientSocket* client, Message* message)
 
 void Server::CheckDisconnections()
 {
+    Logger::getInstance()->debug("(Server::CheckDisconnections)");
     std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
 
     auto it = this->timers.begin();
@@ -354,7 +355,11 @@ void Server::CheckDisconnections()
         unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>
                              (now - it->second).count();
         if (elapsed_millis > 5000) {
-            this->DisconnectClient(this->clients[it->first]);
+//            Logger::getInstance()->debug("(Server::CheckDisconnections) Desconectando cliente...");
+            if (this->clients.find(it->first) != this->clients.end()) {
+                this->DisconnectClient(this->clients[it->first]);
+                Logger::getInstance()->debug("(Server::CheckDisconnections) Cliente desconectado");
+            }
         }
     }
 }

@@ -188,9 +188,11 @@ bool Client::IsConnected()
 void Client::SendHealthCheck()
 {
     while (this->is_connected) {
+        HealthCheck* health_check = new HealthCheck();
         Logger::getInstance()->debug("(Client:SendHealthCheck) Enviando ping.");
-        Message ping("0");
+        Message ping(health_check->Serialize());
         this->clientSocket->Send(ping);
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        delete health_check;
     }
 }

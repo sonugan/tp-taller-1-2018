@@ -10,6 +10,7 @@
 #include "../shared/network/messages/recover-ball-request.h"
 #include "../shared/network/messages/move-request.h"
 #include "../shared/network/messages/change-player-request.h"
+#include "../shared/network/messages/health-check.h"
 #include "../shared/utils/safe-queue.h"
 #include "../shared/utils/string-utils.h"
 #include "../shared/model/match.h"
