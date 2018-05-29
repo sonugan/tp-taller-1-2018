@@ -139,6 +139,7 @@ bool Player::IsSelected()
 void Player::GoBackToDefaultPosition()
 {
     Location* default_location = team->GetFormation()->GetLocationForPlayer(position_index);
+
     int default_x = default_location->GetX();
     int x = location->GetX();
     int default_y = default_location->GetY();
@@ -185,6 +186,7 @@ void Player::GoBackToDefaultPosition()
         {
             direction = DIRECTION::WEST;
         }
+        this->Play();
     }
 
     if (abs(default_y - location->GetY()) < PLAYER_SPEED)
