@@ -40,11 +40,6 @@ std::string Client::LogIn(LoginRequest* login_request) {
         string login_response(login_status->GetData());
         Logger::getInstance()->debug("(Client) login data: " + login_response);
         Logger::getInstance()->debug("(Client) login size: " + to_string(login_status->GetDataSize()));
-        if ("login-ok" == login_response)
-        {
-            thread health_check_sender(&Client::SendHealthCheck, this);
-            health_check_sender.detach();
-        }
         return login_response;
     } catch (...) {
         Logger::getInstance()->error("(Client:LogIn) Error al intentar loguearse.");
@@ -63,6 +58,9 @@ std::string Client::WaitForGameStart() {
 
         //Empiezo a escuchar actualizaciones del modelo.
         receive_messages_thread = new thread(&Client::ReceiveMessages, this);
+
+        thread health_check_sender(&Client::SendHealthCheck, this);
+        health_check_sender.detach();
 
         return std::string(server_message->GetData());
     } catch (...) {
