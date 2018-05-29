@@ -6,6 +6,7 @@
 #include "../shared/network/messages/login-request.h"
 #include "../shared/logger.h"
 #include "../shared/network/exceptions/socket-connection-exception.h"
+#include <thread>
 
 Client::Client(Configuration* config)
 {
@@ -39,6 +40,11 @@ std::string Client::LogIn(LoginRequest* login_request) {
         string login_response(login_status->GetData());
         Logger::getInstance()->debug("(Client) login data: " + login_response);
         Logger::getInstance()->debug("(Client) login size: " + to_string(login_status->GetDataSize()));
+        if ("login-ok" == login_response)
+        {
+            thread health_check_sender(&Client::SendHealthCheck, this);
+            health_check_sender.detach();
+        }
         return login_response;
     } catch (...) {
         Logger::getInstance()->error("(Client:LogIn) Error al intentar loguearse.");
@@ -177,4 +183,14 @@ string Client::GetGameState()
 bool Client::IsConnected()
 {
     return this->is_connected;
+}
+
+void Client::SendHealthCheck()
+{
+    while (this->is_connected) {
+        Logger::getInstance()->debug("(Client:SendHealthCheck) Enviando ping.");
+        Message ping("0");
+        this->clientSocket->Send(ping);
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
 }

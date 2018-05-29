@@ -9,6 +9,7 @@
 #include <mutex>
 #include <map>
 #include <condition_variable>
+#include <chrono>
 
 #include "../shared/utils/queue.h"
 #include "../shared/utils/safe-queue.h"
@@ -46,7 +47,7 @@ private:
 
     GameServer* game;
     map<int, SafeQueue<Message> *> outgoing_msg_queues = {};
-
+    map<int, std::chrono::time_point<std::chrono::system_clock>> timers = {};
 
     /* Methods */
     void ConnectingUsers();
@@ -61,9 +62,11 @@ private:
     void HandleKickRequest(ClientSocket* client, Message* message);
     void HandlePassBallRequest(ClientSocket* client, Message* message);
     void HandleChangePlayerRequest(ClientSocket* client, Message* message);
+    void HandleHealthCheck(ClientSocket* client, Message* message);
     void SendMessage(ClientSocket* client);
     void NotifyGameState();
     void DisconnectClient(ClientSocket* client);
+    void CheckDisconnections();
     u_int SEND_GAME_STATE_EVERY_MILLISECONDS = 40;
 };
 

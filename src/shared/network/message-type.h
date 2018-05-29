@@ -3,6 +3,7 @@
 
 enum MESSAGE_TYPE
 {
+    HEALTH_CHECK = 0,
     LOGIN_REQUEST = 1,
     KICK_REQUEST = 2,
     RECOVER_REQUEST = 3,

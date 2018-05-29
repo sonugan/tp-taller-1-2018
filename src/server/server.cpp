@@ -92,6 +92,8 @@ void Server::ListenConnections()
         // Disparo thread para envi ar mensajes a este ClienteSocket.
         thread outgoing_msg_thread(&Server::SendMessage, this, client);
         outgoing_msg_thread.detach();
+
+        this->timers[client->socket_id] = std::chrono::system_clock::now();
     }
 }
 
@@ -152,6 +154,9 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
         break;
     case MESSAGE_TYPE::PASS_REQUEST:
         this->HandlePassBallRequest(client, message);
+        break;
+    case MESSAGE_TYPE::HEALTH_CHECK:
+        this->HandleHealthCheck(client, message);
         break;
     default:
         Logger::getInstance()->debug("(Server::ProcessMessage) No hay handler para este tipo de mensaje.");
@@ -308,7 +313,7 @@ void Server::NotifyGameState()
     IdGenerator id_generator;
     while(this->game->IsRunning())
     {
-
+        this->CheckDisconnections();
         Logger::getInstance()->debug("(Server:NotifyGameState) Enviando game state a todos los clientes.");
         string state_id = id_generator.GetNext();
         Message* game_state_msg = new Message(this->game->GetGameState()->GetMatch()->Serialize() + "|" + state_id);
@@ -330,4 +335,26 @@ void Server::DisconnectClient(ClientSocket* client)
     this->clients.erase(client->socket_id);
     client->ShutDown();
     client->Close();
+}
+
+void Server::HandleHealthCheck(ClientSocket* client, Message* message)
+{
+    string socket_id = to_string(client->socket_id);
+    Logger::getInstance()->debug("(Server:HandleHealthCheck) Sigue vivo el cliente: " + socket_id);
+    this->timers[client->socket_id] = std::chrono::system_clock::now();
+}
+
+void Server::CheckDisconnections()
+{
+    std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+
+    auto it = this->timers.begin();
+    while(it != this->timers.end())
+    {
+        unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>
+                             (now - it->second).count();
+        if (elapsed_millis > 5000) {
+            this->DisconnectClient(this->clients[it->first]);
+        }
+    }
 }

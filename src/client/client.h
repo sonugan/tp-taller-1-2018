@@ -51,6 +51,7 @@ class Client
 
         thread* receive_messages_thread;
         void ReceiveMessages();
+        void SendHealthCheck();
 
 };
 
