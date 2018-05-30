@@ -163,6 +163,17 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
     }
 }
 
+void Server::RestartTimers() {
+    std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+
+    auto it = this->timers.begin();
+    while(it != this->timers.end())
+    {
+        it->second = std::chrono::system_clock::now();
+        it++;
+    }
+}
+
 void Server::HandleLoginRequest(ClientSocket* client, Message* message)
 {
     Logger::getInstance()->debug("(Server:HandleLoginRequest) Procesando login request.");
@@ -183,6 +194,7 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
         {
             if (this->game->IsReadyToStart())
             {
+                this->RestartTimers();
                 this->game->StartGame();
 
                 // Disparo thread para notificar game-state periodicamente.
@@ -276,7 +288,8 @@ void Server::SendMessage(ClientSocket* client)
 {
     Logger::getInstance()->debug("(Server:SendMessage) Iniciando hilo para enviar mensajes a cliente: " + to_string(client->socket_id));
     SafeQueue<Message>* outgoing_msg_queue = this->outgoing_msg_queues[client->socket_id];
-    bool sending_msg = true; // Ver como desactivar y activar esto. (condition variables ??)
+    bool sending_msg = outgoing_msg_queue != NULL; // Ver como desactivar y activar esto. (condition variables ??)
+
     while(sending_msg)
     {
         if(outgoing_msg_queue->HasNext())
@@ -313,7 +326,7 @@ void Server::NotifyGameState()
     IdGenerator id_generator;
     while(this->game->IsRunning())
     {
-//        this->CheckDisconnections();
+        this->CheckDisconnections();
         Logger::getInstance()->debug("(Server:NotifyGameState) Enviando game state a todos los clientes.");
         string state_id = id_generator.GetNext();
         Message* game_state_msg = new Message(this->game->GetGameState()->GetMatch()->Serialize() + "|" + state_id);
@@ -357,9 +370,11 @@ void Server::CheckDisconnections()
         if (elapsed_millis > 5000) {
 //            Logger::getInstance()->debug("(Server::CheckDisconnections) Desconectando cliente...");
             if (this->clients.find(it->first) != this->clients.end()) {
+                Logger::getInstance()->debug("(Server::CheckDisconnections) Desconectando client " + to_string((int)it->first));
                 this->DisconnectClient(this->clients[it->first]);
-                Logger::getInstance()->debug("(Server::CheckDisconnections) Cliente desconectado");
+                Logger::getInstance()->debug("(Server::CheckDisconnections) Cliente " + to_string((int)it->first) + " desconectado");
             }
         }
+        it++;
     }
 }
