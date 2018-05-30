@@ -30,19 +30,27 @@ User* SessionManager::Authenticate(ClientSocket* client, LoginRequest* login_req
 
     if(IsValidUser(login_request->GetUsername(), login_request->GetPassword()))
     {
-        Logger::getInstance()->info("(SessionManager:Authenticate) Usuario válido. Se conectó: " + login_request->GetUsername());
+        if(!IsAuthenticated(login_request))
+        {
+            Logger::getInstance()->info("(SessionManager:Authenticate) Usuario válido. Se conectó: " + login_request->GetUsername());
 
-        USER_COLOR color = this->GetColorToAssign();
+            USER_COLOR color = this->GetColorToAssign();
 
-        User* user = new User(login_request->GetUsername(), login_request->GetPassword(), this->ParseSelectedTeam(login_request->GetTeam()), color);
+            User* user = new User(login_request->GetUsername(), login_request->GetPassword(), this->ParseSelectedTeam(login_request->GetTeam()), color);
 
-        this->authenticated_users[user->GetUsername()] = user;
-        this->clientsocket_user_association[client->socket_id] = user;
+            this->authenticated_users[user->GetUsername()] = user;
+            this->clientsocket_user_association[client->socket_id] = user;
 
-        string created_user = "Usuario creado: " + user->GetUsername() + " color: "+ to_string((int) user->GetUserColor());
-        Logger::getInstance()->info(created_user);
+            string created_user = "Usuario creado: " + user->GetUsername() + " color: "+ to_string((int) user->GetUserColor());
+            Logger::getInstance()->info(created_user);
 
-        return user;
+            return user;
+        }
+        else
+        {
+            Logger::getInstance()->debug("(SessionManager:Authenticate) No se pudo autenticar usuario. El usuario ya se encuentra autenticado.");
+            throw AuthenticationException("Invalid user.");
+        }
     }
     else
     {
