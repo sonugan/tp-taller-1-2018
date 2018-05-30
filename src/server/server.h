@@ -68,7 +68,7 @@ private:
     void DisconnectClient(ClientSocket* client);
     void CheckDisconnections();
     void RestartTimers();
-    u_int SEND_GAME_STATE_EVERY_MILLISECONDS = 40;
+    u_int SEND_GAME_STATE_EVERY_MILLISECONDS = 200;
 };
 
 #endif // SERVER_H

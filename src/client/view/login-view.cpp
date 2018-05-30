@@ -119,26 +119,27 @@ void LoginView::Open(Configuration* game_configuration)
                         cout << login_request->ToString() << "\n";
                         if (!inputText.empty())
                         {
-                            this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_ENTER_SERVER_IP, textColor, false );
-                            renderText = true;
-                        }
-                        inputText = "";
-                    }
-                    else if (this->login_request->GetServerIp().empty())
-                    {
-                        cout << "setting server_ip: " << inputText << "\n";
-                        login_request->SetServerIp(inputText);
-                        cout << login_request->ToString() << "\n";
-                        if (!inputText.empty())
-                        {
                             this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_ENTER_TEAM, textColor, false );
                             renderText = true;
                         }
                         inputText = "";
                     }
+//                    else if (this->login_request->GetServerIp().empty())
+//                    {
+//                        cout << "setting server_ip: " << inputText << "\n";
+//                        login_request->SetServerIp(inputText);
+//                        cout << login_request->ToString() << "\n";
+//                        if (!inputText.empty())
+//                        {
+//                            this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_ENTER_TEAM, textColor, false );
+//                            renderText = true;
+//                        }
+//                        inputText = "";
+//                    }
                     else if (this->login_request->GetTeam().empty())
                     {
                         cout << "setting team: " << inputText << "\n";
+                        login_request->SetServerIp(game_configuration->GetServerHostname());
                         login_request->SetTeam(inputText);
                         cout << login_request->ToString() << "\n";
                         if (!inputText.empty())
