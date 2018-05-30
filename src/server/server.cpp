@@ -7,6 +7,7 @@
 #include "session/invalid-team-exception.h"
 #include "../shared/network/messages/quit-request.h"
 #include "../shared/network/messages/pass-ball-request.h"
+#include "session/non-existen-user-exception.h"
 
 Server::Server(Configuration* config)
 {
@@ -221,6 +222,12 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
     {
         Message* login_response = new Message("invalid-team");
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta InvalidTeam.");
+        this->outgoing_msg_queues[client->socket_id]->Append(login_response);
+    }
+    catch (NonExistentUserException e)
+    {
+        Message* login_response = new Message("non-existent-user");
+        Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta el usuario no esta en la partida.");
         this->outgoing_msg_queues[client->socket_id]->Append(login_response);
     }
 }

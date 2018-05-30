@@ -5,6 +5,7 @@
 #define MSG_INVALID_PASSWORD    "Error de autenticacion. Presione ESC para salir o ENTER para volver al menu principal"
 #define MSG_TOO_MANY_USERS      "Lo siento, no es posible conectarse en este momento! Cantidad maxima de usuarios alcanzada. Presione ESC para salir o ENTER para volver al menu principal"
 #define MSG_INVALID_TEAM        "Error: ha elegido un equipo invalido. Presione ESC para salir o ENTER para volver al menu principal"
+#define MSG_NON_EXISTENT_USER   "Error: el usuario no existe en la partida"
 #define MSG_WAITING             "Esperando que se conecten todos los jugadores..."
 
 
@@ -218,6 +219,11 @@ void LoginView::OpenErrorPage(Configuration* game_configuration, const std::stri
     {
         error_message = MSG_INVALID_TEAM;
         Logger::getInstance()->error("(LoginView:OpenErrorPage) No se puede conectar. El equipo elegido es invalido.");
+    }
+    else if(login_response == "non-existent-user")
+    {
+        error_message = MSG_NON_EXISTENT_USER;
+        Logger::getInstance()->error("(LoginView:OpenErrorPage) El usaurio no existe en la partida");
     }
 
 
