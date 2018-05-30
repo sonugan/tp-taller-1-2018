@@ -373,7 +373,7 @@ void Server::CheckDisconnections()
     {
         unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>
                              (now - it->second).count();
-        if (elapsed_millis > 5000) {
+        if (elapsed_millis > CONNECTION_TIMEOUT) {
 //            Logger::getInstance()->debug("(Server::CheckDisconnections) Desconectando cliente...");
             if (this->clients.find(it->first) != this->clients.end()) {
                 Logger::getInstance()->debug("(Server::CheckDisconnections) Desconectando client " + to_string((int)it->first));
