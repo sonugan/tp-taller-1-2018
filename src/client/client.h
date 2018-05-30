@@ -17,6 +17,7 @@
 
 #include <string>
 #include <thread>
+#include <chrono>
 
 class Client
 {
@@ -53,6 +54,7 @@ class Client
         thread* receive_messages_thread;
         void ReceiveMessages();
         void SendHealthCheck();
+        std::chrono::time_point<std::chrono::system_clock> health_checked;
 
 };
 

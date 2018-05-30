@@ -13,6 +13,7 @@ Client::Client(Configuration* config)
     this->config = config;
     clientSocket = new ClientSocket();
     this->message_queue = new SafeQueue<Message>();
+    this->health_checked = std::chrono::system_clock::now();
 }
 
 Client::~Client() {
@@ -172,8 +173,18 @@ string Client::GetGameState()
             }
         }
         current_match_state = new_id;
-
+        this->health_checked = std::chrono::system_clock::now();
         return data;
+    }
+    else
+    {
+        unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>
+                             (std::chrono::system_clock::now() - this->health_checked).count();
+        if(elapsed_millis > 5000)
+        {
+            is_connected = false;
+        }
+
     }
     return "";
 }
