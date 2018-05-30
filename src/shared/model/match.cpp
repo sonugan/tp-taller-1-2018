@@ -138,7 +138,6 @@ void Match::DeserializeAndUpdate(string serialized) {
     //  TEAM A
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
 
-        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Team A - Player: " + to_string(i));
 
         int base_index = 3 + (i*6);
         Player* player = GetTeamA()->GetPlayers()[i];
@@ -162,7 +161,6 @@ void Match::DeserializeAndUpdate(string serialized) {
     //  TEAM B
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
 
-        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Team B - Player: " + to_string(i));
         int base_index = 3 + 42 + (i*6);
         Player* player = GetTeamB()->GetPlayers()[i];
 
