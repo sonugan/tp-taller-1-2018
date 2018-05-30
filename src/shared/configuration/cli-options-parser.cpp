@@ -51,3 +51,13 @@ string CLIOptionsParser::GetMode(int argc, char* args[])
 {
     return parse_option(MODE_OPTION_PATTERN, argc, args);
 }
+
+string CLIOptionsParser::GetIp(int argc, char* args[])
+{
+    return parse_option(IP_OPTION_PATTERN, argc, args);
+}
+
+string CLIOptionsParser::GetPort(int argc, char* args[])
+{
+    return parse_option(PORT_OPTION_PATTERN, argc, args);
+}

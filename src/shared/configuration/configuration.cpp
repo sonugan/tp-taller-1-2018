@@ -101,7 +101,7 @@ void Configuration::SetSpritesPath(string sprites_path)
     Logger::getInstance()->debug("(Configuracion) SPRITES PATH: " + this->sprites_path);
 }
 
-void Configuration::Load(Configuration* config, string config_path, string log_level, string mode)
+void Configuration::Load(Configuration* config, string config_path, string log_level, string mode, string server_hostname, string port)
 {
     ConfigurationParser* parser = new ConfigurationParser();
     parser->ReadFile(config, config_path);
@@ -111,6 +111,12 @@ void Configuration::Load(Configuration* config, string config_path, string log_l
     }
     if(mode != "") {
        config->SetInitMode(mode);
+    }
+    if (server_hostname != "") {
+        config->SetServerHostname(server_hostname);
+    }
+    if (port != "") {
+        config->SetPort(stoi(port));
     }
     delete parser;
 }

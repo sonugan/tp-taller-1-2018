@@ -22,7 +22,7 @@ Client::~Client() {
 
 void Client::Init(string server_ip)
 {
-    SocketAddress address(this->config->GetPort(), server_ip);
+    SocketAddress address(this->config->GetPort(), this->config->GetServerHostname());
     clientSocket->Connect(address);
 
 }

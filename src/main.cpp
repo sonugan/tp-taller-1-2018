@@ -16,8 +16,10 @@ void load_configuration(int argc, char* args[], Configuration* config)
     string config_path = parser->GetConfigPath(argc, args);
     string log_level = parser->GetLogLevel(argc, args);
     string mode = parser->GetMode(argc, args);
-    CLIOptions* cli_options = new CLIOptions(config_path, log_level, mode);
-    Configuration::Load(config, cli_options->GetConfigPath(), cli_options->GetLogLevel(), cli_options->GetMode());
+    string ip = parser->GetIp(argc, args);
+    string port = parser->GetPort(argc, args);
+    CLIOptions* cli_options = new CLIOptions(config_path, log_level, ip, port, mode);
+    Configuration::Load(config, cli_options->GetConfigPath(), cli_options->GetLogLevel(), cli_options->GetMode(), ip, port);
     delete parser;
     delete cli_options;
 }
