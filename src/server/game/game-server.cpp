@@ -1,7 +1,7 @@
 #include "game-server.h"
 
 #include "../../shared/logger.h"
-
+#include "non-existen-user-exception.h"
 
 GameServer::GameServer(Configuration* initial_configuration)
 {
@@ -42,6 +42,10 @@ void GameServer::DoLogin(ClientSocket* client, LoginRequest* login_request)
 {
     User* authenticated_user = this->session_manager->Authenticate(client, login_request);
 
+    bool was_not_connected = !this->game_state->WasConnected(authenticated_user);
+    if (this->is_running && was_not_connected) {
+    	throw NonExistentUserException("Error. El usuario no puede ser reconectado a la partida.");
+    }
     // SETEO EL JUGADOR ACTIVO
 
     Team* selected_team = this->game_state->GetMatch()->GetTeamB();
@@ -60,7 +64,6 @@ void GameServer::DoLogin(ClientSocket* client, LoginRequest* login_request)
 
 void GameServer::DoQuit(ClientSocket* client)
 {
-//    this->session_manager->CloseSession(client);
     this->DisconnectClient(client);
 }
 
@@ -176,6 +179,16 @@ Message* GameServer::StartGame()
 {
     Logger::getInstance()->info("(GameServer:StartGame) Comenzando el juego.");
     this->is_running = true;
+    /*
+     * Agrego registro de usuarios logueados al gamestate para casos de reconexión
+     * */
+    auto it = this->session_manager->GetAuthenticatedUsers().begin();
+    while(it != this->session_manager->GetAuthenticatedUsers().end())
+    {
+    	this->game_state->AddUser(it->second->GetUsername(), it->second->GetPassword());
+    	it++;
+    }
+
     return new Message(this->game_state->GetMatch()->Serialize());
 }
 

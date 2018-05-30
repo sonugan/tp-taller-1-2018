@@ -147,6 +147,11 @@ void SessionManager::CloseSession(ClientSocket* client)
 
 }
 
+map<string, User*> SessionManager::GetAuthenticatedUsers()
+{
+	return this->authenticated_users;
+}
+
 /* Private Methods */
 
 bool SessionManager::IsValidUser(string username, string password)

@@ -39,7 +39,7 @@ public:
 protected:
 
 private:
-    static const int CATCH_DISTANCE = 30;
+	static const int CATCH_DISTANCE = 30;
     /* Attributes */
     GameState* game_state;
     bool is_running = false;

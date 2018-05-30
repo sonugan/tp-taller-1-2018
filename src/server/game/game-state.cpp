@@ -22,6 +22,11 @@ Match* GameState::GetMatch()
     return this->match;
 }
 
+void GameState::AddUser(string username, string password)
+{
+	this->users[username] = password;
+}
+
 /* Private methods */
 void GameState::CreateModel(Configuration* initial_configuration)
 {
@@ -46,4 +51,13 @@ void GameState::CreateModel(Configuration* initial_configuration)
 
     this->match = new Match(pitch, team_a, team_b, ball);
 }
+
+bool GameState::WasConnected(User* user) {
+	auto it = this->users.find(user->GetUsername());
+	if(it != this->users.end()) {
+		return it->second == user->GetPassword();
+	}
+	return false;
+}
+
 

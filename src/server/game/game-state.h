@@ -17,12 +17,15 @@ class GameState
         virtual ~GameState();
 
         Match* GetMatch();
+        void AddUser(string username, string password);
+        bool WasConnected(User* user);
 
         protected:
 
     private:
         /* Attributes */
         Match* match;
+        map<string, string> users = {};
 
         /* Methods */
         void CreateModel(Configuration* initial_configuration);

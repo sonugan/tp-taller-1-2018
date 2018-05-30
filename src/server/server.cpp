@@ -7,7 +7,7 @@
 #include "session/invalid-team-exception.h"
 #include "../shared/network/messages/quit-request.h"
 #include "../shared/network/messages/pass-ball-request.h"
-#include "session/non-existen-user-exception.h"
+#include "game/non-existen-user-exception.h"
 
 Server::Server(Configuration* config)
 {
@@ -160,12 +160,11 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
         this->HandleHealthCheck(client, message);
         break;
     default:
-        Logger::getInstance()->debug("(Server::ProcessMessage) No hay handler para este tipo de mensaje.");
+        Logger::getInstance()->error("(Server::ProcessMessage) No hay handler para este tipo de mensaje.");
     }
 }
 
 void Server::RestartTimers() {
-    std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
 
     auto it = this->timers.begin();
     while(it != this->timers.end())
@@ -188,7 +187,6 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta login-ok.");
 
         this->socket->Send(client, login_response);
-//        this->outgoing_msg_queues[client->socket_id]->Append(login_response);
 
         // Si ya se loguearon todos, se notifica a todos los usuarios para empezar a jugar.
         if (!this->game->IsRunning())
