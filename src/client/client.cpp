@@ -180,7 +180,7 @@ string Client::GetGameState()
     {
         unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>
                              (std::chrono::system_clock::now() - this->health_checked).count();
-        if(elapsed_millis > 15000)
+        if(elapsed_millis > 3000)
         {
             is_connected = false;
         }

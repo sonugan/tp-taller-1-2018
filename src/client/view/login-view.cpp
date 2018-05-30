@@ -3,7 +3,7 @@
 #define MSG_ENTER_TEAM          "Ingrese equipo (A o B) y presione enter:"
 #define MSG_ENTER_SERVER_IP     "Ingrese la direccion IP del server:"
 #define MSG_INVALID_PASSWORD    "Error de autenticacion. Presione ESC para salir o ENTER para volver al menu principal"
-#define MSG_TOO_MANY_USERS      "Lo siento, no es posible conectarse en este momento! Cantidad maxima de usuarios alcanzada. Presione ESC para salir o ENTER para volver al menu principal"
+#define MSG_TOO_MANY_USERS      "Lo siento, no es posible conectarse en este momento! Cantidad maxima de usuarios alcanzada. Presione ESC para salir."
 #define MSG_INVALID_TEAM        "Error: ha elegido un equipo invalido. Presione ESC para salir o ENTER para volver al menu principal"
 #define MSG_NON_EXISTENT_USER   "Error: el usuario no existe en la partida"
 #define MSG_WAITING             "Esperando que se conecten todos los jugadores..."
