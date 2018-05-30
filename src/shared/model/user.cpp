@@ -6,6 +6,7 @@ User::User(string username, string password, TEAM_NUMBER selected_team, USER_COL
     this->password = password;
     this->selected_team= selected_team;
     this->user_color = color;
+    this->selected_player = NULL;
 }
 
 User::~User()

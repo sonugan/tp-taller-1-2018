@@ -145,11 +145,6 @@ void LoginView::Open(Configuration* game_configuration)
                         cout << login_request->ToString() << "\n";
                         if (!inputText.empty())
                         {
-//                            if (game_configuration->IsValidCredential(login->GetUsername(), login->GetPassword() )) {
-//                                this->userAuthenticated = true;
-//                            } else {
-//                                this->userAuthenticated = false;
-//                            }
                             quit = true;
                         }
                         inputText = "";
@@ -284,12 +279,6 @@ void LoginView::OpenErrorPage(Configuration* game_configuration, const std::stri
 void LoginView::OpenWaitingPage()
 {
     Logger::getInstance()->debug("(LoginView:OpenWaitingPage) Abriendo pantalla de espera.");
-
-    bool quit = false;
-
-    bool backHome = false;
-
-    SDL_Event e;
 
     SDL_Color textColor = { 255, 255, 255, 0xFF };
 

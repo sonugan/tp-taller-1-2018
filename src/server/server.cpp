@@ -232,14 +232,15 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
 
 void Server::HandleQuitRequest(ClientSocket* client, Message* message)
 {
-    Logger::getInstance()->debug("(Server:HandleQuitRequest) Procesando quit request.");
+	string client_id = to_string(client->socket_id);
+    Logger::getInstance()->debug("(Server:HandleQuitRequest) Procesando quit request. Client: " + client_id);
     QuitRequest* quit_request = new QuitRequest();
     message->GetDeserializedData(quit_request);
     this->game->DoQuit(client);
 
     // NO se manda mensaje de logout para evitar problemas.
 
-    Logger::getInstance()->debug("(Server:HandleQuitRequest) Cerrando clientsocket.");
+    Logger::getInstance()->debug("(Server:HandleQuitRequest) Cerrando clientsocket: " + client_id);
     this->clients.erase(client->socket_id);
     client->ShutDown();
     client->Close();

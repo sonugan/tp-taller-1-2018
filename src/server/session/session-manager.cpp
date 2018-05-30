@@ -134,7 +134,10 @@ void SessionManager::CloseSession(ClientSocket* client)
 
         // Remuevo seleccion del player.
         Logger::getInstance()->debug("(SessionManager:CloseSession) Quitando selección al player");
-        user->GetSelectedPlayer()->SetPlayerColor(USER_COLOR::NO_COLOR);
+		if (user->GetSelectedPlayer() != NULL)
+		{
+			user->GetSelectedPlayer()->SetPlayerColor(USER_COLOR::NO_COLOR);
+		}
 
         Logger::getInstance()->debug("(SessionManager:CloseSession) Borrando user de colección de autenticados.");
         // Lo elimino de la colección de usuarios autenticados.
