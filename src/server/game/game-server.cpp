@@ -175,6 +175,7 @@ bool GameServer::IsReadyToStart()
     return this->session_manager->IsReadyToStart();
 }
 
+//TODO: Para a void porque no se usa el msj retornado y genera perdida de memoria.
 Message* GameServer::StartGame()
 {
     Logger::getInstance()->info("(GameServer:StartGame) Comenzando el juego.");
