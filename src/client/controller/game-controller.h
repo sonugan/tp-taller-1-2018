@@ -8,7 +8,7 @@ class Game; // forward declaration
 class GameController : public AbstractController
 {
     public:
-        GameController(Game* game);
+        GameController(Game* game, Client* client);
         virtual ~GameController();
         void Handle(const Uint8* keyboard_state_array);
 

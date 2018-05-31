@@ -2,40 +2,49 @@
 
 #include "message.h"
 
-Message::Message(char* data, int size)
+
+/* Este constructor lo usamos en el receive del server o client */
+Message::Message(const string& data)
 {
     this->data = data;
-    this->size = size;
+    this->type = ResolveType(data);
 }
 
-Message::Message(string data)
-{
-    this->data = (char*)data.c_str();
-    this->size = strlen(this->data);
-}
-
+/* Este constructor se usa para enviar datos */
 Message::Message(ISerializable* serializable)
 {
-    string serialized = serializable->Serialize();
-    this->data = (char*)serialized.c_str();
-    this->size = strlen(this->data);
+    this->data = serializable->Serialize();
+    this->type = serializable->GetMessageType();
 }
 
-char* Message::GetData()
+const char* Message::GetData()
 {
-    return this->data;
+    return data.c_str();
 }
 
 ISerializable* Message::GetDeserializedData(ISerializable* serializable)
 {
+    serializable->Deserialize(this->data);
     return serializable;
 }
 
 int Message::GetDataSize()
 {
-    return this->size;
+    return this->data.length();
+}
+
+MESSAGE_TYPE Message::GetType()
+{
+    return this->type;
 }
 
 Message::~Message()
 {
+}
+
+MESSAGE_TYPE Message::ResolveType(string serialized_data)
+{
+    /* Magia oscura para convertir el char a un message_type */
+    int type = (int) serialized_data.at(0) - 48;
+    return static_cast<MESSAGE_TYPE>(type);
 }

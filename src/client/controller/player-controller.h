@@ -13,7 +13,7 @@
 class PlayerController : public AbstractController
 {
     public:
-        PlayerController(Team* team);
+        PlayerController(Team* team, Client* client);
         virtual ~PlayerController();
         void Handle(const Uint8* keyboard_state_array);
 
@@ -21,11 +21,11 @@ class PlayerController : public AbstractController
 
     private:
         Team* team;
-        int current_action_timming;
-        PLAYER_ACTION current_action;
+        //int current_action_timming;
+        //PLAYER_ACTION current_action;
         Player* selected_player;
         std::chrono::time_point<std::chrono::system_clock> last_pass;
-        static const unsigned int PASS_DELAY_MILLIS = 150;
+        static const unsigned int PASS_DELAY_MILLIS = 200;
 
         void PlayerPlay(const Uint8 *keyboard_state_array);
         void MovePlayer(const Uint8 *keyboard_state_array);
@@ -40,6 +40,7 @@ class PlayerController : public AbstractController
         bool SKeySelected(const Uint8 *keyboard_state_array);
         bool DKeySelected(const Uint8 *keyboard_state_array);
         bool ShiftKeySelected(const Uint8 *keyboard_state_array);
+        bool ShouldRequestPass(const Uint8 *keyboard_state_array);
         bool SelectedPlayerHasChange();
         bool ContinueCurrentAction();
 };

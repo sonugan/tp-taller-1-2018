@@ -1,28 +1,33 @@
 #define MSG_ENTER_USERNAME      "Ingrese usuario y presione enter:"
 #define MSG_ENTER_PASSWORD      "Ingrese clave y presione enter:"
+#define MSG_ENTER_TEAM          "Ingrese equipo (A o B) y presione enter:"
+#define MSG_ENTER_SERVER_IP     "Ingrese la direccion IP del server:"
 #define MSG_INVALID_PASSWORD    "Error de autenticacion. Presione ESC para salir o ENTER para volver al menu principal"
+#define MSG_TOO_MANY_USERS      "Lo siento, no es posible conectarse en este momento! Cantidad maxima de usuarios alcanzada. Presione ESC para salir."
+#define MSG_INVALID_TEAM        "Error: ha elegido un equipo invalido. Presione ESC para salir o ENTER para volver al menu principal"
+#define MSG_NON_EXISTENT_USER   "Error: el usuario no existe en la partida"
+#define MSG_WAITING             "Esperando que se conecten todos los jugadores..."
+
 
 #include "login-view.h"
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include "../../shared/logger.h"
 
-LoginView::LoginView(SDL_Renderer* renderer, int height, int width)
+LoginView::LoginView(SDL_Renderer* renderer, int height, int width, LoginRequest* login_request)
 {
     this->screenHeight = height;
     this->screenWidth = width;
-
-    this->userName = "";
-    this->userPassword = "";
 
     this->userAuthenticated = false;
     this->userQuit = false;
 
     this->renderer = renderer;
+    this->login_request = login_request;
 
     //Cargando el .ttf
     this->fontStyle = TTF_OpenFont( this->DISPLAY_FONT.c_str(), 18 );
-    if( this->fontStyle == NULL )
+    if ( this->fontStyle == NULL )
     {
         Logger::getInstance()->error(string("No se pudo cargar la fuente. SDL_TTF Error: ") + TTF_GetError());
     }
@@ -33,6 +38,11 @@ LoginView::LoginView(SDL_Renderer* renderer, int height, int width)
     }
 
     this->backgroundSprite = new SpriteSheet(this->renderer, this->BACKGROUND_IMAGE);
+}
+
+LoginView::~LoginView()
+{
+    Logger::getInstance()->debug("DESTRUYENDO LOGINVIEW");
 }
 
 void LoginView::Free()
@@ -60,8 +70,6 @@ void LoginView::Open(Configuration* game_configuration)
 {
     bool quit = false;
 
-    bool writingUserName = true;
-
     SDL_Event e;
 
     SDL_Color textColor = { 255, 255, 255, 0xFF };
@@ -73,7 +81,7 @@ void LoginView::Open(Configuration* game_configuration)
 
     SDL_StartTextInput();
 
-    //Loop de login-view
+
     while( !quit )
     {
         bool renderText = false;
@@ -86,66 +94,61 @@ void LoginView::Open(Configuration* game_configuration)
             }
             else if( e.type == SDL_KEYDOWN )
             {
-                //Borra caracter
                 if( e.key.keysym.sym == SDLK_BACKSPACE && inputText.length() > 0 )
                 {
                     inputText.pop_back();
                     renderText = true;
                 }
-                //CTRL + C
-                else if( e.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL )
-                {
-                    SDL_SetClipboardText( inputText.c_str() );
-                }
-                //CTRL + V
-                else if( e.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL )
-                {
-                    inputText = SDL_GetClipboardText();
-                    renderText = true;
-                }
-                //ENTER
                 else if ( e.key.keysym.scancode == SDL_SCANCODE_KP_ENTER || e.key.keysym.scancode == SDL_SCANCODE_RETURN)
                 {
-                    if ( writingUserName )
+                    if ( this->login_request->GetUsername().empty() )
                     {
-                        writingUserName = false;
-                        this->userName = inputText;
-                        inputText = "";
-                        //Cambio el texto
-                        this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_ENTER_PASSWORD, textColor, false );
-                        renderText = true;
-                    }
-                    else
-                    {
-                        this->userPassword = inputText;
-                        //Aca enviar mensaje socket pidiendo conexion con user y password y, en base a eso, hacer quit o no
-                        if (game_configuration->IsValidCredential(this->userName, this->userPassword ))
+                        cout << "setting username: " << inputText << "\n";
+                        login_request->SetUsername(inputText);
+                        cout << login_request->ToString() << "\n";
+                        if (!inputText.empty())
                         {
-                            this->userAuthenticated = true;
-                        }
-                        else
-                        {
-                            this->userAuthenticated = false;
-                        }
-
-                        /**
-                        if (!this->logUser(userName, userPassword))
-                        {
-                            //Reinicio el formulario de login
-                            this->inputText = "";
-                            this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_ENTER_USERNAME, textColor )
-
-                            this->userName = "";
-                            this->userPassword = "":
-                            writingUserName = true;
+                            this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_ENTER_PASSWORD, textColor, false );
                             renderText = true;
                         }
-                        else
+                        inputText = "";
+                    }
+                    else if (this->login_request->GetPassword().empty())
+                    {
+                        cout << "setting password: " << inputText << "\n";
+                        login_request->SetPassword(inputText);
+                        cout << login_request->ToString() << "\n";
+                        if (!inputText.empty())
+                        {
+                            this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_ENTER_TEAM, textColor, false );
+                            renderText = true;
+                        }
+                        inputText = "";
+                    }
+//                    else if (this->login_request->GetServerIp().empty())
+//                    {
+//                        cout << "setting server_ip: " << inputText << "\n";
+//                        login_request->SetServerIp(inputText);
+//                        cout << login_request->ToString() << "\n";
+//                        if (!inputText.empty())
+//                        {
+//                            this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_ENTER_TEAM, textColor, false );
+//                            renderText = true;
+//                        }
+//                        inputText = "";
+//                    }
+                    else if (this->login_request->GetTeam().empty())
+                    {
+                        cout << "setting team: " << inputText << "\n";
+                        login_request->SetServerIp(game_configuration->GetServerHostname());
+                        login_request->SetTeam(inputText);
+                        cout << login_request->ToString() << "\n";
+                        if (!inputText.empty())
                         {
                             quit = true;
                         }
-                        */
-                        quit = true;
+                        inputText = "";
+
                     }
                 }
             }
@@ -185,17 +188,7 @@ void LoginView::Open(Configuration* game_configuration)
     SDL_StopTextInput();
 }
 
-string LoginView::GetUserName()
-{
-    return this->userName;
-}
-
-string LoginView::GetUserPassword()
-{
-    return this->userPassword;
-}
-
-void LoginView::OpenErrorPage(Configuration* game_configuration)
+void LoginView::OpenErrorPage(Configuration* game_configuration, const std::string& login_response)
 {
     bool quit = false;
 
@@ -205,15 +198,35 @@ void LoginView::OpenErrorPage(Configuration* game_configuration)
 
     SDL_Color textColor = { 255, 255, 255, 0xFF };
 
-    // Loggeo que el usuario o pass eran erroneos
-    Logger::getInstance()->error("El usuario " + this->GetUserName() + " o la password " + this->GetUserPassword() + " son incorrectos.");
+    string error_message = MSG_INVALID_PASSWORD;
+
+    if ("login-fail" == login_response)
+    {
+        // Loggeo que el usuario o pass eran erroneos
+        Logger::getInstance()->error("El usuario " + login_request->GetUsername() + " o la password " + login_request->GetPassword() + " son incorrectos.");
+    }
+    else if ("too-many-users" == login_response)
+    {
+        error_message = MSG_TOO_MANY_USERS;
+        Logger::getInstance()->error("(LoginView:OpenErrorPage) No se puede conectar. Cantidad maxima de usuarios alcanza.");
+    }
+    else if ("invalid-team" == login_response)
+    {
+        error_message = MSG_INVALID_TEAM;
+        Logger::getInstance()->error("(LoginView:OpenErrorPage) No se puede conectar. El equipo elegido es invalido.");
+    }
+    else if(login_response == "non-existent-user")
+    {
+        error_message = MSG_NON_EXISTENT_USER;
+        Logger::getInstance()->error("(LoginView:OpenErrorPage) El usaurio no existe en la partida");
+    }
 
 
     // Limpio el texto que quedo del usuario
     this->inputTextSprite->LoadFromRenderedText( this->fontStyle, " ", textColor, false );
 
-    // Cargo mensaje de autenticacion erronea
-    this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_INVALID_PASSWORD, textColor, true );
+    // Cargo mensaje de error
+    this->textSprite->LoadFromRenderedText( this->fontStyle, error_message, textColor, true );
 
     SDL_StartTextInput();
 
@@ -238,6 +251,11 @@ void LoginView::OpenErrorPage(Configuration* game_configuration)
             }
         }
 
+        this->login_request->SetUsername("");
+        this->login_request->SetPassword("");
+        this->login_request->SetTeam("");
+        this->login_request->SetServerIp("");
+
 
         SDL_SetRenderDrawColor( this->renderer, 0x00, 0x00, 0x00, 0xFF );
         SDL_RenderClear( this->renderer );
@@ -256,4 +274,42 @@ void LoginView::OpenErrorPage(Configuration* game_configuration)
     {
         this->Open(game_configuration);
     }
+}
+
+void LoginView::OpenWaitingPage()
+{
+    Logger::getInstance()->debug("(LoginView:OpenWaitingPage) Abriendo pantalla de espera.");
+
+    SDL_Color textColor = { 255, 255, 255, 0xFF };
+
+    // Limpio el texto que quedo del usuario
+    this->inputTextSprite->LoadFromRenderedText( this->fontStyle, " ", textColor, false );
+
+    // Cargo mensaje de autenticacion erronea
+    this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_WAITING, textColor, true );
+
+    SDL_StartTextInput();
+
+    SDL_SetRenderDrawColor( this->renderer, 0x00, 0x00, 0x00, 0xFF );
+    SDL_RenderClear( this->renderer );
+
+    this->backgroundSprite->Render( ( this->screenWidth - this->backgroundSprite->GetWidth() ) / 2, 0 );
+    this->textSprite->Render( ( this->screenWidth - this->textSprite->GetWidth() ) / 2, 350 );
+    this->inputTextSprite->Render( ( this->screenWidth - this->inputTextSprite->GetWidth() ) / 2, 350 + this->textSprite->GetHeight() );
+
+    SDL_RenderPresent( this->renderer );
+
+//    }
+
+    SDL_StopTextInput();
+
+//    if (backHome) {
+//        this->Open(game_configuration);
+//    }
+}
+
+TEAM_NUMBER LoginView::GetTeamNumber()
+{
+    this->team_number = TEAM_NUMBER::TEAM_B; // TODO ESTO LO TIENE QUE TRAER DE LA PANTALLA DE LOGIN
+    return this->team_number;
 }

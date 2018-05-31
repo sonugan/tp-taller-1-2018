@@ -1,9 +1,12 @@
 #include "player-controller.h"
 
-PlayerController::PlayerController(Team* team) {
+//Agregar los request que son los que se van a mandar al servidor.
+
+PlayerController::PlayerController(Team* team, Client* client) {
     this->team = team;
-    current_action_timming = 1;
-    current_action = PLAYER_IS_STILL;
+    this->client = client;
+    //current_action_timming = 1;
+    //current_action = PLAYER_IS_STILL;
     this->last_pass = std::chrono::system_clock::now();
 }
 
@@ -12,7 +15,8 @@ PlayerController::~PlayerController() {
 }
 
 void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
-    if(!ContinueCurrentAction())
+//    Logger::getInstance()->debug("(PlayerController::PlayerPlay)");
+    /*if(!ContinueCurrentAction())
     {
         selected_player = this->team->GetSelectedPlayer();
         bool playerKicked = this->KickPlayer(keyboard_state_array);
@@ -20,57 +24,79 @@ void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
         if (!playerKicked) {
             bool playerRecovered = this->PlayerRecoverBall(keyboard_state_array);
             if (!playerRecovered) {
-                this->MovePlayer(keyboard_state_array);
                 this->PassBall(keyboard_state_array);
+                this->MovePlayer(keyboard_state_array);
             }
         }
-    }
+    }*/
+    this->PassBall(keyboard_state_array);//TODO: Ver como implementar PassBall en el modelo
+    this->PlayerRecoverBall(keyboard_state_array);
+    this->KickPlayer(keyboard_state_array);
+    this->MovePlayer(keyboard_state_array);
 }
 
 void PlayerController::MovePlayer(const Uint8 *keyboard_state_array)
 {
+    Logger::getInstance()->debug("(PlayerController::MovePlayer)");
     bool run = ShiftKeySelected(keyboard_state_array);
+
     if (UpKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveUpToRight(run);
+        MoveRequest m(DIRECTION::NORTHEAST, run);
+        this->client->Move(&m);
     } else if (UpKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveUpToLeft(run);
+        MoveRequest m(DIRECTION::NORTHWEST, run);
+        this->client->Move(&m);
     } else if (DownKeySelected(keyboard_state_array) && RightKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveDownToRight(run);
+        MoveRequest m(DIRECTION::SOUTHEAST, run);
+        this->client->Move(&m);
     } else if (DownKeySelected(keyboard_state_array) && LeftKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveDownToLeft(run);
+        MoveRequest m(DIRECTION::SOUTHWEST, run);
+        this->client->Move(&m);
     } else if (UpKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveUp(run);
+        MoveRequest m(DIRECTION::NORTH, run);
+        this->client->Move(&m);
     } else if(RightKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveRight(run);
+        MoveRequest m(DIRECTION::EAST, run);
+        this->client->Move(&m);
     } else if(LeftKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveLeft(run);
+        MoveRequest m(DIRECTION::WEST, run);
+        this->client->Move(&m);
     } else if(DownKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->MoveDown(run);
+        MoveRequest m(DIRECTION::SOUTH, run);
+        this->client->Move(&m);
     }
-    current_action = PLAYER_IS_RUNNING;
+    //current_action = PLAYER_IS_RUNNING;
 }
 
 bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array) {
     if (DKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->Kick();
-        current_action = PLAYER_IS_KICKING;
+        KickBallRequest r;
+        this->client->KickBall(&r);
+        //current_action = PLAYER_IS_KICKING;
         return true;
     }
     return false;
 }
 
 void PlayerController::PassBall(const Uint8 *keyboard_state_array) {
-    unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_pass).count();
-    if (elapsed_millis > PASS_DELAY_MILLIS && SKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->PassBall();
+    if (ShouldRequestPass(keyboard_state_array)) {
+        PassBallRequest r;
+        this->client->PassBall(&r);
         last_pass = std::chrono::system_clock::now();
     }
 }
 
+bool PlayerController::ShouldRequestPass(const Uint8 *keyboard_state_array) {
+    unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_pass).count();
+    return (elapsed_millis > PASS_DELAY_MILLIS) && SKeySelected(keyboard_state_array) && SKeySelected(keyboard_state_array);
+}
+
 bool PlayerController::PlayerRecoverBall(const Uint8 *keyboard_state_array) {
+    Logger::getInstance()->debug("(PlayerController::PlayerRecoverBall)");
     if (AKeySelected(keyboard_state_array)) {
-        team->GetSelectedPlayer()->RecoverBall();
-        current_action = PLAYER_IS_RECOVERING;
+        RecoverBallRequest r;
+        this->client->RecoverBall(&r);
+        //current_action = PLAYER_IS_RECOVERING;
         return true;
     }
     return false;
@@ -114,24 +140,29 @@ void PlayerController::Handle(const Uint8* keyboard_state_array) {
 
 bool PlayerController::SelectedPlayerHasChange()
 {
+    Logger::getInstance()->debug("(PlayerController::SelectedPlayerHasChange)");
     return team->GetSelectedPlayer() != this->selected_player;
+
 }
 
 bool PlayerController::ContinueCurrentAction()
 {
+    /*Logger::getInstance()->debug("(PlayerController::ContinueCurrentAction)");
     if(!SelectedPlayerHasChange())
     {
         current_action_timming++;
         if(current_action == PLAYER_IS_KICKING &&
             (current_action_timming * PlayerView::FRAMES_PER_EVENT) < PlayerView::KICKING_FRAME_COUNT)
         {
-            this->team->GetSelectedPlayer()->Kick();
+            KickBallRequest r;
+            this->client->KickBall(&r);
             return true;
         }
         else if(current_action == PLAYER_IS_RECOVERING &&
             (current_action_timming * PlayerView::FRAMES_PER_EVENT) < PlayerView::RECOVERING_FRAME_COUNT)
         {
-            this->team->GetSelectedPlayer()->RecoverBall();
+            RecoverBallRequest r;
+            this->client->RecoverBall(&r);
             return true;
         }
         else
@@ -144,5 +175,5 @@ bool PlayerController::ContinueCurrentAction()
     {
         current_action_timming = 1; //Es la segunda vez por la que debo entrar acá
         return false;
-    }
+}*/
 }

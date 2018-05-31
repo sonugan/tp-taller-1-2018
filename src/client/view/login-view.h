@@ -5,8 +5,9 @@
 #include <SDL2/SDL_ttf.h>
 #include "sprite-sheet.h"
 #include "sprite-text.h"
-#include "../shared/logger.h"
-#include "../shared/configuration/configuration.h"
+#include "../../shared/logger.h"
+#include "../../shared/network/messages/login-request.h"
+#include "../../shared/configuration/configuration.h"
 #include <string>
 
 using namespace std;
@@ -14,20 +15,20 @@ using namespace std;
 class LoginView
 {
     public:
-        LoginView(SDL_Renderer* renderer, int height, int width);
+        LoginView(SDL_Renderer* renderer, int height, int width, LoginRequest* login_request);
         void Free();
         void Open(Configuration* game_configuration);
-        void OpenErrorPage(Configuration* game_configuration);
+        void OpenErrorPage(Configuration* game_configuration, const std::string& login_response);
+        void OpenWaitingPage();
         bool IsUserAuthenticated();
         bool IsUserQuit();
-        string GetUserName();
-        string GetUserPassword();
-    protected:
+        TEAM_NUMBER GetTeamNumber();
         ~LoginView();
+
+    protected:
         string BACKGROUND_IMAGE = "tehkan_world_cup_menu.jpg";
         string DISPLAY_FONT = "src/client/sprites/tehkan_world_cup.ttf";
-        string userName;
-        string userPassword;
+        TEAM_NUMBER team_number;
         bool userAuthenticated;
         bool userQuit;
         TTF_Font* fontStyle = NULL;
@@ -37,6 +38,8 @@ class LoginView
         SpriteSheet* backgroundSprite;
         int screenHeight;
         int screenWidth;
+    private:
+        LoginRequest* login_request;
 };
 
 #endif // LOGINVIEW_H

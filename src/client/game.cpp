@@ -1,39 +1,72 @@
 #include "game.h"
 #include <iostream>
+#include <thread>
+#include <chrono>
 #include "../shared/logger.h"
 #include "view/login-view.h"
+#include "view/disconect-view.h"
 
-Game::Game(Configuration* initial_configuration) {
+Game::Game(Configuration* initial_configuration)
+{
 
     this->initial_configuration = initial_configuration;
     this->correctly_initialized = false;
 
+}
+
+void Game::LogIn()
+{
     InitSDL();
 
-    LoginView* loginView = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH);
+
+    LoginRequest* login_request = new LoginRequest();
+    LoginView* login_view = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH, login_request);
 
     //Se abre la pantalla de login con su propio "game loop"
-    loginView->Open(initial_configuration);
+    login_view->Open(initial_configuration);
 
-    while(!loginView->IsUserAuthenticated() && !loginView->IsUserQuit())
-    {
-        // El usuario no esta autenticado
-        loginView->OpenErrorPage(initial_configuration);
-    }
+    this->client = new Client(initial_configuration);
 
-    if (loginView->IsUserAuthenticated() && !loginView->IsUserQuit())
+    bool is_logged = false;
+    std::string serialized_model;
+
+    while (!is_logged && !login_view->IsUserQuit())
     {
-        CreateModel();
-        CreateViews();
-        CreateControllers();
-        this->correctly_initialized = true;
+        client->Init(login_request->GetServerIp());
+        std::string login_response = client->LogIn(login_request);
+
+        if ("login-fail" == login_response || "too-many-users" == login_response || "invalid-team" == login_response || login_response == "non-existent-user")
+        {
+            login_view->OpenErrorPage(initial_configuration, login_response);
+        }
+        else if("login-ok" == login_response)
+        {
+            is_logged = true;
+            login_view->OpenWaitingPage();
+            while (serialized_model.empty())
+            {
+                serialized_model = client->WaitForGameStart();
+            }
+            //TODO sacar esto y ver que se rompe
+
+            this->user = new User(login_request->GetUsername(), login_request->GetPassword(), login_view->GetTeamNumber(), USER_COLOR::RED);
+
+            CreateModel(serialized_model);
+            CreateViews();
+            CreateControllers();
+            this->correctly_initialized = true;
+        }
     }
 
     //Libero recursos de la vista
-    loginView->Free();
+
+    login_view->Free();
+    delete login_view;
+    delete login_request;
 }
 
-Game::~Game() {
+Game::~Game()
+{
 
 }
 
@@ -42,7 +75,8 @@ bool Game::IsCorrectlyInitialized()
     return this->correctly_initialized;
 }
 
-void Game::RenderViews() {
+void Game::RenderViews()
+{
     SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
     SDL_RenderClear( renderer );
 
@@ -50,7 +84,8 @@ void Game::RenderViews() {
     SDL_RenderPresent( renderer );
 }
 
-void Game::Start() {
+void Game::Start()
+{
     Logger::getInstance()->info("==================COMIENZA EL JUEGO==================");
     this->quit = false;
 
@@ -62,19 +97,45 @@ void Game::Start() {
     const Uint8* keyboard_state_array = SDL_GetKeyboardState(NULL);
 
     // GAME LOOP
-    while( !quit ) {
+    while( !quit )
+    {
+        if (!this->client->IsConnected())
+        {
+            Logger::getInstance()->debug("(Game:Start) Desconectado.");
+            DisconetView* disconect_view = new DisconetView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH);
+            disconect_view->OpenConectionErrorPage();
+            if(disconect_view->ExitGame())
+            {
+                quit = true;
+            }
+            else if(disconect_view->Reconnect())
+            {
+                //TODO: reconexion
+                disconect_view->OpenConectingPage();
+            }
+            delete disconect_view;
+            continue;
+        }
+
         this->game_controller->Handle(keyboard_state_array);
         this->player_controller->Handle(keyboard_state_array);
         this->team_controller->Handle(keyboard_state_array);
-        match->GetBall()->Move();
+
+        string serialized_match = this->client->GetGameState();
+        if(serialized_match != "")
+        {
+            this->match->DeserializeAndUpdate(serialized_match);
+        }
 
         RenderViews();
 
         //Manejo de frames por segundo: http://lazyfoo.net/SDL_tutorials/lesson16/index.php
-        SDL_Delay( ( 1000 / FRAMES_PER_SECOND ));
+        //SDL_Delay( ( 100 / FRAMES_PER_SECOND ));//TODO: configurar iteracion
+        SDL_Delay(STOP_LOOP_MILLISECONDS);
 
         // Esto maneja el cierre del juego desde la cruz de la ventana
-        while( SDL_PollEvent( &e ) != 0 ) {
+        while( SDL_PollEvent( &e ) != 0 )
+        {
             //Apreta ESCAPE
             quit = ( e.type == SDL_QUIT );
         }
@@ -82,7 +143,8 @@ void Game::Start() {
 
 }
 
-void Game::End() {
+void Game::End()
+{
     Logger::getInstance()->info("==================JUEGO TERMINADO==================");
 
     DestroyModel();
@@ -93,26 +155,54 @@ void Game::End() {
     CloseSDL();
 }
 
-void Game::CreateModel() {
+void Game::CreateModel(std::string serialized_model)
+{
     Logger::getInstance()->debug("CREANDO EL MODELO");
+
+    /*
+    ACA ESTAMOS INSTANCIANDO EL MODELO COMO CUANDO NO HABÍA SERVER
+    Y LUEGO LO ACTUALIZAMOS CON LO QUE MANDA EL SERVER.
+    POR QUE? PORQUE NO QUEREMOS ROMPER COSAS QUE ANTES FUNCIONABAN.
+     */
     Pitch* pitch = new Pitch();
 
-    Formation* formation = new Formation(initial_configuration->GetFormation());
-    Team* team_a = new Team(formation, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt());
+    Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_A);
+    Team* team_a = new Team(formation_team_a, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
 
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
-        team_a->AddPlayer(new Player(i));
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    {
+        team_a->AddPlayer(new Player(i,TEAM_NUMBER::TEAM_A));
     }
 
-    //selecciono por default al arquero
-    team_a->GetPlayers()[0]->SetSelected(true);
+    Formation* formation_team_b = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_B);
+    Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_NUMBER::TEAM_B); // TODO: TRAER NOMBRE DEL TEAM B Y CAMISETA DE CONFIG
+
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    {
+        team_b->AddPlayer(new Player(i, TEAM_NUMBER::TEAM_B));
+    }
+
+    // DEFINIR COMO SE SELECCIONA EL JUGADOR
+    if (user->GetSelectedTeam() == TEAM_NUMBER::TEAM_A)
+    {
+        team_a->GetPlayers()[5]->SetPlayerColor(this->user->GetUserColor());
+    }
+    else
+    {
+        team_b->GetPlayers()[5]->SetPlayerColor(this->user->GetUserColor());
+    }
 
     Ball* ball = new Ball();
 
-    this->match = new Match(pitch, team_a, NULL, ball);
+    this->match = new Match(pitch, team_a, team_b, ball);
+
+    this->match->DeserializeAndUpdate(serialized_model);
+
+    this->client->SetMatch(this->match);
 }
 
-void Game::CreateViews() {
+void Game::CreateViews()
+{
 
     Logger::getInstance()->debug("CREANDO LAS VISTAS");
     Location center(PITCH_WIDTH/2 - SCREEN_WIDTH/2, PITCH_HEIGHT/2 - SCREEN_HEIGHT/2, 0);
@@ -121,8 +211,16 @@ void Game::CreateViews() {
     PitchView* pitch_view = new PitchView(this->match->GetPitch());
     this->camera->Add(pitch_view);
 
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    {
         Player* player = match->GetTeamA()->GetPlayers()[i];
+        PlayerView* player_view = new PlayerView(player);
+        this->camera->Add(player_view);
+    }
+
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    {
+        Player* player = match->GetTeamB()->GetPlayers()[i];
         PlayerView* player_view = new PlayerView(player);
         this->camera->Add(player_view);
     }
@@ -132,40 +230,58 @@ void Game::CreateViews() {
     this->camera->SetShowable(ball_view);
 }
 
-void Game::CreateControllers() {
+void Game::CreateControllers()
+{
     Logger::getInstance()->debug("CREANDO CONTROLLERS"); //  forward declaration
-    team_controller = new TeamController(match->GetTeamA(), camera);
-    player_controller = new PlayerController(match->GetTeamA());
-    game_controller = new GameController(this);
+
+    //OBTENER EL EQUIPO DEL USER PARA CREAR LOS CONTROLADORES
+
+    if (this->user->GetSelectedTeam() == TEAM_NUMBER::TEAM_A)
+    {
+        team_controller = new TeamController(match->GetTeamA(), this->client, camera);
+        player_controller = new PlayerController(match->GetTeamA(), this->client);
+    }
+    else
+    {
+        team_controller = new TeamController(match->GetTeamB(), this->client, camera);
+        player_controller = new PlayerController(match->GetTeamB(), this->client);
+    }
+
+    game_controller = new GameController(this, this->client);
 }
 
-void Game::DestroyModel() {
+void Game::DestroyModel()
+{
     Logger::getInstance()->debug("DESTRUYENDO EL MODELO");
     delete this->match;
 }
 
-void Game::DestroyViews() {
+void Game::DestroyViews()
+{
     Logger::getInstance()->debug("DESTRUYENDO LAS VISTAS");
     std::vector<AbstractView*> views = this->camera->GetViews();
-    for (unsigned int i = 0; i < views.size(); i++) {
+    for (unsigned int i = 0; i < views.size(); i++)
+    {
         delete (views[i]);
     }
     delete this->camera;
 }
 
-void Game::DestroyControllers() {
+void Game::DestroyControllers()
+{
     Logger::getInstance()->debug("DESTRUYENDO LOS CONTROLLERS");
     delete game_controller;
     delete player_controller;
     delete team_controller;
 }
 
-void Game::InitSDL() {
+void Game::InitSDL()
+{
     Logger::getInstance()->debug("INICIALIZANDO SDL");
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-	{
-	    throw std::runtime_error(SDL_GetError());
-	}
+    if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+    {
+        throw std::runtime_error(SDL_GetError());
+    }
 
     if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
     {
@@ -196,25 +312,32 @@ void Game::InitSDL() {
     SoundManager::LoadResources();
 
     if( TTF_Init() == -1 )
-	{
-	    throw std::runtime_error(TTF_GetError());
-	}
+    {
+        throw std::runtime_error(TTF_GetError());
+    }
 
 }
 
-void Game::CloseSDL() {
-	SDL_DestroyRenderer( renderer );
-	SDL_DestroyWindow( window );
-	window = NULL;
-	renderer = NULL;
+void Game::CloseSDL()
+{
+    SDL_DestroyRenderer( renderer );
+    SDL_DestroyWindow( window );
+    window = NULL;
+    renderer = NULL;
 
-	TTF_Quit();
-	IMG_Quit();
-	SDL_Quit();
+    TTF_Quit();
+    IMG_Quit();
+    SDL_Quit();
 
-	Logger::getInstance()->debug("TERMINANDO PROGRAMA");
+    Logger::getInstance()->debug("TERMINANDO PROGRAMA");
 }
 
-void Game::RequestQuit() {
+void Game::Quit()
+{
     this->quit = true;
+}
+
+User* Game::GetUser()
+{
+    return user;
 }

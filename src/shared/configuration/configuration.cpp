@@ -21,7 +21,7 @@ bool DirectoryExists(string dir)
     return stat(dir.c_str(), &statStruct) == 0 && S_ISDIR(statStruct.st_mode);
 }
 
-LogMode Configuration::GetLogLevel()
+LogLevel Configuration::GetLogLevel()
 {
     return this->log_level;
 }
@@ -36,14 +36,14 @@ void Configuration::SetLogLevel(string log_level)
 {
 
     if (IsValidConfigValue("level", str_to_lower(log_level))) {
-        this->log_level = this->ToLogMode(str_to_lower(log_level));
+        this->log_level = this->ToLogLevel(str_to_lower(log_level));
     }
     else {
-        this->log_level = this->ToLogMode("debug");
+        this->log_level = this->ToLogLevel("debug");
         Logger::getInstance()->error("El valor '" + log_level + "' no es valido para el nivel de log. Se procede a tomar el valor por defecto del logger: 'debug'");
     }
 
-    Logger::getInstance()->setMode(this->log_level);
+    Logger::getInstance()->setLogLevel(this->log_level);
 }
 
 string Configuration::GetFormation()
@@ -72,6 +72,7 @@ string Configuration::GetShirt()
 void Configuration::SetShirt(string shirt)
 {
     if (IsValidConfigValue("shirt", shirt)) {
+        Logger::getInstance()->debug("Se asigna el valor de shirt: " + shirt);
         this->shirt = shirt;
     }
     else {
@@ -100,13 +101,22 @@ void Configuration::SetSpritesPath(string sprites_path)
     Logger::getInstance()->debug("(Configuracion) SPRITES PATH: " + this->sprites_path);
 }
 
-void Configuration::Load(Configuration* config, string config_path, string log_level)
+void Configuration::Load(Configuration* config, string config_path, string log_level, string mode, string server_hostname, string port)
 {
     ConfigurationParser* parser = new ConfigurationParser();
     parser->ReadFile(config, config_path);
     if(log_level != "") {
         Logger::getInstance()->debug("(Configuracion-CLI MASTER) NIVEL DE LOG: " + log_level);
         config->SetLogLevel(log_level);
+    }
+    if(mode != "") {
+       config->SetInitMode(mode);
+    }
+    if (server_hostname != "") {
+        config->SetServerHostname(server_hostname);
+    }
+    if (port != "") {
+        config->SetPort(stoi(port));
     }
     delete parser;
 }
@@ -158,9 +168,9 @@ bool Configuration::IsValidConfigValue(string parameter, string value)
     return false;
 }
 
-LogMode Configuration::ToLogMode(string log_level_str)
+LogLevel Configuration::ToLogLevel(string log_level_str)
 {
-    auto it = this->LOG_MODE_MAP.find(log_level_str);
+    auto it = this->LOG_LEVEL_MAP.find(log_level_str);
     return it->second;
 }
 
@@ -173,6 +183,11 @@ bool Configuration::InitModeIsServer()
 bool Configuration::InitModeIsClient()
 {
     return !this->InitModeIsServer();
+}
+
+map<string, string> Configuration::GetCredentials()
+{
+    return this->valid_credentials;
 }
 
 void Configuration::AddValidCredential(string username, string password)
@@ -192,4 +207,44 @@ bool Configuration::IsValidCredential(string username, string password)
 
     return false; // No existe ese usuario
 
+}
+
+void Configuration::SetTeamNumber(TEAM_NUMBER team_number)
+{
+    this->team_number = team_number;
+}
+
+TEAM_NUMBER Configuration::GetTeamNumber()
+{
+    return this->team_number;
+}
+
+u_int Configuration::GetPort()
+{
+    return this->port;
+}
+
+void Configuration::SetPort(u_int port)
+{
+    this->port = port;
+}
+
+u_int Configuration::GetMaxPlayers()
+{
+    return this->max_players;
+}
+
+void Configuration::SetMaxPlayers(u_int max_players)
+{
+    this->max_players = max_players;
+}
+
+void Configuration::SetServerHostname(string hostname)
+{
+    this->server_hostname = hostname;
+}
+
+string Configuration::GetServerHostname()
+{
+    return this->server_hostname;
 }

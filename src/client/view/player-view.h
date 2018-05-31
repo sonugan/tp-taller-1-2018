@@ -34,11 +34,10 @@ class PlayerView : public AbstractView, public IShowable
         static const int SELECTOR_SPRITE_HEIGHT = 64;
         double angle = 0;
         Location* previous_location;
-        bool IsStill();
-        bool IsKicking();
-        bool IsRecoveringBall();
         void GetPlayerAngle();
         SpriteSheet* selector_sheet;
+        void GetSelectorSheet();
+        bool IsStill();
 };
 
 #endif // PLAYERVIEW_H

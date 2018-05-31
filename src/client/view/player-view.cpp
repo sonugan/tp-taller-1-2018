@@ -176,8 +176,6 @@ PlayerView::PlayerView(Player* player)
 
     animations.push_back(new Animation("selector", player_selector_clips, FRAMES_PER_EVENT));
 
-    this->selector_sheet = SpritesProvider::GetDefaultSheet(SELECTOR_A1);
-
     Location* current_location = player->GetLocation();
     previous_location = new Location(current_location->GetX(), current_location->GetY(), current_location->GetZ());
 
@@ -186,7 +184,14 @@ PlayerView::PlayerView(Player* player)
     kitFile.append(player->GetTeam()->GetShirt());
     kitFile.append("-kit.png");
 
-    this->sprite_sheet = SpritesProvider::GetSheet(TEAM_A_PLAYER, kitFile);
+    if (player->PlaysForTeamA())
+    {
+        this->sprite_sheet = SpritesProvider::GetSheet(TEAM_A_PLAYER, kitFile);
+    }
+    else
+    {
+        this->sprite_sheet = SpritesProvider::GetSheet(TEAM_B_PLAYER, kitFile);
+    }
 
 }
 
@@ -238,14 +243,17 @@ void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
 {
     this->GetPlayerAngle();
     int animation_index = current_animation_index;
-    if (IsKicking()) {
+
+    if (this->player->IsKicking()) {
         current_animation_index = KICKING_ANIMATION_INDEX;
-    } else if (IsRecoveringBall()) {
+    } else if (this->player->IsRecoveringBall()) {
         current_animation_index = RECOVERING_BALL_ANIMATION_INDEX;
-    } else if(IsStill()) {
+    } else if(this->player->GetIsStill()) {
         current_animation_index = STILL_ANIMATION_INDEX;
-    } else {
+    } else if(this->player->IsMoving()){
         current_animation_index = RUN_ANIMATION_INDEX;
+    } else {
+        current_animation_index = STILL_ANIMATION_INDEX;
     }
     if(animation_index != current_animation_index)
     {
@@ -257,17 +265,37 @@ void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
 
     this->previous_location->UpdateX(player->GetLocation()->GetX());
     this->previous_location->UpdateY(player->GetLocation()->GetY());
-    this->player->SetKicking(false);
-    this->player->SetRecoveringBall(false);
 
     x = player->GetLocation()->GetX() - x_camera;
     y = player->GetLocation()->GetY() - y_camera;
 
-    if (player->IsSelected()) {
+    this->GetSelectorSheet();
+
+    if (player->GetPlayerColor() != USER_COLOR::NO_COLOR) {
         selector_sheet->Render(x - (SELECTOR_SPRITE_WIDTH / 2), y - (SELECTOR_SPRITE_HEIGHT / 2), animations[SELECTOR_ANIMATION_INDEX]->NextClip(), 0);
     }
 
     sprite_sheet->Render( x - (SPRITE_WIDTH / 2), y - (SPRITE_HEIGHT / 2), current_clip, this->angle);
+}
+
+void PlayerView::GetSelectorSheet()
+{
+    if (this->player->GetPlayerColor() == USER_COLOR::RED)
+    {
+        this->selector_sheet = SpritesProvider::GetDefaultSheet(SELECTOR_A1);
+    }
+    else if (this->player->GetPlayerColor() == USER_COLOR::GREEN)
+    {
+        this->selector_sheet = SpritesProvider::GetDefaultSheet(SELECTOR_A2);
+    }
+    else if (this->player->GetPlayerColor() == USER_COLOR::YELLOW)
+    {
+        this->selector_sheet = SpritesProvider::GetDefaultSheet(SELECTOR_A3);
+    }
+    else if (this->player->GetPlayerColor() == USER_COLOR::BLUE)
+    {
+        this->selector_sheet = SpritesProvider::GetDefaultSheet(SELECTOR_A4);
+    }
 }
 
 Location* PlayerView::GetLocation()
@@ -282,19 +310,7 @@ void PlayerView::SetAnimation(Animation* animation)
 
 bool PlayerView::IsStill()
 {
-    Location* current_location = player->GetLocation();
-    bool still = current_location->GetX() == previous_location->GetX()
-        && current_location->GetY() == previous_location->GetY();
-    return still;
+    Location* location = this->player->GetLocation();
+    return location->GetX() == previous_location->GetX() &&
+        location->GetY() == previous_location->GetY();
 }
-
-bool PlayerView::IsKicking()
-{
-    return this->player->IsKicking();
-}
-
-bool PlayerView::IsRecoveringBall()
-{
-    return this->player->IsRecoveringBall();
-}
-

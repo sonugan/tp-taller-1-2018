@@ -23,11 +23,15 @@
 #include "../shared/model/formation.h"
 #include "../shared/configuration/configuration.h"
 #include "controller/game-controller.h"
+#include "client.h"
+#include "../shared/model/user.h"
 #include <map>
 
 class GameController; //  forward declaration
-class PlayerController; //  forward declaration
 class TeamController; //  forward declaration
+
+class Configuration;
+
 class Game
 {
     public:
@@ -35,8 +39,11 @@ class Game
         virtual ~Game();
         void Start();
         void End();
-        void RequestQuit();
+        void Quit();
         bool IsCorrectlyInitialized();
+        void LogIn();
+        User* GetUser();
+
         static const int SCREEN_WIDTH = 800;
         static const int SCREEN_HEIGHT = 600;
         static const unsigned int PITCH_WIDTH = 1920;
@@ -50,14 +57,17 @@ class Game
         SDL_Renderer* renderer;
         Match* match;
         Camera* camera;
+        User* user;
+        Client* client;
         static const int FRAMES_PER_SECOND = 30;
+        u_int STOP_LOOP_MILLISECONDS = 30;
         TeamController* team_controller;
         PlayerController* player_controller;
         GameController* game_controller;
         bool quit;
         bool correctly_initialized;
 
-        void CreateModel();
+        void CreateModel(std::string serialized_model);
         void CreateViews();
         void CreateControllers();
         void DestroyModel();

@@ -11,6 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters='--config=&quot;src/shared/configuration/server-config.yml&quot;' />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="src/game" />
@@ -23,6 +24,11 @@
 					<Add directory="src/sound" />
 					<Add directory="src/shared/model" />
 					<Add directory="src/server" />
+					<Add directory="src/shared/network" />
+					<Add directory="src/client" />
+					<Add directory="src/server/session" />
+					<Add directory="src/shared/network/messages" />
+					<Add directory="src/shared/model/player-states" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -43,6 +49,11 @@
 					<Add directory="src/sound" />
 					<Add directory="src/shared/model" />
 					<Add directory="src/server" />
+					<Add directory="src/shared/network" />
+					<Add directory="src/client" />
+					<Add directory="src/server/session" />
+					<Add directory="src/shared/network/messages" />
+					<Add directory="src/shared/model/player-states" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -54,8 +65,12 @@
 			<Add option="-std=c++11" />
 		</Compiler>
 		<Linker>
-			<Add option="-lSDL2 -lSDL2_image -lyaml-cpp -lSDL2_mixer -lSDL2_ttf" />
+			<Add option="-lSDL2 -lSDL2_image -lyaml-cpp -lSDL2_mixer -lSDL2_ttf -lpthread" />
 		</Linker>
+		<Unit filename="src/client/client-tester.cpp" />
+		<Unit filename="src/client/client-tester.h" />
+		<Unit filename="src/client/client.cpp" />
+		<Unit filename="src/client/client.h" />
 		<Unit filename="src/client/controller/abstract-controller.h" />
 		<Unit filename="src/client/controller/game-controller.cpp" />
 		<Unit filename="src/client/controller/game-controller.h" />
@@ -74,6 +89,8 @@
 		<Unit filename="src/client/view/ball-view.h" />
 		<Unit filename="src/client/view/camera.cpp" />
 		<Unit filename="src/client/view/camera.h" />
+		<Unit filename="src/client/view/disconect-view.cpp" />
+		<Unit filename="src/client/view/disconect-view.h" />
 		<Unit filename="src/client/view/ishowable.h" />
 		<Unit filename="src/client/view/login-view.cpp" />
 		<Unit filename="src/client/view/login-view.h" />
@@ -88,9 +105,17 @@
 		<Unit filename="src/client/view/sprites-provider.cpp" />
 		<Unit filename="src/client/view/sprites-provider.h" />
 		<Unit filename="src/main.cpp" />
-		<Unit filename="src/server/bla.txt" />
+		<Unit filename="src/server/game/game-server.cpp" />
+		<Unit filename="src/server/game/game-server.h" />
+		<Unit filename="src/server/game/game-state.cpp" />
+		<Unit filename="src/server/game/game-state.h" />
 		<Unit filename="src/server/server.cpp" />
 		<Unit filename="src/server/server.h" />
+		<Unit filename="src/server/session/authentication-exception.h" />
+		<Unit filename="src/server/session/max-allowed-user-exception.h" />
+		<Unit filename="src/server/session/non-existen-user-exception.h" />
+		<Unit filename="src/server/session/session-manager.cpp" />
+		<Unit filename="src/server/session/session-manager.h" />
 		<Unit filename="src/shared/configuration/cli-options-parser.cpp" />
 		<Unit filename="src/shared/configuration/cli-options-parser.h" />
 		<Unit filename="src/shared/configuration/cli-options.cpp" />
@@ -100,6 +125,7 @@
 		<Unit filename="src/shared/configuration/configuration.cpp" />
 		<Unit filename="src/shared/configuration/configuration.h" />
 		<Unit filename="src/shared/configuration/default-config.yml" />
+		<Unit filename="src/shared/configuration/server-config.yml" />
 		<Unit filename="src/shared/logger.cpp" />
 		<Unit filename="src/shared/logger.h" />
 		<Unit filename="src/shared/model/ball.cpp" />
@@ -112,30 +138,65 @@
 		<Unit filename="src/shared/model/match.h" />
 		<Unit filename="src/shared/model/pitch.cpp" />
 		<Unit filename="src/shared/model/pitch.h" />
+		<Unit filename="src/shared/model/player-states/iplayer-state.h" />
+		<Unit filename="src/shared/model/player-states/player-kick-state.cpp" />
+		<Unit filename="src/shared/model/player-states/player-kick-state.h" />
+		<Unit filename="src/shared/model/player-states/player-move-state.cpp" />
+		<Unit filename="src/shared/model/player-states/player-move-state.h" />
+		<Unit filename="src/shared/model/player-states/player-recover-ball-state.cpp" />
+		<Unit filename="src/shared/model/player-states/player-recover-ball-state.h" />
+		<Unit filename="src/shared/model/player-states/player-states.h" />
+		<Unit filename="src/shared/model/player-states/player-still-state.cpp" />
+		<Unit filename="src/shared/model/player-states/player-still-state.h" />
 		<Unit filename="src/shared/model/player.cpp" />
 		<Unit filename="src/shared/model/player.h" />
+		<Unit filename="src/shared/model/team-number.h" />
 		<Unit filename="src/shared/model/team.cpp" />
 		<Unit filename="src/shared/model/team.h" />
 		<Unit filename="src/shared/model/trajectory.cpp" />
 		<Unit filename="src/shared/model/trajectory.h" />
+		<Unit filename="src/shared/model/user-color.h" />
+		<Unit filename="src/shared/model/user.cpp" />
+		<Unit filename="src/shared/model/user.h" />
 		<Unit filename="src/shared/network/client-socket.cpp" />
 		<Unit filename="src/shared/network/client-socket.h" />
+		<Unit filename="src/shared/network/exceptions/socket-connection-exception.cpp" />
+		<Unit filename="src/shared/network/exceptions/socket-connection-exception.h" />
 		<Unit filename="src/shared/network/iserializable.h" />
 		<Unit filename="src/shared/network/iserializer.h" />
+		<Unit filename="src/shared/network/message-type.h" />
 		<Unit filename="src/shared/network/message.cpp" />
 		<Unit filename="src/shared/network/message.h" />
-		<Unit filename="src/shared/network/request.cpp" />
-		<Unit filename="src/shared/network/request.h" />
-		<Unit filename="src/shared/network/response.cpp" />
-		<Unit filename="src/shared/network/response.h" />
+		<Unit filename="src/shared/network/messages/change-player-request.cpp" />
+		<Unit filename="src/shared/network/messages/change-player-request.h" />
+		<Unit filename="src/shared/network/messages/health-check.cpp" />
+		<Unit filename="src/shared/network/messages/health-check.h" />
+		<Unit filename="src/shared/network/messages/kick-ball-request.cpp" />
+		<Unit filename="src/shared/network/messages/kick-ball-request.h" />
+		<Unit filename="src/shared/network/messages/login-request.cpp" />
+		<Unit filename="src/shared/network/messages/login-request.h" />
+		<Unit filename="src/shared/network/messages/move-request.cpp" />
+		<Unit filename="src/shared/network/messages/move-request.h" />
+		<Unit filename="src/shared/network/messages/pass-ball-request.cpp" />
+		<Unit filename="src/shared/network/messages/pass-ball-request.h" />
+		<Unit filename="src/shared/network/messages/quit-request.cpp" />
+		<Unit filename="src/shared/network/messages/quit-request.h" />
+		<Unit filename="src/shared/network/messages/recover-ball-request.cpp" />
+		<Unit filename="src/shared/network/messages/recover-ball-request.h" />
 		<Unit filename="src/shared/network/server-socket.cpp" />
 		<Unit filename="src/shared/network/server-socket.h" />
 		<Unit filename="src/shared/network/socket-address.cpp" />
 		<Unit filename="src/shared/network/socket-address.h" />
 		<Unit filename="src/shared/network/socket.cpp" />
 		<Unit filename="src/shared/network/socket.h" />
+		<Unit filename="src/shared/utils/id-generator.cpp" />
+		<Unit filename="src/shared/utils/id-generator.h" />
+		<Unit filename="src/shared/utils/queue.h" />
+		<Unit filename="src/shared/utils/safe-queue.h" />
 		<Unit filename="src/shared/utils/string-builder.cpp" />
 		<Unit filename="src/shared/utils/string-builder.h" />
+		<Unit filename="src/shared/utils/string-utils.cpp" />
+		<Unit filename="src/shared/utils/string-utils.h" />
 		<Extensions>
 			<envvars />
 			<code_completion />

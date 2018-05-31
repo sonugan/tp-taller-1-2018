@@ -5,23 +5,31 @@
 #include <iostream>
 #include <string>
 #include "location.h"
+#include "../configuration/configuration.h"
+#include "team.h"
+
+class Team;
 
 enum FORMATION { F_3_3, F_3_1_2, F_3_2_1 };
+
 class Formation
 {
-    public:
-        Formation(FORMATION value);
-        Formation(std::string string_value);
-        virtual ~Formation();
-        Location* GetLocationForPlayer(unsigned int player_index);
-        FORMATION GetValue();
+public:
+    Formation(FORMATION value, TEAM_NUMBER team_number);
+    Formation(std::string string_value, TEAM_NUMBER team_number);
+    virtual ~Formation();
+    Location* GetLocationForPlayer(unsigned int player_index);
+    FORMATION GetValue();
 
-    protected:
+protected:
 
-    private:
-        FORMATION value;
-        std::vector<Location*> positions;
-        void InitializePositions();
+private:
+    FORMATION value;
+    TEAM_NUMBER team_number;
+    std::vector<Location*> positions;
+    void InitializePositions();
+    void InitializePositionsTeamA();
+    void InitializePositionsTeamB();
 };
-
 #endif // FORMATION_H
+
