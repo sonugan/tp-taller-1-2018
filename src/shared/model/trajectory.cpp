@@ -1,9 +1,11 @@
 #include "trajectory.h"
 
-Trajectory::Trajectory(DIRECTION direction, unsigned int drive) {
+Trajectory::Trajectory(DIRECTION direction, unsigned int power) {
     this->direction = direction;
-    this->drive = drive;
+    this->power = power;
     this->player = NULL;
+    this->drive = 250;
+    this->ball_speed = this->drive * this->power;
     //std::cout << "Trajectory::Trajectory created \n";
 }
 
@@ -51,7 +53,7 @@ void Trajectory::UpdateToNextLocation(Location* location) {
         x = location ->GetX();
         y = location->GetY();
 
-        offset = (drive * DRIVE_COEFFICIENT);
+        offset = (ball_speed * DRIVE_COEFFICIENT);
 
 
         if (DIRECTION::EAST == direction) {
@@ -77,10 +79,10 @@ void Trajectory::UpdateToNextLocation(Location* location) {
         }
 
 
-        if (this->drive >= DECELERATION) {
-            this->drive = drive - DECELERATION;
+        if (this->ball_speed >= DECELERATION) {
+            this->ball_speed = ball_speed - DECELERATION;
         } else {
-            this->drive = 0;
+            this->ball_speed = 0;
         }
 
         location->Update(x, y, location->GetZ());

@@ -23,7 +23,9 @@ class Trajectory
         static constexpr float DRIVE_COEFFICIENT = 0.08;
 
         DIRECTION direction;
+        unsigned int power;
         unsigned int drive;
+        unsigned int ball_speed;
         Player* player;
 };
 

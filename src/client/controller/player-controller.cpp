@@ -8,6 +8,8 @@ PlayerController::PlayerController(Team* team, Client* client) {
     //current_action_timming = 1;
     //current_action = PLAYER_IS_STILL;
     this->last_pass = std::chrono::system_clock::now();
+    this->last_keyboard_state_array = NULL;
+    this->kickballevents = 1;
 }
 
 PlayerController::~PlayerController() {
@@ -33,6 +35,7 @@ void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
     this->PlayerRecoverBall(keyboard_state_array);
     this->KickPlayer(keyboard_state_array);
     this->MovePlayer(keyboard_state_array);
+    this->last_keyboard_state_array = keyboard_state_array;
 }
 
 void PlayerController::MovePlayer(const Uint8 *keyboard_state_array)
@@ -69,11 +72,20 @@ void PlayerController::MovePlayer(const Uint8 *keyboard_state_array)
 }
 
 bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array) {
-    if (DKeySelected(keyboard_state_array)) {
-        KickBallRequest r;
-        this->client->KickBall(&r);
-        //current_action = PLAYER_IS_KICKING;
-        return true;
+    if (this->last_keyboard_state_array != NULL)
+    {
+        if ((DKeySelected(this->last_keyboard_state_array)) && (DKeySelected(keyboard_state_array)))
+        {
+            this->kickballevents = this->kickballevents + 0.1;
+            return true;
+        }
+        if((DKeySelected(this->last_keyboard_state_array)) && (!DKeySelected(keyboard_state_array)))
+        {
+            KickBallRequest r(this->kickballevents);
+            this->client->KickBall(&r);
+            this->kickballevents = 1;
+            return true;
+        }
     }
     return false;
 }

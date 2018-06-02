@@ -53,6 +53,7 @@ class Player
         Team* GetTeam();
         bool HasBall();
         void PassBall();
+        void KickBall(int power);
         bool PlaysForTeamA();
         bool PlaysForTeamB();
         void SetPlayerColor(USER_COLOR color);

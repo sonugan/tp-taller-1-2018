@@ -277,7 +277,16 @@ void Player::PassBall()
 {
     if (HasBall())
     {
-        Trajectory* trajectory = new Trajectory(direction, 250);
+        Trajectory* trajectory = new Trajectory(direction, 1);
+        team->GetMatch()->GetBall()->SetTrajectory(trajectory);
+    }
+}
+
+void Player::KickBall(int power)
+{
+    if (HasBall())
+    {
+        Trajectory* trajectory = new Trajectory(direction, power);
         team->GetMatch()->GetBall()->SetTrajectory(trajectory);
     }
 }
