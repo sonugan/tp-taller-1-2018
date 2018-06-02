@@ -32,7 +32,7 @@ void Game::LogIn()
 
     while (!is_logged && !login_view->IsUserQuit())
     {
-        client->Init(login_request->GetServerIp());
+        client->Init();
         std::string login_response = client->LogIn(login_request);
 
         if ("login-fail" == login_response || "too-many-users" == login_response || "invalid-team" == login_response || login_response == "non-existent-user")

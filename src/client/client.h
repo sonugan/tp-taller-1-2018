@@ -24,7 +24,7 @@ class Client
     public:
         Client(Configuration * configuration);
         virtual ~Client();
-        void Init(std::string server_ip);
+        void Init();
         string LogIn(LoginRequest* login_request);
         string WaitForGameStart();
         bool Quit(QuitRequest* quit_request);

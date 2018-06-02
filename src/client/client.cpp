@@ -20,7 +20,7 @@ Client::~Client() {
     delete clientSocket;
 }
 
-void Client::Init(string server_ip)
+void Client::Init()
 {
     SocketAddress address(this->config->GetPort(), this->config->GetServerHostname());
     clientSocket->Connect(address);
