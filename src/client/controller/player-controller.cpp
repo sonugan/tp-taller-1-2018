@@ -1,4 +1,6 @@
 #include "player-controller.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 //Agregar los request que son los que se van a mandar al servidor.
 
@@ -16,7 +18,7 @@ PlayerController::~PlayerController() {
     //dtor
 }
 
-void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
+void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array, SDL_Event e) {
 //    Logger::getInstance()->debug("(PlayerController::PlayerPlay)");
     /*if(!ContinueCurrentAction())
     {
@@ -33,7 +35,7 @@ void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
     }*/
     this->PassBall(keyboard_state_array);//TODO: Ver como implementar PassBall en el modelo
     this->PlayerRecoverBall(keyboard_state_array);
-    this->KickPlayer(keyboard_state_array);
+    this->KickPlayer(keyboard_state_array, e);
     this->MovePlayer(keyboard_state_array);
     this->last_keyboard_state_array = keyboard_state_array;
 }
@@ -71,15 +73,14 @@ void PlayerController::MovePlayer(const Uint8 *keyboard_state_array)
     //current_action = PLAYER_IS_RUNNING;
 }
 
-bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array) {
-    if (this->last_keyboard_state_array != NULL)
+bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array, SDL_Event e) {
+    if (e.key.keysym.sym == SDLK_d)
     {
-        if ((DKeySelected(this->last_keyboard_state_array)) && (DKeySelected(keyboard_state_array)))
+        if ((e.key.state == SDL_PRESSED) && (e.key.repeat != 0))
         {
-            this->kickballevents = this->kickballevents + 0.1;
-            return true;
+            this->kickballevents = 2;
         }
-        if((DKeySelected(this->last_keyboard_state_array)) && (!DKeySelected(keyboard_state_array)))
+        if (e.key.state == SDL_RELEASED)
         {
             KickBallRequest r(this->kickballevents);
             this->client->KickBall(&r);
@@ -147,7 +148,7 @@ bool PlayerController::ShiftKeySelected(const Uint8 *keyboard_state_array) {
 }
 
 void PlayerController::Handle(const Uint8* keyboard_state_array) {
-    PlayerPlay(keyboard_state_array);
+    PlayerPlay(keyboard_state_array, this->event);
 }
 
 bool PlayerController::SelectedPlayerHasChange()
@@ -155,6 +156,11 @@ bool PlayerController::SelectedPlayerHasChange()
     Logger::getInstance()->debug("(PlayerController::SelectedPlayerHasChange)");
     return team->GetSelectedPlayer() != this->selected_player;
 
+}
+
+void PlayerController::SetEvent(SDL_Event e)
+{
+    this->event = e;
 }
 
 bool PlayerController::ContinueCurrentAction()

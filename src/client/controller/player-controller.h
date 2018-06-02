@@ -16,6 +16,7 @@ class PlayerController : public AbstractController
         PlayerController(Team* team, Client* client);
         virtual ~PlayerController();
         void Handle(const Uint8* keyboard_state_array);
+        void SetEvent(SDL_Event e);
 
     protected:
 
@@ -28,12 +29,13 @@ class PlayerController : public AbstractController
         static const unsigned int PASS_DELAY_MILLIS = 200;
         const Uint8* last_keyboard_state_array;
         unsigned int kickballevents;
+        SDL_Event event;
 
-        void PlayerPlay(const Uint8 *keyboard_state_array);
+        void PlayerPlay(const Uint8 *keyboard_state_array, SDL_Event e);
         void MovePlayer(const Uint8 *keyboard_state_array);
         void PassBall(const Uint8 *keyboard_state_array);
         bool PlayerRecoverBall(const Uint8 *keyboard_state_array);
-        bool KickPlayer(const Uint8 *keyboard_state_array);
+        bool KickPlayer(const Uint8 *keyboard_state_array, SDL_Event e);
         bool UpKeySelected(const Uint8 *keyboard_state_array);
         bool RightKeySelected(const Uint8 *keyboard_state_array);
         bool LeftKeySelected(const Uint8 *keyboard_state_array);
