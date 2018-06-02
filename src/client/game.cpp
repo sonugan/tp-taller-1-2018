@@ -230,7 +230,7 @@ void Game::CreateViews()
         this->camera->Add(player_view);
 
         MiniPlayerView* mini_player_view = new MiniPlayerView(player, PITCH_HEIGHT, PITCH_WIDTH);
-        this->camera->Add(mini_player_view);
+        this->camera->AddMiniPlayerView(mini_player_view);
     }
 
     BallView* ball_view = new BallView(match->GetBall());

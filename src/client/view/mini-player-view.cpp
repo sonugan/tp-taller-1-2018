@@ -7,7 +7,7 @@ MiniPlayerView::MiniPlayerView(Player* player, int real_pitch_height, int real_p
     this->real_pitch_width = real_pitch_width;
 
     SDL_Rect* sprite1 = new SDL_Rect();
-    sprite1->x = 10;
+    sprite1->x = 0;
     sprite1->y =  0;
     sprite1->w =  10;
     sprite1->h = 10;
@@ -32,7 +32,8 @@ MiniPlayerView::~MiniPlayerView()
 {
     Logger::getInstance()->debug("DESTRUYENDO MINI PLAYER");
 
-    for (unsigned int i = 0; i < animations.size(); i++) {
+    for (unsigned int i = 0; i < animations.size(); i++)
+    {
         delete (animations[i]);
     }
 }
@@ -41,6 +42,18 @@ int MiniPlayerView::GetMiniPlayerX()
 {
     int mini_x = this->player->GetLocation()->GetX() * MINI_PITCH_WIDTH;
     mini_x = mini_x / this->real_pitch_width;
+
+    // Le doy un offset a cada team, porque sino quedaban muy pegados en el centro
+
+    if (player->PlaysForTeamA())
+    {
+        mini_x = mini_x - TEAM_OFFSET;
+    }
+    else
+    {
+        mini_x = mini_x + TEAM_OFFSET;
+    }
+
     return mini_x + MINI_PITCH_OFFSET_X;
 }
 
@@ -54,9 +67,7 @@ int MiniPlayerView::GetMiniPlayerY()
 void MiniPlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
 {
     SDL_Rect* current_clip = this->animations[current_animation_index]->NextClip();
-    current_clip->x = 0;
-    current_clip->y = 0;
-    sprite_sheet->Render(this->GetMiniPlayerX(), this->GetMiniPlayerY(), current_clip );
+    sprite_sheet->Render(this->GetMiniPlayerX(), this->GetMiniPlayerY(), current_clip);
 }
 
 
