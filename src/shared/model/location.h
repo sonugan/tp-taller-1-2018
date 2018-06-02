@@ -25,8 +25,8 @@ class Location
 
         static const int MAX_X_LOCATION = 1920;
         static const int MIN_X_LOCATION = 0;
-        static const int MAX_Y_LOCATION = 1080;
-        static const int MIN_Y_LOCATION = 0;
+        static const int MAX_Y_LOCATION = 1150;
+        static const int MIN_Y_LOCATION = 82;
         int x;
         int y;
         int z;

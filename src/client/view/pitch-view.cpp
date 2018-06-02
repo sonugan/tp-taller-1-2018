@@ -7,8 +7,8 @@ PitchView::PitchView(Pitch* pitch)
 
     SDL_Rect* sprite1 = new SDL_Rect();
     sprite1->x = 0;
-    sprite1->y =   0;
-    sprite1->w =  800;
+    sprite1->y = 0;
+    sprite1->w = 800;
     sprite1->h = 600;
 
     std::vector<SDL_Rect*> clips;

@@ -14,6 +14,8 @@
 #include "view/pitch-view.h"
 #include "view/ball-view.h"
 #include "view/player-view.h"
+#include "view/mini-player-view.h"
+#include "view/info-panel-view.h"
 #include "view/camera.h"
 #include "../shared/model/match.h"
 #include "../shared/model/player.h"
@@ -47,7 +49,9 @@ class Game
         static const int SCREEN_WIDTH = 800;
         static const int SCREEN_HEIGHT = 600;
         static const unsigned int PITCH_WIDTH = 1920;
-        static const unsigned int PITCH_HEIGHT = 1080;
+        static const unsigned int PITCH_HEIGHT = 1158;
+        static const int INFO_PANEL_HEIGHT = 78;
+
     protected:
 
     private:

@@ -214,20 +214,29 @@ void Game::CreateViews()
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
     {
         Player* player = match->GetTeamA()->GetPlayers()[i];
+
         PlayerView* player_view = new PlayerView(player);
         this->camera->Add(player_view);
+
+        MiniPlayerView* mini_player_view = new MiniPlayerView(player, PITCH_HEIGHT, PITCH_WIDTH);
+        this->camera->AddMiniPlayerView(mini_player_view);
     }
 
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
     {
         Player* player = match->GetTeamB()->GetPlayers()[i];
+
         PlayerView* player_view = new PlayerView(player);
         this->camera->Add(player_view);
+
+        MiniPlayerView* mini_player_view = new MiniPlayerView(player, PITCH_HEIGHT, PITCH_WIDTH);
+        this->camera->Add(mini_player_view);
     }
 
     BallView* ball_view = new BallView(match->GetBall());
     this->camera->Add(ball_view);
     this->camera->SetShowable(ball_view);
+
 }
 
 void Game::CreateControllers()

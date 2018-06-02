@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters='--config=&quot;src/shared/configuration/server-config.yml&quot;' />
+				<Option parameters='--config=&quot;src/shared/configuration/default-config.yml&quot;' />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="src/game" />
@@ -29,6 +29,7 @@
 					<Add directory="src/server/session" />
 					<Add directory="src/shared/network/messages" />
 					<Add directory="src/shared/model/player-states" />
+					<Add directory="src/client/view" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -54,6 +55,7 @@
 					<Add directory="src/server/session" />
 					<Add directory="src/shared/network/messages" />
 					<Add directory="src/shared/model/player-states" />
+					<Add directory="src/client/view" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -91,6 +93,8 @@
 		<Unit filename="src/client/view/camera.h" />
 		<Unit filename="src/client/view/disconect-view.cpp" />
 		<Unit filename="src/client/view/disconect-view.h" />
+		<Unit filename="src/client/view/info-panel-view.cpp" />
+		<Unit filename="src/client/view/info-panel-view.h" />
 		<Unit filename="src/client/view/ishowable.h" />
 		<Unit filename="src/client/view/login-view.cpp" />
 		<Unit filename="src/client/view/login-view.h" />
