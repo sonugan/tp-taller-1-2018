@@ -8,6 +8,7 @@ class Location
 {
     public:
         Location(int x, int y, int z);
+        Location(Location* location);
         virtual ~Location();
         int GetX();
         int GetY();
@@ -16,6 +17,7 @@ class Location
         void UpdateX(int x);
         void UpdateY(int y);
         void UpdateZ(int z);
+	    void Update(Location* location);
         int Distance(Location* other_location);
         std::string ToString();
 
@@ -23,10 +25,10 @@ class Location
 
     private:
 
-        static const int MAX_X_LOCATION = 1920;
-        static const int MIN_X_LOCATION = 0;
-        static const int MAX_Y_LOCATION = 1080;
-        static const int MIN_Y_LOCATION = 0;
+	static const int MAX_X_LOCATION = 1920;
+	static const int MIN_X_LOCATION = 0;
+	static const int MAX_Y_LOCATION = 1080;
+	static const int MIN_Y_LOCATION = 0;
         int x;
         int y;
         int z;

@@ -9,6 +9,13 @@ Location::Location(int x, int y, int z)
     this->z = z;
 }
 
+Location::Location(Location* location)
+{
+    this->x = location->x;
+    this->y = location->y;
+    this->z = location->z;
+}
+
 Location::~Location() {}
 
 int Location::GetX() {
@@ -60,6 +67,13 @@ void Location::UpdateY(int y) {
 
 void Location::UpdateZ(int z) {
     Update(GetX(), GetY(), z);
+}
+
+void Location::Update(Location* location)
+{
+    this->x = location->x;
+    this->y = location->y;
+    this->z = location->z;
 }
 
 int Location::Distance(Location* other_location) {

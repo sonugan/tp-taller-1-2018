@@ -117,6 +117,7 @@ void Player::SetTeam(Team* team)
     Location* default_location = GetDefaultLocation();
     this->location = new Location(default_location->GetX(), default_location->GetY(), default_location->GetZ());
     this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
+    this->circle = new Circle(20, new Location(this->location));//TODO: magic number
 }
 
 unsigned int Player::GetPositionIndex()
@@ -271,6 +272,7 @@ void Player::Move(bool run)
         location->UpdateX(location->GetX() - speed);
         break;
     }
+    this->circle->Move(this->location);
 }
 
 void Player::PassBall()
@@ -374,4 +376,27 @@ void Player::SetLocation(Location* location)
 {
     this->location->Update(location->GetX(), location->GetY(), location->GetZ());
     this->previous_location->Update(location->GetX(), location->GetY(), location->GetZ());
+}
+
+bool Player::Collides()
+{
+    Logger::getInstance()->debug("collides");
+    vector<Player*> players_a = team->GetMatch()->GetTeamA()->GetPlayers();
+    for(int i = 0; i< players_a.size(); i++)
+    {
+        if(players_a[i] != this && this->circle->ExistsCollision2d(players_a[i]->circle))
+        {
+            return true;
+        }
+    }
+    Logger::getInstance()->debug("collides b");
+    vector<Player*> players_b = team->GetMatch()->GetTeamB()->GetPlayers();
+    for(int i = 0; i< players_b.size(); i++)
+    {
+        if(players_a[i] != this && this->circle->ExistsCollision2d(players_b[i]->circle))
+        {
+            return true;
+        }
+    }
+    return false;
 }
