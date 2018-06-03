@@ -44,6 +44,7 @@ Player::~Player()
     delete move_state;
     delete kick_state;
     delete recover_ball_state;
+    delete shadow;
 }
 
 void Player::MoveLeft(bool run)
@@ -117,7 +118,7 @@ void Player::SetTeam(Team* team)
     Location* default_location = GetDefaultLocation();
     this->location = new Location(default_location->GetX(), default_location->GetY(), default_location->GetZ());
     this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
-    this->circle = new Circle(20, new Location(this->location));//TODO: magic number
+    this->shadow = new Shadow(this);
 }
 
 unsigned int Player::GetPositionIndex()
@@ -241,38 +242,44 @@ void Player::Move(bool run)
         speed = PLAYER_SPEED;
     }
     this->previous_location->Update(this->location->GetX(), this->location->GetY(), this->location->GetZ());
+    Location* new_location = new Location(this->location);
     switch(direction)
     {
     case DIRECTION::NORTH:
-        location->UpdateY(location->GetY() - speed);
+        new_location->UpdateY(location->GetY() - speed);
         break;
     case DIRECTION::WEST:
-        location->UpdateX(location->GetX() - speed);
+        new_location->UpdateX(location->GetX() - speed);
         break;
     case DIRECTION::SOUTH:
-        location->UpdateY(location->GetY() + speed);
+        new_location->UpdateY(location->GetY() + speed);
         break;
     case DIRECTION::EAST:
-        location->UpdateX(location->GetX() + speed);
+        new_location->UpdateX(location->GetX() + speed);
         break;
     case DIRECTION::NORTHEAST:
-        location->UpdateY(location->GetY() - speed);
-        location->UpdateX(location->GetX() + speed);
+        new_location->UpdateY(location->GetY() - speed);
+        new_location->UpdateX(location->GetX() + speed);
         break;
     case DIRECTION::NORTHWEST:
-        location->UpdateY(location->GetY() - speed);
-        location->UpdateX(location->GetX() - speed);
+        new_location->UpdateY(location->GetY() - speed);
+        new_location->UpdateX(location->GetX() - speed);
         break;
     case DIRECTION::SOUTHEAST:
-        location->UpdateY(location->GetY() + speed);
-        location->UpdateX(location->GetX() + speed);
+        new_location->UpdateY(location->GetY() + speed);
+        new_location->UpdateX(location->GetX() + speed);
         break;
     case DIRECTION::SOUTHWEST:
-        location->UpdateY(location->GetY() + speed);
-        location->UpdateX(location->GetX() - speed);
+        new_location->UpdateY(location->GetY() + speed);
+        new_location->UpdateX(location->GetX() - speed);
         break;
     }
-    this->circle->Move(this->location);
+    if(this->shadow->CanMoveTo(new_location))
+    {
+        this->location->Update(new_location);
+        this->shadow->PlayerHasChanged();
+    }
+    delete new_location;
 }
 
 void Player::PassBall()
@@ -380,23 +387,10 @@ void Player::SetLocation(Location* location)
 
 bool Player::Collides()
 {
-    Logger::getInstance()->debug("collides");
-    vector<Player*> players_a = team->GetMatch()->GetTeamA()->GetPlayers();
-    for(int i = 0; i< players_a.size(); i++)
-    {
-        if(players_a[i] != this && this->circle->ExistsCollision2d(players_a[i]->circle))
-        {
-            return true;
-        }
-    }
-    Logger::getInstance()->debug("collides b");
-    vector<Player*> players_b = team->GetMatch()->GetTeamB()->GetPlayers();
-    for(int i = 0; i< players_b.size(); i++)
-    {
-        if(players_a[i] != this && this->circle->ExistsCollision2d(players_b[i]->circle))
-        {
-            return true;
-        }
-    }
     return false;
+}
+
+Shadow* Player::GetShadow()
+{
+    return this->shadow;
 }

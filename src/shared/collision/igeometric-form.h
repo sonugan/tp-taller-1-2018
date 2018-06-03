@@ -13,8 +13,14 @@ class IGeometricForm
     public:
         IGeometricForm();
         virtual ~IGeometricForm();
-        virtual bool ExistsCollision2d(IGeometricForm other_form){};
-        virtual bool ExistsCollision3d(IGeometricForm other_form){};
+	virtual bool ExistsCollision2d(IGeometricForm other_form)
+    {
+		return false;
+	};
+	virtual bool ExistsCollision3d(IGeometricForm other_form)
+    {
+		return false;
+	};
     protected:
     private:
 };

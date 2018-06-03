@@ -7,18 +7,20 @@
 
 using namespace std;
 
+class Player;
 class Shadow
 {
     public:
-        Shadow(Location* masa_center);
+        Shadow(Player* player);
         virtual ~Shadow();
-        void AddForm(Circle* circle);
         bool CollidesWith(Shadow* other_shadow);
-        void Move(Location* location);
+        void PlayerHasChanged();
+        bool CanMoveTo(Location* location);
+        Circle* GetCircle();
     protected:
     private:
-        vector<Circle*> forms;
-        Location* masa_center;
+        Circle* circle;
+        Player* player;
 };
 
 #endif // SHADOW_H
