@@ -181,10 +181,14 @@ void Match::DeserializeAndUpdate(string serialized) {
 
     int base_index = 87;
 
-    Formation* formation_a = new Formation(static_cast<FORMATION>(SafeStoi(data[base_index])), TEAM_NUMBER::TEAM_A);
+    /*Formation* formation_a = new Formation(static_cast<FORMATION>(SafeStoi(data[base_index])), TEAM_NUMBER::TEAM_A);
     GetTeamA()->SetFormation(formation_a);
     Formation* formation_b = new Formation(static_cast<FORMATION>(SafeStoi(data[base_index + 1])), TEAM_NUMBER::TEAM_B);
-    GetTeamB()->SetFormation(formation_b);
+    GetTeamB()->SetFormation(formation_b);*/
+
+    team_a->GetFormation()->SetFormation(static_cast<FORMATION>(SafeStoi(data[base_index])));
+    team_b->GetFormation()->SetFormation(static_cast<FORMATION>(SafeStoi(data[base_index + 1])));
+
 
     GetTeamA()->SetShirt(data[base_index + 2]);
     GetTeamB()->SetShirt(data[base_index + 3]);

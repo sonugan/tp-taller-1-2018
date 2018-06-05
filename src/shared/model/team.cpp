@@ -121,3 +121,13 @@ TEAM_NUMBER Team::GetTeamNumber()
 {
     return this->team_number;
 }
+
+void Team::UpdateFormation()
+{
+    Player* cPlayer;
+    for (unsigned int i = 0; i < (Team::TEAM_SIZE); i++)
+    {
+        cPlayer = this->players[i];
+        cPlayer->GoBackToDefaultPosition();
+    }
+}

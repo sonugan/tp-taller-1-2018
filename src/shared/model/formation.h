@@ -20,13 +20,17 @@ public:
     virtual ~Formation();
     Location* GetLocationForPlayer(unsigned int player_index);
     FORMATION GetValue();
-
+    void ChangeFormation(string formation);
+    bool ChangedByUser();
+    void SetFormation(FORMATION value);
 protected:
+    void SetValueFromStringFormation(string string_value);
 
 private:
     FORMATION value;
     TEAM_NUMBER team_number;
     std::vector<Location*> positions;
+    bool changed_by_user;
     void InitializePositions();
     void InitializePositionsTeamA();
     void InitializePositionsTeamB();

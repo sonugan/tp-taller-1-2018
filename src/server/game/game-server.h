@@ -13,6 +13,7 @@
 #include "../../shared/network/messages/pass-ball-request.h"
 #include "../../shared/network/messages/move-request.h"
 #include "../../shared/network/messages/change-player-request.h"
+#include "../../shared/network/messages/change-formation-request.h"
 
 using namespace std;
 
@@ -35,6 +36,9 @@ public:
     void RunArtificialIntelligence();
     bool IsRunning();
     void DisconnectClient(ClientSocket* client);
+    void ChangeFormation(ChangeFormationRequest* change_player_request, int socket_id);
+    bool TeamsHaveFormation();
+    int GetTeamUsersNum(string team_name);
 
 protected:
 

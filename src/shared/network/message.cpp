@@ -1,7 +1,9 @@
 #include<stdlib.h>
 
 #include "message.h"
+#include <string>
 
+using namespace std;
 
 /* Este constructor lo usamos en el receive del server o client */
 Message::Message(const string& data)
@@ -44,7 +46,13 @@ Message::~Message()
 
 MESSAGE_TYPE Message::ResolveType(string serialized_data)
 {
-    /* Magia oscura para convertir el char a un message_type */
-    int type = (int) serialized_data.at(0) - 48;
-    return static_cast<MESSAGE_TYPE>(type);
+    if (serialized_data.at(0) == '0')
+    {
+        return MESSAGE_TYPE::HEALTH_CHECK;
+    }
+    else
+    {
+        int type = atoi(serialized_data.c_str());
+        return static_cast<MESSAGE_TYPE>(type);
+    }
 }
