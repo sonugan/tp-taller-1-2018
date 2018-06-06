@@ -186,9 +186,6 @@ void Match::DeserializeAndUpdate(string serialized) {
     Formation* formation_b = new Formation(static_cast<FORMATION>(SafeStoi(data[base_index + 1])), TEAM_NUMBER::TEAM_B);
     GetTeamB()->SetFormation(formation_b);*/
 
-    team_a->GetFormation()->SetFormation(static_cast<FORMATION>(SafeStoi(data[base_index])));
-    team_b->GetFormation()->SetFormation(static_cast<FORMATION>(SafeStoi(data[base_index + 1])));
-
 
     GetTeamA()->SetShirt(data[base_index + 2]);
     GetTeamB()->SetShirt(data[base_index + 3]);

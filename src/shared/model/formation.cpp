@@ -130,6 +130,7 @@ FORMATION Formation::GetValue()
 void Formation::ChangeFormation(string formation) {
     this->changed_by_user = true;
     this->SetValueFromStringFormation(formation);
+    this->positions.clear();
     this->InitializePositions();
 }
 
@@ -150,10 +151,4 @@ void Formation::SetValueFromStringFormation(string string_value) {
 
 bool Formation::ChangedByUser() {
     return this->changed_by_user;
-}
-
-void Formation::SetFormation(FORMATION value)
-{
-    this->value = value;
-    this->InitializePositions();
 }

@@ -10,7 +10,7 @@
 
 class Team;
 
-enum FORMATION { F_3_3, F_3_1_2, F_3_2_1 };
+enum FORMATION { F_3_3 = 1, F_3_1_2 = 2, F_3_2_1 = 3 };
 
 class Formation
 {
@@ -22,7 +22,6 @@ public:
     FORMATION GetValue();
     void ChangeFormation(string formation);
     bool ChangedByUser();
-    void SetFormation(FORMATION value);
 protected:
     void SetValueFromStringFormation(string string_value);
 

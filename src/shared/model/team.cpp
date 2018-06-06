@@ -84,6 +84,7 @@ Match* Team::GetMatch()
     return this->match;
 }
 
+
 void Team::AddPlayer(Player* player)
 {
     if (players.size() < TEAM_SIZE)
@@ -128,6 +129,6 @@ void Team::UpdateFormation()
     for (unsigned int i = 0; i < (Team::TEAM_SIZE); i++)
     {
         cPlayer = this->players[i];
-        cPlayer->GoBackToDefaultPosition();
+        cPlayer->SetLocation(cPlayer->GetDefaultLocation());
     }
 }
