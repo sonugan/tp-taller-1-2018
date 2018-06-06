@@ -20,7 +20,6 @@ class MiniPlayerView: public AbstractView
         static const int MINI_PITCH_OFFSET_Y = 0; // DONDE EMPIEZA LA CANCHA EN EL PANEL DE INFORMACION
         static const int MINI_PITCH_WIDTH = 124;
         static const int MINI_PITCH_HEIGHT = 65;
-        static const int TEAM_OFFSET = 2;
 
         Player* player;
         int real_pitch_height;

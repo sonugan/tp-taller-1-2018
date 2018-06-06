@@ -9,8 +9,8 @@ MiniPlayerView::MiniPlayerView(Player* player, int real_pitch_height, int real_p
     SDL_Rect* sprite1 = new SDL_Rect();
     sprite1->x = 0;
     sprite1->y =  0;
-    sprite1->w =  10;
-    sprite1->h = 10;
+    sprite1->w =  7;
+    sprite1->h = 7;
 
     std::vector<SDL_Rect*> clips;
     clips.push_back(sprite1);
@@ -42,18 +42,6 @@ int MiniPlayerView::GetMiniPlayerX()
 {
     int mini_x = this->player->GetLocation()->GetX() * MINI_PITCH_WIDTH;
     mini_x = mini_x / this->real_pitch_width;
-
-    // Le doy un offset a cada team, porque sino quedaban muy pegados en el centro
-
-    if (player->PlaysForTeamA())
-    {
-        mini_x = mini_x - TEAM_OFFSET;
-    }
-    else
-    {
-        mini_x = mini_x + TEAM_OFFSET;
-    }
-
     return mini_x + MINI_PITCH_OFFSET_X;
 }
 

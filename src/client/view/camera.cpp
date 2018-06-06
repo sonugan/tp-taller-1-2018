@@ -21,6 +21,12 @@ Camera::Camera(int game_width, int game_height, int width, int height, IShowable
 
 Camera::~Camera() {
     Logger::getInstance()->debug("DESTRUYENDO CAMARA");
+
+    for (unsigned int i = 0; i < this->mini_player_views.size(); i++)
+    {
+        delete (this->mini_player_views[i]);
+    }
+
     delete this->area;
 }
 

@@ -98,6 +98,8 @@
 		<Unit filename="src/client/view/ishowable.h" />
 		<Unit filename="src/client/view/login-view.cpp" />
 		<Unit filename="src/client/view/login-view.h" />
+		<Unit filename="src/client/view/mini-player-view.cpp" />
+		<Unit filename="src/client/view/mini-player-view.h" />
 		<Unit filename="src/client/view/pitch-view.cpp" />
 		<Unit filename="src/client/view/pitch-view.h" />
 		<Unit filename="src/client/view/player-view.cpp" />
@@ -108,6 +110,8 @@
 		<Unit filename="src/client/view/sprite-text.h" />
 		<Unit filename="src/client/view/sprites-provider.cpp" />
 		<Unit filename="src/client/view/sprites-provider.h" />
+		<Unit filename="src/client/view/timer-view.cpp" />
+		<Unit filename="src/client/view/timer-view.h" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/server/game/game-server.cpp" />
 		<Unit filename="src/server/game/game-server.h" />

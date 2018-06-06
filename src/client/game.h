@@ -14,6 +14,7 @@
 #include "view/pitch-view.h"
 #include "view/ball-view.h"
 #include "view/player-view.h"
+#include "view/timer-view.h"
 #include "view/mini-player-view.h"
 #include "view/info-panel-view.h"
 #include "view/camera.h"
@@ -27,6 +28,7 @@
 #include "controller/game-controller.h"
 #include "client.h"
 #include "../shared/model/user.h"
+#include "../shared/model/timer.h"
 #include <map>
 
 class GameController; //  forward declaration
@@ -61,6 +63,8 @@ class Game
         SDL_Renderer* renderer;
         Match* match;
         Camera* camera;
+        Timer* timer;
+        TimerView* timer_view;
         User* user;
         Client* client;
         static const int FRAMES_PER_SECOND = 30;

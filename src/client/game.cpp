@@ -81,6 +81,7 @@ void Game::RenderViews()
     SDL_RenderClear( renderer );
 
     this->camera->Render();
+    this->timer_view->Render(this->timer);
     SDL_RenderPresent( renderer );
 }
 
@@ -196,6 +197,8 @@ void Game::CreateModel(std::string serialized_model)
 
     this->match = new Match(pitch, team_a, team_b, ball);
 
+    this->timer = new Timer(); // esto dsp ver como pasarlo al server
+
     this->match->DeserializeAndUpdate(serialized_model);
 
     this->client->SetMatch(this->match);
@@ -237,6 +240,8 @@ void Game::CreateViews()
     this->camera->Add(ball_view);
     this->camera->SetShowable(ball_view);
 
+    this->timer_view = new TimerView(renderer);
+
 }
 
 void Game::CreateControllers()
@@ -268,12 +273,15 @@ void Game::DestroyModel()
 void Game::DestroyViews()
 {
     Logger::getInstance()->debug("DESTRUYENDO LAS VISTAS");
+
     std::vector<AbstractView*> views = this->camera->GetViews();
     for (unsigned int i = 0; i < views.size(); i++)
     {
         delete (views[i]);
     }
+
     delete this->camera;
+    delete this->timer_view;
 }
 
 void Game::DestroyControllers()
