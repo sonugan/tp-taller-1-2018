@@ -49,7 +49,9 @@ void GameState::CreateModel(Configuration* initial_configuration)
 
     Ball* ball = new Ball();
 
-    this->match = new Match(pitch, team_a, team_b, ball);
+    Timer* timer = new Timer("02:00"); // TODO: VER DE DONDE SE TOMA EL TIEMPO, DEBERIA VENIR DE CONFIG?
+
+    this->match = new Match(pitch, team_a, team_b, ball, timer);
 }
 
 bool GameState::WasConnected(User* user) {

@@ -81,7 +81,7 @@ void Game::RenderViews()
     SDL_RenderClear( renderer );
 
     this->camera->Render();
-    this->timer_view->Render(this->timer);
+    this->timer_view->Render(this->match->GetTimer());
     SDL_RenderPresent( renderer );
 }
 
@@ -195,9 +195,9 @@ void Game::CreateModel(std::string serialized_model)
 
     Ball* ball = new Ball();
 
-    this->match = new Match(pitch, team_a, team_b, ball);
+    this->timer = new Timer("02:00"); // TODO: VER DE DONDE SE TOMA EL TIEMPO, DEBERIA VENIR DE CONFIG?
 
-    this->timer = new Timer(); // esto dsp ver como pasarlo al server
+    this->match = new Match(pitch, team_a, team_b, ball, this->timer);
 
     this->match->DeserializeAndUpdate(serialized_model);
 

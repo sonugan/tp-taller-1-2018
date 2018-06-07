@@ -190,6 +190,8 @@ Message* GameServer::StartGame()
     	it++;
     }
 
+    this->game_state->GetMatch()->StartTimer();
+
     return new Message(this->game_state->GetMatch()->Serialize());
 }
 

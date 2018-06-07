@@ -21,7 +21,7 @@ TimerView::~TimerView()
 void TimerView::Render(Timer* timer)
 {
     SDL_Color text_color = { 255, 255, 255, 0xFF };
-    SDL_Surface* surface = TTF_RenderText_Solid(this->font_style, timer->GetElapsedMinutes().c_str(), text_color);
+    SDL_Surface* surface = TTF_RenderText_Solid(this->font_style, timer->GetRemainingMinutes().c_str(), text_color);
     SDL_Texture* message = SDL_CreateTextureFromSurface(this->renderer, surface);
     SDL_Rect rect;
 

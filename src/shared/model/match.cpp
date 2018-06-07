@@ -2,7 +2,7 @@
 #include "../logger.h"
 
 
-Match::Match(Pitch* pitch, Team* team_a, Team* team_b, Ball* ball) {
+Match::Match(Pitch* pitch, Team* team_a, Team* team_b, Ball* ball, Timer* timer) {
     this->team_a = team_a;
     this->team_b = team_b;
     this->team_a->SetMatch(this);
@@ -11,6 +11,7 @@ Match::Match(Pitch* pitch, Team* team_a, Team* team_b, Ball* ball) {
     }
     this->pitch = pitch;
     this->ball = ball;
+    this->timer = timer;
 }
 
 Match::~Match() {
@@ -36,6 +37,11 @@ Pitch* Match::GetPitch() {
 Ball* Match::GetBall() {
     return ball;
 }
+
+Timer* Match::GetTimer() {
+    return timer;
+}
+
 
 string Match::Serialize() {
     Logger::getInstance()->debug("(Match:Serialize) Serializando Match...");
@@ -123,6 +129,10 @@ string Match::Serialize() {
     result.append("|");
     result.append(GetTeamB()->GetShirt());
 
+    // TIMER
+    result.append("|");
+    result.append(this->timer->GetFinishTime());
+
 //    Logger::getInstance()->debug("(Match:Serialize) Serialize result: " + result);
     return result;
 }
@@ -189,6 +199,8 @@ void Match::DeserializeAndUpdate(string serialized) {
     GetTeamA()->SetShirt(data[base_index + 2]);
     GetTeamB()->SetShirt(data[base_index + 3]);
 
+    // DESERIALIZO TIMER
+    this->timer->SetFinishTime(data[91]);
 
     Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Match deserializado");
 }
@@ -203,4 +215,9 @@ int Match::SafeStoi(const string& str)
     {
         Logger::getInstance()->error("(Match:SafeStoi) Error con argumento: " + str);
     }
+}
+
+void Match::StartTimer()
+{
+    this->timer->Restart();
 }
