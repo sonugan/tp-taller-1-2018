@@ -21,6 +21,7 @@ class Ball
         bool IsFree();
         Player* GetPlayer();
         bool LastFreedDelayPassed();
+        Trajectory* GetTrajectory();
 
     protected:
 

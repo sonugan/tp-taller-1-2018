@@ -83,6 +83,13 @@ std::string GameServer::DoKick(KickBallRequest* kick_request, int socket_id)
     return this->game_state->GetMatch()->Serialize();
 }
 
+std::string GameServer::DoLongPass(LongPassRequest* long_pass_request, int socket_id)
+{
+    User* user = this->session_manager->GetUserBySocketID(socket_id);
+    unsigned int power = long_pass_request->GetPower();
+    user->GetSelectedPlayer()->LongPass(power, TRAJECTORY_TYPE::UPWARDS); //Mirar esto!!!
+    return this->game_state->GetMatch()->Serialize();
+}
 
 Message* GameServer::DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request)
 {

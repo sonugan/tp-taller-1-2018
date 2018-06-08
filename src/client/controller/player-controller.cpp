@@ -12,6 +12,7 @@ PlayerController::PlayerController(Team* team, Client* client) {
     this->last_pass = std::chrono::system_clock::now();
     this->last_keyboard_state_array = NULL;
     this->kickballevents = 1;
+    this->longpassevents = 1;
 }
 
 PlayerController::~PlayerController() {
@@ -36,6 +37,7 @@ void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array, SDL_Event e
     this->PassBall(keyboard_state_array);//TODO: Ver como implementar PassBall en el modelo
     this->PlayerRecoverBall(keyboard_state_array);
     this->KickPlayer(keyboard_state_array, e);
+    this->LongPass(keyboard_state_array, e);
     this->MovePlayer(keyboard_state_array);
     this->last_keyboard_state_array = keyboard_state_array;
 }
@@ -85,6 +87,24 @@ bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array, SDL_Event e
             KickBallRequest r(this->kickballevents);
             this->client->KickBall(&r);
             this->kickballevents = 1;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool PlayerController::LongPass(const Uint8 *keyboard_state_array, SDL_Event e) {
+    if (e.key.keysym.sym == SDLK_w)
+    {
+        if ((e.key.state == SDL_PRESSED) && (e.key.repeat != 0))
+        {
+            this->longpassevents = 2;
+        }
+        if (e.key.state == SDL_RELEASED)
+        {
+            LongPassRequest r(this->longpassevents);
+            this->client->LongPass(&r);
+            this->longpassevents = 1;
             return true;
         }
     }

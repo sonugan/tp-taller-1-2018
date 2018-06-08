@@ -75,6 +75,11 @@ bool Client::KickBall(KickBallRequest* kick_ball_request){
     return clientSocket->Send(r);
 }
 
+bool Client::LongPass(LongPassRequest* long_pass_request){
+    Message r(long_pass_request->Serialize());
+    return clientSocket->Send(r);
+}
+
 bool Client::Move(MoveRequest* move_request){
     Message r(move_request->Serialize());
     return clientSocket->Send(r);

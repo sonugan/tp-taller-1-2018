@@ -13,6 +13,7 @@
 #include "player-states/player-kick-state.h"
 #include "player-states/player-recover-ball-state.h"
 #include "player-states/player-states.h"
+#include "trajectory-type.h"
 
 enum class DIRECTION { NORTH = 1, SOUTH = 2, EAST = 3, WEST = 4, NORTHEAST = 5, SOUTHEAST = 6, SOUTHWEST = 7, NORTHWEST = 8 };
 
@@ -36,6 +37,7 @@ class Player
         void MoveDownToRight(bool run);
         void MoveDownToLeft(bool run);
         void Kick();
+        void LongPass(int power, TRAJECTORY_TYPE trajectory_type);
         void RecoverBall();
         Location* GetLocation();
         DIRECTION GetDirection();
@@ -91,6 +93,7 @@ class Player
         PlayerRecoverBallState* recover_ball_state;
         IPlayerState* current_state;
         bool is_still;
+        unsigned int height = 64;
 };
 
 #endif // PLAYER_H

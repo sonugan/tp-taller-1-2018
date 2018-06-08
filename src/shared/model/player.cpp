@@ -277,7 +277,7 @@ void Player::PassBall()
 {
     if (HasBall())
     {
-        Trajectory* trajectory = new Trajectory(direction, 1);
+        Trajectory* trajectory = new Trajectory(direction, 1, TRAJECTORY_TYPE::FLOOR);
         team->GetMatch()->GetBall()->SetTrajectory(trajectory);
     }
 }
@@ -286,7 +286,16 @@ void Player::KickBall(int power)
 {
     if (HasBall())
     {
-        Trajectory* trajectory = new Trajectory(direction, power);
+        Trajectory* trajectory = new Trajectory(direction, power, TRAJECTORY_TYPE::FLOOR);
+        team->GetMatch()->GetBall()->SetTrajectory(trajectory);
+    }
+}
+
+void Player::LongPass(int power, TRAJECTORY_TYPE trajectory_type)
+{
+    if (HasBall())
+    {
+        Trajectory* trajectory = new Trajectory(direction, power, trajectory_type);
         team->GetMatch()->GetBall()->SetTrajectory(trajectory);
     }
 }
