@@ -7,6 +7,7 @@
 #include "sprite-text.h"
 #include "../../shared/logger.h"
 #include "../../shared/network/messages/login-request.h"
+#include "../../shared/network/messages/change-formation-request.h"
 #include "../../shared/configuration/configuration.h"
 #include <string>
 
@@ -20,6 +21,7 @@ class LoginView
         void Open(Configuration* game_configuration);
         void OpenErrorPage(Configuration* game_configuration, const std::string& login_response);
         void OpenWaitingPage();
+        bool OpenFormationPage(ChangeFormationRequest* cfRequest);
         bool IsUserAuthenticated();
         bool IsUserQuit();
         TEAM_NUMBER GetTeamNumber();

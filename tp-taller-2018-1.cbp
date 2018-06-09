@@ -167,6 +167,8 @@
 		<Unit filename="src/shared/network/message-type.h" />
 		<Unit filename="src/shared/network/message.cpp" />
 		<Unit filename="src/shared/network/message.h" />
+		<Unit filename="src/shared/network/messages/change-formation-request.cpp" />
+		<Unit filename="src/shared/network/messages/change-formation-request.h" />
 		<Unit filename="src/shared/network/messages/change-player-request.cpp" />
 		<Unit filename="src/shared/network/messages/change-player-request.h" />
 		<Unit filename="src/shared/network/messages/health-check.cpp" />
