@@ -32,7 +32,7 @@ public:
     Message* DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request);
     string ChangePlayer(ChangePlayerRequest* change_player_request, int socket_id);
     bool IsReadyToStart();
-    Message* StartGame();
+    void StartGame();
     void RunArtificialIntelligence();
     bool IsRunning();
     void DisconnectClient(ClientSocket* client);

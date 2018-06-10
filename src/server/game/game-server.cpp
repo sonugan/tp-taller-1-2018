@@ -185,7 +185,8 @@ bool GameServer::TeamsHaveFormation() {
     map<string, User*> users = this->session_manager->GetAuthenticatedUsers();
     Team* team;
     Team* teamA = this->game_state->GetMatch()->GetTeamA();
-    for (auto const& u : users) {
+	for (const auto& u : users)
+	{
         team = u.second->GetSelectedPlayer()->GetTeam();
         if (team == teamA) {
             team_a_has_formation = team->GetFormation()->ChangedByUser();
@@ -198,8 +199,7 @@ bool GameServer::TeamsHaveFormation() {
     return (team_a_has_formation && team_b_has_formation);
 }
 
-//TODO: Para a void porque no se usa el msj retornado y genera perdida de memoria.
-Message* GameServer::StartGame()
+void GameServer::StartGame()
 {
     Logger::getInstance()->info("(GameServer:StartGame) Comenzando el juego.");
     this->is_running = true;
@@ -214,8 +214,6 @@ Message* GameServer::StartGame()
     }
 
     this->game_state->GetMatch()->StartTimer();
-
-    return new Message(this->game_state->GetMatch()->Serialize());
 }
 
 void GameServer::RunArtificialIntelligence() {
@@ -339,7 +337,8 @@ int GameServer::GetTeamUsersNum(string team_name) {
         user_team = this->game_state->GetMatch()->GetTeamB();
     }
 
-    for (auto const& u : users) {
+	for (const auto& u : users)
+	{
         current_team = u.second->GetSelectedPlayer()->GetTeam();
         if (current_team == user_team) {
             num++;
