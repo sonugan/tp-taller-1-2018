@@ -51,7 +51,7 @@ void Formation::InitializePositionsTeamA()
         positions.push_back(new Location(660, 240, 0));
         positions.push_back(new Location(660, 540, 0));
         positions.push_back(new Location(660, 840, 0));
-        positions.push_back(new Location(800, 240, 0));
+        positions.push_back(new Location(800, 340, 0));
         positions.push_back(new Location(900, 540, 0));
         positions.push_back(new Location(800, 740, 0));
     }
@@ -61,9 +61,9 @@ void Formation::InitializePositionsTeamA()
         positions.push_back(new Location(660, 240, 0));
         positions.push_back(new Location(660, 540, 0));
         positions.push_back(new Location(660, 840, 0));
-        positions.push_back(new Location(800, 240, 0));
-        positions.push_back(new Location(900, 540, 0));
-        positions.push_back(new Location(800, 740, 0));
+        positions.push_back(new Location(800, 540, 0));
+        positions.push_back(new Location(900, 340, 0));
+        positions.push_back(new Location(900, 740, 0));
     }
 }
 
@@ -88,7 +88,7 @@ void Formation::InitializePositionsTeamB()
         positions.push_back(new Location(1260, 240, 0));
         positions.push_back(new Location(1260, 540, 0));
         positions.push_back(new Location(1260, 840, 0));
-        positions.push_back(new Location(1120, 240, 0));
+        positions.push_back(new Location(1120, 340, 0));
         positions.push_back(new Location(1020, 540, 0));
         positions.push_back(new Location(1120, 740, 0));
     }
@@ -98,9 +98,9 @@ void Formation::InitializePositionsTeamB()
         positions.push_back(new Location(1260, 240, 0));
         positions.push_back(new Location(1260, 540, 0));
         positions.push_back(new Location(1260, 840, 0));
-        positions.push_back(new Location(1120, 240, 0));
-        positions.push_back(new Location(1020, 540, 0));
-        positions.push_back(new Location(1120, 740, 0));
+        positions.push_back(new Location(1020, 340, 0));
+        positions.push_back(new Location(1120, 540, 0));
+        positions.push_back(new Location(1020, 740, 0));
     }
 
 }
