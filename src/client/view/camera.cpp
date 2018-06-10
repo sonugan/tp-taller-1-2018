@@ -2,7 +2,8 @@
 #include <unistd.h>
 #include "../../shared/logger.h"
 
-Camera::Camera(int game_width, int game_height, int width, int height, IShowable* showable, SDL_Renderer* renderer, Location* initialPosition) {
+Camera::Camera(int game_width, int game_height, int width, int height, IShowable* showable, SDL_Renderer* renderer, Location* initialPosition)
+{
 
     this->game_width = game_width;
     this->game_height = game_height;
@@ -27,6 +28,8 @@ Camera::~Camera() {
         delete (this->mini_player_views[i]);
     }
 
+//    delete this->mini_ball_view;
+
     delete this->area;
 }
 
@@ -43,6 +46,8 @@ void Camera::Render() {
     for (unsigned int i = 0; i < this->mini_player_views.size(); i++) {
         this->mini_player_views[i]->Render(this->area->x, this->area->y, this->area->w, this->area->h);
     }
+
+    this->mini_ball_view->Render(this->area->x, this->area->y, this->area->w, this->area->h);
 }
 
 void Camera::SetShowable(IShowable* showable) {
@@ -125,4 +130,8 @@ void Camera::Move() {
 
 }
 
+void Camera::AddMiniBallView(MiniBallView* view)
+{
+    this->mini_ball_view = view;
+}
 

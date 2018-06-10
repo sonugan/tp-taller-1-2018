@@ -4,12 +4,14 @@
 #include "abstract-view.h"
 #include "ishowable.h"
 #include "mini-player-view.h"
+#include "mini-ball-view.h"
 #include "player-view.h"
 #include "info-panel-view.h"
 #include <map>
 
 class PlayerView;
 class MiniPlayerView;
+class MiniBallView;
 
 class Camera
 {
@@ -20,6 +22,7 @@ class Camera
         void SetShowable(IShowable* showable);
         void Add(AbstractView* view);
         void AddMiniPlayerView(MiniPlayerView* view);
+        void AddMiniBallView(MiniBallView* view);
         std::vector<AbstractView*> GetViews();
         SDL_Rect* area;
         void SetStartPosition(Location* position);
@@ -30,6 +33,7 @@ class Camera
     private:
         std::vector<AbstractView*> views;
         std::vector<MiniPlayerView*> mini_player_views;
+        MiniBallView* mini_ball_view;
         void Move();
         IShowable* showable;
         Location* previous_showable_location;

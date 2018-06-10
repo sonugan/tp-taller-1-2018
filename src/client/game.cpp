@@ -255,6 +255,9 @@ void Game::CreateViews()
     this->camera->Add(ball_view);
     this->camera->SetShowable(ball_view);
 
+    MiniBallView* mini_ball_view = new MiniBallView(match->GetBall(), PITCH_HEIGHT, PITCH_WIDTH);
+    this->camera->AddMiniBallView(mini_ball_view);
+
     this->timer_view = new TimerView(renderer);
 
 }

@@ -98,6 +98,8 @@
 		<Unit filename="src/client/view/ishowable.h" />
 		<Unit filename="src/client/view/login-view.cpp" />
 		<Unit filename="src/client/view/login-view.h" />
+		<Unit filename="src/client/view/mini-ball-view.cpp" />
+		<Unit filename="src/client/view/mini-ball-view.h" />
 		<Unit filename="src/client/view/mini-player-view.cpp" />
 		<Unit filename="src/client/view/mini-player-view.h" />
 		<Unit filename="src/client/view/pitch-view.cpp" />

@@ -91,6 +91,10 @@ std::string SpritesProvider::GetDefaultPath(SPRITE_SHEET sprite_sheet_enum)
     {
         return "info-panel-background.png";
     }
+    else if (MINI_BALL == sprite_sheet_enum)
+    {
+        return "mini-ball-selector.png";
+    }
     return NULL;
 }
 
