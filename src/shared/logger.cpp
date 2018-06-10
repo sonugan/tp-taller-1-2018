@@ -66,7 +66,7 @@ void Logger::log(LogLevel level, string msg) {
 	logFile.close();
 	if (this->is_cout_enabled)
 	{
-	    //cout << log_entry << endl;
+	    cout << log_entry << endl;
 	}
 }
 
