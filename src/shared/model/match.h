@@ -9,6 +9,8 @@
 #include "../network/message-type.h"
 #include "../utils/string-utils.h"
 #include <string>
+#include "match-state.h"
+#include "match-time-type.h"
 
 class Ball;
 class Team;
@@ -33,6 +35,8 @@ class Match
         Pitch* pitch;
         Ball* ball;
         Timer* timer;
+        MATCH_TIME_TYPE match_time;
+        MATCH_STATE match_state;
 
         int SafeStoi(const std::string& str);
 };

@@ -25,7 +25,7 @@ class GameState
 
     private:
         /* Attributes */
-        Match* match;
+        Match* match = NULL;
         map<string, string> users = {};
 
         /* Methods */

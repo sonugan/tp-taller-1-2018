@@ -12,6 +12,8 @@ Match::Match(Pitch* pitch, Team* team_a, Team* team_b, Ball* ball, Timer* timer)
     this->pitch = pitch;
     this->ball = ball;
     this->timer = timer;
+    this->match_time = MATCH_TIME_TYPE::FIRST_TIME;
+    this->match_state = MATCH_STATE::WAITING_TO_START;
 }
 
 Match::~Match() {
@@ -20,6 +22,7 @@ Match::~Match() {
     delete team_a;
     delete team_b;
     delete ball;
+    delete timer;
 }
 
 Team* Match::GetTeamA() {
