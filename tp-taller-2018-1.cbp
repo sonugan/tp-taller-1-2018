@@ -116,6 +116,11 @@
 		<Unit filename="src/server/session/non-existen-user-exception.h" />
 		<Unit filename="src/server/session/session-manager.cpp" />
 		<Unit filename="src/server/session/session-manager.h" />
+		<Unit filename="src/shared/collision/circle.cpp" />
+		<Unit filename="src/shared/collision/circle.h" />
+		<Unit filename="src/shared/collision/igeometric-form.h" />
+		<Unit filename="src/shared/collision/shadow.cpp" />
+		<Unit filename="src/shared/collision/shadow.h" />
 		<Unit filename="src/shared/configuration/cli-options-parser.cpp" />
 		<Unit filename="src/shared/configuration/cli-options-parser.h" />
 		<Unit filename="src/shared/configuration/cli-options.cpp" />

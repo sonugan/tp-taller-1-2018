@@ -31,6 +31,7 @@ class PlayerMoveState : public IPlayerState
         Player* player;
     private:
         int has_been_moved = 0;
+        u_int STATE_COUNTER_RESET_VALUE = 2;
 };
 
 #endif // PLAYER_MOVE_STATE_H

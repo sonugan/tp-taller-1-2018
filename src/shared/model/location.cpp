@@ -76,10 +76,17 @@ void Location::Update(Location* location)
     this->z = location->z;
 }
 
-int Location::Distance(Location* other_location) {
+float Location::Distance(Location* other_location) {
     return sqrt(pow((x - other_location->GetX()), 2)
                + pow((y - other_location->GetY()), 2)
                      + pow((z - other_location->GetZ()), 2));
+}
+
+float Location::ManhattanDistance(Location* other_location)
+{
+    return abs(this->x - other_location->x)
+            + abs(this->y - other_location->y)
+                + abs(this->z - other_location->z);
 }
 
 std::string Location::ToString() {

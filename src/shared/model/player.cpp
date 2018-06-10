@@ -279,6 +279,12 @@ void Player::Move(bool run)
         this->location->Update(new_location);
         this->shadow->PlayerHasChanged();
     }
+    else
+    {
+        Location* best_location = this->shadow->GetBestNextPosition(new_location, speed);
+        this->location->Update(best_location);
+        delete best_location;
+    }
     delete new_location;
 }
 
@@ -383,11 +389,6 @@ void Player::SetLocation(Location* location)
 {
     this->location->Update(location->GetX(), location->GetY(), location->GetZ());
     this->previous_location->Update(location->GetX(), location->GetY(), location->GetZ());
-}
-
-bool Player::Collides()
-{
-    return false;
 }
 
 Shadow* Player::GetShadow()

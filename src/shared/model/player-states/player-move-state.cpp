@@ -10,75 +10,51 @@ PlayerMoveState::~PlayerMoveState()
 }
 void PlayerMoveState::MoveLeft(bool run)
 {
-    if(!this->player->Collides())
-    {
-        this->player->SetDirection(DIRECTION::WEST);
-        this->player->Move(run);
-        this->has_been_moved = 2;
-    }
+    this->player->SetDirection(DIRECTION::WEST);
+    this->player->Move(run);
+    this->has_been_moved = STATE_COUNTER_RESET_VALUE;
 }
 void PlayerMoveState::MoveRight(bool run)
 {
-    if(!this->player->Collides())
-    {
-        this->player->SetDirection(DIRECTION::EAST);
-        this->player->Move(run);
-        this->has_been_moved = 2;
-    }
+    this->player->SetDirection(DIRECTION::EAST);
+    this->player->Move(run);
+    this->has_been_moved = STATE_COUNTER_RESET_VALUE;
 }
 void PlayerMoveState::MoveUp(bool run)
 {
-    if(!this->player->Collides())
-    {
-        this->player->SetDirection(DIRECTION::NORTH);
-        this->player->Move(run);
-        this->has_been_moved = 2;
-    }
+    this->player->SetDirection(DIRECTION::NORTH);
+    this->player->Move(run);
+    this->has_been_moved = STATE_COUNTER_RESET_VALUE;
 }
 void PlayerMoveState::MoveDown(bool run)
 {
-    if(!this->player->Collides())
-    {
-        this->player->SetDirection(DIRECTION::SOUTH);
-        this->player->Move(run);
-        this->has_been_moved = 2;
-    }
+    this->player->SetDirection(DIRECTION::SOUTH);
+    this->player->Move(run);
+    this->has_been_moved = STATE_COUNTER_RESET_VALUE;
 }
 void PlayerMoveState::MoveUpToRight(bool run)
 {
-    if(!this->player->Collides())
-    {
-        this->player->SetDirection(DIRECTION::NORTHEAST);
-        this->player->Move(run);
-        this->has_been_moved = 2;
-    }
+    this->player->SetDirection(DIRECTION::NORTHEAST);
+    this->player->Move(run);
+    this->has_been_moved = STATE_COUNTER_RESET_VALUE;
 }
 void PlayerMoveState::MoveUpToLeft(bool run)
 {
-    if(!this->player->Collides())
-    {
-        this->player->SetDirection(DIRECTION::NORTHWEST);
-        this->player->Move(run);
-        this->has_been_moved = 2;
-    }
+    this->player->SetDirection(DIRECTION::NORTHWEST);
+    this->player->Move(run);
+    this->has_been_moved = STATE_COUNTER_RESET_VALUE;
 }
 void PlayerMoveState::MoveDownToRight(bool run)
 {
-    if(!this->player->Collides())
-    {
-        this->player->SetDirection(DIRECTION::SOUTHEAST);
-        this->player->Move(run);
-        this->has_been_moved = 2;
-    }
+    this->player->SetDirection(DIRECTION::SOUTHEAST);
+    this->player->Move(run);
+    this->has_been_moved = STATE_COUNTER_RESET_VALUE;
 }
 void PlayerMoveState::MoveDownToLeft(bool run)
 {
-    if(!this->player->Collides())
-    {
-        this->player->SetDirection(DIRECTION::SOUTHWEST);
-        this->player->Move(run);
-        this->has_been_moved = 2;
-    }
+    this->player->SetDirection(DIRECTION::SOUTHWEST);
+    this->player->Move(run);
+    this->has_been_moved = STATE_COUNTER_RESET_VALUE;
 }
 void PlayerMoveState::Kick()
 {

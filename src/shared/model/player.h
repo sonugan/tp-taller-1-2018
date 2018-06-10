@@ -73,7 +73,6 @@ class Player
         void SetIsStill(bool is_still);
         bool GetIsStill();
         void SetLocation(Location* location);
-        bool Collides();
         Shadow* GetShadow();
     protected:
 
