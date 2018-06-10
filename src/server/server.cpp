@@ -120,7 +120,7 @@ void Server::ReceiveMessages(ClientSocket* client)
 
             input_msg_condition_variable.notify_all();
         }
-        catch (SocketConnectionException e)
+        catch (SocketConnectionException& e)
         {
             Logger::getInstance()->error("(Server:ReceiveMessages) Error de conexión. Cerrando socket cliente.");
             receiving_messages = false;
@@ -204,25 +204,25 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
             this->StartGame();
         }
     }
-    catch (AuthenticationException e)
+    catch (AuthenticationException& e)
     {
         Message* login_response = new Message("login-fail");
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta LoginFail.");
         this->outgoing_msg_queues[client->socket_id]->Append(login_response);
     }
-    catch(MaxAllowedUsersException e)
+    catch(MaxAllowedUsersException& e)
     {
         Message* login_response = new Message("too-many-users");
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta TooManyUsers.");
         this->outgoing_msg_queues[client->socket_id]->Append(login_response);
     }
-    catch (InvalidTeamException e)
+    catch (InvalidTeamException& e)
     {
         Message* login_response = new Message("invalid-team");
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta InvalidTeam.");
         this->outgoing_msg_queues[client->socket_id]->Append(login_response);
     }
-    catch (NonExistentUserException e)
+    catch (NonExistentUserException& e)
     {
         Message* login_response = new Message("non-existent-user");
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta el usuario no esta en la partida.");

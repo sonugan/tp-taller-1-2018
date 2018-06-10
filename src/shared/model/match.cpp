@@ -143,7 +143,7 @@ void Match::DeserializeAndUpdate(string serialized) {
 
     //  BALL
     ball->GetLocation()->Update(SafeStoi(data[1]), SafeStoi(data[2]), 0);
-//    Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Ball location: " + ball->GetLocation()->ToString());
+
 
     //  TEAM A
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
@@ -151,19 +151,17 @@ void Match::DeserializeAndUpdate(string serialized) {
 
         int base_index = 3 + (i*6);
         Player* player = GetTeamA()->GetPlayers()[i];
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) direction");
+
         player->SetDirection(static_cast<DIRECTION>(SafeStoi(data[base_index])));
 
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) color");
+
         player->SetPlayerColor(static_cast<USER_COLOR>(SafeStoi(data[base_index + 1])));
 
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_kicking");
         //player->SetKicking((bool)(SafeStoi(data[base_index + 2])));
         player->SetCurrentAction(static_cast<PLAYER_ACTION>(stoi(data[base_index + 2])));
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_recovering_ball");
+
         player->SetIsStill((bool)(SafeStoi(data[base_index + 3])));
 
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) location");
         player->GetLocation()->Update(SafeStoi(data[base_index + 4]), SafeStoi(data[base_index + 5]), 0);
 
     }
@@ -174,17 +172,16 @@ void Match::DeserializeAndUpdate(string serialized) {
         int base_index = 3 + 42 + (i*6);
         Player* player = GetTeamB()->GetPlayers()[i];
 
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) direction");
         player->SetDirection(static_cast<DIRECTION>(SafeStoi(data[base_index])));
 
         player->SetPlayerColor(static_cast<USER_COLOR>(SafeStoi(data[base_index + 1])));
 
         player->SetCurrentAction(static_cast<PLAYER_ACTION>(stoi(data[base_index + 2])));
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_kicking");
+
         //player->SetKicking((bool)(SafeStoi(data[base_index + 2])));
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_recovering_ball");
+
         player->SetIsStill((bool)(SafeStoi(data[base_index + 3])));
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) location");
+
         player->GetLocation()->Update(SafeStoi(data[base_index + 4]), SafeStoi(data[base_index + 5]), 0);
 
     }
