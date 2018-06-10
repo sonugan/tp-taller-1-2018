@@ -131,7 +131,7 @@ void Server::ReceiveMessages(ClientSocket* client)
 
 void Server::ProcessMessage(ClientSocket* client, Message* message)
 {
-    Logger::getInstance()->debug("(Server::ProcessMessage) Procesando mensaje.");
+    Logger::getInstance()->debug("(Server::ProcessMessage) Procesando mensaje. Tipo: " + to_string(message->GetType()));
 
     switch(message->GetType())
     {
@@ -159,6 +159,9 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
     case MESSAGE_TYPE::HEALTH_CHECK:
         this->HandleHealthCheck(client, message);
         break;
+    case MESSAGE_TYPE::CHANGE_FORMATION_REQUEST:
+        this->HandleChangeFormationRequest(client, message);
+        break;
     default:
         Logger::getInstance()->error("(Server::ProcessMessage) No hay handler para este tipo de mensaje.");
     }
@@ -183,26 +186,23 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
     try
     {
         this->game->DoLogin(client, &login_request);
-        Message* login_response = new Message("login-ok");
-        Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta login-ok.");
+        Message* login_response;
+        if (!this->game->IsRunning() && this->game->GetTeamUsersNum(login_request.GetTeam()) == 1) {
+            //Como es el primero del equipo elige formacion
+            login_response = new Message("choose-formation");
+            Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta: choose-formation");
+        }
+        else {
+            login_response = new Message("login-ok");
+            Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta: login-ok");
+        }
 
         this->socket->Send(client, login_response);
 
         // Si ya se loguearon todos, se notifica a todos los usuarios para empezar a jugar.
-        if (!this->game->IsRunning())
-        {
-            if (this->game->IsReadyToStart())
-            {
-                this->RestartTimers();
-                this->game->StartGame();
-
-                // Disparo thread para notificar game-state periodicamente.
-                std::thread game_state_notifier_thread(&Server::NotifyGameState, this);
-                game_state_notifier_thread.detach();
-            }
+        if (!this->game->IsRunning() && this->game->IsReadyToStart()) {
+            this->StartGame();
         }
-
-
     }
     catch (AuthenticationException e)
     {
@@ -228,6 +228,15 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta el usuario no esta en la partida.");
         this->outgoing_msg_queues[client->socket_id]->Append(login_response);
     }
+}
+
+void Server::StartGame() {
+    this->RestartTimers();
+    this->game->StartGame();
+
+    // Disparo thread para notificar game-state periodicamente.
+    std::thread game_state_notifier_thread(&Server::NotifyGameState, this);
+    game_state_notifier_thread.detach();
 }
 
 void Server::HandleQuitRequest(ClientSocket* client, Message* message)
@@ -361,6 +370,20 @@ void Server::HandleHealthCheck(ClientSocket* client, Message* message)
     string socket_id = to_string(client->socket_id);
     Logger::getInstance()->debug("(Server:HandleHealthCheck) Sigue vivo el cliente: " + socket_id);
     this->timers[client->socket_id] = std::chrono::system_clock::now();
+}
+
+void Server::HandleChangeFormationRequest(ClientSocket* client, Message* message)
+{
+    string socket_id = to_string(client->socket_id);
+    ChangeFormationRequest cfRequest;
+    message->GetDeserializedData(&cfRequest);
+    this->game->ChangeFormation(&cfRequest, client->socket_id);
+
+    Logger::getInstance()->debug("(Server::HandleChangeFormationRequest) Procesado el cambio de formacion hecho por " + to_string(client->socket_id) + ". Verificando si el juego esta listo para comenzar..");
+    //Los otros jugadores pueden estar esperando que algun usuario elija una formacion para su equipo, por lo tanto verifico si debo empezar el juego o no
+    if (!this->game->IsRunning() && this->game->IsReadyToStart()) {
+        this->StartGame();
+    }
 }
 
 void Server::CheckDisconnections()

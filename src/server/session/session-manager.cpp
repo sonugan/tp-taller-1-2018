@@ -114,6 +114,7 @@ User* SessionManager::GetUserByColor(USER_COLOR color)
 
 bool SessionManager::IsReadyToStart()
 {
+    Logger::getInstance()->debug("(SessionManager::IsReadyToStart) Jugadores autenticados: " + to_string(this->GetAutheticatedUsersCount()) + ". Jugadores necesarios: " + to_string(this->max_allowed_users));
     return this->GetAutheticatedUsersCount() == this->max_allowed_users;
 }
 

@@ -3,20 +3,11 @@
 
 Formation::Formation(string string_value, TEAM_NUMBER team_number)
 {
-    if (string_value == "3-3")
-    {
-        this->value = F_3_3;
-    }
-    else if (string_value == "3-2-1")
-    {
-        this->value = F_3_2_1;
-    }
-    else
-    {
-        this->value = F_3_1_2;
-    }
+    this->SetValueFromStringFormation(string_value);
 
     this->team_number = team_number;
+
+    this->changed_by_user = false;
 
     InitializePositions();
 }
@@ -25,6 +16,7 @@ Formation::Formation(FORMATION value, TEAM_NUMBER team_number)
 {
     this->value = value;
     this->team_number = team_number;
+    this->changed_by_user = false;
     InitializePositions();
 }
 
@@ -133,4 +125,30 @@ Location* Formation::GetLocationForPlayer(unsigned int player_index)
 FORMATION Formation::GetValue()
 {
     return this->value;
+}
+
+void Formation::ChangeFormation(string formation) {
+    this->changed_by_user = true;
+    this->SetValueFromStringFormation(formation);
+    this->positions.clear();
+    this->InitializePositions();
+}
+
+void Formation::SetValueFromStringFormation(string string_value) {
+    if (string_value == "3-3")
+    {
+        this->value = F_3_3;
+    }
+    else if (string_value == "3-2-1")
+    {
+        this->value = F_3_2_1;
+    }
+    else
+    {
+        this->value = F_3_1_2;
+    }
+}
+
+bool Formation::ChangedByUser() {
+    return this->changed_by_user;
 }

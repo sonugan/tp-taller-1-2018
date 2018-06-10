@@ -7,7 +7,8 @@
 #define MSG_INVALID_TEAM        "Error: ha elegido un equipo invalido. Presione ESC para salir o ENTER para volver al menu principal"
 #define MSG_NON_EXISTENT_USER   "Error: el usuario no existe en la partida"
 #define MSG_WAITING             "Esperando que se conecten todos los jugadores..."
-
+#define MSG_CHOOSE_FORMATION    "Ingrese formacion a usar: "
+#define MSG_INVALID_FORMATION   "Formacion invalida. Presione ENTER para ingresar una nueva."
 
 #include "login-view.h"
 #include <SDL2/SDL_image.h>
@@ -218,7 +219,7 @@ void LoginView::OpenErrorPage(Configuration* game_configuration, const std::stri
     else if(login_response == "non-existent-user")
     {
         error_message = MSG_NON_EXISTENT_USER;
-        Logger::getInstance()->error("(LoginView:OpenErrorPage) El usaurio no existe en la partida");
+        Logger::getInstance()->error("(LoginView:OpenErrorPage) El usuario no existe en la partida");
     }
 
 
@@ -312,4 +313,103 @@ TEAM_NUMBER LoginView::GetTeamNumber()
 {
     this->team_number = TEAM_NUMBER::TEAM_B; // TODO ESTO LO TIENE QUE TRAER DE LA PANTALLA DE LOGIN
     return this->team_number;
+}
+
+bool LoginView::OpenFormationPage(ChangeFormationRequest* cfRequest)
+{
+    Logger::getInstance()->debug("(LoginView:OpenFormationPage) Abriendo pantalla de seleccion de formacion.");
+    bool quit = false, invalid_formation = false, x_pressed = false;
+
+    SDL_Event e;
+
+    SDL_Color textColor = { 255, 255, 255, 0xFF };
+
+    std::string inputText = "";
+    this->inputTextSprite = new SpriteText(this->renderer, this->fontStyle, " ", textColor);
+
+    this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_CHOOSE_FORMATION, textColor, false );
+
+    SDL_StartTextInput();
+
+    while( !quit )
+    {
+        bool renderText = false;
+
+        while( SDL_PollEvent( &e ) != 0 )
+        {
+            if( e.type == SDL_QUIT )
+            {
+                x_pressed = true;
+                quit = true;
+            }
+            else if( e.type == SDL_KEYDOWN )
+            {
+                if( e.key.keysym.sym == SDLK_BACKSPACE && inputText.length() > 0 )
+                {
+                    inputText.pop_back();
+                    renderText = true;
+                }
+                else if ( e.key.keysym.scancode == SDL_SCANCODE_KP_ENTER || e.key.keysym.scancode == SDL_SCANCODE_RETURN)
+                {
+                    if (invalid_formation) {
+                        invalid_formation = false;
+                        this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_CHOOSE_FORMATION, textColor, false );
+                    }
+                    else {
+                        //ENVIA INFORMACION DE LA FORMACION ELEGIDA
+                        if (inputText != "3-3" && inputText != "3-2-1" && inputText != "3-1-2")
+                        {
+                            //Reinicio el texto ingresado
+                            inputText = "";
+                            renderText = true;
+                            invalid_formation = true;
+                            this->textSprite->LoadFromRenderedText( this->fontStyle, MSG_INVALID_FORMATION, textColor, true );
+                        }
+                        else
+                        {
+                            //Envio mensaje de formacion
+                            cfRequest->SetFormation(inputText);
+                            cout << "Change formation request: " + cfRequest->ToString() << "\n";
+                            quit = true;
+                        }
+                    }
+                }
+            }
+            else if( e.type == SDL_TEXTINPUT && !invalid_formation)
+            {
+                if( !( ( e.text.text[ 0 ] == 'c' || e.text.text[ 0 ] == 'C' ) && ( e.text.text[ 0 ] == 'v' || e.text.text[ 0 ] == 'V' ) && SDL_GetModState() & KMOD_CTRL ) )
+                {
+                    inputText += e.text.text;
+                    renderText = true;
+                }
+            }
+        }
+
+        if( renderText )
+        {
+            if( inputText != "" )
+            {
+                this->inputTextSprite->LoadFromRenderedText( this->fontStyle, inputText.c_str(), textColor, false);
+            }
+            else
+            {
+                this->inputTextSprite->LoadFromRenderedText( this->fontStyle, " ", textColor, false );
+            }
+        }
+
+
+        SDL_SetRenderDrawColor( this->renderer, 0x00, 0x00, 0x00, 0xFF );
+        SDL_RenderClear( this->renderer );
+
+        this->backgroundSprite->Render( ( this->screenWidth - this->backgroundSprite->GetWidth() ) / 2, 0 );
+        this->textSprite->Render( ( this->screenWidth - this->textSprite->GetWidth() ) / 2, 350 );
+        this->inputTextSprite->Render( ( this->screenWidth - this->inputTextSprite->GetWidth() ) / 2, 350 + this->textSprite->GetHeight() );
+
+
+        SDL_RenderPresent( this->renderer );
+
+    }
+    SDL_StopTextInput();
+
+    return x_pressed;
 }

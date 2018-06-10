@@ -32,6 +32,7 @@ class Team
         string GetName();
         string GetShirt();
         void SetShirt(string shirt);
+        void UpdateFormation();
 
         //USAR SOLO DESDE EL CLIENTE
         Player* GetSelectedPlayer();
