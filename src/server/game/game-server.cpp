@@ -172,7 +172,30 @@ string GameServer::ChangePlayer(ChangePlayerRequest* change_player_request, int 
 
 bool GameServer::IsReadyToStart()
 {
-    return this->session_manager->IsReadyToStart();
+    if (this->session_manager->IsReadyToStart()) {
+        return this->TeamsHaveFormation();
+    }
+
+    return false;
+}
+
+bool GameServer::TeamsHaveFormation() {
+    //Me fijo si los equipos tienen formacion definida por algun usuario en caso que el equipo tenga jugadores no NPC
+    bool team_a_has_formation = true, team_b_has_formation = true;
+    map<string, User*> users = this->session_manager->GetAuthenticatedUsers();
+    Team* team;
+    Team* teamA = this->game_state->GetMatch()->GetTeamA();
+    for (auto const& u : users) {
+        team = u.second->GetSelectedPlayer()->GetTeam();
+        if (team == teamA) {
+            team_a_has_formation = team->GetFormation()->ChangedByUser();
+        } else {
+            team_b_has_formation = team->GetFormation()->ChangedByUser();
+        }
+    }
+
+    Logger::getInstance()->debug("(GameServer::TeamsHaveFormation) Todavia hay equipos con usuarios que no tienen la formacion elegida por su capitan");
+    return (team_a_has_formation && team_b_has_formation);
 }
 
 //TODO: Para a void porque no se usa el msj retornado y genera perdida de memoria.
@@ -292,4 +315,36 @@ void GameServer::DisconnectClient(ClientSocket* client)
             this->is_running = false;
         }
     }
+}
+
+void GameServer::ChangeFormation(ChangeFormationRequest* cfRequest, int socket_id)
+{
+    User* user = this->session_manager->GetUserBySocketID(socket_id);
+    Team* team = user->GetSelectedPlayer()->GetTeam();
+    team->GetFormation()->ChangeFormation(cfRequest->GetFormation());
+    team->UpdateFormation();
+    Logger::getInstance()->info("(Server:HandleChangeFormationRequest) El usuario " + user->GetUsername() + " cambio la formacion de su equipo (" + team->GetName() + ") a " + cfRequest->GetFormation());
+    Logger::getInstance()->info("(Server:HandleChangeFormationRequest) Nueva formacion (" + team->GetName() + "): " + to_string(team->GetFormation()->GetValue()));
+}
+
+int GameServer::GetTeamUsersNum(string team_name) {
+    int num;
+    map<string, User*> users = this->session_manager->GetAuthenticatedUsers();
+    Team* user_team;
+    Team* current_team;
+    if (team_name == "a") {
+        user_team = this->game_state->GetMatch()->GetTeamA();
+    }
+    else {
+        user_team = this->game_state->GetMatch()->GetTeamB();
+    }
+
+    for (auto const& u : users) {
+        current_team = u.second->GetSelectedPlayer()->GetTeam();
+        if (current_team == user_team) {
+            num++;
+        }
+    }
+
+    return num;
 }

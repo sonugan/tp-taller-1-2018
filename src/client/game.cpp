@@ -32,16 +32,29 @@ void Game::LogIn()
 
     while (!is_logged && !login_view->IsUserQuit())
     {
-        client->Init(login_request->GetServerIp());
+        client->Init();
         std::string login_response = client->LogIn(login_request);
 
         if ("login-fail" == login_response || "too-many-users" == login_response || "invalid-team" == login_response || login_response == "non-existent-user")
         {
             login_view->OpenErrorPage(initial_configuration, login_response);
         }
-        else if("login-ok" == login_response)
+        else if("login-ok" == login_response || "choose-formation" == login_response)
         {
             is_logged = true;
+            if ("choose-formation" == login_response) {
+                //Si recibo mensaje de elegir formacion muestro pantalla
+                ChangeFormationRequest* cfRequest = new ChangeFormationRequest();
+                bool x_pressed = login_view->OpenFormationPage(cfRequest);
+                if (x_pressed || !this->client->ChangeFormation(cfRequest)) {
+                    //El cliente cerro el programa o no se pudo cambiar la formacion por error en socket -> disconnect
+                    QuitRequest* quit_request = new QuitRequest(this->user->GetUsername());
+                    this->client->Quit(quit_request);
+
+                    /** ESTO TIRA bad_alloc */
+                }
+            }
+
             login_view->OpenWaitingPage();
             while (serialized_model.empty())
             {
@@ -126,6 +139,8 @@ void Game::Start()
         if(serialized_match != "")
         {
             this->match->DeserializeAndUpdate(serialized_match);
+            Logger::getInstance()->debug("(GameLoop) Formacion team a: " + to_string(this->match->GetTeamA()->GetFormation()->GetValue()));
+            Logger::getInstance()->debug("(GameLoop) Formacion team b: " + to_string(this->match->GetTeamB()->GetFormation()->GetValue()));
         }
 
         RenderViews();
