@@ -27,6 +27,13 @@ void GameState::AddUser(string username, string password)
 	this->users[username] = password;
 }
 
+void GameState::CheckTimeUp() {
+	bool time_up = this->match->GetTimer()->IsTimeUp();
+	if(time_up) {
+		this->match->SetMatchState(MATCH_STATE::TIME_UP);
+	}
+}
+
 /* Private methods */
 void GameState::CreateModel(Configuration* initial_configuration)
 {

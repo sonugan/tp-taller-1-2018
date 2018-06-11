@@ -45,6 +45,14 @@ Timer* Match::GetTimer() {
     return timer;
 }
 
+void Match::SetMatchTime(MATCH_TIME_TYPE match_time){
+	this->match_time = match_time;
+}
+
+void Match::SetMatchState(MATCH_STATE state) {
+	this->match_state = state;
+}
+
 
 string Match::Serialize() {
     Logger::getInstance()->debug("(Match:Serialize) Serializando Match...");

@@ -54,6 +54,7 @@ private:
     void MakePlayerCatchBall(Player* player);
     void MoveBall();
     void MovePlayersToDefaultPositions();
+    void CheckTimeUp();
 
 };
 

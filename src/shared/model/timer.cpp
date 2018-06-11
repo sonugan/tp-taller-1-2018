@@ -21,7 +21,7 @@ std::string Timer::GetRemainingMinutes()
     if (difftime(this->finish_time, now) <= 0)
     {
         // Si se paso del tiempo del timer, queda en 0
-        remaining_minutes += "0:00";
+        remaining_minutes += ZERO_MINUTES;
     }
     else
     {
@@ -99,5 +99,9 @@ std::string Timer::ToString()
     response += std::to_string(timePtr->tm_sec);
 
     return response;
+}
+
+bool Timer::IsTimeUp() {
+	return ZERO_MINUTES == GetRemainingMinutes();
 }
 

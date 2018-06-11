@@ -28,6 +28,8 @@ class Match
         std::string Serialize();
         void DeserializeAndUpdate(std::string serialized);
         void StartTimer();
+        void SetMatchTime(MATCH_TIME_TYPE match_time);
+        void SetMatchState(MATCH_STATE state);
 
     private:
         Team* team_a;

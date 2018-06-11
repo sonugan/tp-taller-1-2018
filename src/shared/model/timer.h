@@ -16,11 +16,13 @@ class Timer
         void Restart();
         void SetFinishTime(std::string finish_time_mm_ss);
         std::string GetFinishTime();
+        bool IsTimeUp();
 
     protected:
         std::string ToString();
         time_t AddTimeToNow(std::string finish_time_mm_ss);
     private:
+        const std::string ZERO_MINUTES = "0:00";
         time_t finish_time;
         std::string initial_config_finish_time;
 };
