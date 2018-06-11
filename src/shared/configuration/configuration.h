@@ -74,6 +74,10 @@ public:
 
     string GetServerHostname();
 
+    void SetGameDuration(string game_duration);
+
+    string GetGameDuration();
+
 protected:
 
 private:
@@ -87,6 +91,7 @@ private:
     u_int port;
     u_int max_players;
     string server_hostname;
+    string game_duration;
 
     // Para almacenar las credenciales validas => <user,password>
     map<string, string> valid_credentials = {};

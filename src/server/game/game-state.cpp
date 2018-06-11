@@ -56,7 +56,7 @@ void GameState::CreateModel(Configuration* initial_configuration)
 
     Ball* ball = new Ball();
 
-    Timer* timer = new Timer("02:00"); // TODO: VER DE DONDE SE TOMA EL TIEMPO, DEBERIA VENIR DE CONFIG?
+    Timer* timer = new Timer(initial_configuration->GetGameDuration()); // TODO: VER DE DONDE SE TOMA EL TIEMPO, DEBERIA VENIR DE CONFIG?
 
     this->match = new Match(pitch, team_a, team_b, ball, timer);
 }
