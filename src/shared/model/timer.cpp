@@ -4,6 +4,7 @@ Timer::Timer(std::string finish_time_mm_ss)
 {
     // finish_time_mm_ss debe estar en formato MM:SS
     this->initial_config_finish_time = finish_time_mm_ss;
+    this->is_stopped = false;
     this->finish_time = this->AddTimeToNow(finish_time_mm_ss);
 }
 
@@ -12,11 +13,20 @@ Timer::~Timer()
     //dtor
 }
 
+void Timer::Start() {
+	this->is_stopped = false;
+}
+
+void Timer::Stop() {
+	this->is_stopped = true;
+	this->last_stop_time = time(NULL);
+}
+
 std::string Timer::GetRemainingMinutes()
 {
     std::string remaining_minutes = "";
 
-    time_t now = time(NULL);
+    time_t now = GetProperTime();
 
     if (difftime(this->finish_time, now) <= 0)
     {
@@ -103,5 +113,9 @@ std::string Timer::ToString()
 
 bool Timer::IsTimeUp() {
 	return ZERO_MINUTES == GetRemainingMinutes();
+}
+
+time_t Timer::GetProperTime() {
+	return is_stopped ? last_stop_time : time(NULL);
 }
 

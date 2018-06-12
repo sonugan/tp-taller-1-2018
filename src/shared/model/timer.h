@@ -17,6 +17,8 @@ class Timer
         void SetFinishTime(std::string finish_time_mm_ss);
         std::string GetFinishTime();
         bool IsTimeUp();
+        void Start();
+        void Stop();
 
     protected:
         std::string ToString();
@@ -25,6 +27,10 @@ class Timer
         const std::string ZERO_MINUTES = "0:00";
         time_t finish_time;
         std::string initial_config_finish_time;
+        bool is_stopped;
+        time_t last_stop_time;
+
+        time_t GetProperTime();
 };
 
 #endif // TIMER_H
