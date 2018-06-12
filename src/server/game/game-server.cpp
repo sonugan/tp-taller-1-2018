@@ -217,7 +217,6 @@ void GameServer::StartGame()
 }
 
 void GameServer::RunArtificialIntelligence() {
-	this->CheckTimeUp();
     this->CatchBall();
     this->MoveBall();
     this->MovePlayersToDefaultPositions();
@@ -349,6 +348,11 @@ int GameServer::GetTeamUsersNum(string team_name) {
     return num;
 }
 
-void GameServer::CheckTimeUp() {
-	this->game_state->CheckTimeUp();
+void GameServer::CheckMatchState() {
+	this->game_state->CheckMatchState();
+}
+
+void GameServer::Run() {
+	this->CheckMatchState();
+	this->RunArtificialIntelligence();
 }

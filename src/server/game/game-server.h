@@ -33,12 +33,12 @@ public:
     string ChangePlayer(ChangePlayerRequest* change_player_request, int socket_id);
     bool IsReadyToStart();
     void StartGame();
-    void RunArtificialIntelligence();
     bool IsRunning();
     void DisconnectClient(ClientSocket* client);
     void ChangeFormation(ChangeFormationRequest* change_player_request, int socket_id);
     bool TeamsHaveFormation();
     int GetTeamUsersNum(string team_name);
+    void Run();
 
 protected:
 
@@ -54,7 +54,8 @@ private:
     void MakePlayerCatchBall(Player* player);
     void MoveBall();
     void MovePlayersToDefaultPositions();
-    void CheckTimeUp();
+    void CheckMatchState();
+    void RunArtificialIntelligence();
 
 };
 

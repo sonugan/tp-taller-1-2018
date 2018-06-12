@@ -49,11 +49,11 @@ class Game
         void LogIn();
         User* GetUser();
 
-        static const int SCREEN_WIDTH = 800;
-        static const int SCREEN_HEIGHT = 600;
-        static const unsigned int PITCH_WIDTH = 1920;
-        static const unsigned int PITCH_HEIGHT = 1158;
-        static const int INFO_PANEL_HEIGHT = 78;
+	static const int SCREEN_WIDTH = 800;
+	static const int SCREEN_HEIGHT = 600;
+	static const unsigned int PITCH_WIDTH = 1920;
+	static const unsigned int PITCH_HEIGHT = 1158;
+	static const int INFO_PANEL_HEIGHT = 78;
 
     protected:
 
@@ -68,7 +68,7 @@ class Game
         TimerView* timer_view;
         User* user;
         Client* client;
-        static const int FRAMES_PER_SECOND = 30;
+	static const int FRAMES_PER_SECOND = 30;
         u_int STOP_LOOP_MILLISECONDS = 30;
         TeamController* team_controller;
         PlayerController* player_controller;

@@ -1,24 +1,23 @@
 /*
  * match-state.h
  *
- *  Created on: Jun 10, 2018
+ *  Created on: Jun 11, 2018
  *      Author: swandelow
  */
 
 #ifndef SRC_SHARED_MODEL_MATCH_STATE_H_
 #define SRC_SHARED_MODEL_MATCH_STATE_H_
 
+#include "match-state-type.h"
 
-enum MATCH_STATE {
-	CORNER,
-	GOAL,
-	GOAL_KICK,
-	KICKOFF,
-	PLAYING,
-	TIME_UP,
-	FINISHED,
-	WAITING_TO_START
+class MatchState
+{
+public:
+	MatchState();
+	virtual ~MatchState();
+	MATCH_STATE_TYPE GetType();
+private:
+	MATCH_STATE_TYPE type;
 };
-
 
 #endif /* SRC_SHARED_MODEL_MATCH_STATE_H_ */

@@ -9,8 +9,9 @@
 #include "../network/message-type.h"
 #include "../utils/string-utils.h"
 #include <string>
-#include "match-state.h"
+
 #include "match-time-type.h"
+#include "match-state.h"
 
 class Ball;
 class Team;
@@ -29,7 +30,7 @@ class Match
         void DeserializeAndUpdate(std::string serialized);
         void StartTimer();
         void SetMatchTime(MATCH_TIME_TYPE match_time);
-        void SetMatchState(MATCH_STATE state);
+        void SetMatchState(MatchState* state);
 
     private:
         Team* team_a;
@@ -38,7 +39,7 @@ class Match
         Ball* ball;
         Timer* timer;
         MATCH_TIME_TYPE match_time;
-        MATCH_STATE match_state;
+        MatchState* match_state;
 
         int SafeStoi(const std::string& str);
 };

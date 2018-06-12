@@ -349,7 +349,7 @@ void Server::NotifyGameState()
 
         std::this_thread::sleep_for(std::chrono::milliseconds(SEND_GAME_STATE_EVERY_MILLISECONDS));
 
-        this->game->RunArtificialIntelligence();
+        this->game->Run();
     }
 }
 

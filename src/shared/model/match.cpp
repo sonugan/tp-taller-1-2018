@@ -13,7 +13,7 @@ Match::Match(Pitch* pitch, Team* team_a, Team* team_b, Ball* ball, Timer* timer)
     this->ball = ball;
     this->timer = timer;
     this->match_time = MATCH_TIME_TYPE::FIRST_TIME;
-    this->match_state = MATCH_STATE::WAITING_TO_START;
+    this->match_state = new MatchState();
 }
 
 Match::~Match() {
@@ -49,7 +49,7 @@ void Match::SetMatchTime(MATCH_TIME_TYPE match_time){
 	this->match_time = match_time;
 }
 
-void Match::SetMatchState(MATCH_STATE state) {
+void Match::SetMatchState(MatchState* state) {
 	this->match_state = state;
 }
 
@@ -223,6 +223,7 @@ int Match::SafeStoi(const string& str)
     catch (...)
     {
         Logger::getInstance()->error("(Match:SafeStoi) Error con argumento: " + str);
+        return -1;
     }
 }
 
