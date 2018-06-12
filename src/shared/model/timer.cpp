@@ -4,7 +4,7 @@ Timer::Timer(std::string finish_time_mm_ss)
 {
     // finish_time_mm_ss debe estar en formato MM:SS
     this->initial_config_finish_time = finish_time_mm_ss;
-    this->is_stopped = false;
+    this->is_stopped = true;
     this->finish_time = this->AddTimeToNow(finish_time_mm_ss);
 }
 

@@ -12,7 +12,7 @@ class TimerView
         TimerView(SDL_Renderer* renderer);
         virtual ~TimerView();
         void Free();
-        void Render(Timer* timer);
+        void Render(std::string remaining_time);
     protected:
         std::string DISPLAY_FONT = "src/client/sprites/tehkan_world_cup.ttf";
         TTF_Font* font_style = NULL;

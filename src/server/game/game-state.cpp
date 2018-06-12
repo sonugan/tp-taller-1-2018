@@ -28,10 +28,14 @@ void GameState::AddUser(string username, string password)
 }
 
 void GameState::CheckMatchState() {
-	bool time_up = this->match->GetTimer()->IsTimeUp();
-	if(time_up) {
-//		this->match->SetMatchState(MATCH_STATE_TYPE::TIME_UP);
+	this->match->SetRemainingTime(this->timer->GetRemainingMinutes());
+	if(this->timer->IsTimeUp()) {
+		// TODO: set timeup state
 	}
+}
+
+void GameState::Start() {
+	this->timer->Start();
 }
 
 /* Private methods */
@@ -56,9 +60,9 @@ void GameState::CreateModel(Configuration* initial_configuration)
 
     Ball* ball = new Ball();
 
-    Timer* timer = new Timer(initial_configuration->GetGameDuration()); // TODO: VER DE DONDE SE TOMA EL TIEMPO, DEBERIA VENIR DE CONFIG?
-
-    this->match = new Match(pitch, team_a, team_b, ball, timer);
+    this->timer = new Timer(initial_configuration->GetGameDuration());
+    this->match = new Match(pitch, team_a, team_b, ball);
+    this->match->SetRemainingTime(this->timer->GetRemainingMinutes());
 }
 
 bool GameState::WasConnected(User* user) {

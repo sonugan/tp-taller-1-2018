@@ -21,6 +21,7 @@ class GameState
         void AddUser(string username, string password);
         bool WasConnected(User* user);
         void CheckMatchState();
+        void Start();
 
         protected:
 
@@ -28,6 +29,7 @@ class GameState
         /* Attributes */
         Match* match = NULL;
         map<string, string> users = {};
+        Timer* timer = NULL;
 
         /* Methods */
         void CreateModel(Configuration* initial_configuration);

@@ -213,7 +213,7 @@ void GameServer::StartGame()
     	it++;
     }
 
-    this->game_state->GetMatch()->StartTimer();
+    this->game_state->Start();
 }
 
 void GameServer::RunArtificialIntelligence() {

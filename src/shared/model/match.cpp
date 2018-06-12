@@ -2,7 +2,7 @@
 #include "../logger.h"
 
 
-Match::Match(Pitch* pitch, Team* team_a, Team* team_b, Ball* ball, Timer* timer) {
+Match::Match(Pitch* pitch, Team* team_a, Team* team_b, Ball* ball) {
     this->team_a = team_a;
     this->team_b = team_b;
     this->team_a->SetMatch(this);
@@ -11,7 +11,6 @@ Match::Match(Pitch* pitch, Team* team_a, Team* team_b, Ball* ball, Timer* timer)
     }
     this->pitch = pitch;
     this->ball = ball;
-    this->timer = timer;
     this->match_time = MATCH_TIME_TYPE::FIRST_TIME;
     this->match_state = new MatchState();
 }
@@ -22,7 +21,6 @@ Match::~Match() {
     delete team_a;
     delete team_b;
     delete ball;
-    delete timer;
 }
 
 Team* Match::GetTeamA() {
@@ -41,9 +39,6 @@ Ball* Match::GetBall() {
     return ball;
 }
 
-Timer* Match::GetTimer() {
-    return timer;
-}
 
 void Match::SetMatchTime(MATCH_TIME_TYPE match_time){
 	this->match_time = match_time;
@@ -140,9 +135,9 @@ string Match::Serialize() {
     result.append("|");
     result.append(GetTeamB()->GetShirt());
 
-    // TIMER
+    // REMAINING GAME TIME
     result.append("|");
-    result.append(this->timer->GetFinishTime());
+    result.append(GetRemainingTime());
 
 //    Logger::getInstance()->debug("(Match:Serialize) Serialize result: " + result);
     return result;
@@ -208,8 +203,8 @@ void Match::DeserializeAndUpdate(string serialized) {
     GetTeamA()->SetShirt(data[base_index + 2]);
     GetTeamB()->SetShirt(data[base_index + 3]);
 
-    // DESERIALIZO TIMER
-    this->timer->SetFinishTime(data[91]);
+    // DESERIALIZO REMAINING GAME TIME
+    this->SetRemainingTime(data[91]);
 
     Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Match deserializado");
 }
@@ -227,7 +222,10 @@ int Match::SafeStoi(const string& str)
     }
 }
 
-void Match::StartTimer()
-{
-    this->timer->Restart();
+std::string Match::GetRemainingTime() {
+	return this->remaining_time;
+}
+
+void Match::SetRemainingTime(std::string remaining_time) {
+	this->remaining_time = remaining_time;
 }
