@@ -39,6 +39,9 @@ Ball* Match::GetBall() {
     return ball;
 }
 
+MATCH_TIME_TYPE Match::GetMatchTime() {
+	return this->match_time;
+}
 
 void Match::SetMatchTime(MATCH_TIME_TYPE match_time){
 	this->match_time = match_time;

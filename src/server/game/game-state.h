@@ -20,7 +20,7 @@ class GameState
         Match* GetMatch();
         void AddUser(string username, string password);
         bool WasConnected(User* user);
-        void CheckMatchState();
+        void UpdateMatchState();
         void Start();
 
         protected:

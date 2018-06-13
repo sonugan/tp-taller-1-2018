@@ -54,7 +54,7 @@ private:
     void MakePlayerCatchBall(Player* player);
     void MoveBall();
     void MovePlayersToDefaultPositions();
-    void CheckMatchState();
+    void UpdateMatchState();
     void RunArtificialIntelligence();
 
 };

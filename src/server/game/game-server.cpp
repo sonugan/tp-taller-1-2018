@@ -348,11 +348,11 @@ int GameServer::GetTeamUsersNum(string team_name) {
     return num;
 }
 
-void GameServer::CheckMatchState() {
-	this->game_state->CheckMatchState();
+void GameServer::UpdateMatchState() {
+	this->game_state->UpdateMatchState();
 }
 
 void GameServer::Run() {
-	this->CheckMatchState();
+	this->UpdateMatchState();
 	this->RunArtificialIntelligence();
 }

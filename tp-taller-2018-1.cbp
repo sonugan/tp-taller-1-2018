@@ -166,6 +166,8 @@
 		<Unit filename="src/shared/model/formation.h" />
 		<Unit filename="src/shared/model/location.cpp" />
 		<Unit filename="src/shared/model/location.h" />
+		<Unit filename="src/shared/model/match-state-type.h" />
+		<Unit filename="src/shared/model/match-state.cpp" />
 		<Unit filename="src/shared/model/match-state.h" />
 		<Unit filename="src/shared/model/match-time-type.h" />
 		<Unit filename="src/shared/model/match.cpp" />

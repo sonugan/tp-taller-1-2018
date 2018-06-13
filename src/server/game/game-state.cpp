@@ -27,10 +27,13 @@ void GameState::AddUser(string username, string password)
 	this->users[username] = password;
 }
 
-void GameState::CheckMatchState() {
+void GameState::UpdateMatchState() {
 	this->match->SetRemainingTime(this->timer->GetRemainingMinutes());
 	if(this->timer->IsTimeUp()) {
-		// TODO: set timeup state
+		if(MATCH_TIME_TYPE::FIRST_TIME == this->match->GetMatchTime()) {
+			this->match->SetMatchTime(MATCH_TIME_TYPE::SECOND_TIME);
+			this->timer->Restart();
+		}
 	}
 }
 

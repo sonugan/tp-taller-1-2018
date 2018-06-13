@@ -28,6 +28,7 @@ class Match
         Timer* GetTimer();
         std::string Serialize();
         void DeserializeAndUpdate(std::string serialized);
+        MATCH_TIME_TYPE GetMatchTime();
         void SetMatchTime(MATCH_TIME_TYPE match_time);
         void SetMatchState(MatchState* state);
         std::string GetRemainingTime();
