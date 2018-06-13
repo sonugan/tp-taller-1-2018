@@ -69,7 +69,7 @@ BallView::~BallView()
 }
 
 void BallView::Render(int x_camera, int y_camera, int max_x, int max_y) {
-	
+
     if(IsStill()) {
         current_animation_index = 1;
     } else {

@@ -1,7 +1,7 @@
 #include "ball.h"
 
 Ball::Ball() {
-    this->location = new Location(960, 540, 0);
+    this->location = new Location(960, 618, 0);
     this->previous_location = new Location(200, 200, 0);
     this->trajectory = new Trajectory(DIRECTION::EAST, 0);
     this->circle = new Circle(HALO_RADIUS, new Location(this->location));

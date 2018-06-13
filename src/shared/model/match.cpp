@@ -2,7 +2,7 @@
 #include "../logger.h"
 
 
-Match::Match(Pitch* pitch, Team* team_a, Team* team_b, Ball* ball) {
+Match::Match(Pitch* pitch, Team* team_a, Team* team_b, Ball* ball, Timer* timer) {
     this->team_a = team_a;
     this->team_b = team_b;
     this->team_a->SetMatch(this);
@@ -11,6 +11,7 @@ Match::Match(Pitch* pitch, Team* team_a, Team* team_b, Ball* ball) {
     }
     this->pitch = pitch;
     this->ball = ball;
+    this->timer = timer;
 }
 
 Match::~Match() {
@@ -36,6 +37,11 @@ Pitch* Match::GetPitch() {
 Ball* Match::GetBall() {
     return ball;
 }
+
+Timer* Match::GetTimer() {
+    return timer;
+}
+
 
 string Match::Serialize() {
     Logger::getInstance()->debug("(Match:Serialize) Serializando Match...");
@@ -123,6 +129,10 @@ string Match::Serialize() {
     result.append("|");
     result.append(GetTeamB()->GetShirt());
 
+    // TIMER
+    result.append("|");
+    result.append(this->timer->GetFinishTime());
+
 //    Logger::getInstance()->debug("(Match:Serialize) Serialize result: " + result);
     return result;
 }
@@ -133,7 +143,7 @@ void Match::DeserializeAndUpdate(string serialized) {
 
     //  BALL
     ball->GetLocation()->Update(SafeStoi(data[1]), SafeStoi(data[2]), 0);
-//    Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Ball location: " + ball->GetLocation()->ToString());
+
 
     //  TEAM A
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
@@ -141,19 +151,17 @@ void Match::DeserializeAndUpdate(string serialized) {
 
         int base_index = 3 + (i*6);
         Player* player = GetTeamA()->GetPlayers()[i];
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) direction");
+
         player->SetDirection(static_cast<DIRECTION>(SafeStoi(data[base_index])));
 
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) color");
+
         player->SetPlayerColor(static_cast<USER_COLOR>(SafeStoi(data[base_index + 1])));
 
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_kicking");
         //player->SetKicking((bool)(SafeStoi(data[base_index + 2])));
         player->SetCurrentAction(static_cast<PLAYER_ACTION>(stoi(data[base_index + 2])));
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_recovering_ball");
+
         player->SetIsStill((bool)(SafeStoi(data[base_index + 3])));
 
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) location");
         player->GetLocation()->Update(SafeStoi(data[base_index + 4]), SafeStoi(data[base_index + 5]), 0);
 
     }
@@ -164,17 +172,16 @@ void Match::DeserializeAndUpdate(string serialized) {
         int base_index = 3 + 42 + (i*6);
         Player* player = GetTeamB()->GetPlayers()[i];
 
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) direction");
         player->SetDirection(static_cast<DIRECTION>(SafeStoi(data[base_index])));
 
         player->SetPlayerColor(static_cast<USER_COLOR>(SafeStoi(data[base_index + 1])));
 
         player->SetCurrentAction(static_cast<PLAYER_ACTION>(stoi(data[base_index + 2])));
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_kicking");
+
         //player->SetKicking((bool)(SafeStoi(data[base_index + 2])));
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) is_recovering_ball");
+
         player->SetIsStill((bool)(SafeStoi(data[base_index + 3])));
-//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) location");
+
         player->GetLocation()->Update(SafeStoi(data[base_index + 4]), SafeStoi(data[base_index + 5]), 0);
 
     }
@@ -190,6 +197,8 @@ void Match::DeserializeAndUpdate(string serialized) {
     GetTeamA()->SetShirt(data[base_index + 2]);
     GetTeamB()->SetShirt(data[base_index + 3]);
 
+    // DESERIALIZO TIMER
+    this->timer->SetFinishTime(data[91]);
 
     Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Match deserializado");
 }
@@ -204,4 +213,9 @@ int Match::SafeStoi(const string& str)
     {
         Logger::getInstance()->error("(Match:SafeStoi) Error con argumento: " + str);
     }
+}
+
+void Match::StartTimer()
+{
+    this->timer->Restart();
 }

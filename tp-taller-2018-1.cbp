@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters='--config=&quot;src/shared/configuration/server-config.yml&quot;' />
+				<Option parameters='--config=&quot;src/shared/configuration/default-config.yml&quot;' />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="src/game" />
@@ -29,6 +29,7 @@
 					<Add directory="src/server/session" />
 					<Add directory="src/shared/network/messages" />
 					<Add directory="src/shared/model/player-states" />
+					<Add directory="src/client/view" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -54,6 +55,7 @@
 					<Add directory="src/server/session" />
 					<Add directory="src/shared/network/messages" />
 					<Add directory="src/shared/model/player-states" />
+					<Add directory="src/client/view" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -91,9 +93,15 @@
 		<Unit filename="src/client/view/camera.h" />
 		<Unit filename="src/client/view/disconect-view.cpp" />
 		<Unit filename="src/client/view/disconect-view.h" />
+		<Unit filename="src/client/view/info-panel-view.cpp" />
+		<Unit filename="src/client/view/info-panel-view.h" />
 		<Unit filename="src/client/view/ishowable.h" />
 		<Unit filename="src/client/view/login-view.cpp" />
 		<Unit filename="src/client/view/login-view.h" />
+		<Unit filename="src/client/view/mini-ball-view.cpp" />
+		<Unit filename="src/client/view/mini-ball-view.h" />
+		<Unit filename="src/client/view/mini-player-view.cpp" />
+		<Unit filename="src/client/view/mini-player-view.h" />
 		<Unit filename="src/client/view/pitch-view.cpp" />
 		<Unit filename="src/client/view/pitch-view.h" />
 		<Unit filename="src/client/view/player-view.cpp" />
@@ -104,6 +112,8 @@
 		<Unit filename="src/client/view/sprite-text.h" />
 		<Unit filename="src/client/view/sprites-provider.cpp" />
 		<Unit filename="src/client/view/sprites-provider.h" />
+		<Unit filename="src/client/view/timer-view.cpp" />
+		<Unit filename="src/client/view/timer-view.h" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/server/game/game-server.cpp" />
 		<Unit filename="src/server/game/game-server.h" />
@@ -158,6 +168,8 @@
 		<Unit filename="src/shared/model/team-number.h" />
 		<Unit filename="src/shared/model/team.cpp" />
 		<Unit filename="src/shared/model/team.h" />
+		<Unit filename="src/shared/model/timer.cpp" />
+		<Unit filename="src/shared/model/timer.h" />
 		<Unit filename="src/shared/model/trajectory.cpp" />
 		<Unit filename="src/shared/model/trajectory.h" />
 		<Unit filename="src/shared/model/user-color.h" />

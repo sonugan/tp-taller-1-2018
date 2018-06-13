@@ -2,9 +2,12 @@
 #include <unistd.h>
 #include "../../shared/logger.h"
 
-Camera::Camera(int pitch_width, int pitch_height, int width, int height, IShowable* showable, SDL_Renderer* renderer, Location* initialPosition) {
-    this->pitch_width = pitch_width;
-    this->pitch_height = pitch_height;
+Camera::Camera(int game_width, int game_height, int width, int height, IShowable* showable, SDL_Renderer* renderer, Location* initialPosition)
+{
+
+    this->game_width = game_width;
+    this->game_height = game_height;
+    this->info_panel = new InfoPanelView();
 
     this->area = new SDL_Rect();
     this->area->x = initialPosition->GetX();
@@ -19,14 +22,32 @@ Camera::Camera(int pitch_width, int pitch_height, int width, int height, IShowab
 
 Camera::~Camera() {
     Logger::getInstance()->debug("DESTRUYENDO CAMARA");
+
+    for (unsigned int i = 0; i < this->mini_player_views.size(); i++)
+    {
+        delete (this->mini_player_views[i]);
+    }
+
+//    delete this->mini_ball_view;
+
     delete this->area;
 }
 
 void Camera::Render() {
     this->Move();
+
     for (unsigned int i = 0; i < this->views.size(); i++) {
         this->views[i]->Render(this->area->x, this->area->y, this->area->w, this->area->h);
     }
+
+    this->info_panel->Render(0, 0, this->area->w, this->area->h);
+
+    // Pongo las vistas de los mini players por separado, porque sino quedan tapadas por el menu
+    for (unsigned int i = 0; i < this->mini_player_views.size(); i++) {
+        this->mini_player_views[i]->Render(this->area->x, this->area->y, this->area->w, this->area->h);
+    }
+
+    this->mini_ball_view->Render(this->area->x, this->area->y, this->area->w, this->area->h);
 }
 
 void Camera::SetShowable(IShowable* showable) {
@@ -36,6 +57,10 @@ void Camera::SetShowable(IShowable* showable) {
 
 void Camera::Add(AbstractView* view) {
     this->views.push_back(view);
+}
+
+void Camera::AddMiniPlayerView(MiniPlayerView* view) {
+    this->mini_player_views.push_back(view);
 }
 
 std::vector<AbstractView*> Camera::GetViews() {
@@ -96,11 +121,17 @@ void Camera::Move() {
     if( this->area->y < 0 ) {
         this->area->y = 0;
     }
-    if( this->area->x > this->pitch_width - this->area->w ) {
-        this->area->x = this->pitch_width - this->area->w;
+    if( this->area->x > this->game_width - this->area->w ) {
+        this->area->x = this->game_width - this->area->w;
     }
-    if( this->area->y > this->pitch_height - this->area->h ) {
-        this->area->y = this->pitch_height - this->area->h;
+    if( this->area->y > this->game_height - this->area->h ) {
+        this->area->y = this->game_height - this->area->h;
     }
 
 }
+
+void Camera::AddMiniBallView(MiniBallView* view)
+{
+    this->mini_ball_view = view;
+}
+

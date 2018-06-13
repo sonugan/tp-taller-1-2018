@@ -130,7 +130,7 @@ void Client::ReceiveMessages()
 //            Logger::getInstance()->debug("(Client:ReceiveMessages) Recibido: " + string(incoming_message->GetData()));
             this->message_queue->Append(incoming_message);
         }
-        catch (SocketConnectionException e)
+        catch (SocketConnectionException& e)
         {
             Logger::getInstance()->error("(Client:ReceiveMessages) Error de conexión. Cerrando socket.");
             this->is_connected = false;

@@ -94,6 +94,7 @@ void Game::RenderViews()
     SDL_RenderClear( renderer );
 
     this->camera->Render();
+    this->timer_view->Render(this->match->GetTimer());
     SDL_RenderPresent( renderer );
 }
 
@@ -209,7 +210,9 @@ void Game::CreateModel(std::string serialized_model)
 
     Ball* ball = new Ball();
 
-    this->match = new Match(pitch, team_a, team_b, ball);
+    this->timer = new Timer("02:00"); // TODO: VER DE DONDE SE TOMA EL TIEMPO, DEBERIA VENIR DE CONFIG?
+
+    this->match = new Match(pitch, team_a, team_b, ball, this->timer);
 
     this->match->DeserializeAndUpdate(serialized_model);
 
@@ -229,20 +232,34 @@ void Game::CreateViews()
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
     {
         Player* player = match->GetTeamA()->GetPlayers()[i];
+
         PlayerView* player_view = new PlayerView(player);
         this->camera->Add(player_view);
+
+        MiniPlayerView* mini_player_view = new MiniPlayerView(player, PITCH_HEIGHT, PITCH_WIDTH);
+        this->camera->AddMiniPlayerView(mini_player_view);
     }
 
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
     {
         Player* player = match->GetTeamB()->GetPlayers()[i];
+
         PlayerView* player_view = new PlayerView(player);
         this->camera->Add(player_view);
+
+        MiniPlayerView* mini_player_view = new MiniPlayerView(player, PITCH_HEIGHT, PITCH_WIDTH);
+        this->camera->AddMiniPlayerView(mini_player_view);
     }
 
     BallView* ball_view = new BallView(match->GetBall());
     this->camera->Add(ball_view);
     this->camera->SetShowable(ball_view);
+
+    MiniBallView* mini_ball_view = new MiniBallView(match->GetBall(), PITCH_HEIGHT, PITCH_WIDTH);
+    this->camera->AddMiniBallView(mini_ball_view);
+
+    this->timer_view = new TimerView(renderer);
+
 }
 
 void Game::CreateControllers()
@@ -274,12 +291,15 @@ void Game::DestroyModel()
 void Game::DestroyViews()
 {
     Logger::getInstance()->debug("DESTRUYENDO LAS VISTAS");
+
     std::vector<AbstractView*> views = this->camera->GetViews();
     for (unsigned int i = 0; i < views.size(); i++)
     {
         delete (views[i]);
     }
+
     delete this->camera;
+    delete this->timer_view;
 }
 
 void Game::DestroyControllers()

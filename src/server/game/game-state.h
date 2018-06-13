@@ -7,6 +7,7 @@
 #include "../../shared/model/match.h"
 #include "../../shared/model/user.h"
 #include "../../shared/model/player.h"
+#include "../../shared/model/timer.h"
 
 using namespace std;
 
