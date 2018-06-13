@@ -13,7 +13,7 @@
 #include "player-states/player-kick-state.h"
 #include "player-states/player-recover-ball-state.h"
 #include "player-states/player-states.h"
-#include "../collision/shadow.h"
+#include "../collision/circle.h"
 
 enum class DIRECTION { NORTH = 1, SOUTH = 2, EAST = 3, WEST = 4, NORTHEAST = 5, SOUTHEAST = 6, SOUTHWEST = 7, NORTHWEST = 8 };
 
@@ -23,7 +23,6 @@ class PlayerMoveState;
 class PlayerKickState;
 class PlayerRecoverBallState;
 class IPlayerState;
-class Shadow;
 class Player
 {
     public:
@@ -73,7 +72,7 @@ class Player
         void SetIsStill(bool is_still);
         bool GetIsStill();
         void SetLocation(Location* location);
-        Shadow* GetShadow();
+        Circle* GetCircle();
     protected:
 
     private:
@@ -93,7 +92,8 @@ class Player
         PlayerRecoverBallState* recover_ball_state;
         IPlayerState* current_state;
         bool is_still;
-	    Shadow* shadow;
+	    Circle* circle;
+        static const u_int HALO_RADIUS = 10;
 };
 
 #endif // PLAYER_H

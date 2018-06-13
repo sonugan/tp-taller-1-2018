@@ -21,7 +21,7 @@ void Shadow::PlayerHasChanged()
     this->circle->Move(this->player->GetLocation());
 }
 
-bool Shadow::CanMoveTo(Location* location)
+/*bool Shadow::CanMoveTo(Location* location)
 {
     Location* current_location = new Location(this->circle->GetCenter());
     this->circle->Move(location);
@@ -47,9 +47,9 @@ bool Shadow::CanMoveTo(Location* location)
     this->circle->Move(current_location);
     delete current_location;
     return can;
-}
+}*/
 
-Location* Shadow::GetBestNextPosition(Location* target, int speed)
+/*Location* Shadow::GetBestNextPosition(Location* target, int speed)
 {
     if(CanMoveTo(target))
     {
@@ -123,4 +123,4 @@ void Shadow::IsBetterAlternative(Location* possible_location, float distance_to_
             *best_distance = distance_to_target;
         }
     }
-}
+}*/

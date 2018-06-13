@@ -3,10 +3,11 @@
 PlayerMoveState::PlayerMoveState(Player* player)
 {
     this->player = player;
+    this->coin_flipper = new CoinFlipper();
 }
 PlayerMoveState::~PlayerMoveState()
 {
-
+    delete this->coin_flipper;
 }
 void PlayerMoveState::MoveLeft(bool run)
 {
@@ -86,5 +87,19 @@ void PlayerMoveState::Play()
     else
     {
         this->has_been_moved--;
+    }
+    this->TryRecover();
+}
+
+void PlayerMoveState::TryRecover()
+{
+    Ball* ball = this->player->GetTeam()->GetMatch()->GetBall();
+    if(ball->GetCircle()->ExistsCollision2d(this->player->GetCircle()))
+    {
+        if(this->coin_flipper->Flip() == COIN_RESULT::WIN)
+        {
+            Trajectory* trajectory = new Trajectory(player);
+            ball->SetTrajectory(trajectory);
+        }
     }
 }

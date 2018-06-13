@@ -44,7 +44,7 @@ Player::~Player()
     delete move_state;
     delete kick_state;
     delete recover_ball_state;
-    delete shadow;
+    delete circle;
 }
 
 void Player::MoveLeft(bool run)
@@ -118,7 +118,8 @@ void Player::SetTeam(Team* team)
     Location* default_location = GetDefaultLocation();
     this->location = new Location(default_location->GetX(), default_location->GetY(), default_location->GetZ());
     this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
-    this->shadow = new Shadow(this);
+    this->circle = new Circle(HALO_RADIUS, new Location(this->location));
+    //this->shadow = new Shadow(this);
 }
 
 unsigned int Player::GetPositionIndex()
@@ -274,17 +275,10 @@ void Player::Move(bool run)
         new_location->UpdateX(location->GetX() - speed);
         break;
     }
-    if(this->shadow->CanMoveTo(new_location))
-    {
-        this->location->Update(new_location);
-        this->shadow->PlayerHasChanged();
-    }
-    else
-    {
-        Location* best_location = this->shadow->GetBestNextPosition(new_location, speed);
-        this->location->Update(best_location);
-        delete best_location;
-    }
+
+    this->location->Update(new_location);
+    this->circle->Move(this->location);
+    
     delete new_location;
 }
 
@@ -391,7 +385,7 @@ void Player::SetLocation(Location* location)
     this->previous_location->Update(location->GetX(), location->GetY(), location->GetZ());
 }
 
-Shadow* Player::GetShadow()
+Circle* Player::GetCircle()
 {
-    return this->shadow;
+    return this->circle;
 }

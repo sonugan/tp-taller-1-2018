@@ -196,6 +196,8 @@
 		<Unit filename="src/shared/network/socket-address.h" />
 		<Unit filename="src/shared/network/socket.cpp" />
 		<Unit filename="src/shared/network/socket.h" />
+		<Unit filename="src/shared/utils/coin-flipper.cpp" />
+		<Unit filename="src/shared/utils/coin-flipper.h" />
 		<Unit filename="src/shared/utils/id-generator.cpp" />
 		<Unit filename="src/shared/utils/id-generator.h" />
 		<Unit filename="src/shared/utils/queue.h" />

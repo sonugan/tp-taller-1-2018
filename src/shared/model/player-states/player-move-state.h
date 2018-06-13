@@ -4,6 +4,8 @@
 #include "iplayer-state.h"
 #include "../player.h"
 #include "player-states.h"
+#include "../../utils/coin-flipper.h"
+#include "../trajectory.h"
 
 class Player;
 class PlayerMoveState : public IPlayerState
@@ -27,11 +29,13 @@ class PlayerMoveState : public IPlayerState
         bool IsKicking(){ return false; }
         bool IsRecoveringBall() { return false; }
         PLAYER_ACTION GetName(){ return PLAYER_ACTION::PLAYER_IS_RUNNING; }
+        void TryRecover();
     protected:
         Player* player;
     private:
         int has_been_moved = 0;
         u_int STATE_COUNTER_RESET_VALUE = 2;
+        CoinFlipper* coin_flipper;
 };
 
 #endif // PLAYER_MOVE_STATE_H

@@ -6,10 +6,11 @@ PlayerRecoverBallState::PlayerRecoverBallState(Player* player)
     this->timming = 0;
     this->frames_per_event = PlayerView::FRAMES_PER_EVENT;
     this->frames_count = PlayerView::RECOVERING_FRAME_COUNT;
+    this->coin_flipper = new CoinFlipper();
 }
 PlayerRecoverBallState::~PlayerRecoverBallState()
 {
-
+    delete coin_flipper;
 }
 void PlayerRecoverBallState::MoveLeft(bool run)
 {
@@ -128,6 +129,21 @@ void PlayerRecoverBallState::Play()
     }
     else
     {
+        this->TryRecover();
         this->player->Move(false);
+    }
+}
+
+void PlayerRecoverBallState::TryRecover()
+{
+    Ball* ball = this->player->GetTeam()->GetMatch()->GetBall();
+    if(ball->GetCircle()->ExistsCollision2d(this->player->GetCircle()))
+    {
+        if(this->coin_flipper->Flip() == COIN_RESULT::WIN)
+        {
+            Trajectory* trajectory = new Trajectory(player);
+            ball->SetTrajectory(trajectory);
+            this->player->ChangeToMove();
+        }
     }
 }

@@ -5,6 +5,8 @@
 #include "iplayer-state.h"
 #include "../player.h"
 #include "player-states.h"
+#include "../../utils/coin-flipper.h"
+#include "../trajectory.h"
 
 class Player;
 class PlayerRecoverBallState : public IPlayerState
@@ -33,8 +35,10 @@ class PlayerRecoverBallState : public IPlayerState
     private:
         u_int timming;
         bool ContinueRecovering();
+        void TryRecover();
         float frames_per_event;
         u_int frames_count;
+        CoinFlipper* coin_flipper;
 };
 
 #endif // PLAYERRECOVERBALLSTATE_H
