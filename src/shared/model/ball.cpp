@@ -4,6 +4,7 @@ Ball::Ball() {
     this->location = new Location(960, 618, 0);
     this->previous_location = new Location(200, 200, 0);
     this->trajectory = new Trajectory(DIRECTION::EAST, 0);
+    this->last_player_owner = NULL;
 }
 
 Ball::~Ball() {
@@ -54,4 +55,9 @@ Player* Ball::GetPlayer() {
         return trajectory->GetPlayer();
     }
     return NULL;
+}
+
+void Ball::SetLastOwner(Player* player)
+{
+    this->last_player_owner = player;
 }

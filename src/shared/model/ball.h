@@ -21,7 +21,8 @@ class Ball
         bool IsFree();
         Player* GetPlayer();
         bool LastFreedDelayPassed();
-
+        void SetLastOwner(Player* player);
+        static const int BALL_TRIDIMENSIONAL_OFFSET = 5;
     protected:
 
     private:
@@ -29,6 +30,7 @@ class Ball
         Location* location;
         Location* previous_location;
         Trajectory* trajectory;
+        Player* last_player_owner;
         std::chrono::time_point<std::chrono::system_clock> last_freed;
 };
 

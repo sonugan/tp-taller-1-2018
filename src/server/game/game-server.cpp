@@ -71,6 +71,8 @@ std::string GameServer::DoRecoverBall(RecoverBallRequest* recover_ball_request, 
 {
     User* user = this->session_manager->GetUserBySocketID(socket_id);
     user->GetSelectedPlayer()->RecoverBall();
+    Logger::getInstance()->debug("(GameServer::DoRecoverBall) El cliente " + to_string(socket_id) + " recupero la pelota");
+    this->game_state->GetMatch()->GetBall()->SetLastOwner(this->session_manager->GetUserBySocketID(socket_id)->GetSelectedPlayer());
     string game_state_serialize = this->game_state->GetMatch()->Serialize();
     return game_state_serialize;
 }
