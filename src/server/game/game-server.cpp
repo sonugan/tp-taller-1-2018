@@ -146,16 +146,16 @@ string GameServer::ChangePlayer(ChangePlayerRequest* change_player_request, int 
     for (unsigned int i = 0; i < (Team::TEAM_SIZE - 1); i++)
     {
 
-        if (new_selected_player_position_index == Team::TEAM_SIZE-1)
+        if (new_selected_player_position_index == Team::TEAM_SIZE)
         {
-            new_selected_player_position_index = 0;
+            new_selected_player_position_index = 1;
         }
         else
         {
             new_selected_player_position_index++;
         }
 
-        Player* possible_player = team->GetPlayers()[new_selected_player_position_index];
+        Player* possible_player = team->GetPlayerByPositionIndex(new_selected_player_position_index);
         if (!possible_player->IsSelected())
         {
             next_player = possible_player;
@@ -227,10 +227,10 @@ void GameServer::RunArtificialIntelligence() {
 void GameServer::CatchBall()
 {
     if (this->GetGameState()->GetMatch()->GetBall()->LastFreedDelayPassed()) {
-        for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
-            Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayers()[i];
+        for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
+            Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
             MakePlayerCatchBall(player_a);
-            Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayers()[i];
+            Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
             MakePlayerCatchBall(player_b);
         }
     }
@@ -280,14 +280,14 @@ void GameServer::MakePlayerCatchBall(Player* player) {
 }
 
 void GameServer::MovePlayersToDefaultPositions() {
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
-        Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayers()[i];
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
+        Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
         if (!player_a->IsSelected()) {
             player_a->GoBackToDefaultPosition();
         }else{
             player_a->Play();
         }
-        Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayers()[i];
+        Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
         if (!player_b->IsSelected()) {
             player_b->GoBackToDefaultPosition();
         }else{

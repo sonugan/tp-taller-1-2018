@@ -23,6 +23,7 @@
 #include "../shared/model/player.h"
 #include "controller/player-controller.h"
 #include "../shared/model/team.h"
+#include "../shared/model/keeper.h"
 #include "controller/team-controller.h"
 #include "../shared/model/formation.h"
 #include "../shared/configuration/configuration.h"

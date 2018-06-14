@@ -8,6 +8,7 @@
 #include "../../shared/model/user.h"
 #include "../../shared/model/player.h"
 #include "../../shared/model/timer.h"
+#include "../../shared/model/keeper.h"
 
 using namespace std;
 

@@ -122,6 +122,10 @@ Location* Formation::GetLocationForPlayer(unsigned int player_index)
     return positions[player_index];
 }
 
+Location* Formation::GetKeeperLocation() {
+	return this->GetLocationForPlayer(0);
+}
+
 FORMATION Formation::GetValue()
 {
     return this->value;
