@@ -133,7 +133,7 @@ void Match::DeserializeAndUpdate(string serialized) {
 
     //  BALL
     ball->GetLocation()->Update(SafeStoi(data[1]), SafeStoi(data[2]), 0);
-//    Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Ball location: " + ball->GetLocation()->ToString());
+//  Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Ball location: " + ball->GetLocation()->ToString());
 
     //  TEAM A
     for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
@@ -204,4 +204,24 @@ int Match::SafeStoi(const string& str)
     {
         Logger::getInstance()->error("(Match:SafeStoi) Error con argumento: " + str);
     }
+}
+
+Team* Match::GetTeamByNumber(TEAM_NUMBER number)
+{
+    if (number == this->team_a->GetTeamNumber())
+    {
+        return this->team_a;
+    }
+
+    return this->team_b;
+}
+
+Team* Match::GetOppositeTeam(Team* team)
+{
+    if (team == this->team_a)
+    {
+        return team_b;
+    }
+
+    return team_a;
 }

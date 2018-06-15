@@ -15,7 +15,6 @@ ChangePlayerRequest::~ChangePlayerRequest()
 string ChangePlayerRequest::Serialize()
 {
     string msg_type = to_string(this->GetMessageType());
-    Logger::getInstance()->info(msg_type);
     return msg_type;
 }
 
