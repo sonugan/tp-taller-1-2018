@@ -171,6 +171,9 @@ string Match::Serialize() {
     // REMAINING GAME TIME
     result.append("|");
     result.append(GetRemainingTime());
+    // MATCH TIME
+    result.append("|");
+    result.append(std::to_string(GetMatchTime()));
 
 //    Logger::getInstance()->debug("(Match:Serialize) Serialize result: " + result);
     return result;
@@ -238,6 +241,8 @@ void Match::DeserializeAndUpdate(string serialized) {
 
     // DESERIALIZO REMAINING GAME TIME
     this->SetRemainingTime(data[91]);
+    // MATCH TIME
+    this->SetMatchTime(static_cast<MATCH_TIME_TYPE>(SafeStoi(data[92])));
 
     Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Match deserializado");
 }
