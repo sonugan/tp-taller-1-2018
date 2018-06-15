@@ -2,7 +2,7 @@
 #include "../logger.h"
 
 
-Team::Team(Formation* formation, string name, string shirt, TEAM_NUMBER team_number)
+Team::Team(Formation* formation, string name, string shirt, TEAM_NUMBER team_number) // @suppress("Class members should be properly initialized")
 {
     this->formation = formation;
     this->name = name;
@@ -19,6 +19,7 @@ Team::~Team()
         delete players[i];
     }
     players.clear();
+    delete keeper;
 }
 
 std::vector<Player*> Team::GetPlayers()
@@ -94,6 +95,15 @@ void Team::AddPlayer(Player* player)
     }
 }
 
+void Team::SetKeeper(Keeper* keeper) {
+	this->keeper = keeper;
+	this->keeper->SetTeam(this);
+}
+
+Keeper* Team::GetKeeper() {
+	return this->keeper;
+}
+
 string Team::GetName()
 {
     return this->name;
@@ -131,4 +141,8 @@ void Team::UpdateFormation()
         cPlayer = this->players[i];
         cPlayer->SetLocation(cPlayer->GetDefaultLocation());
     }
+}
+
+Player* Team::GetPlayerByPositionIndex(unsigned int position_index) {
+	return this->players[position_index - 1];
 }

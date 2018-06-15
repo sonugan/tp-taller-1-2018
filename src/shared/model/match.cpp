@@ -72,9 +72,24 @@ string Match::Serialize() {
 //    result.append("|");
 
     //  TEAM A
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+    
+    // dummy keeper
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+    
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
         //  PLAYER i
-        Player* player = GetTeamA()->GetPlayers()[i];
+        Player* player = GetTeamA()->GetPlayerByPositionIndex(i);
         //  DIRECTION
         result.append(std::to_string((int) player->GetDirection()));
         result.append("|");
@@ -101,9 +116,24 @@ string Match::Serialize() {
     }
 
     //  TEAM B
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+    
+    // dummy keeper
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+    
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
         //  PLAYER i
-        Player* player = GetTeamB()->GetPlayers()[i];
+        Player* player = GetTeamB()->GetPlayerByPositionIndex(i);
         //  DIRECTION
         result.append(std::to_string((int) player->GetDirection()));
         result.append("|");
@@ -155,11 +185,11 @@ void Match::DeserializeAndUpdate(string serialized) {
 
 
     //  TEAM A
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
 
 
         int base_index = 3 + (i*6);
-        Player* player = GetTeamA()->GetPlayers()[i];
+        Player* player = GetTeamA()->GetPlayerByPositionIndex(i);
 
         player->SetDirection(static_cast<DIRECTION>(SafeStoi(data[base_index])));
 
@@ -176,10 +206,10 @@ void Match::DeserializeAndUpdate(string serialized) {
     }
 
     //  TEAM B
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
 
         int base_index = 3 + 42 + (i*6);
-        Player* player = GetTeamB()->GetPlayers()[i];
+        Player* player = GetTeamB()->GetPlayerByPositionIndex(i);
 
         player->SetDirection(static_cast<DIRECTION>(SafeStoi(data[base_index])));
 
@@ -212,7 +242,7 @@ void Match::DeserializeAndUpdate(string serialized) {
     Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Match deserializado");
 }
 
-int Match::SafeStoi(const string& str)
+int Match::SafeStoi(const string& str) // @suppress("No return")
 {
     try
     {

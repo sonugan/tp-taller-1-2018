@@ -49,17 +49,19 @@ void GameState::CreateModel(Configuration* initial_configuration)
 
     Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_A);
     Team* team_a = new Team(formation_team_a, initial_configuration->GetTeamName(), initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
-
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+    Keeper* keeper_a = new Keeper();
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
         team_a->AddPlayer(new Player(i,TEAM_NUMBER::TEAM_A));
     }
+    team_a->SetKeeper(keeper_a);
 
     Formation* formation_team_b = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_B);
     Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_NUMBER::TEAM_B); // TODO: TRAER NOMBRE DEL TEAM B Y CAMISETA DE CONFIG
-
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+    Keeper* keeper_b = new Keeper();
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
         team_b->AddPlayer(new Player(i, TEAM_NUMBER::TEAM_B));
     }
+    team_b->SetKeeper(keeper_b);
 
     Ball* ball = new Ball();
 
