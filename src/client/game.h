@@ -16,6 +16,7 @@
 #include "view/mini-ball-view.h"
 #include "view/player-view.h"
 #include "view/timer-view.h"
+#include "view/score-view.h"
 #include "view/mini-player-view.h"
 #include "view/info-panel-view.h"
 #include "view/camera.h"
@@ -66,6 +67,7 @@ class Game
         Camera* camera;
         Timer* timer;
         TimerView* timer_view;
+        ScoreView* score_view;
         User* user;
         Client* client;
         static const int FRAMES_PER_SECOND = 30;

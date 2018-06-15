@@ -95,6 +95,7 @@ void Game::RenderViews()
 
     this->camera->Render();
     this->timer_view->Render(this->match->GetTimer());
+    this->score_view->Render();
     SDL_RenderPresent( renderer );
 }
 
@@ -259,6 +260,7 @@ void Game::CreateViews()
     this->camera->AddMiniBallView(mini_ball_view);
 
     this->timer_view = new TimerView(renderer);
+    this->score_view = new ScoreView(renderer);
 
 }
 
@@ -300,6 +302,7 @@ void Game::DestroyViews()
 
     delete this->camera;
     delete this->timer_view;
+    delete this->score_view;
 }
 
 void Game::DestroyControllers()
