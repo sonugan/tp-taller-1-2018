@@ -1,13 +1,14 @@
-#include "player-view.h"
+#include "keeper-view.h"
 #include "../../shared/logger.h"
 
-PlayerView::PlayerView(Player* player)
+KeeperView::KeeperView(Keeper* keeper) // @suppress("Class members should be properly initialized")
 {
+	Logger::getInstance()->debug("CREANDO KEEPERVIEW");
     this->width = 62;
     this->height = 62;
 
     this->frame = 0;
-    this->player = player;
+    this->keeper = keeper;
 
     std::vector<SDL_Rect*> run_clips;
 
@@ -176,27 +177,15 @@ PlayerView::PlayerView(Player* player)
 
     animations.push_back(new Animation("selector", player_selector_clips, FRAMES_PER_EVENT));
 
-    Location* current_location = player->GetLocation();
+    Location* current_location = this->keeper->GetLocation();
     previous_location = new Location(current_location->GetX(), current_location->GetY(), current_location->GetZ());
-
-    string kitFile = player->GetTeam()->GetName();
-    kitFile.append("/");
-    kitFile.append(player->GetTeam()->GetShirt());
-    kitFile.append("-kit.png");
-
-    if (player->PlaysForTeamA())
-    {
-        this->sprite_sheet = SpritesProvider::GetSheet(TEAM_A_PLAYER, kitFile);
-    }
-    else
-    {
-        this->sprite_sheet = SpritesProvider::GetSheet(TEAM_B_PLAYER, kitFile);
-    }
+ 
+    this->sprite_sheet = SpritesProvider::GetDefaultSheet(KEEPER);
 
 }
 
-PlayerView::~PlayerView() {
-    Logger::getInstance()->debug("DESTRUYENDO PLAYERVIEW");
+KeeperView::~KeeperView() {
+    Logger::getInstance()->debug("DESTRUYENDO KEEPERVIEW");
 
     //TODO: delete clips in animation destructor
     for (unsigned int i = 0; i < animations.size(); i++) {
@@ -205,56 +194,57 @@ PlayerView::~PlayerView() {
     delete previous_location;
 }
 
-void PlayerView::GetPlayerAngle()
+void KeeperView::GetKeeperAngle()
 {
-    DIRECTION direction = this->player->GetDirection();
-    switch(direction) {
-        case DIRECTION::NORTH:
-            angle = 0;
-        break;
-        case DIRECTION::WEST:
-            angle = -90;
-        break;
-        case DIRECTION::SOUTH:
-            angle = 180;
-        break;
-        case DIRECTION::EAST:
-            angle = 90;
-        break;
-        case DIRECTION::NORTHEAST:
-            angle = 45;
-        break;
-        case DIRECTION::NORTHWEST:
-            angle = -45;
-        break;
-        case DIRECTION::SOUTHEAST:
-            angle = 135;
-        break;
-        case DIRECTION::SOUTHWEST:
-            angle = -135;
-        break;
+//    DIRECTION direction = this->keeper->GetDirection();
+//    switch(direction) {
+//        case DIRECTION::NORTH:
+//            angle = 0;
+//        break;
+//        case DIRECTION::WEST:
+//            angle = -90;
+//        break;
+//        case DIRECTION::SOUTH:
+//            angle = 180;
+//        break;
+//        case DIRECTION::EAST:
+//            angle = 90;
+//        break;
+//        case DIRECTION::NORTHEAST:
+//            angle = 45;
+//        break;
+//        case DIRECTION::NORTHWEST:
+//            angle = -45;
+//        break;
+//        case DIRECTION::SOUTHEAST:
+//            angle = 135;
+//        break;
+//        case DIRECTION::SOUTHWEST:
+//            angle = -135;
+//        break;
 //        default:
 //            angle = angle;
-        break;
-    }
+//        break;
+//    }
+        angle = 90;
 }
 
-void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
+void KeeperView::Render(int x_camera, int y_camera, int max_x, int max_y)
 {
-    this->GetPlayerAngle();
+    this->GetKeeperAngle();
     int animation_index = current_animation_index;
 
-    if (this->player->IsKicking()) {
-        current_animation_index = KICKING_ANIMATION_INDEX;
-    } else if (this->player->IsRecoveringBall()) {
-        current_animation_index = RECOVERING_BALL_ANIMATION_INDEX;
-    } else if(this->player->GetIsStill()) {
+//    if (this->player->IsKicking()) {
+//        current_animation_index = KICKING_ANIMATION_INDEX;
+//    } else if (this->keeper->IsRecoveringBall()) {
+//        current_animation_index = RECOVERING_BALL_ANIMATION_INDEX;
+//    } else if(this->keeper->GetIsStill()) {
+//        current_animation_index = STILL_ANIMATION_INDEX;
+//    } else if(this->keeper->IsMoving()){
+//        current_animation_index = RUN_ANIMATION_INDEX;
+//    } else {
         current_animation_index = STILL_ANIMATION_INDEX;
-    } else if(this->player->IsMoving()){
-        current_animation_index = RUN_ANIMATION_INDEX;
-    } else {
-        current_animation_index = STILL_ANIMATION_INDEX;
-    }
+//    }
     if(animation_index != current_animation_index)
     {
         animations[current_animation_index]->Restart();
@@ -263,55 +253,31 @@ void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
     SDL_Rect* current_clip = animations[current_animation_index]->NextClip();
     int x, y;
 
-    this->previous_location->UpdateX(player->GetLocation()->GetX());
-    this->previous_location->UpdateY(player->GetLocation()->GetY());
+    this->previous_location->UpdateX(keeper->GetLocation()->GetX());
+    this->previous_location->UpdateY(keeper->GetLocation()->GetY());
 
-    x = player->GetLocation()->GetX() - x_camera;
-    y = player->GetLocation()->GetY() - y_camera;
-
-    this->GetSelectorSheet();
-
-    if (player->GetPlayerColor() != USER_COLOR::NO_COLOR) {
-        selector_sheet->Render(x - (SELECTOR_SPRITE_WIDTH / 2), y - (SELECTOR_SPRITE_HEIGHT / 2), animations[SELECTOR_ANIMATION_INDEX]->NextClip(), 0);
-    }
+    x = keeper->GetLocation()->GetX() - x_camera;
+    y = keeper->GetLocation()->GetY() - y_camera;
 
     sprite_sheet->Render( x - (SPRITE_WIDTH / 2), y - (SPRITE_HEIGHT / 2), current_clip, this->angle);
 
 }
 
-void PlayerView::GetSelectorSheet()
+
+
+Location* KeeperView::GetLocation()
 {
-    if (this->player->GetPlayerColor() == USER_COLOR::RED)
-    {
-        this->selector_sheet = SpritesProvider::GetDefaultSheet(SELECTOR_A1);
-    }
-    else if (this->player->GetPlayerColor() == USER_COLOR::GREEN)
-    {
-        this->selector_sheet = SpritesProvider::GetDefaultSheet(SELECTOR_A2);
-    }
-    else if (this->player->GetPlayerColor() == USER_COLOR::YELLOW)
-    {
-        this->selector_sheet = SpritesProvider::GetDefaultSheet(SELECTOR_A3);
-    }
-    else if (this->player->GetPlayerColor() == USER_COLOR::BLUE)
-    {
-        this->selector_sheet = SpritesProvider::GetDefaultSheet(SELECTOR_A4);
-    }
+    return this->keeper->GetLocation();
 }
 
-Location* PlayerView::GetLocation()
-{
-    return this->player->GetLocation();
-}
-
-void PlayerView::SetAnimation(Animation* animation)
+void KeeperView::SetAnimation(Animation* animation)
 {
 
 }
 
-bool PlayerView::IsStill()
+bool KeeperView::IsStill()
 {
-    Location* location = this->player->GetLocation();
+    Location* location = this->keeper->GetLocation();
     return location->GetX() == previous_location->GetX() &&
         location->GetY() == previous_location->GetY();
 }

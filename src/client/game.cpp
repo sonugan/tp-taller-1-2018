@@ -233,6 +233,11 @@ void Game::CreateViews()
     PitchView* pitch_view = new PitchView(this->match->GetPitch());
     this->camera->Add(pitch_view);
 
+    Keeper* keeper_a = match->GetTeamA()->GetKeeper();
+    KeeperView* keeper_a_view = new KeeperView(keeper_a);
+    this->camera->Add(keeper_a_view);
+    MiniPlayerView* mini_keeper_a_view = new MiniPlayerView(keeper_a->GetLocation(), keeper_a->PlaysForTeamA(), PITCH_HEIGHT, PITCH_WIDTH);
+    this->camera->AddMiniPlayerView(mini_keeper_a_view);
     for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
     {
         Player* player = match->GetTeamA()->GetPlayerByPositionIndex(i);
@@ -240,10 +245,15 @@ void Game::CreateViews()
         PlayerView* player_view = new PlayerView(player);
         this->camera->Add(player_view);
 
-        MiniPlayerView* mini_player_view = new MiniPlayerView(player, PITCH_HEIGHT, PITCH_WIDTH);
+        MiniPlayerView* mini_player_view = new MiniPlayerView(player->GetLocation(), player->PlaysForTeamA(), PITCH_HEIGHT, PITCH_WIDTH);
         this->camera->AddMiniPlayerView(mini_player_view);
     }
 
+    Keeper* keeper_b = match->GetTeamB()->GetKeeper();
+    KeeperView* keeper_b_view = new KeeperView(keeper_b);
+    this->camera->Add(keeper_b_view);
+    MiniPlayerView* mini_keeper_b_view = new MiniPlayerView(keeper_b->GetLocation(), keeper_b->PlaysForTeamA(), PITCH_HEIGHT, PITCH_WIDTH);
+    this->camera->AddMiniPlayerView(mini_keeper_b_view);
     for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
     {
         Player* player = match->GetTeamB()->GetPlayerByPositionIndex(i);
@@ -251,7 +261,7 @@ void Game::CreateViews()
         PlayerView* player_view = new PlayerView(player);
         this->camera->Add(player_view);
 
-        MiniPlayerView* mini_player_view = new MiniPlayerView(player, PITCH_HEIGHT, PITCH_WIDTH);
+        MiniPlayerView* mini_player_view = new MiniPlayerView(player->GetLocation(), player->PlaysForTeamA(), PITCH_HEIGHT, PITCH_WIDTH);
         this->camera->AddMiniPlayerView(mini_player_view);
     }
 

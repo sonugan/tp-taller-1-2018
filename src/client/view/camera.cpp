@@ -83,17 +83,17 @@ void Camera::Move() {
     int y = location->GetY();
 
     //esto suaviza los cambios bruscos de la cámara
-    if (previous_showable_location->GetX() > x) {
-        x += (previous_showable_location->GetX()-x)/3;
-    } else if (previous_showable_location->GetX() < x) {
-        x -= (x-previous_showable_location->GetX())/3;
-    }
-
-    if (previous_showable_location->GetY() > y) {
-        y += (previous_showable_location->GetY()-y)/3;
-    } else if (previous_showable_location->GetY() < y) {
-        y -= (y-previous_showable_location->GetY())/3;
-    }
+//    if (previous_showable_location->GetX() > x) {
+//        x += (previous_showable_location->GetX()-x)/3;
+//    } else if (previous_showable_location->GetX() < x) {
+//        x -= (x-previous_showable_location->GetX())/3;
+//    }
+//
+//    if (previous_showable_location->GetY() > y) {
+//        y += (previous_showable_location->GetY()-y)/3;
+//    } else if (previous_showable_location->GetY() < y) {
+//        y -= (y-previous_showable_location->GetY())/3;
+//    }
     previous_showable_location->UpdateX(x);
     previous_showable_location->UpdateY(y);
 

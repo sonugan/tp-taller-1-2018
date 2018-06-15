@@ -15,6 +15,10 @@ void Keeper::SetTeam(Team* team) {
 	this->location = new Location(default_location->GetX(), default_location->GetY(), default_location->GetZ());
 }
 
+bool Keeper::PlaysForTeamA() {
+	return this->team->GetTeamNumber() == TEAM_NUMBER::TEAM_A;
+}
+
 Location* Keeper::GetDefaultLocation() {
 	return this->team->GetFormation()->GetKeeperLocation();
 }

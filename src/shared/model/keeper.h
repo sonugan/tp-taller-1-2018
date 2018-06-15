@@ -11,6 +11,7 @@ public:
 	void SetTeam(Team* team);
 	void SetLocation(Location* location);
 	Location* GetLocation();
+	bool PlaysForTeamA();
 private:
 	Team* team;
 	Location* location;

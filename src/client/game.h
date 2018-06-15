@@ -15,6 +15,7 @@
 #include "view/ball-view.h"
 #include "view/mini-ball-view.h"
 #include "view/player-view.h"
+#include "view/keeper-view.h"
 #include "view/timer-view.h"
 #include "view/mini-player-view.h"
 #include "view/info-panel-view.h"

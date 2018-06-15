@@ -19,6 +19,7 @@ Team::~Team()
         delete players[i];
     }
     players.clear();
+    delete keeper;
 }
 
 std::vector<Player*> Team::GetPlayers()

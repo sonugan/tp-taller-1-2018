@@ -10,7 +10,7 @@
 class MiniPlayerView: public AbstractView
 {
     public:
-        MiniPlayerView(Player* Player, int real_pitch_height, int real_pitch_width);
+		MiniPlayerView(Location* location, bool plays_for_team_a, int real_pitch_height, int real_pitch_width);
         virtual ~MiniPlayerView();
         void Render(int x_camera, int y_camera, int max_x, int max_y);
     protected:
@@ -21,7 +21,7 @@ class MiniPlayerView: public AbstractView
         static const int MINI_PITCH_WIDTH = 124;
         static const int MINI_PITCH_HEIGHT = 65;
 
-        Player* player;
+        Location* location;
         int real_pitch_height;
         int real_pitch_width;
 
