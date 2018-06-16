@@ -40,9 +40,6 @@ class Client
         bool IsConnected();
         bool ChangeFormation(ChangeFormationRequest* cfRequest);
 
-        // TODO: Tipar mensaje. esto es solo para una prueba
-        void SendEvent();
-
     protected:
 
     private:

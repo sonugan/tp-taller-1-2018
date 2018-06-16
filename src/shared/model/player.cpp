@@ -1,7 +1,7 @@
 #include "player.h"
 #include "../logger.h"
 
-Player::Player(unsigned int position_index, TEAM_NUMBER team_number)
+Player::Player(unsigned int position_index, TEAM_NUMBER team_number) // @suppress("Class members should be properly initialized")
 {
     this->position_index = position_index;
     this->still_state = new PlayerStillState(this);

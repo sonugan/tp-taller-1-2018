@@ -146,16 +146,16 @@ string GameServer::ChangePlayer(ChangePlayerRequest* change_player_request, int 
     for (unsigned int i = 0; i < (Team::TEAM_SIZE - 1); i++)
     {
 
-        if (new_selected_player_position_index == Team::TEAM_SIZE-1)
+        if (new_selected_player_position_index == Team::TEAM_SIZE)
         {
-            new_selected_player_position_index = 0;
+            new_selected_player_position_index = 1;
         }
         else
         {
             new_selected_player_position_index++;
         }
 
-        Player* possible_player = team->GetPlayers()[new_selected_player_position_index];
+        Player* possible_player = team->GetPlayerByPositionIndex(new_selected_player_position_index);
         if (!possible_player->IsSelected())
         {
             next_player = possible_player;
@@ -185,7 +185,8 @@ bool GameServer::TeamsHaveFormation() {
     map<string, User*> users = this->session_manager->GetAuthenticatedUsers();
     Team* team;
     Team* teamA = this->game_state->GetMatch()->GetTeamA();
-    for (auto const& u : users) {
+	for (const auto& u : users)
+	{
         team = u.second->GetSelectedPlayer()->GetTeam();
         if (team == teamA) {
             team_a_has_formation = team->GetFormation()->ChangedByUser();
@@ -198,8 +199,7 @@ bool GameServer::TeamsHaveFormation() {
     return (team_a_has_formation && team_b_has_formation);
 }
 
-//TODO: Para a void porque no se usa el msj retornado y genera perdida de memoria.
-Message* GameServer::StartGame()
+void GameServer::StartGame()
 {
     Logger::getInstance()->info("(GameServer:StartGame) Comenzando el juego.");
     this->is_running = true;
@@ -213,9 +213,7 @@ Message* GameServer::StartGame()
     	it++;
     }
 
-    this->game_state->GetMatch()->StartTimer();
-
-    return new Message(this->game_state->GetMatch()->Serialize());
+    this->game_state->Start();
 }
 
 void GameServer::RunArtificialIntelligence() {
@@ -227,10 +225,10 @@ void GameServer::RunArtificialIntelligence() {
 void GameServer::CatchBall()
 {
     if (this->GetGameState()->GetMatch()->GetBall()->LastFreedDelayPassed()) {
-        for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
-            Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayers()[i];
+        for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
+            Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
             MakePlayerCatchBall(player_a);
-            Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayers()[i];
+            Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
             MakePlayerCatchBall(player_b);
         }
     }
@@ -286,14 +284,14 @@ void GameServer::MakePlayerCatchBall(Player* player) {
 }
 
 void GameServer::MovePlayersToDefaultPositions() {
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
-        Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayers()[i];
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
+        Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
         if (!player_a->IsSelected()) {
             player_a->GoBackToDefaultPosition();
         }else{
             player_a->Play();
         }
-        Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayers()[i];
+        Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
         if (!player_b->IsSelected()) {
             player_b->GoBackToDefaultPosition();
         }else{
@@ -345,7 +343,8 @@ int GameServer::GetTeamUsersNum(string team_name) {
         user_team = this->game_state->GetMatch()->GetTeamB();
     }
 
-    for (auto const& u : users) {
+	for (const auto& u : users)
+	{
         current_team = u.second->GetSelectedPlayer()->GetTeam();
         if (current_team == user_team) {
             num++;
@@ -353,4 +352,13 @@ int GameServer::GetTeamUsersNum(string team_name) {
     }
 
     return num;
+}
+
+void GameServer::UpdateMatchState() {
+	this->game_state->UpdateMatchState();
+}
+
+void GameServer::Run() {
+	this->UpdateMatchState();
+	this->RunArtificialIntelligence();
 }

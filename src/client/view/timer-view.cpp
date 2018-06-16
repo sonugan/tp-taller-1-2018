@@ -18,10 +18,10 @@ TimerView::~TimerView()
     TTF_CloseFont(this->font_style);
 }
 
-void TimerView::Render(Timer* timer)
+void TimerView::Render(std::string remaining_time)
 {
     SDL_Color text_color = { 255, 255, 255, 0xFF };
-    SDL_Surface* surface = TTF_RenderText_Solid(this->font_style, timer->GetRemainingMinutes().c_str(), text_color);
+    SDL_Surface* surface = TTF_RenderText_Solid(this->font_style, remaining_time.c_str(), text_color);
     SDL_Texture* message = SDL_CreateTextureFromSurface(this->renderer, surface);
     SDL_Rect rect;
 

@@ -95,6 +95,10 @@ std::string SpritesProvider::GetDefaultPath(SPRITE_SHEET sprite_sheet_enum)
     {
         return "mini-ball-selector.png";
     }
+    else if (KEEPER == sprite_sheet_enum)
+    {
+        return "keeper.png";
+    }
     return NULL;
 }
 

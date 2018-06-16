@@ -6,7 +6,7 @@
 #include "view/login-view.h"
 #include "view/disconect-view.h"
 
-Game::Game(Configuration* initial_configuration)
+Game::Game(Configuration* initial_configuration) // @suppress("Class members should be properly initialized")
 {
 
     this->initial_configuration = initial_configuration;
@@ -94,7 +94,7 @@ void Game::RenderViews()
     SDL_RenderClear( renderer );
 
     this->camera->Render();
-    this->timer_view->Render(this->match->GetTimer());
+    this->timer_view->Render(this->match->GetRemainingTime());
     SDL_RenderPresent( renderer );
 }
 
@@ -185,18 +185,22 @@ void Game::CreateModel(std::string serialized_model)
     Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_A);
     Team* team_a = new Team(formation_team_a, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
 
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    Keeper* keeper_a = new Keeper();
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
     {
         team_a->AddPlayer(new Player(i,TEAM_NUMBER::TEAM_A));
     }
+    team_a->SetKeeper(keeper_a);
 
     Formation* formation_team_b = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_B);
     Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_NUMBER::TEAM_B); // TODO: TRAER NOMBRE DEL TEAM B Y CAMISETA DE CONFIG
 
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    Keeper* keeper_b = new Keeper();
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
     {
         team_b->AddPlayer(new Player(i, TEAM_NUMBER::TEAM_B));
     }
+    team_b->SetKeeper(keeper_b);
 
     // DEFINIR COMO SE SELECCIONA EL JUGADOR
     if (user->GetSelectedTeam() == TEAM_NUMBER::TEAM_A)
@@ -210,9 +214,7 @@ void Game::CreateModel(std::string serialized_model)
 
     Ball* ball = new Ball();
 
-    this->timer = new Timer("02:00"); // TODO: VER DE DONDE SE TOMA EL TIEMPO, DEBERIA VENIR DE CONFIG?
-
-    this->match = new Match(pitch, team_a, team_b, ball, this->timer);
+    this->match = new Match(pitch, team_a, team_b, ball);
 
     this->match->DeserializeAndUpdate(serialized_model);
 
@@ -229,25 +231,35 @@ void Game::CreateViews()
     PitchView* pitch_view = new PitchView(this->match->GetPitch());
     this->camera->Add(pitch_view);
 
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    Keeper* keeper_a = match->GetTeamA()->GetKeeper();
+    KeeperView* keeper_a_view = new KeeperView(keeper_a);
+    this->camera->Add(keeper_a_view);
+    MiniPlayerView* mini_keeper_a_view = new MiniPlayerView(keeper_a->GetLocation(), keeper_a->PlaysForTeamA(), PITCH_HEIGHT, PITCH_WIDTH);
+    this->camera->AddMiniPlayerView(mini_keeper_a_view);
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
     {
-        Player* player = match->GetTeamA()->GetPlayers()[i];
+        Player* player = match->GetTeamA()->GetPlayerByPositionIndex(i);
 
         PlayerView* player_view = new PlayerView(player);
         this->camera->Add(player_view);
 
-        MiniPlayerView* mini_player_view = new MiniPlayerView(player, PITCH_HEIGHT, PITCH_WIDTH);
+        MiniPlayerView* mini_player_view = new MiniPlayerView(player->GetLocation(), player->PlaysForTeamA(), PITCH_HEIGHT, PITCH_WIDTH);
         this->camera->AddMiniPlayerView(mini_player_view);
     }
 
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    Keeper* keeper_b = match->GetTeamB()->GetKeeper();
+    KeeperView* keeper_b_view = new KeeperView(keeper_b);
+    this->camera->Add(keeper_b_view);
+    MiniPlayerView* mini_keeper_b_view = new MiniPlayerView(keeper_b->GetLocation(), keeper_b->PlaysForTeamA(), PITCH_HEIGHT, PITCH_WIDTH);
+    this->camera->AddMiniPlayerView(mini_keeper_b_view);
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
     {
-        Player* player = match->GetTeamB()->GetPlayers()[i];
+        Player* player = match->GetTeamB()->GetPlayerByPositionIndex(i);
 
         PlayerView* player_view = new PlayerView(player);
         this->camera->Add(player_view);
 
-        MiniPlayerView* mini_player_view = new MiniPlayerView(player, PITCH_HEIGHT, PITCH_WIDTH);
+        MiniPlayerView* mini_player_view = new MiniPlayerView(player->GetLocation(), player->PlaysForTeamA(), PITCH_HEIGHT, PITCH_WIDTH);
         this->camera->AddMiniPlayerView(mini_player_view);
     }
 

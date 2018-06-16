@@ -109,12 +109,6 @@ void Client::Close() {
     clientSocket->ShutDown();
 }
 
-void Client::SendEvent()
-{
-    Logger::getInstance()->debug("(Client:Quit) Enviando move request.");
-    Message event("6|move-request");
-    this->clientSocket->Send(event);
-}
 
 void Client::ReceiveMessages()
 {
