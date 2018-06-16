@@ -116,6 +116,8 @@
 		<Unit filename="src/client/view/info-panel-view.cpp" />
 		<Unit filename="src/client/view/info-panel-view.h" />
 		<Unit filename="src/client/view/ishowable.h" />
+		<Unit filename="src/client/view/keeper-view.cpp" />
+		<Unit filename="src/client/view/keeper-view.h" />
 		<Unit filename="src/client/view/login-view.cpp" />
 		<Unit filename="src/client/view/login-view.h" />
 		<Unit filename="src/client/view/mini-ball-view.cpp" />
@@ -148,6 +150,11 @@
 		<Unit filename="src/server/session/non-existen-user-exception.h" />
 		<Unit filename="src/server/session/session-manager.cpp" />
 		<Unit filename="src/server/session/session-manager.h" />
+		<Unit filename="src/shared/collision/circle.cpp" />
+		<Unit filename="src/shared/collision/circle.h" />
+		<Unit filename="src/shared/collision/igeometric-form.h" />
+		<Unit filename="src/shared/collision/shadow.cpp" />
+		<Unit filename="src/shared/collision/shadow.h" />
 		<Unit filename="src/shared/configuration/cli-options-parser.cpp" />
 		<Unit filename="src/shared/configuration/cli-options-parser.h" />
 		<Unit filename="src/shared/configuration/cli-options.cpp" />
@@ -164,6 +171,8 @@
 		<Unit filename="src/shared/model/ball.h" />
 		<Unit filename="src/shared/model/formation.cpp" />
 		<Unit filename="src/shared/model/formation.h" />
+		<Unit filename="src/shared/model/keeper.cpp" />
+		<Unit filename="src/shared/model/keeper.h" />
 		<Unit filename="src/shared/model/location.cpp" />
 		<Unit filename="src/shared/model/location.h" />
 		<Unit filename="src/shared/model/match-state-type.h" />
@@ -229,6 +238,8 @@
 		<Unit filename="src/shared/network/socket-address.h" />
 		<Unit filename="src/shared/network/socket.cpp" />
 		<Unit filename="src/shared/network/socket.h" />
+		<Unit filename="src/shared/utils/coin-flipper.cpp" />
+		<Unit filename="src/shared/utils/coin-flipper.h" />
 		<Unit filename="src/shared/utils/id-generator.cpp" />
 		<Unit filename="src/shared/utils/id-generator.h" />
 		<Unit filename="src/shared/utils/queue.h" />

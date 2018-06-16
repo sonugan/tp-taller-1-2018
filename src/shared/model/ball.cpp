@@ -4,11 +4,13 @@ Ball::Ball() {
     this->location = new Location(960, 618, 0);
     this->previous_location = new Location(200, 200, 0);
     this->trajectory = new Trajectory(DIRECTION::EAST, 0);
+    this->circle = new Circle(HALO_RADIUS, new Location(this->location));
 }
 
 Ball::~Ball() {
     delete location;
     delete previous_location;
+    delete circle;
 }
 
 Location* Ball::GetLocation() {
@@ -42,6 +44,7 @@ void Ball::Move() {
     if (this->trajectory != NULL) {
         this->previous_location->Update(this->location->GetX(), this->location->GetY(), this->location->GetZ());
         this->trajectory->UpdateToNextLocation(this->location);
+        this->circle->Move(this->location);
     }
 }
 
@@ -54,4 +57,9 @@ Player* Ball::GetPlayer() {
         return trajectory->GetPlayer();
     }
     return NULL;
+}
+
+Circle* Ball::GetCircle()
+{
+    return this->circle;
 }
