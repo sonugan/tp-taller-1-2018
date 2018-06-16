@@ -180,7 +180,11 @@ KeeperView::KeeperView(Keeper* keeper) // @suppress("Class members should be pro
     Location* current_location = this->keeper->GetLocation();
     previous_location = new Location(current_location->GetX(), current_location->GetY(), current_location->GetZ());
  
-    this->sprite_sheet = SpritesProvider::GetDefaultSheet(KEEPER);
+    if (this->keeper->PlaysForTeamA()) {
+		this->sprite_sheet = SpritesProvider::GetDefaultSheet(TEAM_A_KEEPER);
+    } else {
+    	this->sprite_sheet = SpritesProvider::GetDefaultSheet(TEAM_B_KEEPER);
+    }
 
 }
 
