@@ -8,24 +8,25 @@
 
 Game::Game(Configuration* initial_configuration) // @suppress("Class members should be properly initialized")
 {
-
     this->initial_configuration = initial_configuration;
     this->correctly_initialized = false;
-
+    this->game_music = new GameMusic();
 }
 
 void Game::LogIn()
 {
     InitSDL();
 
-
     LoginRequest* login_request = new LoginRequest();
     LoginView* login_view = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH, login_request);
+
+    this->game_music->PlayLoginTheme();
 
     //Se abre la pantalla de login con su propio "game loop"
     login_view->Open(initial_configuration);
 
     this->client = new Client(initial_configuration);
+
 
     bool is_logged = false;
     std::string serialized_model;
@@ -67,6 +68,7 @@ void Game::LogIn()
             CreateModel(serialized_model);
             CreateViews();
             CreateControllers();
+
             this->correctly_initialized = true;
         }
     }
@@ -80,7 +82,7 @@ void Game::LogIn()
 
 Game::~Game()
 {
-
+    delete this->game_music;
 }
 
 bool Game::IsCorrectlyInitialized()
@@ -102,6 +104,8 @@ void Game::Start()
 {
     Logger::getInstance()->info("==================COMIENZA EL JUEGO==================");
     this->quit = false;
+
+    this->game_music->PlayMainTheme();
 
     //Handler de eventos
     SDL_Event e;
@@ -134,6 +138,7 @@ void Game::Start()
         this->game_controller->Handle(keyboard_state_array);
         this->player_controller->Handle(keyboard_state_array);
         this->team_controller->Handle(keyboard_state_array);
+        this->music_controller->Handle(keyboard_state_array);
 
         string serialized_match = this->client->GetGameState();
         if(serialized_match != "")
@@ -292,6 +297,7 @@ void Game::CreateControllers()
     }
 
     game_controller = new GameController(this, this->client);
+    music_controller = new GameMusicController(this->game_music);
 }
 
 void Game::DestroyModel()
