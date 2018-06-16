@@ -278,7 +278,7 @@ void Player::Move(bool run)
 
     this->location->Update(new_location);
     this->circle->Move(this->location);
-    
+
     delete new_location;
 }
 
@@ -326,7 +326,10 @@ void Player::ChangeToKick()
 }
 void Player::ChangeToRecover()
 {
-    this->current_state = this->recover_ball_state;
+    //if(!this->HasBall())
+    //{
+        this->current_state = this->recover_ball_state;
+    //}
 }
 void Player::ChangeToPass()
 {
@@ -338,7 +341,10 @@ void Player::ChangeToCatchBall()
 }
 void Player::ChangeToStill()
 {
-    this->current_state = this->still_state;
+    //if(!this->HasBall())
+    //{
+        this->current_state = this->still_state;
+    //}
 }
 
 void Player::Play()
@@ -388,4 +394,9 @@ void Player::SetLocation(Location* location)
 Circle* Player::GetCircle()
 {
     return this->circle;
+}
+
+bool Player::AreInSameTeam(Player* player)
+{
+    return player != nullptr && player->GetTeam() == this->GetTeam();
 }

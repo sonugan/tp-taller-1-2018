@@ -94,12 +94,15 @@ void PlayerMoveState::Play()
 void PlayerMoveState::TryRecover()
 {
     Ball* ball = this->player->GetTeam()->GetMatch()->GetBall();
-    if(ball->GetCircle()->ExistsCollision2d(this->player->GetCircle()))
+    if(!this->player->HasBall()
+        && !this->player->AreInSameTeam(ball->GetPlayer())
+        && ball->GetCircle()->ExistsCollision2d(this->player->GetCircle()))
     {
         if(this->coin_flipper->Flip() == COIN_RESULT::WIN)
         {
-            Trajectory* trajectory = new Trajectory(player);
+            Trajectory* trajectory = new Trajectory(this->player);
             ball->SetTrajectory(trajectory);
+            this->player->ChangeToMove();
         }
     }
 }

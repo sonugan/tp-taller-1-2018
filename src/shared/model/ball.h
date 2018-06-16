@@ -32,7 +32,7 @@ class Ball
         Trajectory* trajectory;
         std::chrono::time_point<std::chrono::system_clock> last_freed;
         Circle* circle;
-        static const u_int HALO_RADIUS = 5;
+        static const u_int HALO_RADIUS = 10;
 };
 
 #endif // BALL_H

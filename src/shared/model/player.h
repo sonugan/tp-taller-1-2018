@@ -73,6 +73,7 @@ class Player
         bool GetIsStill();
         void SetLocation(Location* location);
         Circle* GetCircle();
+        bool AreInSameTeam(Player* player);
     protected:
 
     private:
