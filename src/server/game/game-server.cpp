@@ -241,20 +241,27 @@ void GameServer::MakePlayerCatchBall(Player* player) {
     if (!player->HasBall())
     {
         Ball* ball = player->GetTeam()->GetMatch()->GetBall();
-        int distance = ball->GetLocation()->Distance(player->GetLocation());
-        if (ball->IsFree() && distance < CATCH_DISTANCE)
+        //float distance = ball->GetLocation()->Distance(player->GetLocation());
+        bool collides = ball->GetCircle()->ExistsCollision3d(player->GetCircle());
+        if (ball->IsFree())//distance < CATCH_DISTANCE)
         {
-            Trajectory* trajectory = new Trajectory(player);
-            ball->SetTrajectory(trajectory);
+            if(collides)
+            {
+                Trajectory* trajectory = new Trajectory(player);
+                ball->SetTrajectory(trajectory);
+            }
+        }
 
-            /*
-            Si el jugador que agarra la pelota no estaba seleccionado,
-            es seleccionado por el jugador del mismo equipo que estaba más cerca.
-            */
-
-            if (USER_COLOR::NO_COLOR == player->GetPlayerColor()) {
-
-                std::vector<Player*> selected_players = player->GetTeam()->GetSelectedPlayers();
+        if(!ball->IsFree())
+        {
+            Player* player_ball = ball->GetPlayer();
+            if (USER_COLOR::NO_COLOR == player_ball->GetPlayerColor())
+            {
+                /*
+                Si el jugador que agarra la pelota no estaba seleccionado,
+                es seleccionado por el jugador del mismo equipo que estaba más cerca.
+                */
+                std::vector<Player*> selected_players = player_ball->GetTeam()->GetSelectedPlayers();
                 Player* closest_selected_player = NULL;
                 unsigned int closest_selected_player_distance_to_ball = 99999;
 
@@ -268,13 +275,12 @@ void GameServer::MakePlayerCatchBall(Player* player) {
                 }
 
                 if (closest_selected_player != NULL) {
-                    player->SetPlayerColor(closest_selected_player->GetPlayerColor());
+                    player_ball->SetPlayerColor(closest_selected_player->GetPlayerColor());
                     User* user = this->session_manager->GetUserByColor(closest_selected_player->GetPlayerColor());
-                    user->SetSelectedPlayer(player);
+                    user->SetSelectedPlayer(player_ball);
                     closest_selected_player->SetPlayerColor(USER_COLOR::NO_COLOR);
                 }
             }
-
         }
     }
 }

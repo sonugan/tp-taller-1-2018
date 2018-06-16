@@ -10,6 +10,7 @@ Player::Player(unsigned int position_index, TEAM_NUMBER team_number)
     this->recover_ball_state = new PlayerRecoverBallState(this);
 
     this->current_state = this->still_state;
+    this->coin_flipper = new CoinFlipper();
 
     switch (team_number)
     {
@@ -45,6 +46,7 @@ Player::~Player()
     delete kick_state;
     delete recover_ball_state;
     delete circle;
+    delete coin_flipper;
 }
 
 void Player::MoveLeft(bool run)
@@ -399,4 +401,22 @@ Circle* Player::GetCircle()
 bool Player::AreInSameTeam(Player* player)
 {
     return player != nullptr && player->GetTeam() == this->GetTeam();
+}
+
+bool Player::TryRecover()
+{
+    Ball* ball = this->GetTeam()->GetMatch()->GetBall();
+    if(!this->HasBall()
+        && !this->AreInSameTeam(ball->GetPlayer())
+        && ball->GetCircle()->ExistsCollision3d(this->GetCircle()))
+    {
+        if(coin_flipper->Flip() == COIN_RESULT::WIN)
+        {
+            Trajectory* trajectory = new Trajectory(this);
+            ball->SetTrajectory(trajectory);
+            cout << "atrapada!" << endl;
+            return true;
+        }
+    }
+    return false;
 }
