@@ -239,9 +239,8 @@ void GameServer::MakePlayerCatchBall(Player* player) {
     if (!player->HasBall())
     {
         Ball* ball = player->GetTeam()->GetMatch()->GetBall();
-        //float distance = ball->GetLocation()->Distance(player->GetLocation());
         bool collides = ball->GetCircle()->ExistsCollision3d(player->GetCircle());
-        if (ball->IsFree())//distance < CATCH_DISTANCE)
+        if (ball->IsFree())
         {
             if(collides)
             {

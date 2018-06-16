@@ -414,7 +414,6 @@ bool Player::TryRecover()
         {
             Trajectory* trajectory = new Trajectory(this);
             ball->SetTrajectory(trajectory);
-            cout << "atrapada!" << endl;
             return true;
         }
     }

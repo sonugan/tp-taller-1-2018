@@ -82,13 +82,6 @@ float Location::Distance(Location* other_location) {
                      + pow((z - other_location->GetZ()), 2));
 }
 
-float Location::ManhattanDistance(Location* other_location)
-{
-    return abs(this->x - other_location->x)
-            + abs(this->y - other_location->y)
-                + abs(this->z - other_location->z);
-}
-
 std::string Location::ToString() {
     return "x: " + to_string(x) + ", y: " + to_string(y) + ", z: " + to_string(z);
 }

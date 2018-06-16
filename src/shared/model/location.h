@@ -19,7 +19,6 @@ class Location
         void UpdateZ(int z);
 	    void Update(Location* location);
         float Distance(Location* other_location);
-        float ManhattanDistance(Location* other_location);
         std::string ToString();
 
     protected:
