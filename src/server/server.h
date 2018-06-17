@@ -65,11 +65,13 @@ private:
     void HandlePassBallRequest(ClientSocket* client, Message* message);
     void HandleChangePlayerRequest(ClientSocket* client, Message* message);
     void HandleHealthCheck(ClientSocket* client, Message* message);
+    void HandleChangeFormationRequest(ClientSocket* client, Message* message);
     void SendMessage(ClientSocket* client);
     void NotifyGameState();
     void DisconnectClient(ClientSocket* client);
     void CheckDisconnections();
     void RestartTimers();
+    void StartGame();
     u_int SEND_GAME_STATE_EVERY_MILLISECONDS = 50;
     u_int CONNECTION_TIMEOUT = 4000;
 };

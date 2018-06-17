@@ -10,7 +10,7 @@ class LoginRequest : public ISerializable
 {
     public:
         LoginRequest();
-        ~LoginRequest();
+        virtual ~LoginRequest();
         string Serialize();
         void Deserialize(string str_obj);
         string GetUsername();

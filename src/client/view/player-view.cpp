@@ -233,8 +233,8 @@ void PlayerView::GetPlayerAngle()
         case DIRECTION::SOUTHWEST:
             angle = -135;
         break;
-        default:
-            angle = angle;
+//        default:
+//            angle = angle;
         break;
     }
 }
@@ -276,6 +276,7 @@ void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
     }
 
     sprite_sheet->Render( x - (SPRITE_WIDTH / 2), y - (SPRITE_HEIGHT / 2), current_clip, this->angle);
+
 }
 
 void PlayerView::GetSelectorSheet()

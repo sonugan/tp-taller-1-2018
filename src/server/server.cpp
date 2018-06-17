@@ -120,7 +120,7 @@ void Server::ReceiveMessages(ClientSocket* client)
 
             input_msg_condition_variable.notify_all();
         }
-        catch (SocketConnectionException e)
+        catch (SocketConnectionException& e)
         {
             Logger::getInstance()->error("(Server:ReceiveMessages) Error de conexión. Cerrando socket cliente.");
             receiving_messages = false;
@@ -131,7 +131,7 @@ void Server::ReceiveMessages(ClientSocket* client)
 
 void Server::ProcessMessage(ClientSocket* client, Message* message)
 {
-    Logger::getInstance()->debug("(Server::ProcessMessage) Procesando mensaje.");
+    Logger::getInstance()->debug("(Server::ProcessMessage) Procesando mensaje. Tipo: " + to_string(message->GetType()));
 
     switch(message->GetType())
     {
@@ -159,6 +159,8 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
     case MESSAGE_TYPE::HEALTH_CHECK:
         this->HandleHealthCheck(client, message);
         break;
+    case MESSAGE_TYPE::CHANGE_FORMATION_REQUEST:
+        this->HandleChangeFormationRequest(client, message);
     case MESSAGE_TYPE::LONG_PASS_REQUEST:
         this->HandleLongPassRequest(client, message);
         break;
@@ -186,51 +188,57 @@ void Server::HandleLoginRequest(ClientSocket* client, Message* message)
     try
     {
         this->game->DoLogin(client, &login_request);
-        Message* login_response = new Message("login-ok");
-        Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta login-ok.");
+        Message* login_response;
+        if (!this->game->IsRunning() && this->game->GetTeamUsersNum(login_request.GetTeam()) == 1) {
+            //Como es el primero del equipo elige formacion
+            login_response = new Message("choose-formation");
+            Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta: choose-formation");
+        }
+        else {
+            login_response = new Message("login-ok");
+            Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta: login-ok");
+        }
 
         this->socket->Send(client, login_response);
 
         // Si ya se loguearon todos, se notifica a todos los usuarios para empezar a jugar.
-        if (!this->game->IsRunning())
-        {
-            if (this->game->IsReadyToStart())
-            {
-                this->RestartTimers();
-                this->game->StartGame();
-
-                // Disparo thread para notificar game-state periodicamente.
-                std::thread game_state_notifier_thread(&Server::NotifyGameState, this);
-                game_state_notifier_thread.detach();
-            }
+        if (!this->game->IsRunning() && this->game->IsReadyToStart()) {
+            this->StartGame();
         }
-
-
     }
-    catch (AuthenticationException e)
+    catch (AuthenticationException& e)
     {
         Message* login_response = new Message("login-fail");
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta LoginFail.");
         this->outgoing_msg_queues[client->socket_id]->Append(login_response);
     }
-    catch(MaxAllowedUsersException e)
+    catch(MaxAllowedUsersException& e)
     {
         Message* login_response = new Message("too-many-users");
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta TooManyUsers.");
         this->outgoing_msg_queues[client->socket_id]->Append(login_response);
     }
-    catch (InvalidTeamException e)
+    catch (InvalidTeamException& e)
     {
         Message* login_response = new Message("invalid-team");
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta InvalidTeam.");
         this->outgoing_msg_queues[client->socket_id]->Append(login_response);
     }
-    catch (NonExistentUserException e)
+    catch (NonExistentUserException& e)
     {
         Message* login_response = new Message("non-existent-user");
         Logger::getInstance()->debug("(Server:ProcessMessage) Encolando respuesta el usuario no esta en la partida.");
         this->outgoing_msg_queues[client->socket_id]->Append(login_response);
     }
+}
+
+void Server::StartGame() {
+    this->RestartTimers();
+    this->game->StartGame();
+
+    // Disparo thread para notificar game-state periodicamente.
+    std::thread game_state_notifier_thread(&Server::NotifyGameState, this);
+    game_state_notifier_thread.detach();
 }
 
 void Server::HandleQuitRequest(ClientSocket* client, Message* message)
@@ -352,7 +360,7 @@ void Server::NotifyGameState()
 
         std::this_thread::sleep_for(std::chrono::milliseconds(SEND_GAME_STATE_EVERY_MILLISECONDS));
 
-        this->game->RunArtificialIntelligence();
+        this->game->Run();
     }
 }
 
@@ -373,6 +381,20 @@ void Server::HandleHealthCheck(ClientSocket* client, Message* message)
     string socket_id = to_string(client->socket_id);
     Logger::getInstance()->debug("(Server:HandleHealthCheck) Sigue vivo el cliente: " + socket_id);
     this->timers[client->socket_id] = std::chrono::system_clock::now();
+}
+
+void Server::HandleChangeFormationRequest(ClientSocket* client, Message* message)
+{
+    string socket_id = to_string(client->socket_id);
+    ChangeFormationRequest cfRequest;
+    message->GetDeserializedData(&cfRequest);
+    this->game->ChangeFormation(&cfRequest, client->socket_id);
+
+    Logger::getInstance()->debug("(Server::HandleChangeFormationRequest) Procesado el cambio de formacion hecho por " + to_string(client->socket_id) + ". Verificando si el juego esta listo para comenzar..");
+    //Los otros jugadores pueden estar esperando que algun usuario elija una formacion para su equipo, por lo tanto verifico si debo empezar el juego o no
+    if (!this->game->IsRunning() && this->game->IsReadyToStart()) {
+        this->StartGame();
+    }
 }
 
 void Server::CheckDisconnections()

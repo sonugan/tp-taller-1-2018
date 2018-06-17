@@ -248,3 +248,11 @@ string Configuration::GetServerHostname()
 {
     return this->server_hostname;
 }
+
+void Configuration::SetGameDuration(string game_duration) {
+	this->game_duration = game_duration;
+}
+
+string Configuration::GetGameDuration() {
+	return this->game_duration;
+}

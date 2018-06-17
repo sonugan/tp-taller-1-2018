@@ -14,7 +14,7 @@ ClientTester::~ClientTester()
 
 void ClientTester::TestCompleteFlow()
 {
-    client->Init("127.0.0.1");
+    client->Init();
 
     string username;
     cout << "ingrese username: ";

@@ -11,6 +11,7 @@
 #include "../shared/network/messages/long-pass-request.h"
 #include "../shared/network/messages/move-request.h"
 #include "../shared/network/messages/change-player-request.h"
+#include "../shared/network/messages/change-formation-request.h"
 #include "../shared/network/messages/health-check.h"
 #include "../shared/utils/safe-queue.h"
 #include "../shared/utils/string-utils.h"
@@ -25,7 +26,7 @@ class Client
     public:
         Client(Configuration * configuration);
         virtual ~Client();
-        void Init(std::string server_ip);
+        void Init();
         string LogIn(LoginRequest* login_request);
         string WaitForGameStart();
         bool Quit(QuitRequest* quit_request);
@@ -39,9 +40,7 @@ class Client
         void SetMatch(Match* match);
         string GetGameState();
         bool IsConnected();
-
-        // TODO: Tipar mensaje. esto es solo para una prueba
-        void SendEvent();
+        bool ChangeFormation(ChangeFormationRequest* cfRequest);
 
     protected:
 

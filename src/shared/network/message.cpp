@@ -1,7 +1,9 @@
 #include<stdlib.h>
 
 #include "message.h"
+#include <string>
 
+using namespace std;
 
 /* Este constructor lo usamos en el receive del server o client */
 Message::Message(const string& data)

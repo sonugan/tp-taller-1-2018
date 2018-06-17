@@ -20,7 +20,7 @@ Client::~Client() {
     delete clientSocket;
 }
 
-void Client::Init(string server_ip)
+void Client::Init()
 {
     SocketAddress address(this->config->GetPort(), this->config->GetServerHostname());
     clientSocket->Connect(address);
@@ -87,7 +87,7 @@ bool Client::Move(MoveRequest* move_request){
 
 bool Client::PassBall(PassBallRequest* pass_ball_request){
     Message r(pass_ball_request->Serialize());
-    return clientSocket->Send(r);;
+    return clientSocket->Send(r);
 }
 
 bool Client::RecoverBall(RecoverBallRequest* recover_ball_request){
@@ -114,12 +114,6 @@ void Client::Close() {
     clientSocket->ShutDown();
 }
 
-void Client::SendEvent()
-{
-    Logger::getInstance()->debug("(Client:Quit) Enviando move request.");
-    Message event("6|move-request");
-    this->clientSocket->Send(event);
-}
 
 void Client::ReceiveMessages()
 {
@@ -135,7 +129,7 @@ void Client::ReceiveMessages()
 //            Logger::getInstance()->debug("(Client:ReceiveMessages) Recibido: " + string(incoming_message->GetData()));
             this->message_queue->Append(incoming_message);
         }
-        catch (SocketConnectionException e)
+        catch (SocketConnectionException& e)
         {
             Logger::getInstance()->error("(Client:ReceiveMessages) Error de conexión. Cerrando socket.");
             this->is_connected = false;
@@ -208,4 +202,13 @@ void Client::SendHealthCheck()
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         delete health_check;
     }
+}
+
+bool Client::ChangeFormation(ChangeFormationRequest* cfRequest) {
+    Message change_formation(cfRequest->Serialize());
+    Logger::getInstance()->debug("(Client:ChangeFormation) Enviando change formation request");
+    bool response = this->clientSocket->Send(change_formation);
+    delete cfRequest;
+    Logger::getInstance()->debug("(Client:ChangeFormation) Change formation request enviado y borrado de la memoria");
+    return response;
 }

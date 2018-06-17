@@ -13,18 +13,25 @@
 #include "../shared/model/pitch.h"
 #include "view/pitch-view.h"
 #include "view/ball-view.h"
+#include "view/mini-ball-view.h"
 #include "view/player-view.h"
+#include "view/keeper-view.h"
+#include "view/timer-view.h"
+#include "view/mini-player-view.h"
+#include "view/info-panel-view.h"
 #include "view/camera.h"
 #include "../shared/model/match.h"
 #include "../shared/model/player.h"
 #include "controller/player-controller.h"
 #include "../shared/model/team.h"
+#include "../shared/model/keeper.h"
 #include "controller/team-controller.h"
 #include "../shared/model/formation.h"
 #include "../shared/configuration/configuration.h"
 #include "controller/game-controller.h"
 #include "client.h"
 #include "../shared/model/user.h"
+#include "../shared/model/timer.h"
 #include <map>
 
 class GameController; //  forward declaration
@@ -44,10 +51,12 @@ class Game
         void LogIn();
         User* GetUser();
 
-        static const int SCREEN_WIDTH = 800;
-        static const int SCREEN_HEIGHT = 600;
-        static const unsigned int PITCH_WIDTH = 1920;
-        static const unsigned int PITCH_HEIGHT = 1080;
+	static const int SCREEN_WIDTH = 800;
+	static const int SCREEN_HEIGHT = 600;
+	static const unsigned int PITCH_WIDTH = 1920;
+	static const unsigned int PITCH_HEIGHT = 1158;
+	static const int INFO_PANEL_HEIGHT = 78;
+
     protected:
 
     private:
@@ -57,9 +66,11 @@ class Game
         SDL_Renderer* renderer;
         Match* match;
         Camera* camera;
+        Timer* timer;
+        TimerView* timer_view;
         User* user;
         Client* client;
-        static const int FRAMES_PER_SECOND = 30;
+	static const int FRAMES_PER_SECOND = 30;
         u_int STOP_LOOP_MILLISECONDS = 30;
         TeamController* team_controller;
         PlayerController* player_controller;

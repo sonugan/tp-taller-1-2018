@@ -7,12 +7,15 @@
 #include "team.h"
 #include "../configuration/configuration.h"
 #include "trajectory.h"
+#include "ball.h"
 #include "user-color.h"
 #include "player-states/player-still-state.h"
 #include "player-states/player-move-state.h"
 #include "player-states/player-kick-state.h"
 #include "player-states/player-recover-ball-state.h"
 #include "player-states/player-states.h"
+#include "../collision/circle.h"
+#include "../utils/coin-flipper.h"
 #include "trajectory-type.h"
 
 enum class DIRECTION { NORTH = 1, SOUTH = 2, EAST = 3, WEST = 4, NORTHEAST = 5, SOUTHEAST = 6, SOUTHWEST = 7, NORTHWEST = 8 };
@@ -74,12 +77,15 @@ class Player
         void SetIsStill(bool is_still);
         bool GetIsStill();
         void SetLocation(Location* location);
+        Circle* GetCircle();
+        bool AreInSameTeam(Player* player);
+        bool TryRecover();
     protected:
 
     private:
         DIRECTION direction;
-        static const int PLAYER_SPEED = 6;
-        static const int PLAYER_RUNNING_SPEED = 10;
+	static const int PLAYER_SPEED = 6;
+	static const int PLAYER_RUNNING_SPEED = 10;
         USER_COLOR color;
         bool plays_for_team_a;
         bool plays_for_team_b;
@@ -93,6 +99,9 @@ class Player
         PlayerRecoverBallState* recover_ball_state;
         IPlayerState* current_state;
         bool is_still;
+	    Circle* circle;
+        CoinFlipper* coin_flipper;
+        static const u_int HALO_RADIUS = 10;
         unsigned int height = 64;
 };
 

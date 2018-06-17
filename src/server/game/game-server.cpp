@@ -155,16 +155,16 @@ string GameServer::ChangePlayer(ChangePlayerRequest* change_player_request, int 
     for (unsigned int i = 0; i < (Team::TEAM_SIZE - 1); i++)
     {
 
-        if (new_selected_player_position_index == Team::TEAM_SIZE-1)
+        if (new_selected_player_position_index == Team::TEAM_SIZE)
         {
-            new_selected_player_position_index = 0;
+            new_selected_player_position_index = 1;
         }
         else
         {
             new_selected_player_position_index++;
         }
 
-        Player* possible_player = team->GetPlayers()[new_selected_player_position_index];
+        Player* possible_player = team->GetPlayerByPositionIndex(new_selected_player_position_index);
         if (!possible_player->IsSelected())
         {
             next_player = possible_player;
@@ -181,11 +181,34 @@ string GameServer::ChangePlayer(ChangePlayerRequest* change_player_request, int 
 
 bool GameServer::IsReadyToStart()
 {
-    return this->session_manager->IsReadyToStart();
+    if (this->session_manager->IsReadyToStart()) {
+        return this->TeamsHaveFormation();
+    }
+
+    return false;
 }
 
-//TODO: Para a void porque no se usa el msj retornado y genera perdida de memoria.
-Message* GameServer::StartGame()
+bool GameServer::TeamsHaveFormation() {
+    //Me fijo si los equipos tienen formacion definida por algun usuario en caso que el equipo tenga jugadores no NPC
+    bool team_a_has_formation = true, team_b_has_formation = true;
+    map<string, User*> users = this->session_manager->GetAuthenticatedUsers();
+    Team* team;
+    Team* teamA = this->game_state->GetMatch()->GetTeamA();
+	for (const auto& u : users)
+	{
+        team = u.second->GetSelectedPlayer()->GetTeam();
+        if (team == teamA) {
+            team_a_has_formation = team->GetFormation()->ChangedByUser();
+        } else {
+            team_b_has_formation = team->GetFormation()->ChangedByUser();
+        }
+    }
+
+    Logger::getInstance()->debug("(GameServer::TeamsHaveFormation) Todavia hay equipos con usuarios que no tienen la formacion elegida por su capitan");
+    return (team_a_has_formation && team_b_has_formation);
+}
+
+void GameServer::StartGame()
 {
     Logger::getInstance()->info("(GameServer:StartGame) Comenzando el juego.");
     this->is_running = true;
@@ -199,7 +222,7 @@ Message* GameServer::StartGame()
     	it++;
     }
 
-    return new Message(this->game_state->GetMatch()->Serialize());
+    this->game_state->Start();
 }
 
 void GameServer::RunArtificialIntelligence() {
@@ -211,10 +234,10 @@ void GameServer::RunArtificialIntelligence() {
 void GameServer::CatchBall()
 {
     if (this->GetGameState()->GetMatch()->GetBall()->LastFreedDelayPassed()) {
-        for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
-            Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayers()[i];
+        for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
+            Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
             MakePlayerCatchBall(player_a);
-            Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayers()[i];
+            Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
             MakePlayerCatchBall(player_b);
         }
     }
@@ -225,20 +248,26 @@ void GameServer::MakePlayerCatchBall(Player* player) {
     if (!player->HasBall())
     {
         Ball* ball = player->GetTeam()->GetMatch()->GetBall();
-        int distance = ball->GetLocation()->Distance(player->GetLocation());
-        if (ball->IsFree() && distance < CATCH_DISTANCE)
+        bool collides = ball->GetCircle()->ExistsCollision3d(player->GetCircle());
+        if (ball->IsFree())
         {
-            Trajectory* trajectory = new Trajectory(player);
-            ball->SetTrajectory(trajectory);
+            if(collides)
+            {
+                Trajectory* trajectory = new Trajectory(player);
+                ball->SetTrajectory(trajectory);
+            }
+        }
 
-            /*
-            Si el jugador que agarra la pelota no estaba seleccionado,
-            es seleccionado por el jugador del mismo equipo que estaba más cerca.
-            */
-
-            if (USER_COLOR::NO_COLOR == player->GetPlayerColor()) {
-
-                std::vector<Player*> selected_players = player->GetTeam()->GetSelectedPlayers();
+        if(!ball->IsFree())
+        {
+            Player* player_ball = ball->GetPlayer();
+            if (USER_COLOR::NO_COLOR == player_ball->GetPlayerColor())
+            {
+                /*
+                Si el jugador que agarra la pelota no estaba seleccionado,
+                es seleccionado por el jugador del mismo equipo que estaba más cerca.
+                */
+                std::vector<Player*> selected_players = player_ball->GetTeam()->GetSelectedPlayers();
                 Player* closest_selected_player = NULL;
                 unsigned int closest_selected_player_distance_to_ball = 99999;
 
@@ -252,13 +281,12 @@ void GameServer::MakePlayerCatchBall(Player* player) {
                 }
 
                 if (closest_selected_player != NULL) {
-                    player->SetPlayerColor(closest_selected_player->GetPlayerColor());
+                    player_ball->SetPlayerColor(closest_selected_player->GetPlayerColor());
                     User* user = this->session_manager->GetUserByColor(closest_selected_player->GetPlayerColor());
-                    user->SetSelectedPlayer(player);
+                    user->SetSelectedPlayer(player_ball);
                     closest_selected_player->SetPlayerColor(USER_COLOR::NO_COLOR);
                 }
             }
-
         }
     }
 }
@@ -317,14 +345,14 @@ Location* GameServer::FindNearestPlayer(Player* player) {
 }
 
 void GameServer::MovePlayersToDefaultPositions() {
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
-        Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayers()[i];
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
+        Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
         if (!player_a->IsSelected()) {
             player_a->GoBackToDefaultPosition();
         }else{
             player_a->Play();
         }
-        Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayers()[i];
+        Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
         if (!player_b->IsSelected()) {
             player_b->GoBackToDefaultPosition();
         }else{
@@ -352,4 +380,46 @@ void GameServer::DisconnectClient(ClientSocket* client)
             this->is_running = false;
         }
     }
+}
+
+void GameServer::ChangeFormation(ChangeFormationRequest* cfRequest, int socket_id)
+{
+    User* user = this->session_manager->GetUserBySocketID(socket_id);
+    Team* team = user->GetSelectedPlayer()->GetTeam();
+    team->GetFormation()->ChangeFormation(cfRequest->GetFormation());
+    team->UpdateFormation();
+    Logger::getInstance()->info("(Server:HandleChangeFormationRequest) El usuario " + user->GetUsername() + " cambio la formacion de su equipo (" + team->GetName() + ") a " + cfRequest->GetFormation());
+    Logger::getInstance()->info("(Server:HandleChangeFormationRequest) Nueva formacion (" + team->GetName() + "): " + to_string(team->GetFormation()->GetValue()));
+}
+
+int GameServer::GetTeamUsersNum(string team_name) {
+    int num;
+    map<string, User*> users = this->session_manager->GetAuthenticatedUsers();
+    Team* user_team;
+    Team* current_team;
+    if (team_name == "a") {
+        user_team = this->game_state->GetMatch()->GetTeamA();
+    }
+    else {
+        user_team = this->game_state->GetMatch()->GetTeamB();
+    }
+
+	for (const auto& u : users)
+	{
+        current_team = u.second->GetSelectedPlayer()->GetTeam();
+        if (current_team == user_team) {
+            num++;
+        }
+    }
+
+    return num;
+}
+
+void GameServer::UpdateMatchState() {
+	this->game_state->UpdateMatchState();
+}
+
+void GameServer::Run() {
+	this->UpdateMatchState();
+	this->RunArtificialIntelligence();
 }

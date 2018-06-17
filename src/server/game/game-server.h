@@ -14,6 +14,7 @@
 #include "../../shared/network/messages/long-pass-request.h"
 #include "../../shared/network/messages/move-request.h"
 #include "../../shared/network/messages/change-player-request.h"
+#include "../../shared/network/messages/change-formation-request.h"
 
 using namespace std;
 
@@ -34,10 +35,13 @@ public:
     string ChangePlayer(ChangePlayerRequest* change_player_request, int socket_id);
     Location* FindNearestPlayer(Player* player);
     bool IsReadyToStart();
-    Message* StartGame();
-    void RunArtificialIntelligence();
+    void StartGame();
     bool IsRunning();
     void DisconnectClient(ClientSocket* client);
+    void ChangeFormation(ChangeFormationRequest* change_player_request, int socket_id);
+    bool TeamsHaveFormation();
+    int GetTeamUsersNum(string team_name);
+    void Run();
 
 protected:
 
@@ -53,6 +57,8 @@ private:
     void MakePlayerCatchBall(Player* player);
     void MoveBall();
     void MovePlayersToDefaultPositions();
+    void UpdateMatchState();
+    void RunArtificialIntelligence();
 
 };
 

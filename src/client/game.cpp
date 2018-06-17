@@ -6,7 +6,7 @@
 #include "view/login-view.h"
 #include "view/disconect-view.h"
 
-Game::Game(Configuration* initial_configuration)
+Game::Game(Configuration* initial_configuration) // @suppress("Class members should be properly initialized")
 {
 
     this->initial_configuration = initial_configuration;
@@ -32,16 +32,29 @@ void Game::LogIn()
 
     while (!is_logged && !login_view->IsUserQuit())
     {
-        client->Init(login_request->GetServerIp());
+        client->Init();
         std::string login_response = client->LogIn(login_request);
 
         if ("login-fail" == login_response || "too-many-users" == login_response || "invalid-team" == login_response || login_response == "non-existent-user")
         {
             login_view->OpenErrorPage(initial_configuration, login_response);
         }
-        else if("login-ok" == login_response)
+        else if("login-ok" == login_response || "choose-formation" == login_response)
         {
             is_logged = true;
+            if ("choose-formation" == login_response) {
+                //Si recibo mensaje de elegir formacion muestro pantalla
+                ChangeFormationRequest* cfRequest = new ChangeFormationRequest();
+                bool x_pressed = login_view->OpenFormationPage(cfRequest);
+                if (x_pressed || !this->client->ChangeFormation(cfRequest)) {
+                    //El cliente cerro el programa o no se pudo cambiar la formacion por error en socket -> disconnect
+                    QuitRequest* quit_request = new QuitRequest(this->user->GetUsername());
+                    this->client->Quit(quit_request);
+
+                    /** ESTO TIRA bad_alloc */
+                }
+            }
+
             login_view->OpenWaitingPage();
             while (serialized_model.empty())
             {
@@ -81,6 +94,7 @@ void Game::RenderViews()
     SDL_RenderClear( renderer );
 
     this->camera->Render();
+    this->timer_view->Render(this->match->GetRemainingTime());
     SDL_RenderPresent( renderer );
 }
 
@@ -127,6 +141,8 @@ void Game::Start()
         if(serialized_match != "")
         {
             this->match->DeserializeAndUpdate(serialized_match);
+            Logger::getInstance()->debug("(GameLoop) Formacion team a: " + to_string(this->match->GetTeamA()->GetFormation()->GetValue()));
+            Logger::getInstance()->debug("(GameLoop) Formacion team b: " + to_string(this->match->GetTeamB()->GetFormation()->GetValue()));
         }
 
         RenderViews();
@@ -171,18 +187,22 @@ void Game::CreateModel(std::string serialized_model)
     Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_A);
     Team* team_a = new Team(formation_team_a, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
 
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    Keeper* keeper_a = new Keeper();
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
     {
         team_a->AddPlayer(new Player(i,TEAM_NUMBER::TEAM_A));
     }
+    team_a->SetKeeper(keeper_a);
 
     Formation* formation_team_b = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_B);
     Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_NUMBER::TEAM_B); // TODO: TRAER NOMBRE DEL TEAM B Y CAMISETA DE CONFIG
 
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    Keeper* keeper_b = new Keeper();
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
     {
         team_b->AddPlayer(new Player(i, TEAM_NUMBER::TEAM_B));
     }
+    team_b->SetKeeper(keeper_b);
 
     // DEFINIR COMO SE SELECCIONA EL JUGADOR
     if (user->GetSelectedTeam() == TEAM_NUMBER::TEAM_A)
@@ -213,23 +233,47 @@ void Game::CreateViews()
     PitchView* pitch_view = new PitchView(this->match->GetPitch());
     this->camera->Add(pitch_view);
 
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    Keeper* keeper_a = match->GetTeamA()->GetKeeper();
+    KeeperView* keeper_a_view = new KeeperView(keeper_a);
+    this->camera->Add(keeper_a_view);
+    MiniPlayerView* mini_keeper_a_view = new MiniPlayerView(keeper_a->GetLocation(), keeper_a->PlaysForTeamA(), PITCH_HEIGHT, PITCH_WIDTH);
+    this->camera->AddMiniPlayerView(mini_keeper_a_view);
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
     {
-        Player* player = match->GetTeamA()->GetPlayers()[i];
+        Player* player = match->GetTeamA()->GetPlayerByPositionIndex(i);
+
         PlayerView* player_view = new PlayerView(player);
         this->camera->Add(player_view);
+
+        MiniPlayerView* mini_player_view = new MiniPlayerView(player->GetLocation(), player->PlaysForTeamA(), PITCH_HEIGHT, PITCH_WIDTH);
+        this->camera->AddMiniPlayerView(mini_player_view);
     }
 
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    Keeper* keeper_b = match->GetTeamB()->GetKeeper();
+    KeeperView* keeper_b_view = new KeeperView(keeper_b);
+    this->camera->Add(keeper_b_view);
+    MiniPlayerView* mini_keeper_b_view = new MiniPlayerView(keeper_b->GetLocation(), keeper_b->PlaysForTeamA(), PITCH_HEIGHT, PITCH_WIDTH);
+    this->camera->AddMiniPlayerView(mini_keeper_b_view);
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
     {
-        Player* player = match->GetTeamB()->GetPlayers()[i];
+        Player* player = match->GetTeamB()->GetPlayerByPositionIndex(i);
+
         PlayerView* player_view = new PlayerView(player);
         this->camera->Add(player_view);
+
+        MiniPlayerView* mini_player_view = new MiniPlayerView(player->GetLocation(), player->PlaysForTeamA(), PITCH_HEIGHT, PITCH_WIDTH);
+        this->camera->AddMiniPlayerView(mini_player_view);
     }
 
     BallView* ball_view = new BallView(match->GetBall());
     this->camera->Add(ball_view);
     this->camera->SetShowable(ball_view);
+
+    MiniBallView* mini_ball_view = new MiniBallView(match->GetBall(), PITCH_HEIGHT, PITCH_WIDTH);
+    this->camera->AddMiniBallView(mini_ball_view);
+
+    this->timer_view = new TimerView(renderer);
+
 }
 
 void Game::CreateControllers()
@@ -261,12 +305,15 @@ void Game::DestroyModel()
 void Game::DestroyViews()
 {
     Logger::getInstance()->debug("DESTRUYENDO LAS VISTAS");
+
     std::vector<AbstractView*> views = this->camera->GetViews();
     for (unsigned int i = 0; i < views.size(); i++)
     {
         delete (views[i]);
     }
+
     delete this->camera;
+    delete this->timer_view;
 }
 
 void Game::DestroyControllers()

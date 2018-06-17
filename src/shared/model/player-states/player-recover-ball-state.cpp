@@ -9,7 +9,6 @@ PlayerRecoverBallState::PlayerRecoverBallState(Player* player)
 }
 PlayerRecoverBallState::~PlayerRecoverBallState()
 {
-
 }
 void PlayerRecoverBallState::MoveLeft(bool run)
 {
@@ -128,6 +127,16 @@ void PlayerRecoverBallState::Play()
     }
     else
     {
+        this->TryRecover();
         this->player->Move(false);
+    }
+}
+
+void PlayerRecoverBallState::TryRecover()
+{
+    if(this->player->TryRecover())
+    {
+        this->timming = 0;
+        this->player->ChangeToMove();
     }
 }
