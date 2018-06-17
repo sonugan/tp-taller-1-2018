@@ -3,7 +3,7 @@
 Ball::Ball() {
     this->location = new Location(960, 618, 0);
     this->previous_location = new Location(200, 200, 0);
-    this->trajectory = new Trajectory(DIRECTION::EAST, 0);
+    this->trajectory = new Trajectory(DIRECTION::EAST, 0, TRAJECTORY_TYPE::FLOOR);
     this->circle = new Circle(HALO_RADIUS, new Location(this->location));
 }
 
@@ -19,6 +19,11 @@ Location* Ball::GetLocation() {
 
 Location* Ball::GetPreviousLocation() {
     return previous_location;
+}
+
+Trajectory* Ball::GetTrajectory()
+{
+    return this->trajectory;
 }
 
 void Ball::SetTrajectory(Trajectory* new_trajectory) {

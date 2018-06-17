@@ -1,21 +1,21 @@
-#include "kick-ball-request.h"
+#include "long-pass-request.h"
 #include "../../logger.h"
 #include "../../utils/string-utils.h"
 
-KickBallRequest::KickBallRequest(){}
-
-KickBallRequest::KickBallRequest(unsigned int power)
+LongPassRequest::LongPassRequest(unsigned int power)
 {
-    this->message_type = MESSAGE_TYPE::KICK_REQUEST;
+    this->message_type = MESSAGE_TYPE::LONG_PASS_REQUEST;
     this->power = power;
 }
 
-KickBallRequest::~KickBallRequest()
+LongPassRequest::LongPassRequest(){}
+
+LongPassRequest::~LongPassRequest()
 {
     //dtor
 }
 
-string KickBallRequest::Serialize()
+string LongPassRequest::Serialize()
 {
     string msg_type = to_string(this->GetMessageType());
     Logger::getInstance()->info(msg_type);
@@ -23,19 +23,19 @@ string KickBallRequest::Serialize()
     return msg;
 }
 
-void KickBallRequest::Deserialize(string str_obj)
+void LongPassRequest::Deserialize(string str_obj)
 {
     std::vector<std::string> data = StringUtils::Split(str_obj, '|');
     this->message_type = static_cast<MESSAGE_TYPE>(stoi(data[0]));
     this->power = stoi(data[1]);
 }
 
-MESSAGE_TYPE KickBallRequest::GetMessageType()
+MESSAGE_TYPE LongPassRequest::GetMessageType()
 {
     return this->message_type;
 }
 
-unsigned int KickBallRequest::GetPower()
+unsigned int LongPassRequest::GetPower()
 {
     return this->power;
 }

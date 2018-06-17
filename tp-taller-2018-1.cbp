@@ -200,6 +200,7 @@
 		<Unit filename="src/shared/model/team.h" />
 		<Unit filename="src/shared/model/timer.cpp" />
 		<Unit filename="src/shared/model/timer.h" />
+		<Unit filename="src/shared/model/trajectory-type.h" />
 		<Unit filename="src/shared/model/trajectory.cpp" />
 		<Unit filename="src/shared/model/trajectory.h" />
 		<Unit filename="src/shared/model/user-color.h" />
@@ -224,6 +225,8 @@
 		<Unit filename="src/shared/network/messages/kick-ball-request.h" />
 		<Unit filename="src/shared/network/messages/login-request.cpp" />
 		<Unit filename="src/shared/network/messages/login-request.h" />
+		<Unit filename="src/shared/network/messages/long-pass-request.cpp" />
+		<Unit filename="src/shared/network/messages/long-pass-request.h" />
 		<Unit filename="src/shared/network/messages/move-request.cpp" />
 		<Unit filename="src/shared/network/messages/move-request.h" />
 		<Unit filename="src/shared/network/messages/pass-ball-request.cpp" />

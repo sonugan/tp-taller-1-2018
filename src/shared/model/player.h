@@ -16,6 +16,7 @@
 #include "player-states/player-states.h"
 #include "../collision/circle.h"
 #include "../utils/coin-flipper.h"
+#include "trajectory-type.h"
 
 enum class DIRECTION { NORTH = 1, SOUTH = 2, EAST = 3, WEST = 4, NORTHEAST = 5, SOUTHEAST = 6, SOUTHWEST = 7, NORTHWEST = 8 };
 
@@ -39,6 +40,7 @@ class Player
         void MoveDownToRight(bool run);
         void MoveDownToLeft(bool run);
         void Kick();
+        void LongPass(int power, TRAJECTORY_TYPE trajectory_type);
         void RecoverBall();
         Location* GetLocation();
         DIRECTION GetDirection();
@@ -56,6 +58,7 @@ class Player
         Team* GetTeam();
         bool HasBall();
         void PassBall();
+        void KickBall(int power);
         bool PlaysForTeamA();
         bool PlaysForTeamB();
         void SetPlayerColor(USER_COLOR color);
@@ -99,6 +102,7 @@ class Player
 	    Circle* circle;
         CoinFlipper* coin_flipper;
         static const u_int HALO_RADIUS = 10;
+        unsigned int height = 64;
 };
 
 #endif // PLAYER_H

@@ -23,6 +23,8 @@ class Ball
         Player* GetPlayer();
         bool LastFreedDelayPassed();
         Circle* GetCircle();
+        Trajectory* GetTrajectory();
+
     protected:
 
     private:
