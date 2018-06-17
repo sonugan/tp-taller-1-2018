@@ -10,6 +10,7 @@ class Trajectory
 {
     public:
         Trajectory(DIRECTION direction, unsigned int drive, TRAJECTORY_TYPE trajectory_type);
+        Trajectory(DIRECTION direction, unsigned int drive, TRAJECTORY_TYPE trajectory_type, Location* nearest_player);
         Trajectory(Player* player);
         virtual ~Trajectory();
         void UpdateToNextLocation(Location* location);
@@ -33,6 +34,7 @@ class Trajectory
         unsigned int original_ball_speed;
         Player* player;
         TRAJECTORY_TYPE trajectory_type;
+        Location* nearest_player;
 };
 
 #endif // TRAJECTORY_H

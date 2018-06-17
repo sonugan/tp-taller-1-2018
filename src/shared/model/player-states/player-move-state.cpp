@@ -69,7 +69,7 @@ void PlayerMoveState::RecoverBall()
 void PlayerMoveState::PassBall()
 {
     this->player->ChangeToPass();
-    this->player->PassBall();
+    this->player->PassBall(NULL);
 }
 void PlayerMoveState::CatchBall()
 {
