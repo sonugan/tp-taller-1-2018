@@ -19,6 +19,7 @@
 #include "../shared/configuration/configuration.h"
 #include "../shared/logger.h"
 #include "../shared/network/messages/login-request.h"
+#include "../shared/network/messages/long-pass-request.h"
 #include "game/game-server.h"
 
 using namespace std;
@@ -60,6 +61,7 @@ private:
     void HandleMoveRequest(ClientSocket* client, Message* message);
     void HandleRecoverBallRequest(ClientSocket* client, Message* message);
     void HandleKickRequest(ClientSocket* client, Message* message);
+    void HandleLongPassRequest(ClientSocket* client, Message* message);
     void HandlePassBallRequest(ClientSocket* client, Message* message);
     void HandleChangePlayerRequest(ClientSocket* client, Message* message);
     void HandleHealthCheck(ClientSocket* client, Message* message);

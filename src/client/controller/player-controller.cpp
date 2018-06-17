@@ -1,4 +1,6 @@
 #include "player-controller.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 //Agregar los request que son los que se van a mandar al servidor.
 
@@ -8,13 +10,16 @@ PlayerController::PlayerController(Team* team, Client* client) {
     //current_action_timming = 1;
     //current_action = PLAYER_IS_STILL;
     this->last_pass = std::chrono::system_clock::now();
+    this->last_keyboard_state_array = NULL;
+    this->kickballevents = 1;
+    this->longpassevents = 1;
 }
 
 PlayerController::~PlayerController() {
     //dtor
 }
 
-void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
+void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array, SDL_Event e) {
 //    Logger::getInstance()->debug("(PlayerController::PlayerPlay)");
     /*if(!ContinueCurrentAction())
     {
@@ -31,8 +36,10 @@ void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array) {
     }*/
     this->PassBall(keyboard_state_array);//TODO: Ver como implementar PassBall en el modelo
     this->PlayerRecoverBall(keyboard_state_array);
-    this->KickPlayer(keyboard_state_array);
+    this->KickPlayer(keyboard_state_array, e);
+    this->LongPass(keyboard_state_array, e);
     this->MovePlayer(keyboard_state_array);
+    this->last_keyboard_state_array = keyboard_state_array;
 }
 
 void PlayerController::MovePlayer(const Uint8 *keyboard_state_array)
@@ -68,13 +75,40 @@ void PlayerController::MovePlayer(const Uint8 *keyboard_state_array)
     //current_action = PLAYER_IS_RUNNING;
 }
 
-bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array) {
-    if (DKeySelected(keyboard_state_array)) {
-        KickBallRequest r;
-        this->client->KickBall(&r);
-        //current_action = PLAYER_IS_KICKING;
-        this->sound_manager->PlayKickBallSound();
-        return true;
+bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array, SDL_Event e) {
+    if (e.key.keysym.sym == SDLK_d)
+    {
+        if ((e.key.state == SDL_PRESSED) && (e.key.repeat != 0))
+        {
+            this->kickballevents = 2;
+        }
+        if (e.key.state == SDL_RELEASED)
+        {
+            KickBallRequest r(this->kickballevents);
+            this->client->KickBall(&r);
+            this->kickballevents = 1;
+            this->sound_manager->PlayKickBallSound();
+            return true;
+        }
+    }
+    return false;
+}
+
+bool PlayerController::LongPass(const Uint8 *keyboard_state_array, SDL_Event e) {
+    if (e.key.keysym.sym == SDLK_w)
+    {
+        if ((e.key.state == SDL_PRESSED) && (e.key.repeat != 0))
+        {
+            this->longpassevents = 2;
+        }
+        if (e.key.state == SDL_RELEASED)
+        {
+            LongPassRequest r(this->longpassevents);
+            this->client->LongPass(&r);
+            this->longpassevents = 1;
+            //this->sound_manager->PlayKickBallSound();
+            return true;
+        }
     }
     return false;
 }
@@ -137,7 +171,7 @@ bool PlayerController::ShiftKeySelected(const Uint8 *keyboard_state_array) {
 }
 
 void PlayerController::Handle(const Uint8* keyboard_state_array) {
-    PlayerPlay(keyboard_state_array);
+    PlayerPlay(keyboard_state_array, this->event);
 }
 
 bool PlayerController::SelectedPlayerHasChange()
@@ -145,6 +179,11 @@ bool PlayerController::SelectedPlayerHasChange()
     Logger::getInstance()->debug("(PlayerController::SelectedPlayerHasChange)");
     return team->GetSelectedPlayer() != this->selected_player;
 
+}
+
+void PlayerController::SetEvent(SDL_Event e)
+{
+    this->event = e;
 }
 
 bool PlayerController::ContinueCurrentAction()
