@@ -47,7 +47,7 @@ void ClientTester::TestCompleteFlow()
 
     cin.get();
 
-    KickBallRequest* kick_request = new KickBallRequest();
+    KickBallRequest* kick_request = new KickBallRequest(2);
     client->KickBall(kick_request);
 
 

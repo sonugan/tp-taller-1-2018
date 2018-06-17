@@ -110,6 +110,7 @@ void Game::Start()
 
     const Uint8* keyboard_state_array = SDL_GetKeyboardState(NULL);
 
+
     // GAME LOOP
     while( !quit )
     {
@@ -131,6 +132,7 @@ void Game::Start()
             continue;
         }
 
+        this->player_controller->SetEvent(e);
         this->game_controller->Handle(keyboard_state_array);
         this->player_controller->Handle(keyboard_state_array);
         this->team_controller->Handle(keyboard_state_array);
