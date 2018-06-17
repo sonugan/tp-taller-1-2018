@@ -38,6 +38,8 @@ class PlayerController : public AbstractController
         bool LongPass(const Uint8 *keyboard_state_array, SDL_Event e);
         bool PlayerRecoverBall(const Uint8 *keyboard_state_array);
         bool KickPlayer(const Uint8 *keyboard_state_array, SDL_Event e);
+        void PlayKickSound(const Uint8 *keyboard_state_array);
+
         bool UpKeySelected(const Uint8 *keyboard_state_array);
         bool RightKeySelected(const Uint8 *keyboard_state_array);
         bool LeftKeySelected(const Uint8 *keyboard_state_array);
@@ -45,6 +47,7 @@ class PlayerController : public AbstractController
         bool AKeySelected(const Uint8 *keyboard_state_array);
         bool SKeySelected(const Uint8 *keyboard_state_array);
         bool DKeySelected(const Uint8 *keyboard_state_array);
+        bool WKeySelected(const Uint8 *keyboard_state_array);
         bool ShiftKeySelected(const Uint8 *keyboard_state_array);
         bool ShouldRequestPass(const Uint8 *keyboard_state_array);
         bool SelectedPlayerHasChange();

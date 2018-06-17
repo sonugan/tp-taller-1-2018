@@ -30,7 +30,7 @@ void SoundManager::PlaySound(char* path)
     }
     else
     {
-        Mix_PlayChannel(-1, this->sound, 0);
+        Mix_PlayChannel(1, this->sound, 0);
     }
 }
 
