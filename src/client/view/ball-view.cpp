@@ -181,8 +181,8 @@ void BallView::Render(int x_camera, int y_camera, int max_x, int max_y) {
     this->previous_location->UpdateY(ball->GetLocation()->GetY());
     this->previous_location->UpdateZ(ball->GetLocation()->GetZ());
 
-    x = ball->GetLocation()->GetX() - (SPRITE_WIDTH / 2) - x_camera;
-    y = ball->GetLocation()->GetY() - (SPRITE_HEIGHT / 2)- y_camera;
+    x = ball->GetLocation()->GetX() - (Ball::BALL_TRIDIMENSIONAL_OFFSET * 2) - x_camera;
+    y = ball->GetLocation()->GetY() - (Ball::BALL_TRIDIMENSIONAL_OFFSET * 2)- y_camera;
 
     sprite_sheet->Render( x, y, current_clip );
 }

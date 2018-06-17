@@ -147,7 +147,6 @@
 		<Unit filename="src/server/session/authentication-exception.h" />
 		<Unit filename="src/server/session/invalid-team-exception.h" />
 		<Unit filename="src/server/session/max-allowed-user-exception.h" />
-		<Unit filename="src/server/session/non-existen-user-exception.h" />
 		<Unit filename="src/server/session/session-manager.cpp" />
 		<Unit filename="src/server/session/session-manager.h" />
 		<Unit filename="src/shared/collision/circle.cpp" />
@@ -173,6 +172,9 @@
 		<Unit filename="src/shared/model/formation.h" />
 		<Unit filename="src/shared/model/keeper.cpp" />
 		<Unit filename="src/shared/model/keeper.h" />
+		<Unit filename="src/shared/model/goal-zone.cpp" />
+		<Unit filename="src/shared/model/goal-zone.h" />
+		<Unit filename="src/shared/model/ipitch-zone.h" />
 		<Unit filename="src/shared/model/location.cpp" />
 		<Unit filename="src/shared/model/location.h" />
 		<Unit filename="src/shared/model/match-state-type.h" />

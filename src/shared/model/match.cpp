@@ -244,9 +244,9 @@ void Match::DeserializeAndUpdate(string serialized) {
     GetTeamB()->SetShirt(data[base_index + 3]);
 
     // DESERIALIZO REMAINING GAME TIME
-    this->SetRemainingTime(data[91]);
+    this->SetRemainingTime(data[base_index + 4]);
     // MATCH TIME
-    this->SetMatchTime(static_cast<MATCH_TIME_TYPE>(SafeStoi(data[92])));
+    this->SetMatchTime(static_cast<MATCH_TIME_TYPE>(SafeStoi(data[base_index + 5])));
 
     Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Match deserializado");
 }
@@ -270,4 +270,24 @@ std::string Match::GetRemainingTime() {
 
 void Match::SetRemainingTime(std::string remaining_time) {
 	this->remaining_time = remaining_time;
+}
+
+Team* Match::GetTeamByNumber(TEAM_NUMBER number)
+{
+    if (number == this->team_a->GetTeamNumber())
+    {
+        return this->team_a;
+    }
+
+    return this->team_b;
+}
+
+Team* Match::GetOppositeTeam(Team* team)
+{
+    if (team == this->team_a)
+    {
+        return team_b;
+    }
+
+    return team_a;
 }

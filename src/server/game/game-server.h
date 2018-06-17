@@ -41,7 +41,8 @@ public:
     bool TeamsHaveFormation();
     int GetTeamUsersNum(string team_name);
     void Run();
-
+    void DetectGoals();
+    
 protected:
 
 private:

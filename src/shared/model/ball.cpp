@@ -5,6 +5,8 @@ Ball::Ball() {
     this->previous_location = new Location(200, 200, 0);
     this->trajectory = new Trajectory(DIRECTION::EAST, 0, TRAJECTORY_TYPE::FLOOR);
     this->circle = new Circle(HALO_RADIUS, new Location(this->location));
+    this->last_owner_player_color = USER_COLOR::NO_COLOR;
+    this->last_owner_team = NULL;
 }
 
 Ball::~Ball() {
@@ -67,4 +69,35 @@ Player* Ball::GetPlayer() {
 Circle* Ball::GetCircle()
 {
     return this->circle;
+}
+
+void Ball::SetLastOwner(Team* team, USER_COLOR color)
+{
+    this->last_owner_team = team;
+    this->last_owner_player_color = color;
+}
+
+USER_COLOR Ball::GetLastOwnerColor()
+{
+    return this->last_owner_player_color;
+}
+
+Team* Ball::GetLastOwnerTeam()
+{
+    return this->last_owner_team;
+}
+
+void Ball::ReturnToMiddle()
+{
+	Logger::getInstance()->debug("Ball::ReturnToMiddle");
+    delete this->location;
+    delete this->previous_location;
+    this->location = new Location(960, 540, 0);
+    this->previous_location = new Location(200, 200, 0);
+    //Eliminando la trayectoria de la pelota
+    delete this->trajectory;
+    this->trajectory = new Trajectory(DIRECTION::EAST, 0, TRAJECTORY_TYPE::FLOOR);
+
+    this->last_owner_team = NULL;
+    this->last_owner_player_color = USER_COLOR::NO_COLOR;
 }
