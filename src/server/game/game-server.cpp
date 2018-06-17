@@ -221,6 +221,23 @@ void GameServer::RunArtificialIntelligence() {
     this->MoveBall();
     this->MovePlayersToDefaultPositions();
     this->DetectGoals();
+    this->BounceBallOnThrowIn();
+}
+
+void GameServer::BounceBallOnThrowIn()
+{
+    Ball* ball = this->game_state->GetMatch()->GetBall();
+
+    if (!ball->IsFree())
+    {
+        return;
+    }
+
+    if (this->game_state->GetMatch()->GetPitch()->BallTouchingThrowIn(ball))
+    {
+        Logger::getInstance()->debug("(GameServer::BounceBallOnThrowIn) Rebotando pelota en los laterales");
+        ball->BounceOnThrowIn();
+    }
 }
 
 void GameServer::DetectGoals()

@@ -87,3 +87,56 @@ void Ball::ReturnToMiddle()
     this->last_owner_team = NULL;
     this->last_owner_player_color = USER_COLOR::NO_COLOR;
 }
+
+void Ball::BounceOnThrowIn()
+{
+    if (this->trajectory == NULL)
+    {
+        return;
+    }
+
+    DIRECTION new_direction;
+    switch(this->trajectory->GetDirection())
+    {
+        case DIRECTION::NORTH:
+        {
+            new_direction = DIRECTION::SOUTH;
+            break;
+        }
+        case DIRECTION::SOUTH:
+        {
+            new_direction = DIRECTION::NORTH;
+            break;
+        }
+        case DIRECTION::NORTHEAST:
+        {
+            new_direction = DIRECTION::SOUTHEAST;
+            break;
+        }
+        case DIRECTION::SOUTHEAST:
+        {
+            new_direction = DIRECTION::NORTHEAST;
+            break;
+        }
+        case DIRECTION::NORTHWEST:
+        {
+            new_direction = DIRECTION::SOUTHWEST;
+            break;
+        }
+        case DIRECTION::SOUTHWEST:
+        {
+            new_direction = DIRECTION::NORTHWEST;
+            break;
+        }
+        default:
+        {
+            //La direccion no se actualiza
+            return;
+        }
+    }
+
+    this->trajectory->SetDirection(new_direction);
+
+    //Desacelero un poco la pelota
+    this->trajectory->SetDrive(0.7*this->trajectory->GetDrive());
+}

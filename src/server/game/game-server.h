@@ -40,6 +40,7 @@ public:
     bool TeamsHaveFormation();
     int GetTeamUsersNum(string team_name);
     void DetectGoals();
+    void BounceBallOnThrowIn();
 protected:
 
 private:

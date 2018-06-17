@@ -90,3 +90,23 @@ void Trajectory::UpdateToNextLocation(Location* location) {
 Player* Trajectory::GetPlayer() {
     return player;
 }
+
+DIRECTION Trajectory::GetDirection()
+{
+    return this->direction;
+}
+
+void Trajectory::SetDirection(DIRECTION direction)
+{
+    this->direction = direction;
+}
+
+unsigned int Trajectory::GetDrive()
+{
+    return this->drive;
+}
+
+void Trajectory::SetDrive(unsigned int drive)
+{
+    this->drive = drive;
+}

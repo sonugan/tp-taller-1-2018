@@ -29,6 +29,7 @@ class Ball
         Team* GetLastOwnerTeam();
         void ReturnToMiddle();
         static const int BALL_TRIDIMENSIONAL_OFFSET = 5;
+        void BounceOnThrowIn();
     protected:
 
     private:
