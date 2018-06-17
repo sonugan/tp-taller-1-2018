@@ -18,6 +18,7 @@ class Trajectory
         TRAJECTORY_TYPE GetTrajectoryType();
         void ChangeTrajectoryType(TRAJECTORY_TYPE trajectory_type);
         void UpdateTrajectoryType(TRAJECTORY_TYPE trajectory_type);
+        unsigned int GetBallSpeed();
 
     protected:
 

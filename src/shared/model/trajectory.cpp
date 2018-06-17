@@ -157,7 +157,7 @@ void Trajectory::UpdateToNextLocation(Location* location) {
 
         if (this->trajectory_type == TRAJECTORY_TYPE::DOWNWARDS)
         {
-            z = z - (offset*3);
+            z = z - (offset*2);
         }
 
 
@@ -168,7 +168,7 @@ void Trajectory::UpdateToNextLocation(Location* location) {
         }
 
         location->Update(x, y, z);
-        if ((this->ball_speed <= this->original_ball_speed/2) && (this->trajectory_type == TRAJECTORY_TYPE::UPWARDS))
+        if ((this->ball_speed <= (this->original_ball_speed* 2/3)) && (this->trajectory_type == TRAJECTORY_TYPE::UPWARDS))
         {
             this->ChangeTrajectoryType(TRAJECTORY_TYPE::DOWNWARDS);
         }
@@ -194,6 +194,11 @@ TRAJECTORY_TYPE Trajectory::GetTrajectoryType(){
 void Trajectory::ChangeTrajectoryType(TRAJECTORY_TYPE trajectory_type)
 {
     this->trajectory_type = trajectory_type;
+}
+
+unsigned int Trajectory::GetBallSpeed()
+{
+    return this->original_ball_speed;
 }
 
 void Trajectory::UpdateTrajectoryType(TRAJECTORY_TYPE trajectory_type)
