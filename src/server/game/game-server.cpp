@@ -2,7 +2,6 @@
 
 #include "../../shared/logger.h"
 #include "non-existen-user-exception.h"
-#include "ball.h"
 
 GameServer::GameServer(Configuration* initial_configuration)
 {
