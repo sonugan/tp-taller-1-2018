@@ -47,7 +47,7 @@ void GameMusic::PlayMainTheme()
 
     if (loaded_track)
     {
-        Mix_PlayMusic(this->current_track, -1);
+        Mix_PlayMusic(this->current_track, FOREVER);
     }
 }
 
@@ -57,7 +57,7 @@ void GameMusic::PlayLoginTheme()
 
     if (loaded_track)
     {
-        Mix_PlayMusic(this->current_track, -1);
+        Mix_PlayMusic(this->current_track, FOREVER);
     }
 }
 

@@ -1,6 +1,9 @@
 #ifndef GAMEMUSIC_H
 #define GAMEMUSIC_H
 
+#define FOREVER -1
+#define ONE_TIME 1
+
 #include<iostream>
 #include "SDL/SDL_mixer.h"
 #include "../../shared/logger.h"

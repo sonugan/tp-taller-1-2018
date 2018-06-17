@@ -73,6 +73,7 @@ bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array) {
         KickBallRequest r;
         this->client->KickBall(&r);
         //current_action = PLAYER_IS_KICKING;
+        this->sound_manager->PlayKickBallSound();
         return true;
     }
     return false;
@@ -83,6 +84,7 @@ void PlayerController::PassBall(const Uint8 *keyboard_state_array) {
         PassBallRequest r;
         this->client->PassBall(&r);
         last_pass = std::chrono::system_clock::now();
+        this->sound_manager->PlayKickBallSound();
     }
 }
 

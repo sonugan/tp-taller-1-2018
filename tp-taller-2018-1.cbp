@@ -5,7 +5,6 @@
 		<Option title="tp-taller-2018-1" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="src/shared/;src/;src/client/;src/client/sound/;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/tp-taller-2018-1" prefix_auto="1" extension_auto="1" />
@@ -14,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Option parameters='--config=&quot;src/shared/configuration/default-config.yml&quot;' />
 				<Compiler>
+					<Add option="-std=c++11" />
 					<Add option="-g" />
 					<Add directory="src/game" />
 					<Add directory="src/pitch" />
@@ -87,12 +87,8 @@
 		<Unit filename="src/client/controller/player-controller.h" />
 		<Unit filename="src/client/controller/team-controller.cpp" />
 		<Unit filename="src/client/controller/team-controller.h" />
-		<Unit filename="src/client/game.cpp">
-			<Option virtualFolder="src/client/" />
-		</Unit>
-		<Unit filename="src/client/game.h">
-			<Option virtualFolder="src/client/" />
-		</Unit>
+		<Unit filename="src/client/game.cpp" />
+		<Unit filename="src/client/game.h" />
 		<Unit filename="src/client/sound/game-music.cpp" />
 		<Unit filename="src/client/sound/game-music.h" />
 		<Unit filename="src/client/sound/select_player.wav" />

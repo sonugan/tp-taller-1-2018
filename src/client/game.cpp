@@ -105,6 +105,10 @@ void Game::Start()
     Logger::getInstance()->info("==================COMIENZA EL JUEGO==================");
     this->quit = false;
 
+    SoundManager* sound_manager = new SoundManager();
+
+    sound_manager->PlayGameTimeStartSound();
+
     this->game_music->PlayMainTheme();
 
     //Handler de eventos
@@ -162,6 +166,8 @@ void Game::Start()
         }
     }
 
+    delete sound_manager;
+
 }
 
 void Game::End()
@@ -172,7 +178,7 @@ void Game::End()
     DestroyViews();
     DestroyControllers();
     SpritesProvider::FreeResources();
-    SoundManager::FreeResources();
+    //SoundManager::FreeResources();
     CloseSDL();
 }
 
@@ -362,7 +368,7 @@ void Game::InitSDL()
         throw std::runtime_error(IMG_GetError());
     }
 
-    SoundManager::LoadResources();
+    //SoundManager::LoadResources();
 
     if( TTF_Init() == -1 )
     {

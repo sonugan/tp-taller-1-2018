@@ -21,6 +21,7 @@
 #include "view/info-panel-view.h"
 #include "view/camera.h"
 #include "sound/game-music.h"
+#include "sound/sound-manager.h"
 #include "../shared/model/match.h"
 #include "../shared/model/player.h"
 #include "controller/player-controller.h"
@@ -76,10 +77,12 @@ private:
 
     static const int FRAMES_PER_SECOND = 30;
     u_int STOP_LOOP_MILLISECONDS = 30;
+
     TeamController* team_controller;
     PlayerController* player_controller;
     GameController* game_controller;
     GameMusicController* music_controller;
+
     bool quit;
     bool correctly_initialized;
 

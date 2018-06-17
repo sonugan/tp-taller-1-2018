@@ -9,14 +9,14 @@ class SoundManager
     public:
         SoundManager();
         virtual ~SoundManager();
-        static void LoadResources();
-        static void FreeResources();
-        static void PlayPlayerSelectionSound();
-
+        void PlayPlayerSelectionSound();
+        void PlayGameTimeStartSound();
+        void PlayKickBallSound();
     protected:
 
     private:
-        static Mix_Chunk* change_player_sound;
+        Mix_Chunk* sound;
+        void PlaySound(char* path);
 };
 
 #endif // SOUNDMANAGER_H
