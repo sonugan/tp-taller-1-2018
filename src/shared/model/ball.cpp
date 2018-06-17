@@ -95,37 +95,36 @@ void Ball::BounceOnThrowIn()
         return;
     }
 
-    DIRECTION new_direction;
     switch(this->trajectory->GetDirection())
     {
         case DIRECTION::NORTH:
         {
-            new_direction = DIRECTION::SOUTH;
+            this->trajectory->SetDirection(DIRECTION::SOUTH);
             break;
         }
         case DIRECTION::SOUTH:
         {
-            new_direction = DIRECTION::NORTH;
+            this->trajectory->SetDirection(DIRECTION::NORTH);
             break;
         }
         case DIRECTION::NORTHEAST:
         {
-            new_direction = DIRECTION::SOUTHEAST;
+            this->trajectory->SetDirection(DIRECTION::SOUTHEAST);
             break;
         }
         case DIRECTION::SOUTHEAST:
         {
-            new_direction = DIRECTION::NORTHEAST;
+            this->trajectory->SetDirection(DIRECTION::NORTHEAST);
             break;
         }
         case DIRECTION::NORTHWEST:
         {
-            new_direction = DIRECTION::SOUTHWEST;
+            this->trajectory->SetDirection(DIRECTION::SOUTHWEST);
             break;
         }
         case DIRECTION::SOUTHWEST:
         {
-            new_direction = DIRECTION::NORTHWEST;
+            this->trajectory->SetDirection(DIRECTION::NORTHWEST);
             break;
         }
         default:
@@ -134,8 +133,6 @@ void Ball::BounceOnThrowIn()
             return;
         }
     }
-
-    this->trajectory->SetDirection(new_direction);
 
     //Desacelero un poco la pelota
     this->trajectory->SetDrive(0.7*this->trajectory->GetDrive());
