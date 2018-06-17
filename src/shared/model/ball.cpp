@@ -92,7 +92,7 @@ void Ball::ReturnToMiddle()
 	Logger::getInstance()->debug("Ball::ReturnToMiddle");
     delete this->location;
     delete this->previous_location;
-    this->location = new Location(960, 540, 0);
+    this->location = new Location(960, 618, 0);
     this->previous_location = new Location(200, 200, 0);
     //Eliminando la trayectoria de la pelota
     delete this->trajectory;
@@ -100,4 +100,54 @@ void Ball::ReturnToMiddle()
 
     this->last_owner_team = NULL;
     this->last_owner_player_color = USER_COLOR::NO_COLOR;
+}
+
+void Ball::BounceOnThrowIn()
+{
+    if (this->trajectory == NULL)
+    {
+        return;
+    }
+
+    switch(this->trajectory->GetDirection())
+    {
+        case DIRECTION::NORTH:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::SOUTH);
+            break;
+        }
+        case DIRECTION::SOUTH:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::NORTH);
+            break;
+        }
+        case DIRECTION::NORTHEAST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::SOUTHEAST);
+            break;
+        }
+        case DIRECTION::SOUTHEAST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::NORTHEAST);
+            break;
+        }
+        case DIRECTION::NORTHWEST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::SOUTHWEST);
+            break;
+        }
+        case DIRECTION::SOUTHWEST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::NORTHWEST);
+            break;
+        }
+        default:
+        {
+            //La direccion no se actualiza
+            return;
+        }
+    }
+
+    //Desacelero un poco la pelota
+    this->trajectory->UpdatePower(0.7*this->trajectory->GetPower());
 }

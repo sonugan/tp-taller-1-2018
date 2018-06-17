@@ -189,6 +189,23 @@ void GameServer::RunArtificialIntelligence() {
 	this->MoveBall();
 	this->MovePlayersToDefaultPositions();
 	this->DetectGoals();
+	this->BounceBallOnThrowIn();
+}
+
+void GameServer::BounceBallOnThrowIn()
+{
+    Ball* ball = this->game_state->GetMatch()->GetBall();
+
+    if (!ball->IsFree())
+    {
+        return;
+    }
+
+    if (this->game_state->GetMatch()->GetPitch()->BallTouchingThrowIn(ball))
+    {
+        Logger::getInstance()->debug("(GameServer::BounceBallOnThrowIn) Rebotando pelota en los laterales");
+        ball->BounceOnThrowIn();
+    }
 }
 
 void GameServer::DetectGoals() {
@@ -199,12 +216,9 @@ void GameServer::DetectGoals() {
 
 	if (scoring_on_goal_team != NULL) {
 		///Equipo que hizo el gol
-		Logger::getInstance()->debug("(GameServer::DetectGoals) Equipo que hizo el gol");
 		Team* goaler_team = this->game_state->GetMatch()->GetOppositeTeam(scoring_on_goal_team);
-		///Equipo del jugador que hizo le gol
-		Logger::getInstance()->debug("(GameServer::DetectGoals) Equipo del jugador que hizo le gol");
-		Team* goal_scorer_team = this->game_state->GetMatch()->GetTeamByNumber(
-				this->session_manager->GetUserByColor(ball->GetLastOwnerColor())->GetSelectedTeam());
+		///Equipo del jugador que hizo el gol
+		Team* goal_scorer_team = this->game_state->GetMatch()->GetTeamByNumber(this->session_manager->GetUserByColor(ball->GetLastOwnerColor())->GetSelectedTeam());
 
 		if (ball->GetLastOwnerColor() != USER_COLOR::NO_COLOR) {
 			Logger::getInstance()->info(
@@ -247,21 +261,16 @@ void GameServer::CatchBall() {
 void GameServer::MakePlayerCatchBall(Player* player) {
 	if (!player->HasBall()) {
 		Ball* ball = player->GetTeam()->GetMatch()->GetBall();
-		if (ball->IsFree()) {
-			bool collides = ball->GetCircle()->ExistsCollision3d(player->GetCircle());
-			if (collides) {
-				Trajectory* trajectory = new Trajectory(player);
-				ball->SetTrajectory(trajectory);
-			}
-		} else {
-
-			Player* player_ball = ball->GetPlayer();
-			if (USER_COLOR::NO_COLOR == player_ball->GetPlayerColor()) {
+		bool collides = ball->GetCircle()->ExistsCollision3d(player->GetCircle());
+		if (ball->IsFree() && collides) {
+			Trajectory* trajectory = new Trajectory(player);
+            ball->SetTrajectory(trajectory);
+			if (USER_COLOR::NO_COLOR == player->GetPlayerColor()) {
 				/*
 				 Si el jugador que agarra la pelota no estaba seleccionado,
 				 es seleccionado por el jugador del mismo equipo que estaba más cerca.
 				 */
-				std::vector<Player*> selected_players = player_ball->GetTeam()->GetSelectedPlayers();
+				std::vector<Player*> selected_players = player->GetTeam()->GetSelectedPlayers();
 				Player* closest_selected_player = NULL;
 				unsigned int closest_selected_player_distance_to_ball = 99999;
 
@@ -275,9 +284,9 @@ void GameServer::MakePlayerCatchBall(Player* player) {
 				}
 
 				if (closest_selected_player != NULL) {
-					player_ball->SetPlayerColor(closest_selected_player->GetPlayerColor());
+					player->SetPlayerColor(closest_selected_player->GetPlayerColor());
 					User* user = this->session_manager->GetUserByColor(closest_selected_player->GetPlayerColor());
-					user->SetSelectedPlayer(player_ball);
+					user->SetSelectedPlayer(player);
 					closest_selected_player->SetPlayerColor(USER_COLOR::NO_COLOR);
 				}
 			}
@@ -296,10 +305,10 @@ void GameServer::MakePlayerCatchBall(Player* player) {
 			}
 
 			if (player->IsSelected()) {
-				ball->SetLastOwner(player->GetTeam(), player->GetPlayerColor());
-			} else {
-				ball->SetLastOwner(player->GetTeam(), USER_COLOR::NO_COLOR);
-			}
+                ball->SetLastOwner(player->GetTeam(), player->GetPlayerColor());
+            } else {
+                ball->SetLastOwner(player->GetTeam(), USER_COLOR::NO_COLOR);
+            }
 		}
 	}
 }

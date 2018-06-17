@@ -132,3 +132,23 @@ void Trajectory::UpdateTrajectoryType(TRAJECTORY_TYPE trajectory_type)
         this->trajectory_type = trajectory_type;
     }
 }
+
+DIRECTION Trajectory::GetDirection()
+{
+    return this->direction;
+}
+
+void Trajectory::UpdateDirection(DIRECTION direction)
+{
+    this->direction = direction;
+}
+
+unsigned int Trajectory::GetPower()
+{
+    return this->power;
+}
+
+void Trajectory::UpdatePower(unsigned int power)
+{
+    this->power = power;
+}

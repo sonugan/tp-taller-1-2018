@@ -17,7 +17,10 @@ class Trajectory
         TRAJECTORY_TYPE GetTrajectoryType();
         void ChangeTrajectoryType(TRAJECTORY_TYPE trajectory_type);
         void UpdateTrajectoryType(TRAJECTORY_TYPE trajectory_type);
-
+        DIRECTION GetDirection();
+        void UpdateDirection(DIRECTION direction);
+        unsigned int GetPower();
+        void UpdatePower(unsigned int power);
     protected:
 
     private:

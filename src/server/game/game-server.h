@@ -42,7 +42,7 @@ public:
     int GetTeamUsersNum(string team_name);
     void Run();
     void DetectGoals();
-    
+    void BounceBallOnThrowIn();
 protected:
 
 private:
