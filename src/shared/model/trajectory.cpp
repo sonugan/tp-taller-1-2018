@@ -143,12 +143,12 @@ void Trajectory::UpdateDirection(DIRECTION direction)
     this->direction = direction;
 }
 
-unsigned int Trajectory::GetPower()
+unsigned int Trajectory::GetBallSpeed()
 {
-    return this->power;
+    return this->ball_speed;
 }
 
-void Trajectory::UpdatePower(unsigned int power)
+void Trajectory::UpdateBallSpeed(unsigned int ball_speed)
 {
-    this->power = power;
+    this->ball_speed = power;
 }

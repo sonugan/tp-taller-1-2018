@@ -30,3 +30,8 @@ void Keeper::SetLocation(Location* location) {
 Location* Keeper::GetLocation() {
 	return this->location;
 }
+
+Team* Keeper::GetTeam()
+{
+    return this->team;
+}

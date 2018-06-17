@@ -19,8 +19,8 @@ class Trajectory
         void UpdateTrajectoryType(TRAJECTORY_TYPE trajectory_type);
         DIRECTION GetDirection();
         void UpdateDirection(DIRECTION direction);
-        unsigned int GetPower();
-        void UpdatePower(unsigned int power);
+        unsigned int GetBallSpeed();
+        void UpdateBallSpeed(unsigned int ball_speed);
     protected:
 
     private:

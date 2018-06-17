@@ -9,7 +9,7 @@
 #include "../collision/circle.h"
 #include "user-color.h"
 
-
+class Keeper;
 class Team;
 class Trajectory;
 class Player;
@@ -33,6 +33,7 @@ class Ball
         void ReturnToMiddle();
         static const int BALL_TRIDIMENSIONAL_OFFSET = 5;
         void BounceOnThrowIn();
+        void GoToKeeper(Keeper* keeper);
     protected:
 
     private:

@@ -188,14 +188,31 @@ void GameServer::RunArtificialIntelligence() {
 	this->CatchBall();
 	this->MoveBall();
 	this->MovePlayersToDefaultPositions();
-	this->DetectGoals();
-	this->BounceBallOnThrowIn();
+	this->DetectBallTouches();
 }
 
-void GameServer::BounceBallOnThrowIn()
+void GameServer::DetectBallTouches()
 {
     Ball* ball = this->game_state->GetMatch()->GetBall();
 
+    this->BounceBallOnThrowIn(ball);
+    this->ReturnBallToKeeperOnGoalKick(ball);
+    this->DetectGoals(ball);
+}
+
+void GameServer::ReturnBallToKeeperOnGoalKick(Ball* ball)
+{
+    Team* goal_keeper_team = this->game_state->GetMatch()->GetPitch()->BallTouchingEndLineZone(ball);
+    if (goal_keeper_team != NULL)
+    {
+        Logger::getInstance()->info("[SAQUE DE ARCO] La pelota se fue por la linea de fondo y es saque de arco para el equipo " + goal_keeper_team->GetName());
+        ///Le doy la pelota al arquero del equipo
+        ball->GoToKeeper(goal_keeper_team->GetKeeper());
+    }
+}
+
+void GameServer::BounceBallOnThrowIn(Ball* ball)
+{
     if (!ball->IsFree())
     {
         return;
@@ -208,17 +225,17 @@ void GameServer::BounceBallOnThrowIn()
     }
 }
 
-void GameServer::DetectGoals() {
-	Ball* ball = this->game_state->GetMatch()->GetBall();
-
+void GameServer::DetectGoals(Ball* ball)
+{
 	///Equipo donde hicieron el gol
 	Team* scoring_on_goal_team = this->game_state->GetMatch()->GetPitch()->ScoringAtSomeGoal(ball);
 
-	if (scoring_on_goal_team != NULL) {
+	if (scoring_on_goal_team != NULL)
+	{
 		///Equipo que hizo el gol
 		Team* goaler_team = this->game_state->GetMatch()->GetOppositeTeam(scoring_on_goal_team);
 		///Equipo del jugador que hizo el gol
-		Team* goal_scorer_team = this->game_state->GetMatch()->GetTeamByNumber(this->session_manager->GetUserByColor(ball->GetLastOwnerColor())->GetSelectedTeam());
+		Team* goal_scorer_team = ball->GetLastOwnerTeam();
 
 		if (ball->GetLastOwnerColor() != USER_COLOR::NO_COLOR) {
 			Logger::getInstance()->info(
@@ -292,8 +309,7 @@ void GameServer::MakePlayerCatchBall(Player* player) {
 			}
 
 			//Si el ultimo poseedor de la pelota era de distinto equipo que el que agarra la pelota => es un "recupero de pelota"
-			if (ball->GetLastOwnerColor() != USER_COLOR::NO_COLOR
-					&& this->session_manager->GetUserByColor(ball->GetLastOwnerColor())->GetSelectedTeam() != player->GetTeam()->GetTeamNumber()) {
+			if (ball->GetLastOwnerTeam() != NULL && ball->GetLastOwnerTeam() != player->GetTeam()) {
 				User* user = this->session_manager->GetUserByColor(player->GetPlayerColor());
 				if (user != NULL) {
 					Logger::getInstance()->info(

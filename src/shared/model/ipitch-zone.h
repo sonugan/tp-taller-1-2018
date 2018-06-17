@@ -12,7 +12,6 @@ class iPitchZone
     protected:
         Location* top_left_corner;
         Location* bottom_right_corner;
-        int zone_height;
         /*bool IsBallInZone(Ball* ball)
         {
             Location* ball_top_left_corner = new Location(ball->GetLocation()->GetX() - Ball::BALL_TRIDIMENSIONAL_OFFSET, ball->GetLocation()->GetY() - Ball::BALL_TRIDIMENSIONAL_OFFSET, ball->GetLocation()->GetZ() - Ball::BALL_TRIDIMENSIONAL_OFFSET);

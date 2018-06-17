@@ -41,10 +41,11 @@ public:
     bool TeamsHaveFormation();
     int GetTeamUsersNum(string team_name);
     void Run();
-    void DetectGoals();
-    void BounceBallOnThrowIn();
+    void DetectBallTouches();
 protected:
-
+    void ReturnBallToKeeperOnGoalKick(Ball* ball);
+    void DetectGoals(Ball* ball);
+    void BounceBallOnThrowIn(Ball* ball);
 private:
 	static const int CATCH_DISTANCE = 30;
     /* Attributes */
