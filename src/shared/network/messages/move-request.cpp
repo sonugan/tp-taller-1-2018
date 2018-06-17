@@ -18,7 +18,6 @@ MoveRequest::~MoveRequest()
 string MoveRequest::Serialize()
 {
     string msg_type = to_string(this->GetMessageType());
-    Logger::getInstance()->info(msg_type);
     string run = this->run ? "1" : "0";
     string msg = msg_type + "|" + to_string((u_int)this->direction) + "|" + run;
     return msg;

@@ -4,7 +4,8 @@ Ball::Ball() {
     this->location = new Location(960, 618, 0);
     this->previous_location = new Location(200, 200, 0);
     this->trajectory = new Trajectory(DIRECTION::EAST, 0);
-    this->last_player_owner = NULL;
+    this->last_owner_player_color = USER_COLOR::NO_COLOR;
+    this->last_owner_team = NULL;
 }
 
 Ball::~Ball() {
@@ -57,7 +58,82 @@ Player* Ball::GetPlayer() {
     return NULL;
 }
 
-void Ball::SetLastOwner(Player* player)
+void Ball::SetLastOwner(Team* team, USER_COLOR color)
 {
-    this->last_player_owner = player;
+    this->last_owner_team = team;
+    this->last_owner_player_color = color;
+}
+
+USER_COLOR Ball::GetLastOwnerColor()
+{
+    return this->last_owner_player_color;
+}
+
+Team* Ball::GetLastOwnerTeam()
+{
+    return this->last_owner_team;
+}
+
+void Ball::ReturnToMiddle()
+{
+    delete this->location;
+    delete this->previous_location;
+    this->location = new Location(960, 540, 0);
+    this->previous_location = new Location(200, 200, 0);
+    //Eliminando la trayectoria de la pelota
+    delete this->trajectory;
+    this->trajectory = new Trajectory(DIRECTION::EAST, 0);
+
+    this->last_owner_team = NULL;
+    this->last_owner_player_color = USER_COLOR::NO_COLOR;
+}
+
+void Ball::BounceOnThrowIn()
+{
+    if (this->trajectory == NULL)
+    {
+        return;
+    }
+
+    switch(this->trajectory->GetDirection())
+    {
+        case DIRECTION::NORTH:
+        {
+            this->trajectory->SetDirection(DIRECTION::SOUTH);
+            break;
+        }
+        case DIRECTION::SOUTH:
+        {
+            this->trajectory->SetDirection(DIRECTION::NORTH);
+            break;
+        }
+        case DIRECTION::NORTHEAST:
+        {
+            this->trajectory->SetDirection(DIRECTION::SOUTHEAST);
+            break;
+        }
+        case DIRECTION::SOUTHEAST:
+        {
+            this->trajectory->SetDirection(DIRECTION::NORTHEAST);
+            break;
+        }
+        case DIRECTION::NORTHWEST:
+        {
+            this->trajectory->SetDirection(DIRECTION::SOUTHWEST);
+            break;
+        }
+        case DIRECTION::SOUTHWEST:
+        {
+            this->trajectory->SetDirection(DIRECTION::NORTHWEST);
+            break;
+        }
+        default:
+        {
+            //La direccion no se actualiza
+            return;
+        }
+    }
+
+    //Desacelero un poco la pelota
+    this->trajectory->SetDrive(0.7*this->trajectory->GetDrive());
 }

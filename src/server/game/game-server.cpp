@@ -2,6 +2,7 @@
 
 #include "../../shared/logger.h"
 #include "non-existen-user-exception.h"
+#include "ball.h"
 
 GameServer::GameServer(Configuration* initial_configuration)
 {
@@ -71,10 +72,7 @@ std::string GameServer::DoRecoverBall(RecoverBallRequest* recover_ball_request, 
 {
     User* user = this->session_manager->GetUserBySocketID(socket_id);
     user->GetSelectedPlayer()->RecoverBall();
-    Logger::getInstance()->debug("(GameServer::DoRecoverBall) El cliente " + to_string(socket_id) + " recupero la pelota");
-    this->game_state->GetMatch()->GetBall()->SetLastOwner(this->session_manager->GetUserBySocketID(socket_id)->GetSelectedPlayer());
-    string game_state_serialize = this->game_state->GetMatch()->Serialize();
-    return game_state_serialize;
+    return this->game_state->GetMatch()->Serialize();
 }
 
 std::string GameServer::DoKick(KickBallRequest* kick_request, int socket_id)
@@ -224,12 +222,73 @@ void GameServer::RunArtificialIntelligence() {
     this->CatchBall();
     this->MoveBall();
     this->MovePlayersToDefaultPositions();
+    this->DetectGoals();
+    this->BounceBallOnThrowIn();
+}
+
+void GameServer::BounceBallOnThrowIn()
+{
+    Ball* ball = this->game_state->GetMatch()->GetBall();
+
+    if (!ball->IsFree())
+    {
+        return;
+    }
+
+    if (this->game_state->GetMatch()->GetPitch()->BallTouchingThrowIn(ball))
+    {
+        Logger::getInstance()->debug("(GameServer::BounceBallOnThrowIn) Rebotando pelota en los laterales");
+        ball->BounceOnThrowIn();
+    }
+}
+
+void GameServer::DetectGoals()
+{
+    Ball* ball = this->game_state->GetMatch()->GetBall();
+
+    ///Equipo donde hicieron el gol
+    Team* scoring_on_goal_team = this->game_state->GetMatch()->GetPitch()->ScoringAtSomeGoal(ball);
+
+    if (scoring_on_goal_team != NULL)
+    {
+        ///Equipo que hizo el gol
+        Team* goaler_team = this->game_state->GetMatch()->GetOppositeTeam(scoring_on_goal_team);
+        ///Equipo del jugador que hizo le gol
+        Team* goal_scorer_team = this->game_state->GetMatch()->GetTeamByNumber(this->session_manager->GetUserByColor(ball->GetLastOwnerColor())->GetSelectedTeam());
+
+        if (ball->GetLastOwnerColor() != USER_COLOR::NO_COLOR)
+        {
+            Logger::getInstance()->info("[GOOL] El usuario " + this->session_manager->GetUserByColor(ball->GetLastOwnerColor())->GetUsername() + " convirtio un gol para el equipo " + goaler_team->GetName());
+        }
+        else
+        {
+            Logger::getInstance()->info("[GOOL] La IA del equipo " + ball->GetLastOwnerTeam()->GetName() + " convirtio un gol para el equipo " + goaler_team->GetName());
+        }
+
+        ball->ReturnToMiddle();
+        if (scoring_on_goal_team != goal_scorer_team)
+        {
+            //Si el equipo del que hace el gol es distinto del equipo del arco en el que se hace el gol => suma goles el equipo del goleador (el que hizo el gol)
+            goal_scorer_team->AddGoal();
+        }
+        else
+        {
+            //Si no pasa lo anterior sumo goles al equipo contrario
+            goaler_team->AddGoal();
+        }
+
+        Team* team_a = this->game_state->GetMatch()->GetTeamA();
+        Team* team_b = this->game_state->GetMatch()->GetTeamB();
+        Logger::getInstance()->info("[RESULTADO PARCIAL] " + team_a->GetName() + " " + to_string(team_a->GetGoals()) + " - " + to_string(team_b->GetGoals()) + " " + team_b->GetName());
+    }
 }
 
 void GameServer::CatchBall()
 {
-    if (this->GetGameState()->GetMatch()->GetBall()->LastFreedDelayPassed()) {
-        for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+    if (this->GetGameState()->GetMatch()->GetBall()->LastFreedDelayPassed())
+    {
+        for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+        {
             Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayers()[i];
             MakePlayerCatchBall(player_a);
             Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayers()[i];
@@ -239,7 +298,8 @@ void GameServer::CatchBall()
 
 }
 
-void GameServer::MakePlayerCatchBall(Player* player) {
+void GameServer::MakePlayerCatchBall(Player* player)
+{
     if (!player->HasBall())
     {
         Ball* ball = player->GetTeam()->GetMatch()->GetBall();
@@ -254,22 +314,26 @@ void GameServer::MakePlayerCatchBall(Player* player) {
             es seleccionado por el jugador del mismo equipo que estaba más cerca.
             */
 
-            if (USER_COLOR::NO_COLOR == player->GetPlayerColor()) {
+            if (USER_COLOR::NO_COLOR == player->GetPlayerColor())
+            {
 
                 std::vector<Player*> selected_players = player->GetTeam()->GetSelectedPlayers();
                 Player* closest_selected_player = NULL;
                 unsigned int closest_selected_player_distance_to_ball = 99999;
 
-                for (unsigned int i = 0; i < selected_players.size(); i++) {
+                for (unsigned int i = 0; i < selected_players.size(); i++)
+                {
                     Player* selected_player = selected_players[i];
                     unsigned int distance = selected_player->GetLocation()->Distance(ball->GetLocation());
-                    if (distance <= closest_selected_player_distance_to_ball) {
+                    if (distance <= closest_selected_player_distance_to_ball)
+                    {
                         closest_selected_player = selected_player;
                         closest_selected_player_distance_to_ball = distance;
                     }
                 }
 
-                if (closest_selected_player != NULL) {
+                if (closest_selected_player != NULL)
+                {
                     player->SetPlayerColor(closest_selected_player->GetPlayerColor());
                     User* user = this->session_manager->GetUserByColor(closest_selected_player->GetPlayerColor());
                     user->SetSelectedPlayer(player);
@@ -277,28 +341,58 @@ void GameServer::MakePlayerCatchBall(Player* player) {
                 }
             }
 
+            //Si el ultimo poseedor de la pelota era de distinto equipo que el que agarra la pelota => es un "recupero de pelota"
+            if (ball->GetLastOwnerColor() != USER_COLOR::NO_COLOR && this->session_manager->GetUserByColor(ball->GetLastOwnerColor())->GetSelectedTeam() != player->GetTeam()->GetTeamNumber())
+            {
+                User* user = this->session_manager->GetUserByColor(player->GetPlayerColor());
+                if (user != NULL)
+                {
+                    Logger::getInstance()->info("[RECUPERO DE PELOTA] El jugador '" + this->session_manager->GetUserByColor(player->GetPlayerColor())->GetUsername() + "' recupero la pelota para el equipo " + player->GetTeam()->GetName());
+                }
+                else
+                {
+                        Logger::getInstance()->info("[RECUPERO DE PELOTA] LA IA del equipo " + player->GetTeam()->GetName() + " recupero la pelota");
+                }
+            }
+
+            if (player->IsSelected())
+            {
+                ball->SetLastOwner(player->GetTeam(), player->GetPlayerColor());
+            }
+            else
+            {
+                ball->SetLastOwner(player->GetTeam(), USER_COLOR::NO_COLOR);
+            }
         }
     }
 }
 
-void GameServer::MovePlayersToDefaultPositions() {
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+void GameServer::MovePlayersToDefaultPositions()
+{
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    {
         Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayers()[i];
-        if (!player_a->IsSelected()) {
+        if (!player_a->IsSelected())
+        {
             player_a->GoBackToDefaultPosition();
-        }else{
+        }
+        else
+        {
             player_a->Play();
         }
         Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayers()[i];
         if (!player_b->IsSelected()) {
             player_b->GoBackToDefaultPosition();
-        }else{
+        }
+        else
+        {
             player_b->Play();
         }
     }
 }
 
-void GameServer::MoveBall() {
+void GameServer::MoveBall()
+{
     this->game_state->GetMatch()->GetBall()->Move();
 }
 
@@ -329,21 +423,26 @@ void GameServer::ChangeFormation(ChangeFormationRequest* cfRequest, int socket_i
     Logger::getInstance()->info("(Server:HandleChangeFormationRequest) Nueva formacion (" + team->GetName() + "): " + to_string(team->GetFormation()->GetValue()));
 }
 
-int GameServer::GetTeamUsersNum(string team_name) {
+int GameServer::GetTeamUsersNum(string team_name)
+{
     int num;
     map<string, User*> users = this->session_manager->GetAuthenticatedUsers();
     Team* user_team;
     Team* current_team;
-    if (team_name == "a") {
+    if (team_name == "a")
+    {
         user_team = this->game_state->GetMatch()->GetTeamA();
     }
-    else {
+    else
+    {
         user_team = this->game_state->GetMatch()->GetTeamB();
     }
 
-    for (auto const& u : users) {
+    for (auto const& u : users)
+    {
         current_team = u.second->GetSelectedPlayer()->GetTeam();
-        if (current_team == user_team) {
+        if (current_team == user_team)
+        {
             num++;
         }
     }

@@ -3,6 +3,7 @@
 
 #include "location.h"
 
+class Ball;
 class iPitchZone
 {
     public:
@@ -20,6 +21,7 @@ class iPitchZone
             return  ((this->top_left_corner->GetX() <= ball_bottom_right_corner->GetX()) && (this->bottom_right_corner->GetX() >= ball_top_left_corner->GetX()) &&
                     ((this->top_left_corner->GetY() <= ball_bottom_right_corner->GetY()) && (this->bottom_right_corner->GetY() >= ball_top_left_corner->GetY())) &&
                     ((this->top_left_corner->GetZ() <= ball_bottom_right_corner->GetZ()) && (this->bottom_right_corner->GetZ() >= ball_top_left_corner->GetZ())));
+                    return true;
         }*/
     private:
 };

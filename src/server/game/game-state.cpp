@@ -31,7 +31,6 @@ void GameState::AddUser(string username, string password)
 void GameState::CreateModel(Configuration* initial_configuration)
 {
     Logger::getInstance()->debug("CREANDO EL MODELO");
-    Pitch* pitch = new Pitch();
 
     Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_A);
     Team* team_a = new Team(formation_team_a, initial_configuration->GetTeamName(), initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
@@ -49,8 +48,9 @@ void GameState::CreateModel(Configuration* initial_configuration)
 
     Ball* ball = new Ball();
 
-    Timer* timer = new Timer("02:00"); // TODO: VER DE DONDE SE TOMA EL TIEMPO, DEBERIA VENIR DE CONFIG?
+    Pitch* pitch = new Pitch(team_a, team_b);
 
+    Timer* timer = new Timer("02:00"); // TODO: VER DE DONDE SE TOMA EL TIEMPO, DEBERIA VENIR DE CONFIG?
     this->match = new Match(pitch, team_a, team_b, ball, timer);
 }
 

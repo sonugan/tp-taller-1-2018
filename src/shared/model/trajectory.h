@@ -13,7 +13,10 @@ class Trajectory
         virtual ~Trajectory();
         void UpdateToNextLocation(Location* location);
         Player* GetPlayer();
-
+        DIRECTION GetDirection();
+        void SetDirection(DIRECTION direction);
+        unsigned int GetDrive();
+        void SetDrive(unsigned int drive);
     protected:
 
     private:

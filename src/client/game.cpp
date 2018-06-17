@@ -95,7 +95,7 @@ void Game::RenderViews()
 
     this->camera->Render();
     this->timer_view->Render(this->match->GetTimer());
-    this->score_view->Render();
+    this->score_view->Render(this->match->GetTeamA(), this->match->GetTeamB());
     SDL_RenderPresent( renderer );
 }
 
@@ -181,7 +181,6 @@ void Game::CreateModel(std::string serialized_model)
     Y LUEGO LO ACTUALIZAMOS CON LO QUE MANDA EL SERVER.
     POR QUE? PORQUE NO QUEREMOS ROMPER COSAS QUE ANTES FUNCIONABAN.
      */
-    Pitch* pitch = new Pitch();
 
     Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_A);
     Team* team_a = new Team(formation_team_a, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
@@ -212,6 +211,8 @@ void Game::CreateModel(std::string serialized_model)
     Ball* ball = new Ball();
 
     this->timer = new Timer("02:00"); // TODO: VER DE DONDE SE TOMA EL TIEMPO, DEBERIA VENIR DE CONFIG?
+
+    Pitch* pitch = new Pitch(team_a, team_b);
 
     this->match = new Match(pitch, team_a, team_b, ball, this->timer);
 

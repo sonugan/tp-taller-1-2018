@@ -18,10 +18,13 @@ ScoreView::~ScoreView()
     TTF_CloseFont(this->font_style);
 }
 
-void ScoreView::RenderRedTeamScore()
+void ScoreView::RenderRedTeamScore(Team* team)
 {
+
+    std::string goals = std::to_string(team->GetGoals());
+
     SDL_Color text_color = { 255, 255, 255, 0xFF };
-    SDL_Surface* surface = TTF_RenderText_Solid(this->font_style, "0", text_color);
+    SDL_Surface* surface = TTF_RenderText_Solid(this->font_style, goals.c_str(), text_color);
     SDL_Texture* message = SDL_CreateTextureFromSurface(this->renderer, surface);
     SDL_Rect rect;
 
@@ -36,10 +39,13 @@ void ScoreView::RenderRedTeamScore()
     SDL_DestroyTexture(message);
 }
 
-void ScoreView::RenderGreenTeamScore()
+void ScoreView::RenderGreenTeamScore(Team* team)
 {
+
+    std::string goals = std::to_string(team->GetGoals());
+
     SDL_Color text_color = { 255, 255, 255, 0xFF };
-    SDL_Surface* surface = TTF_RenderText_Solid(this->font_style, "1", text_color);
+    SDL_Surface* surface = TTF_RenderText_Solid(this->font_style, goals.c_str(), text_color);
     SDL_Texture* message = SDL_CreateTextureFromSurface(this->renderer, surface);
     SDL_Rect rect;
 
@@ -56,10 +62,11 @@ void ScoreView::RenderGreenTeamScore()
     SDL_DestroyTexture(message);
 }
 
-void ScoreView::Render()
+void ScoreView::Render(Team* team_a, Team* team_b)
 {
-    this->RenderRedTeamScore();
-    this->RenderGreenTeamScore();
+    // TODO => VER QUE EL A PUEDE ESTAR USANDO LA VERDE Y EL B LA ROJA
+    this->RenderRedTeamScore(team_a);
+    this->RenderGreenTeamScore(team_b);
 }
 
 

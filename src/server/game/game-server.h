@@ -39,7 +39,8 @@ public:
     void ChangeFormation(ChangeFormationRequest* change_player_request, int socket_id);
     bool TeamsHaveFormation();
     int GetTeamUsersNum(string team_name);
-
+    void DetectGoals();
+    void BounceBallOnThrowIn();
 protected:
 
 private:
