@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Option parameters='--config=&quot;src/shared/configuration/default-config.yml&quot;' />
 				<Compiler>
+					<Add option="-std=c++11" />
 					<Add option="-g" />
 					<Add directory="src/game" />
 					<Add directory="src/pitch" />
@@ -30,6 +31,8 @@
 					<Add directory="src/shared/network/messages" />
 					<Add directory="src/shared/model/player-states" />
 					<Add directory="src/client/view" />
+					<Add directory="src/client/sound" />
+					<Add directory="src/client/controller" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -56,6 +59,8 @@
 					<Add directory="src/shared/network/messages" />
 					<Add directory="src/shared/model/player-states" />
 					<Add directory="src/client/view" />
+					<Add directory="src/client/sound" />
+					<Add directory="src/client/controller" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -76,12 +81,16 @@
 		<Unit filename="src/client/controller/abstract-controller.h" />
 		<Unit filename="src/client/controller/game-controller.cpp" />
 		<Unit filename="src/client/controller/game-controller.h" />
+		<Unit filename="src/client/controller/game-music-controller.cpp" />
+		<Unit filename="src/client/controller/game-music-controller.h" />
 		<Unit filename="src/client/controller/player-controller.cpp" />
 		<Unit filename="src/client/controller/player-controller.h" />
 		<Unit filename="src/client/controller/team-controller.cpp" />
 		<Unit filename="src/client/controller/team-controller.h" />
 		<Unit filename="src/client/game.cpp" />
 		<Unit filename="src/client/game.h" />
+		<Unit filename="src/client/sound/game-music.cpp" />
+		<Unit filename="src/client/sound/game-music.h" />
 		<Unit filename="src/client/sound/select_player.wav" />
 		<Unit filename="src/client/sound/sound-manager.cpp" />
 		<Unit filename="src/client/sound/sound-manager.h" />

@@ -39,6 +39,7 @@ void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array, SDL_Event e
     this->KickPlayer(keyboard_state_array, e);
     this->LongPass(keyboard_state_array, e);
     this->MovePlayer(keyboard_state_array);
+    this->PlayKickSound(keyboard_state_array);
     this->last_keyboard_state_array = keyboard_state_array;
 }
 
@@ -159,6 +160,10 @@ bool PlayerController::SKeySelected(const Uint8 *keyboard_state_array) {
     return keyboard_state_array[SDL_SCANCODE_S];
 }
 
+bool PlayerController::WKeySelected(const Uint8 *keyboard_state_array) {
+    return keyboard_state_array[SDL_SCANCODE_W];
+}
+
 bool PlayerController::DKeySelected(const Uint8 *keyboard_state_array) {
     return keyboard_state_array[SDL_SCANCODE_D];
 }
@@ -215,3 +220,14 @@ bool PlayerController::ContinueCurrentAction()
         return false;
 }*/
 }
+
+void PlayerController::PlayKickSound(const Uint8 *keyboard_state_array)
+{
+    // CHEQUEO SI EL JUGADOR ESTA PATEANDO EN CUALQUIERA DE SUS FORMAS
+    if (SKeySelected(keyboard_state_array) || DKeySelected(keyboard_state_array) || WKeySelected(keyboard_state_array))
+    {
+        this->sound_manager->PlayKickBallSound();
+    }
+}
+
+
