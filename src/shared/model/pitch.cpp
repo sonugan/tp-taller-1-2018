@@ -18,9 +18,9 @@ Pitch::Pitch(Team* team_a, Team* team_b)
     end_line_zones[1] = new EndLineZone(team_a, new Location(0, 100, goal_height + 4), new Location(185 - Ball::BALL_TRIDIMENSIONAL_OFFSET, 1138, throw_in_height));
     end_line_zones[2] = new EndLineZone(team_a, new Location(0, 688, 0), new Location(185 - Ball::BALL_TRIDIMENSIONAL_OFFSET, 1138, goal_height + 4));
 
-    /*end_line_zones[3] = new EndLineZone(team_b, new Location(186, 1139, 0), new Location(1734, 1158, throw_in_height));
-    end_line_zones[4] = new EndLineZone(team_b, new Location(186, 1139, 0), new Location(1734, 1158, throw_in_height));
-    end_line_zones[5] = new EndLineZone(team_b, new Location(186, 1139, 0), new Location(1734, 1158, throw_in_height));*/
+    end_line_zones[3] = new EndLineZone(team_b, new Location(1734 + Ball::BALL_TRIDIMENSIONAL_OFFSET, 100, 0), new Location(1774, 550, goal_height + 4));
+    end_line_zones[4] = new EndLineZone(team_b, new Location(1734 + Ball::BALL_TRIDIMENSIONAL_OFFSET, 100, goal_height + 4), new Location(1774, 1158, throw_in_height));
+    end_line_zones[5] = new EndLineZone(team_b, new Location(1734 + Ball::BALL_TRIDIMENSIONAL_OFFSET, 688, 0), new Location(1774, 1138, goal_height + 4));
 }
 
 Pitch::~Pitch()
@@ -69,7 +69,7 @@ bool Pitch::BallTouchingThrowIn(Ball* ball)
 
 Team* Pitch::BallTouchingEndLineZone(Ball* ball)
 {
-    for (int i = 0; i <= 2; i++)
+    for (int i = 0; i <= 5; i++)
     {
         if (this->end_line_zones[i]->IsTouching(ball))
         {

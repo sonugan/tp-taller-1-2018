@@ -97,6 +97,8 @@ void Ball::ReturnToMiddle()
     //Eliminando la trayectoria de la pelota
     delete this->trajectory;
     this->trajectory = new Trajectory(DIRECTION::EAST, 0, TRAJECTORY_TYPE::FLOOR);
+    this->circle->Move(this->location);
+
 
     this->last_owner_team = NULL;
     this->last_owner_player_color = USER_COLOR::NO_COLOR;
@@ -162,6 +164,8 @@ void Ball::GoToKeeper(Keeper* keeper)
     //Eliminando la trayectoria de la pelota
     delete this->trajectory;
     this->trajectory = new Trajectory(DIRECTION::EAST, 0, TRAJECTORY_TYPE::FLOOR);
+    this->circle->Move(this->location);
+
 
     this->last_owner_team = NULL;
     this->last_owner_player_color = USER_COLOR::NO_COLOR;

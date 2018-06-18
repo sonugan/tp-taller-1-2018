@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/tp-taller-2018-1" prefix_auto="1" extension_auto="1" />
+				<Option output="tp-taller-2018-1" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -168,13 +168,15 @@
 		<Unit filename="src/shared/logger.h" />
 		<Unit filename="src/shared/model/ball.cpp" />
 		<Unit filename="src/shared/model/ball.h" />
+		<Unit filename="src/shared/model/end-line-zone.cpp" />
+		<Unit filename="src/shared/model/end-line-zone.h" />
 		<Unit filename="src/shared/model/formation.cpp" />
 		<Unit filename="src/shared/model/formation.h" />
-		<Unit filename="src/shared/model/keeper.cpp" />
-		<Unit filename="src/shared/model/keeper.h" />
 		<Unit filename="src/shared/model/goal-zone.cpp" />
 		<Unit filename="src/shared/model/goal-zone.h" />
 		<Unit filename="src/shared/model/ipitch-zone.h" />
+		<Unit filename="src/shared/model/keeper.cpp" />
+		<Unit filename="src/shared/model/keeper.h" />
 		<Unit filename="src/shared/model/location.cpp" />
 		<Unit filename="src/shared/model/location.h" />
 		<Unit filename="src/shared/model/match-state-type.h" />
@@ -200,6 +202,8 @@
 		<Unit filename="src/shared/model/team-number.h" />
 		<Unit filename="src/shared/model/team.cpp" />
 		<Unit filename="src/shared/model/team.h" />
+		<Unit filename="src/shared/model/throw-in-zone.cpp" />
+		<Unit filename="src/shared/model/throw-in-zone.h" />
 		<Unit filename="src/shared/model/timer.cpp" />
 		<Unit filename="src/shared/model/timer.h" />
 		<Unit filename="src/shared/model/trajectory-type.h" />

@@ -34,6 +34,7 @@ class Trajectory
         unsigned int drive;
         unsigned int ball_speed;
         unsigned int original_ball_speed;
+        bool direction_updated;
         Player* player;
         TRAJECTORY_TYPE trajectory_type;
 };

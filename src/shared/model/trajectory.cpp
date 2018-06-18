@@ -8,6 +8,7 @@ Trajectory::Trajectory(DIRECTION direction, unsigned int power, TRAJECTORY_TYPE 
     this->trajectory_type = trajectory_type;
     this->original_ball_speed = this->drive * this->power;
     this->ball_speed = this->original_ball_speed;
+    this->direction_updated = false;
     //std::cout << "Trajectory::Trajectory created \n";
 }
 
@@ -140,7 +141,11 @@ DIRECTION Trajectory::GetDirection()
 
 void Trajectory::UpdateDirection(DIRECTION direction)
 {
-    this->direction = direction;
+    if (!this->direction_updated)
+    {
+        this->direction = direction;
+        this->direction_updated = true;
+    }
 }
 
 unsigned int Trajectory::GetBallSpeed()
@@ -150,5 +155,5 @@ unsigned int Trajectory::GetBallSpeed()
 
 void Trajectory::UpdateBallSpeed(unsigned int ball_speed)
 {
-    this->ball_speed = power;
+    this->ball_speed = ball_speed;
 }
