@@ -46,6 +46,7 @@ protected:
     void ReturnBallToKeeperOnGoalKick(Ball* ball);
     void DetectGoals(Ball* ball);
     void BounceBallOnThrowIn(Ball* ball);
+    void BounceBallOnGoalPost(Ball* ball);
 private:
 	static const int CATCH_DISTANCE = 30;
     /* Attributes */

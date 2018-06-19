@@ -196,8 +196,23 @@ void GameServer::DetectBallTouches()
     Ball* ball = this->game_state->GetMatch()->GetBall();
 
     this->BounceBallOnThrowIn(ball);
+    this->BounceBallOnGoalPost(ball);
     this->ReturnBallToKeeperOnGoalKick(ball);
     this->DetectGoals(ball);
+}
+
+void GameServer::BounceBallOnGoalPost(Ball* ball)
+{
+    if (!ball->IsFree())
+    {
+        return;
+    }
+
+    if (this->game_state->GetMatch()->GetPitch()->BallTouchingGoalPost(ball))
+    {
+        Logger::getInstance()->debug("(GameServer::BounceBallOnGoalPost) Rebotando pelota en un palo");
+        ball->BounceOnGoalPost();
+    }
 }
 
 void GameServer::ReturnBallToKeeperOnGoalKick(Ball* ball)

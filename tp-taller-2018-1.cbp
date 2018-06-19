@@ -183,6 +183,8 @@
 		<Unit filename="src/shared/model/formation.h" />
 		<Unit filename="src/shared/model/goal-zone.cpp" />
 		<Unit filename="src/shared/model/goal-zone.h" />
+		<Unit filename="src/shared/model/goalpost.cpp" />
+		<Unit filename="src/shared/model/goalpost.h" />
 		<Unit filename="src/shared/model/ipitch-zone.h" />
 		<Unit filename="src/shared/model/keeper.cpp" />
 		<Unit filename="src/shared/model/keeper.h" />

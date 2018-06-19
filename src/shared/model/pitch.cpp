@@ -21,6 +21,15 @@ Pitch::Pitch(Team* team_a, Team* team_b)
     end_line_zones[3] = new EndLineZone(team_b, new Location(1734 + Ball::BALL_TRIDIMENSIONAL_OFFSET, 100, 0), new Location(1774, 550, goal_height + 4));
     end_line_zones[4] = new EndLineZone(team_b, new Location(1734 + Ball::BALL_TRIDIMENSIONAL_OFFSET, 100, goal_height + 4), new Location(1774, 1158, throw_in_height));
     end_line_zones[5] = new EndLineZone(team_b, new Location(1734 + Ball::BALL_TRIDIMENSIONAL_OFFSET, 688, 0), new Location(1774, 1138, goal_height + 4));
+
+    //Creando los palos
+    goal_posts[0] = new GoalPost(new Location(185, 550, 0), new Location(189, 554, goal_height));
+    goal_posts[1] = new GoalPost(new Location(185, 680, 0), new Location(189, 684, goal_height));
+    goal_posts[2] = new GoalPost(new Location(185, 550, goal_height), new Location(189, 684, goal_height + 4));
+
+    goal_posts[3] = new GoalPost(new Location(1729, 550, 0), new Location(1733, 554, goal_height));
+    goal_posts[4] = new GoalPost(new Location(1729, 680, 0), new Location(1733, 684, goal_height));
+    goal_posts[5] = new GoalPost(new Location(1729, 550, goal_height), new Location(1733, 684, goal_height + 4));
 }
 
 Pitch::~Pitch()
@@ -31,9 +40,10 @@ Pitch::~Pitch()
     delete this->throw_in_zones[0];
     delete this->throw_in_zones[1];
 
-    for (int i = 0; i <= 5; i++)
+    for (int i = 5; i >= 0; i--)
     {
         delete this->end_line_zones[i];
+        delete this->goal_posts[i];
     }
 }
 
@@ -78,4 +88,17 @@ Team* Pitch::BallTouchingEndLineZone(Ball* ball)
     }
 
     return NULL;
+}
+
+bool Pitch::BallTouchingGoalPost(Ball* ball)
+{
+    for (int i = 0; i <= 5; i++)
+    {
+        if (this->goal_posts[i]->IsTouching(ball))
+        {
+            return true;
+        }
+    }
+
+    return false;
 }

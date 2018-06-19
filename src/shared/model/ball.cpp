@@ -170,3 +170,63 @@ void Ball::GoToKeeper(Keeper* keeper)
     this->last_owner_team = NULL;
     this->last_owner_player_color = USER_COLOR::NO_COLOR;
 }
+
+void Ball::BounceOnGoalPost()
+{
+    if (this->trajectory == NULL)
+    {
+        return;
+    }
+
+    switch(this->trajectory->GetDirection())
+    {
+        case DIRECTION::NORTH:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::SOUTH);
+            break;
+        }
+        case DIRECTION::SOUTH:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::NORTH);
+            break;
+        }
+        case DIRECTION::NORTHEAST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::SOUTHEAST);
+            break;
+        }
+        case DIRECTION::SOUTHEAST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::NORTHEAST);
+            break;
+        }
+        case DIRECTION::NORTHWEST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::SOUTHWEST);
+            break;
+        }
+        case DIRECTION::SOUTHWEST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::NORTHWEST);
+            break;
+        }
+        case DIRECTION::EAST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::WEST);
+            break;
+        }
+        case DIRECTION::WEST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::EAST);
+            break;
+        }
+        default:
+        {
+            //La direccion no se actualiza
+            return;
+        }
+    }
+
+    //Desacelero un poco la pelota
+    this->trajectory->UpdateBallSpeed(0.85*this->trajectory->GetBallSpeed());
+}

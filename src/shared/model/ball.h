@@ -33,6 +33,7 @@ class Ball
         void ReturnToMiddle();
         static const int BALL_TRIDIMENSIONAL_OFFSET = 5;
         void BounceOnThrowIn();
+        void BounceOnGoalPost();
         void GoToKeeper(Keeper* keeper);
     protected:
 
