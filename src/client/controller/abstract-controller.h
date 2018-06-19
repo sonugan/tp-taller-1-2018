@@ -2,7 +2,7 @@
 #define ABSTRACTCONTROLLER_H
 
 #include "../client.h"
-#include "sound/sound-manager.h"
+#include "../sound/sound-manager.h"
 
 class AbstractController
 {

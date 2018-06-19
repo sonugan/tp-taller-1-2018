@@ -2,7 +2,7 @@
 #define GAMEMUSICCONTROLLER_H
 
 #include <SDL2/SDL.h>
-#include "sound/game-music.h"
+#include "../sound/game-music.h"
 #include "abstract-controller.h"
 
 class GameMusicController: public AbstractController
