@@ -20,6 +20,8 @@ public:
 	MatchState();
 	virtual ~MatchState();
 	MATCH_STATE_TYPE GetType();
+	// USAR SOLO EN CLIENT PARA DESERIALIZAR
+	void SetType(MATCH_STATE_TYPE type);
 
 	void SetKickOff(TEAM_NUMBER active_kickoff_team);
 	bool IsKickOff();

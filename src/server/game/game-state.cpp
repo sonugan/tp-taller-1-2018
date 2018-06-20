@@ -65,7 +65,6 @@ void GameState::UpdateMatchState() {
 	case TIME_UP:
 		if (this->match->GetMatchState()->IsReadyToChange()) {
 			if(MATCH_TIME_TYPE::SECOND_TIME == this->match->GetMatchTime()) {
-				this->timer->Stop();
 				this->match->GetMatchState()->SetFinished();
 			} else {
 				// segundo tiempo, saca el team B. esto es arbitrario.

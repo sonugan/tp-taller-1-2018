@@ -183,6 +183,9 @@ string Match::Serialize() {
     // MATCH TIME
     result.append("|");
     result.append(std::to_string(GetMatchTime()));
+    // MATCH STATE TYPE
+    result.append("|");
+    result.append(std::to_string(GetMatchState()->GetType()));
 
 //    Logger::getInstance()->debug("(Match:Serialize) Serialize result: " + result);
     return result;
@@ -252,6 +255,8 @@ void Match::DeserializeAndUpdate(string serialized) {
     this->SetRemainingTime(data[base_index + 4]);
     // MATCH TIME
     this->SetMatchTime(static_cast<MATCH_TIME_TYPE>(SafeStoi(data[base_index + 5])));
+    // MATCH STATE TYPE
+    this->match_state->SetType(static_cast<MATCH_STATE_TYPE>(SafeStoi(data[base_index + 6])));
 
     Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Match deserializado");
 }
