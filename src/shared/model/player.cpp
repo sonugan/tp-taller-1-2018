@@ -8,8 +8,12 @@ Player::Player(unsigned int position_index, TEAM_NUMBER team_number) // @suppres
     this->move_state = new PlayerMoveState(this);
     this->kick_state = new PlayerKickState(this);
     this->recover_ball_state = new PlayerRecoverBallState(this);
-
     this->current_state = this->still_state;
+
+    this->defense_strategy = new PlayerDefenseStrategy(this);
+    this->atack_stategy = new PlayerAtackStrategy(this);
+    this->strategy = this->defense_strategy;
+
     this->coin_flipper = new CoinFlipper();
 
     switch (team_number)
@@ -47,6 +51,8 @@ Player::~Player()
     delete recover_ball_state;
     delete circle;
     delete coin_flipper;
+    delete atack_stategy;
+    delete defense_strategy;
 }
 
 void Player::MoveLeft(bool run)
@@ -114,6 +120,11 @@ Location* Player::GetDefaultLocation()
     return team->GetFormation()->GetLocationForPlayer(position_index);
 }
 
+Rectangle* Player::GetDefenseArea()
+{
+    return team->GetFormation()->GetDefenseAreaForPlayer(position_index);
+}
+
 void Player::SetTeam(Team* team)
 {
     this->team = team;
@@ -121,7 +132,7 @@ void Player::SetTeam(Team* team)
     this->location = new Location(default_location->GetX(), default_location->GetY(), default_location->GetZ());
     this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
     this->circle = new Circle(HALO_RADIUS, new Location(this->location));
-    //this->shadow = new Shadow(this);
+    this->defense_strategy->SetDefenseArea(this->GetDefenseArea());
 }
 
 unsigned int Player::GetPositionIndex()
@@ -143,64 +154,116 @@ bool Player::IsSelected()
 
 void Player::GoBackToDefaultPosition()
 {
-    Location* default_location = team->GetFormation()->GetLocationForPlayer(position_index);
+    if(this->location != nullptr)
+    {
+        Location* default_location = team->GetFormation()->GetLocationForPlayer(position_index);
 
-    int default_x = default_location->GetX();
-    int x = location->GetX();
-    int default_y = default_location->GetY();
-    int y = location->GetY();
-    if (x > default_x && y > default_y)
-    {
-        MoveUpToLeft(false);
-    }
-    else if (x < default_x && y > default_y)
-    {
-        MoveUpToRight(false);
-    }
-    else if (x < default_x && y < default_y)
-    {
-        MoveDownToRight(false);
-    }
-    else if (x > default_x && y < default_y)
-    {
-        MoveDownToLeft(false);
-    }
-    else if (x > default_x && y == default_y)
-    {
-        MoveLeft(false);
-    }
-    else if (x < default_x && y == default_y)
-    {
-        MoveRight(false);
-    }
-    else if (x == default_x && y > default_y)
-    {
-        MoveUp(false);
-    }
-    else if (x == default_x && y < default_y)
-    {
-        MoveDown(false);
-    }
-    else
-    {
-        if (this->plays_for_team_a)
+        int default_x = default_location->GetX();
+        int x = location->GetX();
+        int default_y = default_location->GetY();
+        int y = location->GetY();
+        if (x > default_x && y > default_y)
         {
-            direction = DIRECTION::EAST;
+            MoveUpToLeft(false);
+        }
+        else if (x < default_x && y > default_y)
+        {
+            MoveUpToRight(false);
+        }
+        else if (x < default_x && y < default_y)
+        {
+            MoveDownToRight(false);
+        }
+        else if (x > default_x && y < default_y)
+        {
+            MoveDownToLeft(false);
+        }
+        else if (x > default_x && y == default_y)
+        {
+            MoveLeft(false);
+        }
+        else if (x < default_x && y == default_y)
+        {
+            MoveRight(false);
+        }
+        else if (x == default_x && y > default_y)
+        {
+            MoveUp(false);
+        }
+        else if (x == default_x && y < default_y)
+        {
+            MoveDown(false);
         }
         else
         {
-            direction = DIRECTION::WEST;
+            if (this->plays_for_team_a)
+            {
+                direction = DIRECTION::EAST;
+            }
+            else
+            {
+                direction = DIRECTION::WEST;
+            }
+            //this->Play();
         }
-        this->Play();
+
+        if (abs(default_y - location->GetY()) < PLAYER_SPEED)
+        {
+            location->UpdateY(default_location->GetY());
+        }
+        if (abs(default_x - location->GetX()) < PLAYER_SPEED)
+        {
+            location->UpdateX(default_location->GetX());
+        }
+    }
+}
+
+void Player::GoTo(Location* destiny_location, bool run)
+{
+    int destiny_x = destiny_location->GetX();
+    int x = this->location->GetX();
+    int destiny_y = destiny_location->GetY();
+    int y = this->location->GetY();
+    if (x > destiny_x && y > destiny_y)
+    {
+        MoveUpToLeft(run);
+    }
+    else if (x < destiny_x && y > destiny_y)
+    {
+        MoveUpToRight(run);
+    }
+    else if (x < destiny_x && y < destiny_y)
+    {
+        MoveDownToRight(run);
+    }
+    else if (x > destiny_x && y < destiny_y)
+    {
+        MoveDownToLeft(run);
+    }
+    else if (x > destiny_x && y == destiny_y)
+    {
+        MoveLeft(run);
+    }
+    else if (x < destiny_x && y == destiny_y)
+    {
+        MoveRight(run);
+    }
+    else if (x == destiny_x && y > destiny_y)
+    {
+        MoveUp(run);
+    }
+    else if (x == destiny_x && y < destiny_y)
+    {
+        MoveDown(run);
     }
 
-    if (abs(default_y - location->GetY()) < PLAYER_SPEED)
+    if (abs(destiny_y - this->location->GetY()) < PLAYER_SPEED)
     {
-        location->UpdateY(default_location->GetY());
+        this->location->UpdateY(destiny_location->GetY());
     }
-    if (abs(default_x - location->GetX()) < PLAYER_SPEED)
+    if (abs(destiny_x - this->location->GetX()) < PLAYER_SPEED)
     {
-        location->UpdateX(default_location->GetX());
+        this->location->UpdateX(destiny_location->GetX());
     }
 }
 
@@ -349,6 +412,11 @@ void Player::ChangeToStill()
     //}
 }
 
+IPlayerStrategy* Player::GetStrategy()
+{
+    return this->strategy;
+}
+
 void Player::Play()
 {
     this->current_state->Play();
@@ -418,4 +486,18 @@ bool Player::TryRecover()
         }
     }
     return false;
+}
+
+void Player::NotifyChangeBall(Ball* ball)
+{
+    if(!ball->IsFree())
+    {
+        Team* ball_team = ball->GetPlayer()->GetTeam();
+        if(this->GetTeam() == ball_team)
+        {
+            this->strategy = this->atack_stategy;
+            return;
+        }
+    }
+    this->strategy = this->defense_strategy;
 }

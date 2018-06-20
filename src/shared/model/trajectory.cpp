@@ -47,13 +47,15 @@ void Trajectory::UpdateToNextLocation(Location* location) {
         }
         location->Update(x, y, player_location->GetZ());
     } else {
-        int x, y, offset;
+        int x, y, offset, z_offset, z;
         x = location ->GetX();
         y = location->GetY();
+        z = location->GetZ();
 
         offset = (drive * DRIVE_COEFFICIENT);
-
-
+        z_offset = (drive * DRIVE_COEFFICIENT_ELEVATION);
+        z = z + z_offset;
+        
         if (DIRECTION::EAST == direction) {
             x = x + offset;
         } else if (DIRECTION::WEST == direction) {
@@ -75,7 +77,6 @@ void Trajectory::UpdateToNextLocation(Location* location) {
             x = x + offset;
             y = y - offset;
         }
-
 
         if (this->drive >= DECELERATION) {
             this->drive = drive - DECELERATION;

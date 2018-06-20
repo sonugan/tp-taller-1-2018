@@ -14,7 +14,10 @@
 #include "player-states/player-kick-state.h"
 #include "player-states/player-recover-ball-state.h"
 #include "player-states/player-states.h"
+#include "player-strategies/player-atack-strategy.h"
+#include "player-strategies/player-defense-strategy.h"
 #include "../collision/circle.h"
+#include "../collision/rectangle.h"
 #include "../utils/coin-flipper.h"
 
 enum class DIRECTION { NORTH = 1, SOUTH = 2, EAST = 3, WEST = 4, NORTHEAST = 5, SOUTHEAST = 6, SOUTHWEST = 7, NORTHWEST = 8 };
@@ -25,6 +28,8 @@ class PlayerMoveState;
 class PlayerKickState;
 class PlayerRecoverBallState;
 class IPlayerState;
+class PlayerDefenseStrategy;
+class PlayerAtackStrategy;
 class Player
 {
     public:
@@ -50,9 +55,11 @@ class Player
         PLAYER_ACTION GetCurrentAction();
         void SetCurrentAction(PLAYER_ACTION action);
         Location* GetDefaultLocation();
+        Rectangle* GetDefenseArea();
         void SetTeam(Team* team);
         unsigned int GetPositionIndex();
         void GoBackToDefaultPosition();
+        void GoTo(Location* destiny_location, bool run);
         Team* GetTeam();
         bool HasBall();
         void PassBall();
@@ -68,6 +75,7 @@ class Player
         void ChangeToPass();
         void ChangeToCatchBall();
         void ChangeToStill();
+        IPlayerStrategy* GetStrategy();
 
         void Move(bool run);
         void Play();
@@ -77,6 +85,7 @@ class Player
         Circle* GetCircle();
         bool AreInSameTeam(Player* player);
         bool TryRecover();
+        void NotifyChangeBall(Ball* ball);
     protected:
 
     private:
@@ -99,6 +108,9 @@ class Player
 	    Circle* circle;
         CoinFlipper* coin_flipper;
         static const u_int HALO_RADIUS = 10;
+        IPlayerStrategy* strategy;
+        PlayerAtackStrategy* atack_stategy;
+        PlayerDefenseStrategy* defense_strategy;
 };
 
 #endif // PLAYER_H

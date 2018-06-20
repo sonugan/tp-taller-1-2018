@@ -10,6 +10,7 @@ Formation::Formation(string string_value, TEAM_NUMBER team_number)
     this->changed_by_user = false;
 
     InitializePositions();
+    InitializeDefenseAreas();
 }
 
 Formation::Formation(FORMATION value, TEAM_NUMBER team_number)
@@ -18,6 +19,7 @@ Formation::Formation(FORMATION value, TEAM_NUMBER team_number)
     this->team_number = team_number;
     this->changed_by_user = false;
     InitializePositions();
+    InitializeDefenseAreas();
 }
 
 Formation::~Formation()
@@ -117,9 +119,95 @@ void Formation::InitializePositions()
     }
 }
 
+void Formation::InitializeDefenseAreasTeamA()
+{
+    // MITAD DE CANCHA 960, 618, 0
+
+    if (FORMATION::F_3_3 == this->value)
+    {
+        /*
+        |----------246---------740---------1060 TOUCH LINE 50
+        |           |           |           |
+        |           |     P     |    P      |
+        |           |           |           |
+        |           |------------------------440
+        |           |           |           |
+        |          GOAL   P     |    P      |
+        |          LINE         |           |
+        |           |------------------------840
+        |           |           |           |
+        |           |     P     |    P      |
+        |           |           |           |
+        |           |-----------------------| TOUCH LINE 1010
+        */
+        int top_touchline = 50;
+        int bottom_touchline = 1060 - 50;
+        int left_goal_line = 180;
+        defense_areas.push_back(new Rectangle(new Location(0,0,0), bottom_touchline, 360));//TODO: Arquero
+        defense_areas.push_back(new Rectangle(new Location(left_goal_line, top_touchline, 0), 440, 740 - left_goal_line));
+        defense_areas.push_back(new Rectangle(new Location(left_goal_line, 440, 0), 840 - 440, 740 - left_goal_line));
+        defense_areas.push_back(new Rectangle(new Location(left_goal_line, 840,0), bottom_touchline - 840, 740 - left_goal_line));
+        defense_areas.push_back(new Rectangle(new Location(740, 0, 0), 440, 1060 - 740));
+        defense_areas.push_back(new Rectangle(new Location(740, 440,  0), 840 - 440, 1060 - 740));
+        defense_areas.push_back(new Rectangle(new Location(740, 840, 0), bottom_touchline - 840, 1060 - 740));
+    }
+    else if (FORMATION::F_3_2_1 == this->value)
+    {
+
+    }
+    else if (FORMATION::F_3_1_2 == this->value)
+    {
+
+    }
+}
+
+void Formation::InitializeDefenseAreasTeamB()
+{
+    // MITAD DE CANCHA 960, 618, 0
+    /*if (FORMATION::F_3_3 == this->value)
+    {*/
+        int top_touchline = 50;
+        int bottom_touchline = 1060 - 50;
+        int goal_line = 1740;
+        defense_areas.push_back(new Rectangle(new Location(0,0,0), bottom_touchline, 360));//TODO: Arquero
+        defense_areas.push_back(new Rectangle(new Location(1200, top_touchline, 0), 440, goal_line - 1200));
+        defense_areas.push_back(new Rectangle(new Location(1200, 440, 0), 840 - 440, goal_line - 1200));
+        defense_areas.push_back(new Rectangle(new Location(1200, 840,0), bottom_touchline - 840, goal_line - 1200));
+        defense_areas.push_back(new Rectangle(new Location(860, 0, 0), 440, 1200 - 860));
+        defense_areas.push_back(new Rectangle(new Location(860, 440,  0), 840 - 440, 1200 - 860));
+        defense_areas.push_back(new Rectangle(new Location(860, 840, 0), bottom_touchline - 840, 1200 - 860));
+    /*}
+    else if (FORMATION::F_3_2_1 == this->value)
+    {
+
+    }
+    else if (FORMATION::F_3_1_2 == this->value)
+    {
+
+    }*/
+}
+
+void Formation::InitializeDefenseAreas()
+{
+    if (this->team_number == TEAM_NUMBER::TEAM_A)
+    {
+        this->InitializeDefenseAreasTeamA();
+    }
+    else
+    {
+        this->InitializeDefenseAreasTeamB();
+    }
+}
+
 Location* Formation::GetLocationForPlayer(unsigned int player_index)
 {
     return positions[player_index];
+}
+
+Rectangle* Formation::GetDefenseAreaForPlayer(u_int player_index)
+{
+    cout << to_string(defense_areas.size()) << endl;
+    return defense_areas[player_index];
 }
 
 Location* Formation::GetKeeperLocation() {
@@ -136,6 +224,7 @@ void Formation::ChangeFormation(string formation) {
     this->SetValueFromStringFormation(formation);
     this->positions.clear();
     this->InitializePositions();
+    this->InitializeDefenseAreas();
 }
 
 void Formation::SetValueFromStringFormation(string string_value) {

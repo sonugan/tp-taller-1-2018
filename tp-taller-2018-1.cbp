@@ -153,6 +153,8 @@
 		<Unit filename="src/shared/collision/circle.cpp" />
 		<Unit filename="src/shared/collision/circle.h" />
 		<Unit filename="src/shared/collision/igeometric-form.h" />
+		<Unit filename="src/shared/collision/rectangle.cpp" />
+		<Unit filename="src/shared/collision/rectangle.h" />
 		<Unit filename="src/shared/collision/shadow.cpp" />
 		<Unit filename="src/shared/collision/shadow.h" />
 		<Unit filename="src/shared/configuration/cli-options-parser.cpp" />
@@ -193,6 +195,11 @@
 		<Unit filename="src/shared/model/player-states/player-states.h" />
 		<Unit filename="src/shared/model/player-states/player-still-state.cpp" />
 		<Unit filename="src/shared/model/player-states/player-still-state.h" />
+		<Unit filename="src/shared/model/player-strategies/iplayer-strategy.h" />
+		<Unit filename="src/shared/model/player-strategies/player-atack-strategy.cpp" />
+		<Unit filename="src/shared/model/player-strategies/player-atack-strategy.h" />
+		<Unit filename="src/shared/model/player-strategies/player-defense-strategy.cpp" />
+		<Unit filename="src/shared/model/player-strategies/player-defense-strategy.h" />
 		<Unit filename="src/shared/model/player.cpp" />
 		<Unit filename="src/shared/model/player.h" />
 		<Unit filename="src/shared/model/team-number.h" />

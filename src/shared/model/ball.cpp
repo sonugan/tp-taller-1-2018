@@ -31,6 +31,7 @@ void Ball::SetTrajectory(Trajectory* new_trajectory) {
         this->last_freed = std::chrono::system_clock::now();
         Logger::getInstance()->debug("(Ball::SetTrajectory) PASE");
     }
+    this->NotifyAllPlayers();
 }
 
 bool Ball::LastFreedDelayPassed() {
@@ -62,4 +63,17 @@ Player* Ball::GetPlayer() {
 Circle* Ball::GetCircle()
 {
     return this->circle;
+}
+
+void Ball::NotifyAllPlayers()
+{
+    for(u_int i = 0; i < this->players.size(); i++)
+    {
+        this->players[i]->NotifyChangeBall(this);
+    }
+}
+
+void Ball::AddPlayerToObserve(Player* player)
+{
+    this->players.push_back(player);
 }

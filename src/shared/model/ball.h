@@ -6,7 +6,10 @@
 #include "trajectory.h"
 #include <cstddef>
 #include <chrono>
+#include <vector>
 #include "../collision/circle.h"
+
+using namespace std;
 
 class Trajectory;
 class Player;
@@ -23,6 +26,8 @@ class Ball
         Player* GetPlayer();
         bool LastFreedDelayPassed();
         Circle* GetCircle();
+        void NotifyAllPlayers();
+        void AddPlayerToObserve(Player* player);
     protected:
 
     private:
@@ -33,6 +38,7 @@ class Ball
         std::chrono::time_point<std::chrono::system_clock> last_freed;
         Circle* circle;
         static const u_int HALO_RADIUS = 10;
+        vector<Player*> players;
 };
 
 #endif // BALL_H

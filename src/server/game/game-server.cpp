@@ -236,7 +236,7 @@ void GameServer::CatchBall()
 }
 
 void GameServer::MakePlayerCatchBall(Player* player) {
-    if (!player->HasBall())
+    /*if (!player->HasBall())
     {
         Ball* ball = player->GetTeam()->GetMatch()->GetBall();
         bool collides = ball->GetCircle()->ExistsCollision3d(player->GetCircle());
@@ -247,8 +247,8 @@ void GameServer::MakePlayerCatchBall(Player* player) {
                 Trajectory* trajectory = new Trajectory(player);
                 ball->SetTrajectory(trajectory);
             }
-        }
-
+        }*/
+        Ball* ball = player->GetTeam()->GetMatch()->GetBall();
         if(!ball->IsFree())
         {
             Player* player_ball = ball->GetPlayer();
@@ -279,23 +279,15 @@ void GameServer::MakePlayerCatchBall(Player* player) {
                 }
             }
         }
-    }
+    //}
 }
 
 void GameServer::MovePlayersToDefaultPositions() {
     for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
         Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
-        if (!player_a->IsSelected()) {
-            player_a->GoBackToDefaultPosition();
-        }else{
-            player_a->Play();
-        }
+        player_a->Play();
         Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
-        if (!player_b->IsSelected()) {
-            player_b->GoBackToDefaultPosition();
-        }else{
-            player_b->Play();
-        }
+        player_b->Play();
     }
 }
 

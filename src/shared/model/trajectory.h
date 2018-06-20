@@ -21,6 +21,7 @@ class Trajectory
         static const int NON_DIAGONAL_PLAYER_DIRECTION_OFFSET = 20;
         static const int DECELERATION = 6;
         static constexpr float DRIVE_COEFFICIENT = 0.08;
+        static constexpr float DRIVE_COEFFICIENT_ELEVATION = 0.05;
 
         DIRECTION direction;
         unsigned int drive;
