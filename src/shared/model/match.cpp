@@ -77,18 +77,18 @@ string Match::Serialize() {
 
     //  TEAM A
     
-    // dummy keeper
+    Keeper* keeper_a = GetTeamA()->GetKeeper();
     result.append("0");
     result.append("|");
     result.append("0");
     result.append("|");
     result.append("0");
     result.append("|");
-    result.append("0");
+    result.append(std::to_string((int) keeper_a->GetState()));
     result.append("|");
-    result.append("0");
+    result.append(std::to_string(keeper_a->GetLocation()->GetX()));
     result.append("|");
-    result.append("0");
+    result.append(std::to_string(keeper_a->GetLocation()->GetY()));
     result.append("|");
     
     for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
@@ -122,17 +122,18 @@ string Match::Serialize() {
     //  TEAM B
     
     // dummy keeper
+    Keeper* keeper_b = GetTeamB()->GetKeeper();
     result.append("0");
     result.append("|");
     result.append("0");
     result.append("|");
     result.append("0");
     result.append("|");
-    result.append("0");
+    result.append(std::to_string((int) keeper_b->GetState()));
     result.append("|");
-    result.append("0");
+    result.append(std::to_string(keeper_b->GetLocation()->GetX()));
     result.append("|");
-    result.append("0");
+    result.append(std::to_string(keeper_b->GetLocation()->GetY()));
     result.append("|");
     
     for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
@@ -190,8 +191,12 @@ void Match::DeserializeAndUpdate(string serialized) {
     //  BALL
     ball->GetLocation()->Update(SafeStoi(data[1]), SafeStoi(data[2]), SafeStoi(data[3]));
     ball->GetTrajectory()->UpdateTrajectoryType(static_cast<TRAJECTORY_TYPE>(SafeStoi(data[4])));
-
+    
     //  TEAM A
+    Keeper* keeper_a = GetTeamA()->GetKeeper();
+    keeper_a->UpdateState(static_cast<KEEPER_STATE>(SafeStoi(data[8])));
+    keeper_a->GetLocation()->Update(SafeStoi(data[9]), SafeStoi(data[10]), 0);
+
     for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
 
 
@@ -213,6 +218,10 @@ void Match::DeserializeAndUpdate(string serialized) {
     }
 
     //  TEAM B
+    Keeper* keeper_b = GetTeamB()->GetKeeper();
+    keeper_b->UpdateState(static_cast<KEEPER_STATE>(SafeStoi(data[50])));
+    keeper_b->GetLocation()->Update(SafeStoi(data[51]), SafeStoi(data[52]), 0);
+    
     for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
 
         int base_index = 5 + 42 + (i*6);

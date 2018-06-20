@@ -17,6 +17,7 @@ class Trajectory
         virtual ~Trajectory();
         void UpdateToNextLocation(Location* location);
         Player* GetPlayer();
+        Keeper* GetKeeper();
         TRAJECTORY_TYPE GetTrajectoryType();
         void ChangeTrajectoryType(TRAJECTORY_TYPE trajectory_type);
         void UpdateTrajectoryType(TRAJECTORY_TYPE trajectory_type);

@@ -185,6 +185,7 @@ void GameServer::StartGame() {
 }
 
 void GameServer::RunArtificialIntelligence() {
+	this->MoveKeepers();
 	this->CatchBall();
 	this->MoveBall();
 	this->MovePlayersToDefaultPositions();
@@ -279,15 +280,35 @@ void GameServer::DetectGoals(Ball* ball)
 }
 
 void GameServer::CatchBall() {
-	if (this->GetGameState()->GetMatch()->GetBall()->LastFreedDelayPassed()) {
-		for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
-			Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
-			MakePlayerCatchBall(player_a);
-			Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
-			MakePlayerCatchBall(player_b);
+	Ball* ball = this->GetGameState()->GetMatch()->GetBall();
+	if (this->GetGameState()->GetMatch()->GetBall()->LastFreedDelayPassed() && !ball->IsHeldByAnyKeeper()) {
+		if (!ball->IsHeldByAnyKeeper()) {
+			for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
+				Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
+				MakePlayerCatchBall(player_a);
+				Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
+				MakePlayerCatchBall(player_b);
+			}
 		}
 	}
 
+}
+
+void GameServer::MoveKeepers() {
+	Keeper* keeper_a = this->GetGameState()->GetMatch()->GetTeamA()->GetKeeper();
+	Keeper* keeper_b = this->GetGameState()->GetMatch()->GetTeamB()->GetKeeper();
+	
+	keeper_a->TryToCatchBall();
+	keeper_b->TryToCatchBall();
+	
+	keeper_a->TryToRun();
+	keeper_b->TryToRun();
+	
+	keeper_a->TryToKick();
+	keeper_b->TryToKick();
+	
+	keeper_a->TryToStopKicking();
+	keeper_b->TryToStopKicking();
 }
 
 void GameServer::MakePlayerCatchBall(Player* player) {

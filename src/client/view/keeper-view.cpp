@@ -79,26 +79,26 @@ KeeperView::KeeperView(Keeper* keeper) // @suppress("Class members should be pro
     std::vector<SDL_Rect*> kick_clips;
 
     // Kick sprites
-    SDL_Rect* kick_sprite_1 = new SDL_Rect();
-    kick_sprite_1->x = 0;
-    kick_sprite_1->y = 128;
-    kick_sprite_1->w = this->width;
-    kick_sprite_1->h = this->height;
-    kick_clips.push_back(kick_sprite_1);
-
-    SDL_Rect* kick_sprite_2 = new SDL_Rect();
-    kick_sprite_2->x = 64;
-    kick_sprite_2->y = 128;
-    kick_sprite_2->w = this->width;
-    kick_sprite_2->h = this->height;
-    kick_clips.push_back(kick_sprite_2);
-
-    SDL_Rect* kick_sprite_3 = new SDL_Rect();
-    kick_sprite_3->x = 128;
-    kick_sprite_3->y = 128;
-    kick_sprite_3->w = this->width;
-    kick_sprite_3->h = this->height;
-    kick_clips.push_back(kick_sprite_3);
+//    SDL_Rect* kick_sprite_1 = new SDL_Rect();
+//    kick_sprite_1->x = 0;
+//    kick_sprite_1->y = 128;
+//    kick_sprite_1->w = this->width;
+//    kick_sprite_1->h = this->height;
+//    kick_clips.push_back(kick_sprite_1);
+//
+//    SDL_Rect* kick_sprite_2 = new SDL_Rect();
+//    kick_sprite_2->x = 64;
+//    kick_sprite_2->y = 128;
+//    kick_sprite_2->w = this->width;
+//    kick_sprite_2->h = this->height;
+//    kick_clips.push_back(kick_sprite_2);
+//
+//    SDL_Rect* kick_sprite_3 = new SDL_Rect();
+//    kick_sprite_3->x = 128;
+//    kick_sprite_3->y = 128;
+//    kick_sprite_3->w = this->width;
+//    kick_sprite_3->h = this->height;
+//    kick_clips.push_back(kick_sprite_3);
 
     SDL_Rect* kick_sprite_4 = new SDL_Rect();
     kick_sprite_4->x = 192;

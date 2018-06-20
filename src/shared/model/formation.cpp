@@ -37,7 +37,7 @@ void Formation::InitializePositionsTeamA()
 
     if (FORMATION::F_3_3 == this->value)
     {
-        positions.push_back(new Location(360, 618, 0));
+        positions.push_back(new Location(260, 618, 0));
         positions.push_back(new Location(660, 318, 0));
         positions.push_back(new Location(660, 618, 0));
         positions.push_back(new Location(660, 918, 0));
@@ -47,7 +47,7 @@ void Formation::InitializePositionsTeamA()
     }
     else if (FORMATION::F_3_2_1 == this->value)
     {
-        positions.push_back(new Location(360, 618, 0));
+        positions.push_back(new Location(260, 618, 0));
         positions.push_back(new Location(660, 318, 0));
         positions.push_back(new Location(660, 618, 0));
         positions.push_back(new Location(660, 918, 0));
@@ -57,7 +57,7 @@ void Formation::InitializePositionsTeamA()
     }
     else if (FORMATION::F_3_1_2 == this->value)
     {
-        positions.push_back(new Location(360, 618, 0));
+        positions.push_back(new Location(260, 618, 0));
         positions.push_back(new Location(660, 318, 0));
         positions.push_back(new Location(660, 618, 0));
         positions.push_back(new Location(660, 918, 0));
@@ -74,7 +74,7 @@ void Formation::InitializePositionsTeamB()
 
     if (FORMATION::F_3_3 == this->value)
     {
-        positions.push_back(new Location(1560, 618, 0));
+        positions.push_back(new Location(1660, 618, 0));
         positions.push_back(new Location(1260, 318, 0));
         positions.push_back(new Location(1260, 618, 0));
         positions.push_back(new Location(1260, 918, 0));
@@ -84,7 +84,7 @@ void Formation::InitializePositionsTeamB()
     }
     else if (FORMATION::F_3_2_1 == this->value)
     {
-        positions.push_back(new Location(1560, 618, 0));
+        positions.push_back(new Location(1660, 618, 0));
         positions.push_back(new Location(1260, 318, 0));
         positions.push_back(new Location(1260, 618, 0));
         positions.push_back(new Location(1260, 918, 0));
@@ -94,7 +94,7 @@ void Formation::InitializePositionsTeamB()
     }
     else if (FORMATION::F_3_1_2 == this->value)
     {
-        positions.push_back(new Location(1560, 618, 0));
+        positions.push_back(new Location(1660, 618, 0));
         positions.push_back(new Location(1260, 318, 0));
         positions.push_back(new Location(1260, 618, 0));
         positions.push_back(new Location(1260, 918, 0));

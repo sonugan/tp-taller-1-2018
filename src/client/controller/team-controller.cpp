@@ -1,6 +1,6 @@
 #include "team-controller.h"
 
-TeamController::TeamController(Team* team, Client* client, Camera* camera) {
+TeamController::TeamController(Team* team, Client* client, Camera* camera) { // @suppress("Class members should be properly initialized")
     this->team = team;
     this->client = client;
     this->camera = camera;

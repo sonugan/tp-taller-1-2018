@@ -42,6 +42,7 @@ public:
     int GetTeamUsersNum(string team_name);
     void Run();
     void DetectBallTouches();
+    void MoveKeepers();
 protected:
     void ReturnBallToKeeperOnGoalKick(Ball* ball);
     void DetectGoals(Ball* ball);

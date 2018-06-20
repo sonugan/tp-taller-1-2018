@@ -3,6 +3,7 @@
 
 #include "location.h"
 #include "player.h"
+#include "keeper.h"
 #include "trajectory.h"
 #include <cstddef>
 #include <chrono>
@@ -24,6 +25,7 @@ class Ball
         void Move();
         bool IsFree();
         Player* GetPlayer();
+        Keeper* GetKeeper();
         bool LastFreedDelayPassed();
         Circle* GetCircle();
         Trajectory* GetTrajectory();
@@ -35,6 +37,7 @@ class Ball
         void BounceOnThrowIn();
         void BounceOnGoalPost();
         void GoToKeeper(Keeper* keeper);
+        bool IsHeldByAnyKeeper();
     protected:
 
     private:

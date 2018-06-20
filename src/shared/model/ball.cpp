@@ -66,6 +66,18 @@ Player* Ball::GetPlayer() {
     return NULL;
 }
 
+Keeper* Ball::GetKeeper() {
+    if (trajectory != NULL) {
+        return trajectory->GetKeeper();
+    }
+    return NULL;
+}
+
+bool Ball::IsHeldByAnyKeeper() {
+	return GetKeeper() != NULL;
+}
+
+
 Circle* Ball::GetCircle()
 {
     return this->circle;

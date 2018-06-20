@@ -68,7 +68,11 @@ void Trajectory::UpdateToNextLocationForPlayerTrajectory(Location* location) {
 }
 
 void Trajectory::UpdateToNextLocationForKeeperTrajectory(Location* location) {
-	
+	int offset = NON_DIAGONAL_PLAYER_DIRECTION_OFFSET;
+	if (this->keeper->GetLocation()->GetX() > 960) {
+		offset = offset * (-1);
+	}
+	location->Update(this->keeper->GetLocation()->GetX() + offset, this->keeper->GetLocation()->GetY(), 0);
 }
 
 void Trajectory::UpdateToNextLocationForFreeTrajectory(Location* location) {
@@ -134,6 +138,10 @@ void Trajectory::UpdateToNextLocationForFreeTrajectory(Location* location) {
 
 Player* Trajectory::GetPlayer() {
     return player;
+}
+
+Keeper* Trajectory::GetKeeper() {
+    return keeper;
 }
 
 TRAJECTORY_TYPE Trajectory::GetTrajectoryType(){
