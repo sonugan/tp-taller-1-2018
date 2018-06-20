@@ -27,6 +27,7 @@ public:
 	void TryToRun();
 	void TryToKick();
 	void TryToStopKicking();
+	void TryToKickOff();
 	bool HasBall();
 	KEEPER_STATE GetState();
 	void UpdateState(KEEPER_STATE state);

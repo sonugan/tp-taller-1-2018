@@ -30,6 +30,13 @@ void Keeper::TryToCatchBall() {
 	}
 }
 
+void Keeper::TryToKickOff() {
+	unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_kick_request).count();
+	if (HasBall() && elapsed_millis > KICK_DELAY_MILLIS) {
+		last_kick_request = std::chrono::system_clock::now();
+	}
+}
+
 void Keeper::TryToKick() {
 	if (this->HasBall()) {
 		unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_kick_request).count();

@@ -169,18 +169,13 @@ void Ball::BounceOnThrowIn()
 void Ball::GoToKeeper(Keeper* keeper)
 {
 	Logger::getInstance()->debug("Ball::Going to keeper");
+	Trajectory* keeper_trajectory = new Trajectory(keeper);
+	this->SetTrajectory(keeper_trajectory);
     delete this->location;
     delete this->previous_location;
-    this->location = new Location(960, 618, 0);
-    this->previous_location = new Location(200, 200, 0);
-    //Eliminando la trayectoria de la pelota
-    delete this->trajectory;
-    this->trajectory = new Trajectory(DIRECTION::EAST, 0, TRAJECTORY_TYPE::FLOOR);
-    this->circle->Move(this->location);
-
-
-    this->last_owner_team = NULL;
-    this->last_owner_player_color = USER_COLOR::NO_COLOR;
+    this->location = new Location(keeper->GetLocation());
+    this->previous_location = new Location(keeper->GetLocation());
+    keeper->TryToKickOff();
 }
 
 void Ball::BounceOnGoalPost()
