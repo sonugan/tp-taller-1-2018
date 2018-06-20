@@ -2,6 +2,7 @@
 
 SoundManager::SoundManager()
 {
+    this->sound = NULL;
     if(Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,1024) == -1)
     {
         Logger::getInstance()->debug("Error al abrir canal para sonido: ");
@@ -14,8 +15,12 @@ SoundManager::~SoundManager()
     Logger::getInstance()->debug("DESTRUYENDO SOUND MANAGER");
     if (this->sound != NULL)
     {
+        Mix_Pause(1);
+        Logger::getInstance()->debug("Liberando chunk()");
         Mix_FreeChunk(this->sound);
+        this->sound = NULL;
     }
+    Logger::getInstance()->debug("Cerrando audio...");
     Mix_CloseAudio();
 }
 

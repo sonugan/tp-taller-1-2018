@@ -13,6 +13,7 @@ GameMusic::GameMusic()
 
 GameMusic::~GameMusic()
 {
+    Logger::getInstance()->debug("DESTRUYENDO GAME MUSIC");
     if (this->current_track != NULL)
     {
         Mix_FreeMusic(this->current_track);
