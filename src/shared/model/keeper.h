@@ -37,7 +37,7 @@ private:
     static const unsigned int PITCH_Y_CENTER = 580;
     static const unsigned int PITCH_X_CENTER = 960;
 	static const unsigned int KEEPER_Y_RANGE = 100;
-	static const unsigned int HALO_RADIUS = 50;
+	static const unsigned int HALO_RADIUS = 10;
 	static const unsigned int WALKING_SPEED = 2;
 	Team* team;
 	Location* location;

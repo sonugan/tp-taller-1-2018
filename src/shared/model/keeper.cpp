@@ -17,7 +17,7 @@ void Keeper::SetTeam(Team* team) {
 
 void Keeper::TryToCatchBall() {
 	Ball* ball = this->GetTeam()->GetMatch()->GetBall();
-	if (ball->LastFreedDelayPassed() && !ball->IsHeldByAnyKeeper()) {
+	if (!ball->IsHeldByAnyKeeper()) {
 		bool other_team_has_ball = (ball->GetPlayer() != NULL) && team != ball->GetPlayer()->GetTeam();
 		if (this != ball->GetKeeper() && (other_team_has_ball || ball->IsFree())) {
 			bool collides = ball->GetCircle()->ExistsCollision3d(this->circle);
@@ -67,9 +67,11 @@ void Keeper::TryToRun() {
 		if (ball_y > keeper_y && keeper_y < (PITCH_Y_CENTER + KEEPER_Y_RANGE)) {
 			this->state = KEEPER_STATE::MOVING_DOWN_KEEPER;
 			this->location->UpdateY(location->GetY() + WALKING_SPEED);
+			this->circle->Move(this->location);
 		} else if (ball_y < keeper_y && keeper_y > (PITCH_Y_CENTER - KEEPER_Y_RANGE)) {
 			this->state = KEEPER_STATE::MOVING_UP_KEEPER;
 			this->location->UpdateY(location->GetY() - WALKING_SPEED);
+			this->circle->Move(this->location);
 		} else {
 			this->state = KEEPER_STATE::STILL_KEEPER;
 		}
