@@ -516,14 +516,10 @@ bool Player::TryRecover()
 
 void Player::NotifyChangeBall(Ball* ball)
 {
-    if(!ball->IsFree())
+    if(this->GetTeam()->HasBall())
     {
-        Team* ball_team = ball->GetPlayer()->GetTeam();
-        if(this->GetTeam() == ball_team)
-        {
-            this->strategy = this->atack_stategy;
-            return;
-        }
+        this->strategy = this->atack_stategy;
+        return;
     }
     this->strategy = this->defense_strategy;
 }

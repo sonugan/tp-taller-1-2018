@@ -46,11 +46,15 @@ void GameState::CreateModel(Configuration* initial_configuration)
 {
     Logger::getInstance()->debug("CREANDO EL MODELO");
 
+    Ball* ball = new Ball();
+
     Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_A);
     Team* team_a = new Team(formation_team_a, initial_configuration->GetTeamName(), initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
     Keeper* keeper_a = new Keeper();
     for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
-        team_a->AddPlayer(new Player(i,TEAM_NUMBER::TEAM_A));
+        Player* player = new Player(i,TEAM_NUMBER::TEAM_A);
+        team_a->AddPlayer(player);
+        ball->AddPlayerToObserve(player);
     }
     team_a->SetKeeper(keeper_a);
 
@@ -58,11 +62,11 @@ void GameState::CreateModel(Configuration* initial_configuration)
     Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_NUMBER::TEAM_B); // TODO: TRAER NOMBRE DEL TEAM B Y CAMISETA DE CONFIG
     Keeper* keeper_b = new Keeper();
     for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
-        team_b->AddPlayer(new Player(i, TEAM_NUMBER::TEAM_B));
+        Player* player = new Player(i, TEAM_NUMBER::TEAM_B);
+        team_b->AddPlayer(player);
+        ball->AddPlayerToObserve(player);
     }
     team_b->SetKeeper(keeper_b);
-
-    Ball* ball = new Ball();
 
     this->timer = new Timer(initial_configuration->GetGameDuration());
     Pitch* pitch = new Pitch(team_a, team_b);
@@ -77,5 +81,3 @@ bool GameState::WasConnected(User* user) {
 	}
 	return false;
 }
-
-

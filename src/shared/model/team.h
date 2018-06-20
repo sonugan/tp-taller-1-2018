@@ -7,6 +7,7 @@
 #include "keeper.h"
 #include "formation.h"
 #include "../configuration/configuration.h"
+#include "ball.h"
 #include <string>
 
 using namespace std;
@@ -33,6 +34,9 @@ class Team
         Match* GetMatch();
         TEAM_NUMBER GetTeamNumber();
         void AddPlayer(Player* player);
+        bool HasBall();
+        Location* GetTeamAGoalLine();
+        Location* GetTeamBGoalLine();
 	static const unsigned int TEAM_SIZE = 6;
         string GetName();
         string GetShirt();
@@ -51,6 +55,8 @@ class Team
         Match* match;
         int goals;
         TEAM_NUMBER team_number;
+        Location* team_a_goal_line;
+        Location* team_b_goal_line;
 };
 
 #endif // TEAM_H

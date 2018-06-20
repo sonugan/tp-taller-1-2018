@@ -9,6 +9,8 @@ Team::Team(Formation* formation, string name, string shirt, TEAM_NUMBER team_num
     this->shirt = shirt;
     this->team_number = team_number;
     this->goals = 0;
+    this->team_a_goal_line = new Location(1729, 0, 0);
+    this->team_b_goal_line = new Location(185, 0, 0);
 }
 
 Team::~Team()
@@ -21,6 +23,8 @@ Team::~Team()
     }
     players.clear();
     delete keeper;
+    delete this->team_a_goal_line;
+    delete this->team_b_goal_line;
 }
 
 std::vector<Player*> Team::GetPlayers()
@@ -156,4 +160,20 @@ void Team::AddGoal()
 int Team::GetGoals()
 {
     return this->goals;
+}
+
+bool Team::HasBall()
+{
+    Ball* ball = this->GetMatch()->GetBall();
+    return !ball->IsFree() && ball->GetPlayer()->GetTeam() == this;
+}
+
+Location* Team::GetTeamAGoalLine()
+{
+    return this->team_a_goal_line;
+}
+
+Location* Team::GetTeamBGoalLine()
+{
+    return this->team_b_goal_line;
 }
