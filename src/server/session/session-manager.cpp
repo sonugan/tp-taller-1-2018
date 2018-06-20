@@ -42,7 +42,6 @@ User* SessionManager::Authenticate(ClientSocket* client, LoginRequest* login_req
             this->clientsocket_user_association[client->socket_id] = user;
 
             string created_user = "Usuario creado: " + user->GetUsername() + " color: "+ to_string((int) user->GetUserColor());
-            Logger::getInstance()->info(created_user);
 
             return user;
         }

@@ -8,6 +8,7 @@ class Location
 {
     public:
         Location(int x, int y, int z);
+        Location(Location* location);
         virtual ~Location();
         int GetX();
         int GetY();
@@ -16,7 +17,8 @@ class Location
         void UpdateX(int x);
         void UpdateY(int y);
         void UpdateZ(int z);
-        int Distance(Location* other_location);
+	    void Update(Location* location);
+        float Distance(Location* other_location);
         std::string ToString();
 
     protected:

@@ -45,7 +45,6 @@ void GameState::Start() {
 void GameState::CreateModel(Configuration* initial_configuration)
 {
     Logger::getInstance()->debug("(GameState:CreateModel) CREANDO EL MODELO");
-    Pitch* pitch = new Pitch();
 
     Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_A);
     Team* team_a = new Team(formation_team_a, initial_configuration->GetTeamName(), initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
@@ -72,6 +71,7 @@ void GameState::CreateModel(Configuration* initial_configuration)
     Ball* ball = new Ball();
 
     this->timer = new Timer(initial_configuration->GetGameDuration());
+    Pitch* pitch = new Pitch(team_a, team_b);
     this->match = new Match(pitch, team_a, team_b, ball);
     this->match->SetRemainingTime(this->timer->GetRemainingMinutes());
 }

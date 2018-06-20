@@ -38,8 +38,9 @@ class Team
         string GetShirt();
         void SetShirt(string shirt);
         void UpdateFormation();
-        Location* GetLocationForPlayer(unsigned int player_index);
-
+        void AddGoal();
+        int GetGoals();
+	Location* GetLocationForPlayer(unsigned int player_index);
         //USAR SOLO DESDE EL CLIENTE
         Player* GetSelectedPlayer();
     private:
@@ -49,6 +50,7 @@ class Team
         string name;
         string shirt;
         Match* match;
+        int goals;
         TEAM_NUMBER team_number;
 };
 

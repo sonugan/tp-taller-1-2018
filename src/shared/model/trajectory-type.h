@@ -1,0 +1,11 @@
+#ifndef TRAJECTORYTYPE_H
+#define TRAJECTORYTYPE_H
+
+
+enum TRAJECTORY_TYPE
+{
+    UPWARDS = 0,
+    DOWNWARDS = 1,
+    FLOOR = 2
+};
+#endif // TRAJECTORYTYPE_H

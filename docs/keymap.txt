@@ -9,3 +9,5 @@ RIGHT: mover a la derecha
 UP: mover arriba
 DOWN: mover abajo
 ESC: salir del juego
+P: pausar musica del juego
+M: reaundar musica del juego

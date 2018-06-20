@@ -31,6 +31,7 @@ void TeamController::ChangePlayerSelection(const Uint8 *keyboard_state_array) {
     if (CKeySelected(keyboard_state_array) && elapsed_millis >= PLAYER_SELECTION_DELAY_MILLIS) {
         ChangePlayerRequest r;
         this->client->ChangePlayer(&r);
+        this->sound_manager->PlayPlayerSelectionSound();
         last_player_selection_change = std::chrono::system_clock::now();
     }
 }

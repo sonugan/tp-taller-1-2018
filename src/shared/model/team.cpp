@@ -8,6 +8,7 @@ Team::Team(Formation* formation, string name, string shirt, TEAM_NUMBER team_num
     this->name = name;
     this->shirt = shirt;
     this->team_number = team_number;
+    this->goals = 0;
 }
 
 Team::~Team()
@@ -145,6 +146,16 @@ void Team::UpdateFormation()
 
 Player* Team::GetPlayerByPositionIndex(unsigned int position_index) {
 	return this->players[position_index - 1];
+}
+
+void Team::AddGoal()
+{
+    this->goals++;
+}
+
+int Team::GetGoals()
+{
+    return this->goals;
 }
 
 Location* Team::GetLocationForPlayer(unsigned int player_index) {
