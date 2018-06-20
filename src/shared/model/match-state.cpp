@@ -9,7 +9,7 @@
 
 MatchState::MatchState()
 {
-	this->type = MATCH_STATE_TYPE::WAITING_TO_START;
+	this->type = MATCH_STATE_TYPE::KICKOFF;
 }
 
 MatchState::~MatchState()
@@ -17,4 +17,8 @@ MatchState::~MatchState()
 
 MATCH_STATE_TYPE MatchState::GetType(){
 	return this->type;
+}
+
+bool MatchState::IsKickOff() {
+	return MATCH_STATE_TYPE::KICKOFF == GetType();
 }

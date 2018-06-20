@@ -38,6 +38,7 @@ class Team
         string GetShirt();
         void SetShirt(string shirt);
         void UpdateFormation();
+        Location* GetLocationForPlayer(unsigned int player_index);
 
         //USAR SOLO DESDE EL CLIENTE
         Player* GetSelectedPlayer();

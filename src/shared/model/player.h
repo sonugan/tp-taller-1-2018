@@ -71,12 +71,13 @@ class Player
         void SetIsStill(bool is_still);
         bool GetIsStill();
         void SetLocation(Location* location);
+        void SetInitialLocation(Location* initial_location);
     protected:
 
     private:
         DIRECTION direction;
-        static const int PLAYER_SPEED = 6;
-        static const int PLAYER_RUNNING_SPEED = 10;
+	static const int PLAYER_SPEED = 6;
+	static const int PLAYER_RUNNING_SPEED = 10;
         USER_COLOR color;
         bool plays_for_team_a;
         bool plays_for_team_b;

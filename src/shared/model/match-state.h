@@ -16,6 +16,8 @@ public:
 	MatchState();
 	virtual ~MatchState();
 	MATCH_STATE_TYPE GetType();
+
+	bool IsKickOff();
 private:
 	MATCH_STATE_TYPE type;
 };

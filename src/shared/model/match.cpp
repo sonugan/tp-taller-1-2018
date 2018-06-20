@@ -21,6 +21,7 @@ Match::~Match() {
     delete team_a;
     delete team_b;
     delete ball;
+    delete match_state;
 }
 
 Team* Match::GetTeamA() {
@@ -45,6 +46,10 @@ MATCH_TIME_TYPE Match::GetMatchTime() {
 
 void Match::SetMatchTime(MATCH_TIME_TYPE match_time){
 	this->match_time = match_time;
+}
+
+MatchState* Match::GetMatchState() {
+	return this->match_state;
 }
 
 void Match::SetMatchState(MatchState* state) {

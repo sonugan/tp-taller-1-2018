@@ -7,8 +7,7 @@
 #include "location.h"
 #include "../configuration/configuration.h"
 #include "team.h"
-
-class Team;
+#include "position.h"
 
 enum FORMATION { F_3_3 = 1, F_3_1_2 = 2, F_3_2_1 = 3 };
 
@@ -23,17 +22,20 @@ public:
     FORMATION GetValue();
     void ChangeFormation(string formation);
     bool ChangedByUser();
+    Location* GetKickoffLocationForPlayer(unsigned int player_index);
+    Location* GetKeeperKickoffLocation();
 protected:
     void SetValueFromStringFormation(string string_value);
 
 private:
     FORMATION value;
     TEAM_NUMBER team_number;
-    std::vector<Location*> positions;
+    std::vector<Position*> positions;
     bool changed_by_user;
     void InitializePositions();
     void InitializePositionsTeamA();
     void InitializePositionsTeamB();
+    Position* CreatePosition(Location* defaul_location, Location* kickoff_location);
 };
 #endif // FORMATION_H
 

@@ -186,20 +186,26 @@ void Game::CreateModel(std::string serialized_model)
     Team* team_a = new Team(formation_team_a, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
 
     Keeper* keeper_a = new Keeper();
-    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
-    {
-        team_a->AddPlayer(new Player(i,TEAM_NUMBER::TEAM_A));
-    }
+	Player* new_player_a;
+	for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
+	{
+		new_player_a = new Player(i, TEAM_NUMBER::TEAM_A);
+		new_player_a->SetInitialLocation(formation_team_a->GetKickoffLocationForPlayer(i));
+		team_a->AddPlayer(new_player_a);
+	}
     team_a->SetKeeper(keeper_a);
 
     Formation* formation_team_b = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_B);
     Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_NUMBER::TEAM_B); // TODO: TRAER NOMBRE DEL TEAM B Y CAMISETA DE CONFIG
 
     Keeper* keeper_b = new Keeper();
-    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
-    {
-        team_b->AddPlayer(new Player(i, TEAM_NUMBER::TEAM_B));
-    }
+	Player* new_player_b;
+	for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
+	{
+		new_player_b = new Player(i, TEAM_NUMBER::TEAM_B);
+		new_player_b->SetInitialLocation(formation_team_b->GetKickoffLocationForPlayer(i));
+		team_b->AddPlayer(new_player_b);
+	}
     team_b->SetKeeper(keeper_b);
 
     // DEFINIR COMO SE SELECCIONA EL JUGADOR

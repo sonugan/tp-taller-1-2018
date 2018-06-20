@@ -114,9 +114,9 @@ Location* Player::GetDefaultLocation()
 void Player::SetTeam(Team* team)
 {
     this->team = team;
-    Location* default_location = GetDefaultLocation();
-    this->location = new Location(default_location->GetX(), default_location->GetY(), default_location->GetZ());
-    this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
+//    Location* location = team->GetLocationForPlayer(this->position_index);
+//    this->location = new Location(location->GetX(), location->GetY(), location->GetZ());
+//    this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
 }
 
 unsigned int Player::GetPositionIndex()
@@ -311,7 +311,8 @@ void Player::ChangeToMove()
 {
     this->current_state = this->move_state;
 }
-void Player::ChangeToKick()
+void Player::ChangeToKick()//    this->location = new Location(location->GetX(), location->GetY(), location->GetZ());
+//    this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
 {
     this->current_state = this->kick_state;
 }
@@ -374,4 +375,10 @@ void Player::SetLocation(Location* location)
 {
     this->location->Update(location->GetX(), location->GetY(), location->GetZ());
     this->previous_location->Update(location->GetX(), location->GetY(), location->GetZ());
+}
+
+void Player::SetInitialLocation(Location* initial_location)
+{
+	this->location = new Location(initial_location->GetX(), initial_location->GetY(), initial_location->GetZ());
+	this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
 }
