@@ -391,7 +391,7 @@ void GameServer::ChangeFormation(ChangeFormationRequest* cfRequest, int socket_i
 }
 
 int GameServer::GetTeamUsersNum(string team_name) {
-	int num;
+	int num = 0;
 	map<string, User*> users = this->session_manager->GetAuthenticatedUsers();
 	Team* user_team;
 	Team* current_team;

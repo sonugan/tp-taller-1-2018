@@ -161,6 +161,7 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
         break;
     case MESSAGE_TYPE::CHANGE_FORMATION_REQUEST:
         this->HandleChangeFormationRequest(client, message);
+        break;
     case MESSAGE_TYPE::LONG_PASS_REQUEST:
         this->HandleLongPassRequest(client, message);
         break;
