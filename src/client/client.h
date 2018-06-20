@@ -8,6 +8,7 @@
 #include "../shared/network/messages/kick-ball-request.h"
 #include "../shared/network/messages/pass-ball-request.h"
 #include "../shared/network/messages/recover-ball-request.h"
+#include "../shared/network/messages/long-pass-request.h"
 #include "../shared/network/messages/move-request.h"
 #include "../shared/network/messages/change-player-request.h"
 #include "../shared/network/messages/change-formation-request.h"
@@ -31,6 +32,7 @@ class Client
         bool Quit(QuitRequest* quit_request);
         void Close();
         bool KickBall(KickBallRequest* kick_ball_request);
+        bool LongPass(LongPassRequest* long_pass_request);
         bool PassBall(PassBallRequest* pass_ball_request);
         bool RecoverBall(RecoverBallRequest* recover_ball_request);
         bool Move(MoveRequest* move_request);
@@ -39,9 +41,6 @@ class Client
         string GetGameState();
         bool IsConnected();
         bool ChangeFormation(ChangeFormationRequest* cfRequest);
-
-        // TODO: Tipar mensaje. esto es solo para una prueba
-        void SendEvent();
 
     protected:
 

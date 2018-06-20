@@ -1,7 +1,7 @@
 #include "player.h"
 #include "../logger.h"
 
-Player::Player(unsigned int position_index, TEAM_NUMBER team_number)
+Player::Player(unsigned int position_index, TEAM_NUMBER team_number) // @suppress("Class members should be properly initialized")
 {
     this->position_index = position_index;
     this->still_state = new PlayerStillState(this);
@@ -10,6 +10,7 @@ Player::Player(unsigned int position_index, TEAM_NUMBER team_number)
     this->recover_ball_state = new PlayerRecoverBallState(this);
 
     this->current_state = this->still_state;
+    this->coin_flipper = new CoinFlipper();
 
     switch (team_number)
     {
@@ -44,6 +45,8 @@ Player::~Player()
     delete move_state;
     delete kick_state;
     delete recover_ball_state;
+    delete circle;
+    delete coin_flipper;
 }
 
 void Player::MoveLeft(bool run)
@@ -117,6 +120,8 @@ void Player::SetTeam(Team* team)
     Location* default_location = GetDefaultLocation();
     this->location = new Location(default_location->GetX(), default_location->GetY(), default_location->GetZ());
     this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
+    this->circle = new Circle(HALO_RADIUS, new Location(this->location));
+    //this->shadow = new Shadow(this);
 }
 
 unsigned int Player::GetPositionIndex()
@@ -240,44 +245,68 @@ void Player::Move(bool run)
         speed = PLAYER_SPEED;
     }
     this->previous_location->Update(this->location->GetX(), this->location->GetY(), this->location->GetZ());
+    Location* new_location = new Location(this->location);
     switch(direction)
     {
     case DIRECTION::NORTH:
-        location->UpdateY(location->GetY() - speed);
+        new_location->UpdateY(location->GetY() - speed);
         break;
     case DIRECTION::WEST:
-        location->UpdateX(location->GetX() - speed);
+        new_location->UpdateX(location->GetX() - speed);
         break;
     case DIRECTION::SOUTH:
-        location->UpdateY(location->GetY() + speed);
+        new_location->UpdateY(location->GetY() + speed);
         break;
     case DIRECTION::EAST:
-        location->UpdateX(location->GetX() + speed);
+        new_location->UpdateX(location->GetX() + speed);
         break;
     case DIRECTION::NORTHEAST:
-        location->UpdateY(location->GetY() - speed);
-        location->UpdateX(location->GetX() + speed);
+        new_location->UpdateY(location->GetY() - speed);
+        new_location->UpdateX(location->GetX() + speed);
         break;
     case DIRECTION::NORTHWEST:
-        location->UpdateY(location->GetY() - speed);
-        location->UpdateX(location->GetX() - speed);
+        new_location->UpdateY(location->GetY() - speed);
+        new_location->UpdateX(location->GetX() - speed);
         break;
     case DIRECTION::SOUTHEAST:
-        location->UpdateY(location->GetY() + speed);
-        location->UpdateX(location->GetX() + speed);
+        new_location->UpdateY(location->GetY() + speed);
+        new_location->UpdateX(location->GetX() + speed);
         break;
     case DIRECTION::SOUTHWEST:
-        location->UpdateY(location->GetY() + speed);
-        location->UpdateX(location->GetX() - speed);
+        new_location->UpdateY(location->GetY() + speed);
+        new_location->UpdateX(location->GetX() - speed);
         break;
     }
+
+    this->location->Update(new_location);
+    this->circle->Move(this->location);
+
+    delete new_location;
 }
 
 void Player::PassBall()
 {
     if (HasBall())
     {
-        Trajectory* trajectory = new Trajectory(direction, 250);
+        Trajectory* trajectory = new Trajectory(direction, 1, TRAJECTORY_TYPE::FLOOR);
+        team->GetMatch()->GetBall()->SetTrajectory(trajectory);
+    }
+}
+
+void Player::KickBall(int power)
+{
+    if (HasBall())
+    {
+        Trajectory* trajectory = new Trajectory(direction, power, TRAJECTORY_TYPE::FLOOR);
+        team->GetMatch()->GetBall()->SetTrajectory(trajectory);
+    }
+}
+
+void Player::LongPass(int power, TRAJECTORY_TYPE trajectory_type)
+{
+    if (HasBall())
+    {
+        Trajectory* trajectory = new Trajectory(direction, power, trajectory_type);
         team->GetMatch()->GetBall()->SetTrajectory(trajectory);
     }
 }
@@ -317,7 +346,10 @@ void Player::ChangeToKick()
 }
 void Player::ChangeToRecover()
 {
-    this->current_state = this->recover_ball_state;
+    //if(!this->HasBall())
+    //{
+        this->current_state = this->recover_ball_state;
+    //}
 }
 void Player::ChangeToPass()
 {
@@ -329,7 +361,10 @@ void Player::ChangeToCatchBall()
 }
 void Player::ChangeToStill()
 {
-    this->current_state = this->still_state;
+    //if(!this->HasBall())
+    //{
+        this->current_state = this->still_state;
+    //}
 }
 
 void Player::Play()
@@ -374,4 +409,31 @@ void Player::SetLocation(Location* location)
 {
     this->location->Update(location->GetX(), location->GetY(), location->GetZ());
     this->previous_location->Update(location->GetX(), location->GetY(), location->GetZ());
+}
+
+Circle* Player::GetCircle()
+{
+    return this->circle;
+}
+
+bool Player::AreInSameTeam(Player* player)
+{
+    return player != nullptr && player->GetTeam() == this->GetTeam();
+}
+
+bool Player::TryRecover()
+{
+    Ball* ball = this->GetTeam()->GetMatch()->GetBall();
+    if(!this->HasBall()
+        && !this->AreInSameTeam(ball->GetPlayer())
+        && ball->GetCircle()->ExistsCollision3d(this->GetCircle()))
+    {
+        if(coin_flipper->Flip() == COIN_RESULT::WIN)
+        {
+            Trajectory* trajectory = new Trajectory(this);
+            ball->SetTrajectory(trajectory);
+            return true;
+        }
+    }
+    return false;
 }

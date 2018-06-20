@@ -162,6 +162,9 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
     case MESSAGE_TYPE::CHANGE_FORMATION_REQUEST:
         this->HandleChangeFormationRequest(client, message);
         break;
+    case MESSAGE_TYPE::LONG_PASS_REQUEST:
+        this->HandleLongPassRequest(client, message);
+        break;
     default:
         Logger::getInstance()->error("(Server::ProcessMessage) No hay handler para este tipo de mensaje.");
     }
@@ -281,6 +284,15 @@ void Server::HandleKickRequest(ClientSocket* client, Message* message)
     this->game->DoKick(kick_ball_request, client->socket_id);
 }
 
+void Server::HandleLongPassRequest(ClientSocket* client, Message* message)
+{
+    Logger::getInstance()->debug("(Server:HandleLongPassRequest) Procesando long pass request.");
+
+    LongPassRequest* long_pass_request = new LongPassRequest();
+    message->GetDeserializedData(long_pass_request);
+    this->game->DoLongPass(long_pass_request, client->socket_id);
+}
+
 void Server::HandlePassBallRequest(ClientSocket* client, Message* message)
 {
     string client_id = to_string(client->socket_id);
@@ -349,7 +361,7 @@ void Server::NotifyGameState()
 
         std::this_thread::sleep_for(std::chrono::milliseconds(SEND_GAME_STATE_EVERY_MILLISECONDS));
 
-        this->game->RunArtificialIntelligence();
+        this->game->Run();
     }
 }
 

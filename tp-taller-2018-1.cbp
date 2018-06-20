@@ -7,12 +7,13 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/tp-taller-2018-1" prefix_auto="1" extension_auto="1" />
+				<Option output="tp-taller-2018-1" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Option parameters='--config=&quot;src/shared/configuration/default-config.yml&quot;' />
 				<Compiler>
+					<Add option="-std=c++11" />
 					<Add option="-g" />
 					<Add directory="src/game" />
 					<Add directory="src/pitch" />
@@ -30,6 +31,8 @@
 					<Add directory="src/shared/network/messages" />
 					<Add directory="src/shared/model/player-states" />
 					<Add directory="src/client/view" />
+					<Add directory="src/client/sound" />
+					<Add directory="src/client/controller" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -56,6 +59,8 @@
 					<Add directory="src/shared/network/messages" />
 					<Add directory="src/shared/model/player-states" />
 					<Add directory="src/client/view" />
+					<Add directory="src/client/sound" />
+					<Add directory="src/client/controller" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -76,14 +81,38 @@
 		<Unit filename="src/client/controller/abstract-controller.h" />
 		<Unit filename="src/client/controller/game-controller.cpp" />
 		<Unit filename="src/client/controller/game-controller.h" />
+		<Unit filename="src/client/controller/game-music-controller.cpp" />
+		<Unit filename="src/client/controller/game-music-controller.h" />
 		<Unit filename="src/client/controller/player-controller.cpp" />
 		<Unit filename="src/client/controller/player-controller.h" />
 		<Unit filename="src/client/controller/team-controller.cpp" />
 		<Unit filename="src/client/controller/team-controller.h" />
 		<Unit filename="src/client/game.cpp" />
 		<Unit filename="src/client/game.h" />
+		<Unit filename="src/client/sound/game-music.cpp" />
+		<Unit filename="src/client/sound/game-music.h" />
+		<Unit filename="src/client/sound/select_player.wav" />
 		<Unit filename="src/client/sound/sound-manager.cpp" />
 		<Unit filename="src/client/sound/sound-manager.h" />
+		<Unit filename="src/client/sprites/ball2-old.png" />
+		<Unit filename="src/client/sprites/ball2.png" />
+		<Unit filename="src/client/sprites/error.png" />
+		<Unit filename="src/client/sprites/info-panel-background.png" />
+		<Unit filename="src/client/sprites/mini-ball-selector.png" />
+		<Unit filename="src/client/sprites/pitch-old.jpg" />
+		<Unit filename="src/client/sprites/pitch.jpg" />
+		<Unit filename="src/client/sprites/selectors/selector1.png" />
+		<Unit filename="src/client/sprites/selectors/selector2.png" />
+		<Unit filename="src/client/sprites/selectors/selector3.png" />
+		<Unit filename="src/client/sprites/selectors/selector4.png" />
+		<Unit filename="src/client/sprites/team_a/away-kit.png" />
+		<Unit filename="src/client/sprites/team_a/home-kit.png" />
+		<Unit filename="src/client/sprites/team_a/mini-player.png" />
+		<Unit filename="src/client/sprites/team_b/away-kit.png" />
+		<Unit filename="src/client/sprites/team_b/home-kit.png" />
+		<Unit filename="src/client/sprites/team_b/mini-player.png" />
+		<Unit filename="src/client/sprites/tehkan_world_cup.ttf" />
+		<Unit filename="src/client/sprites/tehkan_world_cup_menu.jpg" />
 		<Unit filename="src/client/view/abstract-view.h" />
 		<Unit filename="src/client/view/animation.cpp" />
 		<Unit filename="src/client/view/animation.h" />
@@ -96,6 +125,8 @@
 		<Unit filename="src/client/view/info-panel-view.cpp" />
 		<Unit filename="src/client/view/info-panel-view.h" />
 		<Unit filename="src/client/view/ishowable.h" />
+		<Unit filename="src/client/view/keeper-view.cpp" />
+		<Unit filename="src/client/view/keeper-view.h" />
 		<Unit filename="src/client/view/login-view.cpp" />
 		<Unit filename="src/client/view/login-view.h" />
 		<Unit filename="src/client/view/mini-ball-view.cpp" />
@@ -121,6 +152,7 @@
 		<Unit filename="src/server/game/game-server.h" />
 		<Unit filename="src/server/game/game-state.cpp" />
 		<Unit filename="src/server/game/game-state.h" />
+		<Unit filename="src/server/game/non-existen-user-exception.h" />
 		<Unit filename="src/server/server.cpp" />
 		<Unit filename="src/server/server.h" />
 		<Unit filename="src/server/session/authentication-exception.h" />
@@ -128,6 +160,11 @@
 		<Unit filename="src/server/session/max-allowed-user-exception.h" />
 		<Unit filename="src/server/session/session-manager.cpp" />
 		<Unit filename="src/server/session/session-manager.h" />
+		<Unit filename="src/shared/collision/circle.cpp" />
+		<Unit filename="src/shared/collision/circle.h" />
+		<Unit filename="src/shared/collision/igeometric-form.h" />
+		<Unit filename="src/shared/collision/shadow.cpp" />
+		<Unit filename="src/shared/collision/shadow.h" />
 		<Unit filename="src/shared/configuration/cli-options-parser.cpp" />
 		<Unit filename="src/shared/configuration/cli-options-parser.h" />
 		<Unit filename="src/shared/configuration/cli-options.cpp" />
@@ -142,13 +179,23 @@
 		<Unit filename="src/shared/logger.h" />
 		<Unit filename="src/shared/model/ball.cpp" />
 		<Unit filename="src/shared/model/ball.h" />
+		<Unit filename="src/shared/model/end-line-zone.cpp" />
+		<Unit filename="src/shared/model/end-line-zone.h" />
 		<Unit filename="src/shared/model/formation.cpp" />
 		<Unit filename="src/shared/model/formation.h" />
 		<Unit filename="src/shared/model/goal-zone.cpp" />
 		<Unit filename="src/shared/model/goal-zone.h" />
+		<Unit filename="src/shared/model/goalpost.cpp" />
+		<Unit filename="src/shared/model/goalpost.h" />
 		<Unit filename="src/shared/model/ipitch-zone.h" />
+		<Unit filename="src/shared/model/keeper.cpp" />
+		<Unit filename="src/shared/model/keeper.h" />
 		<Unit filename="src/shared/model/location.cpp" />
 		<Unit filename="src/shared/model/location.h" />
+		<Unit filename="src/shared/model/match-state-type.h" />
+		<Unit filename="src/shared/model/match-state.cpp" />
+		<Unit filename="src/shared/model/match-state.h" />
+		<Unit filename="src/shared/model/match-time-type.h" />
 		<Unit filename="src/shared/model/match.cpp" />
 		<Unit filename="src/shared/model/match.h" />
 		<Unit filename="src/shared/model/pitch.cpp" />
@@ -168,8 +215,11 @@
 		<Unit filename="src/shared/model/team-number.h" />
 		<Unit filename="src/shared/model/team.cpp" />
 		<Unit filename="src/shared/model/team.h" />
+		<Unit filename="src/shared/model/throw-in-zone.cpp" />
+		<Unit filename="src/shared/model/throw-in-zone.h" />
 		<Unit filename="src/shared/model/timer.cpp" />
 		<Unit filename="src/shared/model/timer.h" />
+		<Unit filename="src/shared/model/trajectory-type.h" />
 		<Unit filename="src/shared/model/trajectory.cpp" />
 		<Unit filename="src/shared/model/trajectory.h" />
 		<Unit filename="src/shared/model/user-color.h" />
@@ -194,6 +244,8 @@
 		<Unit filename="src/shared/network/messages/kick-ball-request.h" />
 		<Unit filename="src/shared/network/messages/login-request.cpp" />
 		<Unit filename="src/shared/network/messages/login-request.h" />
+		<Unit filename="src/shared/network/messages/long-pass-request.cpp" />
+		<Unit filename="src/shared/network/messages/long-pass-request.h" />
 		<Unit filename="src/shared/network/messages/move-request.cpp" />
 		<Unit filename="src/shared/network/messages/move-request.h" />
 		<Unit filename="src/shared/network/messages/pass-ball-request.cpp" />
@@ -208,6 +260,8 @@
 		<Unit filename="src/shared/network/socket-address.h" />
 		<Unit filename="src/shared/network/socket.cpp" />
 		<Unit filename="src/shared/network/socket.h" />
+		<Unit filename="src/shared/utils/coin-flipper.cpp" />
+		<Unit filename="src/shared/utils/coin-flipper.h" />
 		<Unit filename="src/shared/utils/id-generator.cpp" />
 		<Unit filename="src/shared/utils/id-generator.h" />
 		<Unit filename="src/shared/utils/queue.h" />

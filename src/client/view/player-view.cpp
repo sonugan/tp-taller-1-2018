@@ -1,7 +1,7 @@
 #include "player-view.h"
 #include "../../shared/logger.h"
 
-PlayerView::PlayerView(Player* player)
+PlayerView::PlayerView(Player* player) // @suppress("Class members should be properly initialized")
 {
     this->width = 62;
     this->height = 62;
@@ -207,36 +207,50 @@ PlayerView::~PlayerView() {
 
 void PlayerView::GetPlayerAngle()
 {
-    DIRECTION direction = this->player->GetDirection();
-    switch(direction) {
-        case DIRECTION::NORTH:
-            angle = 0;
-        break;
-        case DIRECTION::WEST:
-            angle = -90;
-        break;
-        case DIRECTION::SOUTH:
-            angle = 180;
-        break;
-        case DIRECTION::EAST:
-            angle = 90;
-        break;
-        case DIRECTION::NORTHEAST:
-            angle = 45;
-        break;
-        case DIRECTION::NORTHWEST:
-            angle = -45;
-        break;
-        case DIRECTION::SOUTHEAST:
-            angle = 135;
-        break;
-        case DIRECTION::SOUTHWEST:
-            angle = -135;
-        break;
-        default:
-            angle = angle;
-        break;
-    }
+	if (this->player->IsStill()) {
+		this->angle = this->GetLookAtBallAngle();
+	} else {
+		DIRECTION direction = this->player->GetDirection();
+		switch(direction) {
+			case DIRECTION::NORTH:
+				angle = 0;
+			break;
+			case DIRECTION::WEST:
+				angle = -90;
+			break;
+			case DIRECTION::SOUTH:
+				angle = 180;
+			break;
+			case DIRECTION::EAST:
+				angle = 90;
+			break;
+			case DIRECTION::NORTHEAST:
+				angle = 45;
+			break;
+			case DIRECTION::NORTHWEST:
+				angle = -45;
+			break;
+			case DIRECTION::SOUTHEAST:
+				angle = 135;
+			break;
+			case DIRECTION::SOUTHWEST:
+				angle = -135;
+			break;
+		}
+	}
+}
+
+double PlayerView::GetLookAtBallAngle() {
+	Location* player_location = this->player->GetLocation();
+	Location* ball_location = this->player->GetTeam()->GetMatch()->GetBall()->GetLocation();
+	
+	if (player_location != NULL && ball_location != NULL) {
+		double new_angle = atan2(player_location->GetY() - ball_location->GetY(), player_location->GetX() - ball_location->GetX());
+		new_angle = (new_angle * 180 / 3.1416) - 90;
+		return new_angle;
+	}
+			
+	return 0;
 }
 
 void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)

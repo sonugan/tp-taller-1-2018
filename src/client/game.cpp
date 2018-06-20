@@ -6,26 +6,27 @@
 #include "view/login-view.h"
 #include "view/disconect-view.h"
 
-Game::Game(Configuration* initial_configuration)
+Game::Game(Configuration* initial_configuration) // @suppress("Class members should be properly initialized")
 {
-
     this->initial_configuration = initial_configuration;
     this->correctly_initialized = false;
-
+    this->game_music = new GameMusic();
 }
 
 void Game::LogIn()
 {
     InitSDL();
 
-
     LoginRequest* login_request = new LoginRequest();
     LoginView* login_view = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH, login_request);
+
+    this->game_music->PlayLoginTheme();
 
     //Se abre la pantalla de login con su propio "game loop"
     login_view->Open(initial_configuration);
 
     this->client = new Client(initial_configuration);
+
 
     bool is_logged = false;
     std::string serialized_model;
@@ -67,6 +68,7 @@ void Game::LogIn()
             CreateModel(serialized_model);
             CreateViews();
             CreateControllers();
+
             this->correctly_initialized = true;
         }
     }
@@ -80,7 +82,7 @@ void Game::LogIn()
 
 Game::~Game()
 {
-
+    delete this->game_music;
 }
 
 bool Game::IsCorrectlyInitialized()
@@ -94,8 +96,10 @@ void Game::RenderViews()
     SDL_RenderClear( renderer );
 
     this->camera->Render();
-    this->timer_view->Render(this->match->GetTimer());
+
     this->score_view->Render(this->match->GetTeamA(), this->match->GetTeamB());
+    this->timer_view->Render(this->match->GetRemainingTime());
+
     SDL_RenderPresent( renderer );
 }
 
@@ -104,12 +108,19 @@ void Game::Start()
     Logger::getInstance()->info("==================COMIENZA EL JUEGO==================");
     this->quit = false;
 
+    SoundManager* sound_manager = new SoundManager();
+
+    sound_manager->PlayGameTimeStartSound();
+
+    this->game_music->PlayMainTheme();
+
     //Handler de eventos
     SDL_Event e;
 
     RenderViews();
 
     const Uint8* keyboard_state_array = SDL_GetKeyboardState(NULL);
+
 
     // GAME LOOP
     while( !quit )
@@ -132,9 +143,11 @@ void Game::Start()
             continue;
         }
 
+        this->player_controller->SetEvent(e);
         this->game_controller->Handle(keyboard_state_array);
         this->player_controller->Handle(keyboard_state_array);
         this->team_controller->Handle(keyboard_state_array);
+        this->music_controller->Handle(keyboard_state_array);
 
         string serialized_match = this->client->GetGameState();
         if(serialized_match != "")
@@ -158,6 +171,8 @@ void Game::Start()
         }
     }
 
+    delete sound_manager;
+
 }
 
 void Game::End()
@@ -168,7 +183,7 @@ void Game::End()
     DestroyViews();
     DestroyControllers();
     SpritesProvider::FreeResources();
-    SoundManager::FreeResources();
+    //SoundManager::FreeResources();
     CloseSDL();
 }
 
@@ -185,18 +200,22 @@ void Game::CreateModel(std::string serialized_model)
     Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_A);
     Team* team_a = new Team(formation_team_a, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
 
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    Keeper* keeper_a = new Keeper();
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
     {
         team_a->AddPlayer(new Player(i,TEAM_NUMBER::TEAM_A));
     }
+    team_a->SetKeeper(keeper_a);
 
     Formation* formation_team_b = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_B);
     Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_NUMBER::TEAM_B); // TODO: TRAER NOMBRE DEL TEAM B Y CAMISETA DE CONFIG
 
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    Keeper* keeper_b = new Keeper();
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
     {
         team_b->AddPlayer(new Player(i, TEAM_NUMBER::TEAM_B));
     }
+    team_b->SetKeeper(keeper_b);
 
     // DEFINIR COMO SE SELECCIONA EL JUGADOR
     if (user->GetSelectedTeam() == TEAM_NUMBER::TEAM_A)
@@ -210,11 +229,12 @@ void Game::CreateModel(std::string serialized_model)
 
     Ball* ball = new Ball();
 
-    this->timer = new Timer("02:00"); // TODO: VER DE DONDE SE TOMA EL TIEMPO, DEBERIA VENIR DE CONFIG?
+    //this->timer = new Timer("02:00"); // TODO: VER DE DONDE SE TOMA EL TIEMPO, DEBERIA VENIR DE CONFIG?
 
     Pitch* pitch = new Pitch(team_a, team_b);
 
-    this->match = new Match(pitch, team_a, team_b, ball, this->timer);
+    this->match = new Match(pitch, team_a, team_b, ball);
+    //this->match = new Match(pitch, team_a, team_b, ball, this->timer);
 
     this->match->DeserializeAndUpdate(serialized_model);
 
@@ -231,25 +251,35 @@ void Game::CreateViews()
     PitchView* pitch_view = new PitchView(this->match->GetPitch());
     this->camera->Add(pitch_view);
 
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    Keeper* keeper_a = match->GetTeamA()->GetKeeper();
+    KeeperView* keeper_a_view = new KeeperView(keeper_a);
+    this->camera->Add(keeper_a_view);
+    MiniPlayerView* mini_keeper_a_view = new MiniPlayerView(keeper_a->GetLocation(), keeper_a->PlaysForTeamA(), PITCH_HEIGHT, PITCH_WIDTH);
+    this->camera->AddMiniPlayerView(mini_keeper_a_view);
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
     {
-        Player* player = match->GetTeamA()->GetPlayers()[i];
+        Player* player = match->GetTeamA()->GetPlayerByPositionIndex(i);
 
         PlayerView* player_view = new PlayerView(player);
         this->camera->Add(player_view);
 
-        MiniPlayerView* mini_player_view = new MiniPlayerView(player, PITCH_HEIGHT, PITCH_WIDTH);
+        MiniPlayerView* mini_player_view = new MiniPlayerView(player->GetLocation(), player->PlaysForTeamA(), PITCH_HEIGHT, PITCH_WIDTH);
         this->camera->AddMiniPlayerView(mini_player_view);
     }
 
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++)
+    Keeper* keeper_b = match->GetTeamB()->GetKeeper();
+    KeeperView* keeper_b_view = new KeeperView(keeper_b);
+    this->camera->Add(keeper_b_view);
+    MiniPlayerView* mini_keeper_b_view = new MiniPlayerView(keeper_b->GetLocation(), keeper_b->PlaysForTeamA(), PITCH_HEIGHT, PITCH_WIDTH);
+    this->camera->AddMiniPlayerView(mini_keeper_b_view);
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
     {
-        Player* player = match->GetTeamB()->GetPlayers()[i];
+        Player* player = match->GetTeamB()->GetPlayerByPositionIndex(i);
 
         PlayerView* player_view = new PlayerView(player);
         this->camera->Add(player_view);
 
-        MiniPlayerView* mini_player_view = new MiniPlayerView(player, PITCH_HEIGHT, PITCH_WIDTH);
+        MiniPlayerView* mini_player_view = new MiniPlayerView(player->GetLocation(), player->PlaysForTeamA(), PITCH_HEIGHT, PITCH_WIDTH);
         this->camera->AddMiniPlayerView(mini_player_view);
     }
 
@@ -283,6 +313,7 @@ void Game::CreateControllers()
     }
 
     game_controller = new GameController(this, this->client);
+    music_controller = new GameMusicController(this->game_music);
 }
 
 void Game::DestroyModel()
@@ -348,7 +379,7 @@ void Game::InitSDL()
         throw std::runtime_error(IMG_GetError());
     }
 
-    SoundManager::LoadResources();
+    //SoundManager::LoadResources();
 
     if( TTF_Init() == -1 )
     {

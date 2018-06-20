@@ -11,6 +11,7 @@
 #include "../../shared/network/messages/kick-ball-request.h"
 #include "../../shared/network/client-socket.h"
 #include "../../shared/network/messages/pass-ball-request.h"
+#include "../../shared/network/messages/long-pass-request.h"
 #include "../../shared/network/messages/move-request.h"
 #include "../../shared/network/messages/change-player-request.h"
 #include "../../shared/network/messages/change-formation-request.h"
@@ -29,20 +30,23 @@ public:
     std::string DoRecoverBall(RecoverBallRequest* recover_ball_request, int socket_id);
     std::string DoMove(MoveRequest* move_request, int socket_id);
     string DoKick(KickBallRequest* kick_ball_request, int client_socket_id);
+    string DoLongPass(LongPassRequest* long_pass_request, int client_socket_id);
     Message* DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request);
     string ChangePlayer(ChangePlayerRequest* change_player_request, int socket_id);
     bool IsReadyToStart();
-    Message* StartGame();
-    void RunArtificialIntelligence();
+    void StartGame();
     bool IsRunning();
     void DisconnectClient(ClientSocket* client);
     void ChangeFormation(ChangeFormationRequest* change_player_request, int socket_id);
     bool TeamsHaveFormation();
     int GetTeamUsersNum(string team_name);
-    void DetectGoals();
-    void BounceBallOnThrowIn();
+    void Run();
+    void DetectBallTouches();
 protected:
-
+    void ReturnBallToKeeperOnGoalKick(Ball* ball);
+    void DetectGoals(Ball* ball);
+    void BounceBallOnThrowIn(Ball* ball);
+    void BounceBallOnGoalPost(Ball* ball);
 private:
 	static const int CATCH_DISTANCE = 30;
     /* Attributes */
@@ -55,6 +59,8 @@ private:
     void MakePlayerCatchBall(Player* player);
     void MoveBall();
     void MovePlayersToDefaultPositions();
+    void UpdateMatchState();
+    void RunArtificialIntelligence();
 
 };
 

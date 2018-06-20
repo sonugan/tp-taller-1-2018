@@ -19,6 +19,7 @@ public:
     Formation(std::string string_value, TEAM_NUMBER team_number);
     virtual ~Formation();
     Location* GetLocationForPlayer(unsigned int player_index);
+    Location* GetKeeperLocation();
     FORMATION GetValue();
     void ChangeFormation(string formation);
     bool ChangedByUser();

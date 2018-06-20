@@ -4,7 +4,7 @@ Timer::Timer(std::string finish_time_mm_ss)
 {
     // finish_time_mm_ss debe estar en formato MM:SS
     this->initial_config_finish_time = finish_time_mm_ss;
-    this->finish_time = this->AddTimeToNow(finish_time_mm_ss);
+    this->is_ticking = false;
 }
 
 Timer::~Timer()
@@ -12,16 +12,28 @@ Timer::~Timer()
     //dtor
 }
 
+void Timer::Start() {
+	this->is_ticking = true;
+	if(IsFinishTimeUnset()) {
+		this->finish_time = this->AddTimeToNow(this->initial_config_finish_time);
+	}
+}
+
+void Timer::Stop() {
+	this->is_ticking = false;
+	this->last_stop_time = time(NULL);
+}
+
 std::string Timer::GetRemainingMinutes()
 {
     std::string remaining_minutes = "";
 
-    time_t now = time(NULL);
+    time_t now = GetProperTime();
 
     if (difftime(this->finish_time, now) <= 0)
     {
         // Si se paso del tiempo del timer, queda en 0
-        remaining_minutes += "0:00";
+        remaining_minutes += ZERO_MINUTES;
     }
     else
     {
@@ -40,6 +52,7 @@ std::string Timer::GetRemainingMinutes()
 
         remaining_minutes += std::to_string(timePtr->tm_sec);
     }
+
 
     return remaining_minutes;
 }
@@ -101,3 +114,14 @@ std::string Timer::ToString()
     return response;
 }
 
+bool Timer::IsTimeUp() {
+	return ZERO_MINUTES == GetRemainingMinutes();
+}
+
+time_t Timer::GetProperTime() {
+	return is_ticking ? time(NULL) : last_stop_time;
+}
+
+bool Timer::IsFinishTimeUnset() {
+	return this->finish_time < 0;
+}

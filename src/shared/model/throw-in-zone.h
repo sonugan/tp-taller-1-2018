@@ -8,7 +8,7 @@ class Ball;
 class ThrowInZone : public iPitchZone
 {
     public:
-        ThrowInZone(Location* top_left_corner, Location* bottom_right_corner, int height);
+        ThrowInZone(Location* top_left_corner, Location* bottom_right_corner);
         ~ThrowInZone();
         bool IsTouching(Ball* ball);
 

@@ -14,15 +14,17 @@ const string MAX_PLAYERS_NODE = "max_players";
 const string SERVER_HOSTNAME = "server_hostname";
 const string PORT_NODE = "port";
 const string USERS_NODE = "users";
+const string GAME_DURATION = "game_duration";
 const string SPRITES_PATH = "sprites_path";
 const string DEFAULT_LOG_MODE = "debug";
 const string DEFAULT_INIT_MODE = "client";
-const u_int DEFAULT_MAX_PLAYERS = 2;
-const u_int DEFAULT_PORT_NODE = 51717;
+const unsigned int DEFAULT_MAX_PLAYERS = 2;
+const unsigned int DEFAULT_PORT_NODE = 51717;
 const string DEFAUT_SERVER_HOSTNAME = "localhost";
 const string DEFAULT_FORMATION = "3-3";
 const string DEFAULT_SHIRT = "home";
 const string DEFAULT_SPRITES_PATH = "src/sprites";
+const string DEFAULT_GAME_DURATION = "01:00";
 
 /** Helper functions **/
 void parseConfigFile(Configuration* configuration, YAML::Node config_file)
@@ -191,6 +193,13 @@ void parseConfigFile(Configuration* configuration, YAML::Node config_file)
         Logger::getInstance()->error("No se encontro el parametro '" + PORT_NODE + "' en la configuracion. Se procede a tomar el valor por defecto: '" + to_string(DEFAULT_PORT_NODE) + "'.");
         configuration->SetPort(DEFAULT_PORT_NODE);
     }
+
+    if(config_file[GAME_DURATION]) {
+    	configuration->SetGameDuration(config_file[GAME_DURATION].as<string>());
+    } else {
+    	Logger::getInstance()->error("No se encontro el parametro '" + GAME_DURATION + "' en la configuracion. Se procede a tomar el valor por defecto: '" + DEFAULT_GAME_DURATION + "'.");
+    	configuration->SetPort(DEFAULT_PORT_NODE);
+    }
 }
 
 /** Configuration class implementation **/
@@ -213,7 +222,7 @@ void ConfigurationParser::ReadFile(Configuration* config, string file_path)
         YAML::Node config_file = YAML::LoadFile(file_path);
         parseConfigFile(config, config_file);
     }
-    catch (YAML::BadFile e)
+    catch (YAML::BadFile& e)
     {
         Logger::getInstance()->error("No se encontro el archivo '" + file_path + "'. Se procede a cargar el archivo por defecto: '" + DEFAULT_CONFIG_FILE + "'.");
         this->ReadDefaultConfig(config);

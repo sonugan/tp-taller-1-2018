@@ -1,9 +1,14 @@
 #include "trajectory.h"
 
-Trajectory::Trajectory(DIRECTION direction, unsigned int drive) {
+Trajectory::Trajectory(DIRECTION direction, unsigned int power, TRAJECTORY_TYPE trajectory_type) {
     this->direction = direction;
-    this->drive = drive;
+    this->power = power;
     this->player = NULL;
+    this->drive = 250;
+    this->trajectory_type = trajectory_type;
+    this->original_ball_speed = this->drive * this->power;
+    this->ball_speed = this->original_ball_speed;
+    this->direction_updated = false;
     //std::cout << "Trajectory::Trajectory created \n";
 }
 
@@ -47,12 +52,11 @@ void Trajectory::UpdateToNextLocation(Location* location) {
         }
         location->Update(x, y, player_location->GetZ());
     } else {
-        int x, y, offset;
+        int x, y, z, offset;
         x = location ->GetX();
         y = location->GetY();
-
-        offset = (drive * DRIVE_COEFFICIENT);
-
+        z = location->GetZ();
+        offset = (ball_speed * DRIVE_COEFFICIENT);
 
         if (DIRECTION::EAST == direction) {
             x = x + offset;
@@ -76,14 +80,36 @@ void Trajectory::UpdateToNextLocation(Location* location) {
             y = y - offset;
         }
 
-
-        if (this->drive >= DECELERATION) {
-            this->drive = drive - DECELERATION;
-        } else {
-            this->drive = 0;
+        if (this->trajectory_type == TRAJECTORY_TYPE::UPWARDS)
+        {
+            z = z + offset;
         }
 
-        location->Update(x, y, location->GetZ());
+        if (this->trajectory_type == TRAJECTORY_TYPE::DOWNWARDS)
+        {
+            z = z - (offset*3);
+        }
+
+
+        if (this->ball_speed >= DECELERATION) {
+            this->ball_speed = ball_speed - DECELERATION;
+        } else {
+            this->ball_speed = 0;
+        }
+
+        location->Update(x, y, z);
+        if ((this->ball_speed <= this->original_ball_speed/2) && (this->trajectory_type == TRAJECTORY_TYPE::UPWARDS))
+        {
+            this->ChangeTrajectoryType(TRAJECTORY_TYPE::DOWNWARDS);
+        }
+
+        if(location->GetZ() <= 0)
+        {
+            z = 0;
+            location->UpdateZ(z);
+            this->ChangeTrajectoryType(TRAJECTORY_TYPE::FLOOR);
+
+        }
     }
 }
 
@@ -91,22 +117,43 @@ Player* Trajectory::GetPlayer() {
     return player;
 }
 
+TRAJECTORY_TYPE Trajectory::GetTrajectoryType(){
+    return this->trajectory_type;
+}
+
+void Trajectory::ChangeTrajectoryType(TRAJECTORY_TYPE trajectory_type)
+{
+    this->trajectory_type = trajectory_type;
+}
+
+void Trajectory::UpdateTrajectoryType(TRAJECTORY_TYPE trajectory_type)
+{
+    if (this->trajectory_type != trajectory_type)
+    {
+        this->trajectory_type = trajectory_type;
+    }
+}
+
 DIRECTION Trajectory::GetDirection()
 {
     return this->direction;
 }
 
-void Trajectory::SetDirection(DIRECTION direction)
+void Trajectory::UpdateDirection(DIRECTION direction)
 {
-    this->direction = direction;
+    if (!this->direction_updated)
+    {
+        this->direction = direction;
+        this->direction_updated = true;
+    }
 }
 
-unsigned int Trajectory::GetDrive()
+unsigned int Trajectory::GetBallSpeed()
 {
-    return this->drive;
+    return this->ball_speed;
 }
 
-void Trajectory::SetDrive(unsigned int drive)
+void Trajectory::UpdateBallSpeed(unsigned int ball_speed)
 {
-    this->drive = drive;
+    this->ball_speed = ball_speed;
 }

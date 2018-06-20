@@ -1,8 +1,9 @@
 #include "mini-player-view.h"
 
-MiniPlayerView::MiniPlayerView(Player* player, int real_pitch_height, int real_pitch_width)
+
+MiniPlayerView::MiniPlayerView(Location* location, bool plays_for_team_a, int real_pitch_height, int real_pitch_width)
 {
-    this->player = player;
+    this->location = location;
     this->real_pitch_height = real_pitch_height;
     this->real_pitch_width = real_pitch_width;
 
@@ -18,7 +19,7 @@ MiniPlayerView::MiniPlayerView(Player* player, int real_pitch_height, int real_p
     animations.push_back(new Animation("mini-player", clips));
     current_animation_index = 0;
 
-    if (player->PlaysForTeamA())
+    if (plays_for_team_a)
     {
         this->sprite_sheet = SpritesProvider::GetDefaultSheet(TEAM_A_MINI_PLAYER);
     }
@@ -40,14 +41,14 @@ MiniPlayerView::~MiniPlayerView()
 
 int MiniPlayerView::GetMiniPlayerX()
 {
-    int mini_x = this->player->GetLocation()->GetX() * MINI_PITCH_WIDTH;
+    int mini_x = this->location->GetX() * MINI_PITCH_WIDTH;
     mini_x = mini_x / this->real_pitch_width;
     return mini_x + MINI_PITCH_OFFSET_X;
 }
 
 int MiniPlayerView::GetMiniPlayerY()
 {
-    int mini_y = this->player->GetLocation()->GetY() * MINI_PITCH_HEIGHT;
+    int mini_y = this->location->GetY() * MINI_PITCH_HEIGHT;
     mini_y = mini_y / this->real_pitch_height;
     return mini_y + MINI_PITCH_OFFSET_Y;
 }

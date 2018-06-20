@@ -15,6 +15,9 @@ class BallView : public AbstractView, public IShowable
         Location* GetLocation();
         Location* GetPreviousLocation();
         bool IsStill();
+        bool GoingUp();
+        bool GoingDown();
+
     protected:
 
     private:

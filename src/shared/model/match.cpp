@@ -2,7 +2,7 @@
 #include "../logger.h"
 
 
-Match::Match(Pitch* pitch, Team* team_a, Team* team_b, Ball* ball, Timer* timer) {
+Match::Match(Pitch* pitch, Team* team_a, Team* team_b, Ball* ball) {
     this->team_a = team_a;
     this->team_b = team_b;
     this->team_a->SetMatch(this);
@@ -11,7 +11,8 @@ Match::Match(Pitch* pitch, Team* team_a, Team* team_b, Ball* ball, Timer* timer)
     }
     this->pitch = pitch;
     this->ball = ball;
-    this->timer = timer;
+    this->match_time = MATCH_TIME_TYPE::FIRST_TIME;
+    this->match_state = new MatchState();
 }
 
 Match::~Match() {
@@ -38,8 +39,16 @@ Ball* Match::GetBall() {
     return ball;
 }
 
-Timer* Match::GetTimer() {
-    return timer;
+MATCH_TIME_TYPE Match::GetMatchTime() {
+	return this->match_time;
+}
+
+void Match::SetMatchTime(MATCH_TIME_TYPE match_time){
+	this->match_time = match_time;
+}
+
+void Match::SetMatchState(MatchState* state) {
+	this->match_state = state;
 }
 
 
@@ -59,13 +68,32 @@ string Match::Serialize() {
     result.append(std::to_string(ball->GetLocation()->GetY()));
     result.append("|");
     //  Z
-//    result.append(std::to_string(ball->GetLocation()->GetZ()));
-//    result.append("|");
+    result.append(std::to_string(ball->GetLocation()->GetZ()));
+    result.append("|");
+    // TRAJECTORY TPYE
+    result.append(std::to_string((int) ball->GetTrajectory()->GetTrajectoryType()));
+    result.append("|");
+
 
     //  TEAM A
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+
+    // dummy keeper
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
         //  PLAYER i
-        Player* player = GetTeamA()->GetPlayers()[i];
+        Player* player = GetTeamA()->GetPlayerByPositionIndex(i);
         //  DIRECTION
         result.append(std::to_string((int) player->GetDirection()));
         result.append("|");
@@ -92,9 +120,24 @@ string Match::Serialize() {
     }
 
     //  TEAM B
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+
+    // dummy keeper
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+    result.append("0");
+    result.append("|");
+
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
         //  PLAYER i
-        Player* player = GetTeamB()->GetPlayers()[i];
+        Player* player = GetTeamB()->GetPlayerByPositionIndex(i);
         //  DIRECTION
         result.append(std::to_string((int) player->GetDirection()));
         result.append("|");
@@ -129,9 +172,12 @@ string Match::Serialize() {
     result.append("|");
     result.append(GetTeamB()->GetShirt());
 
-    // TIMER
+    // REMAINING GAME TIME
     result.append("|");
-    result.append(this->timer->GetFinishTime());
+    result.append(GetRemainingTime());
+    // MATCH TIME
+    result.append("|");
+    result.append(std::to_string(GetMatchTime()));
 
 //    Logger::getInstance()->debug("(Match:Serialize) Serialize result: " + result);
     return result;
@@ -142,16 +188,16 @@ void Match::DeserializeAndUpdate(string serialized) {
     std::vector<std::string> data = StringUtils::Split(serialized, '|');
 
     //  BALL
-    ball->GetLocation()->Update(SafeStoi(data[1]), SafeStoi(data[2]), 0);
-//  Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Ball location: " + ball->GetLocation()->ToString());
+    ball->GetLocation()->Update(SafeStoi(data[1]), SafeStoi(data[2]), SafeStoi(data[3]));
+    ball->GetTrajectory()->UpdateTrajectoryType(static_cast<TRAJECTORY_TYPE>(SafeStoi(data[4])));
 
     //  TEAM A
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
 
 
-        int base_index = 3 + (i*6);
-        Player* player = GetTeamA()->GetPlayers()[i];
-
+        int base_index = 5 + (i*6);
+        Player* player = GetTeamA()->GetPlayerByPositionIndex(i);
+//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) direction");
         player->SetDirection(static_cast<DIRECTION>(SafeStoi(data[base_index])));
 
 
@@ -167,10 +213,10 @@ void Match::DeserializeAndUpdate(string serialized) {
     }
 
     //  TEAM B
-    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
 
-        int base_index = 3 + 42 + (i*6);
-        Player* player = GetTeamB()->GetPlayers()[i];
+        int base_index = 5 + 42 + (i*6);
+        Player* player = GetTeamB()->GetPlayerByPositionIndex(i);
 
         player->SetDirection(static_cast<DIRECTION>(SafeStoi(data[base_index])));
 
@@ -186,7 +232,7 @@ void Match::DeserializeAndUpdate(string serialized) {
 
     }
 
-    int base_index = 87;
+    int base_index = 89;
 
     /*Formation* formation_a = new Formation(static_cast<FORMATION>(SafeStoi(data[base_index])), TEAM_NUMBER::TEAM_A);
     GetTeamA()->SetFormation(formation_a);
@@ -197,13 +243,15 @@ void Match::DeserializeAndUpdate(string serialized) {
     GetTeamA()->SetShirt(data[base_index + 2]);
     GetTeamB()->SetShirt(data[base_index + 3]);
 
-    // DESERIALIZO TIMER
-    this->timer->SetFinishTime(data[91]);
+    // DESERIALIZO REMAINING GAME TIME
+    this->SetRemainingTime(data[base_index + 4]);
+    // MATCH TIME
+    this->SetMatchTime(static_cast<MATCH_TIME_TYPE>(SafeStoi(data[base_index + 5])));
 
     Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Match deserializado");
 }
 
-int Match::SafeStoi(const string& str)
+int Match::SafeStoi(const string& str) // @suppress("No return")
 {
     try
     {
@@ -212,12 +260,16 @@ int Match::SafeStoi(const string& str)
     catch (...)
     {
         Logger::getInstance()->error("(Match:SafeStoi) Error con argumento: " + str);
+        return -1;
     }
 }
 
-void Match::StartTimer()
-{
-    this->timer->Restart();
+std::string Match::GetRemainingTime() {
+	return this->remaining_time;
+}
+
+void Match::SetRemainingTime(std::string remaining_time) {
+	this->remaining_time = remaining_time;
 }
 
 Team* Match::GetTeamByNumber(TEAM_NUMBER number)
