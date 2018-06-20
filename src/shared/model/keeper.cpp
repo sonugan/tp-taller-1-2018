@@ -14,6 +14,10 @@ void Keeper::SetTeam(Team* team) {
 	this->location = new Location(default_location->GetX(), default_location->GetY(), default_location->GetZ());
 }
 
+void Keeper::TryToCatchBall() {
+	
+}
+
 Team* Keeper::GetTeam() {
 	return this->team;
 }
