@@ -14,16 +14,19 @@ class Position
 {
 public:
 	Position();
-	Position(Location* default_location, Location* kickoff_location);
+	Position(Location* default_location, Location* kickoff_location, Location* passive_kickoff_location);
 	virtual ~Position();
 
 	Location* GetDefaultLocation();
 	void SetDefaultLocation(Location* default_location);
 	Location* GetKickoffLocation();
 	void SetKickoffLocation(Location* kickoff_location);
+	Location* GetPassiveKickoffLocation();
+	void SetPassiveKickoffLocation(Location* passive_kickoff_location);
 private:
 	Location* default_location = NULL;
 	Location* kickoff_location = NULL;
+	Location* passive_kickoff_location = NULL;
 	//TODO: agregar PositionArea
 };
 

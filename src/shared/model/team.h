@@ -40,7 +40,6 @@ class Team
         void UpdateFormation();
         void AddGoal();
         int GetGoals();
-	Location* GetLocationForPlayer(unsigned int player_index);
         //USAR SOLO DESDE EL CLIENTE
         Player* GetSelectedPlayer();
     private:

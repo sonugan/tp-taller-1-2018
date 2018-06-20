@@ -157,10 +157,3 @@ int Team::GetGoals()
 {
     return this->goals;
 }
-
-Location* Team::GetLocationForPlayer(unsigned int player_index) {
-	if(this->match->GetMatchState()->IsKickOff()) {
-		return this->formation->GetKickoffLocationForPlayer(player_index);
-	}
-	return this->formation->GetLocationForPlayer(player_index);
-}

@@ -13,9 +13,10 @@ Position::Position()
 
 }
 
-Position::Position(Location* default_location, Location* kickoff_location) {
+Position::Position(Location* default_location, Location* kickoff_location, Location* passive_kickoff_location) {
 	this->default_location = default_location;
 	this->kickoff_location = kickoff_location;
+	this->passive_kickoff_location = passive_kickoff_location;
 }
 
 Position::~Position()
@@ -30,4 +31,12 @@ Location* Position::GetDefaultLocation() {
 
 Location* Position::GetKickoffLocation() {
 	return this->kickoff_location;
+}
+
+Location* Position::GetPassiveKickoffLocation() {
+	return this->passive_kickoff_location;
+}
+
+void Position::SetPassiveKickoffLocation(Location* passive_kickoff_location) {
+	this->passive_kickoff_location = passive_kickoff_location;
 }

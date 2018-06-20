@@ -22,7 +22,7 @@ public:
     FORMATION GetValue();
     void ChangeFormation(string formation);
     bool ChangedByUser();
-    Location* GetKickoffLocationForPlayer(unsigned int player_index);
+    Location* GetKickoffLocationForPlayer(unsigned int player_index, bool is_kicker_team);
     Location* GetKeeperKickoffLocation();
 protected:
     void SetValueFromStringFormation(string string_value);
@@ -35,7 +35,7 @@ private:
     void InitializePositions();
     void InitializePositionsTeamA();
     void InitializePositionsTeamB();
-    Position* CreatePosition(Location* defaul_location, Location* kickoff_location);
+    Position* CreatePosition(Location* defaul_location, Location* kickoff_location, Location* passive_kickoff_location);
 };
 #endif // FORMATION_H
 
