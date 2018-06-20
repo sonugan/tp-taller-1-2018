@@ -8,24 +8,25 @@
 
 Game::Game(Configuration* initial_configuration) // @suppress("Class members should be properly initialized")
 {
-
     this->initial_configuration = initial_configuration;
     this->correctly_initialized = false;
-
+    this->game_music = new GameMusic();
 }
 
 void Game::LogIn()
 {
     InitSDL();
 
-
     LoginRequest* login_request = new LoginRequest();
     LoginView* login_view = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH, login_request);
+
+    this->game_music->PlayLoginTheme();
 
     //Se abre la pantalla de login con su propio "game loop"
     login_view->Open(initial_configuration);
 
     this->client = new Client(initial_configuration);
+
 
     bool is_logged = false;
     std::string serialized_model;
@@ -67,6 +68,7 @@ void Game::LogIn()
             CreateModel(serialized_model);
             CreateViews();
             CreateControllers();
+
             this->correctly_initialized = true;
         }
     }
@@ -80,7 +82,7 @@ void Game::LogIn()
 
 Game::~Game()
 {
-
+    delete this->game_music;
 }
 
 bool Game::IsCorrectlyInitialized()
@@ -103,12 +105,19 @@ void Game::Start()
     Logger::getInstance()->info("==================COMIENZA EL JUEGO==================");
     this->quit = false;
 
+    SoundManager* sound_manager = new SoundManager();
+
+    sound_manager->PlayGameTimeStartSound();
+
+    this->game_music->PlayMainTheme();
+
     //Handler de eventos
     SDL_Event e;
 
     RenderViews();
 
     const Uint8* keyboard_state_array = SDL_GetKeyboardState(NULL);
+
 
     // GAME LOOP
     while( !quit )
@@ -131,9 +140,11 @@ void Game::Start()
             continue;
         }
 
+        this->player_controller->SetEvent(e);
         this->game_controller->Handle(keyboard_state_array);
         this->player_controller->Handle(keyboard_state_array);
         this->team_controller->Handle(keyboard_state_array);
+        this->music_controller->Handle(keyboard_state_array);
 
         string serialized_match = this->client->GetGameState();
         if(serialized_match != "")
@@ -157,6 +168,8 @@ void Game::Start()
         }
     }
 
+    delete sound_manager;
+
 }
 
 void Game::End()
@@ -167,7 +180,7 @@ void Game::End()
     DestroyViews();
     DestroyControllers();
     SpritesProvider::FreeResources();
-    SoundManager::FreeResources();
+    //SoundManager::FreeResources();
     CloseSDL();
 }
 
@@ -180,7 +193,6 @@ void Game::CreateModel(std::string serialized_model)
     Y LUEGO LO ACTUALIZAMOS CON LO QUE MANDA EL SERVER.
     POR QUE? PORQUE NO QUEREMOS ROMPER COSAS QUE ANTES FUNCIONABAN.
      */
-    Pitch* pitch = new Pitch();
 
     Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_A);
     Team* team_a = new Team(formation_team_a, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
@@ -214,6 +226,7 @@ void Game::CreateModel(std::string serialized_model)
 
     Ball* ball = new Ball();
 
+    Pitch* pitch = new Pitch(team_a, team_b);
     this->match = new Match(pitch, team_a, team_b, ball);
 
     this->match->DeserializeAndUpdate(serialized_model);
@@ -292,6 +305,7 @@ void Game::CreateControllers()
     }
 
     game_controller = new GameController(this, this->client);
+    music_controller = new GameMusicController(this->game_music);
 }
 
 void Game::DestroyModel()
@@ -356,7 +370,7 @@ void Game::InitSDL()
         throw std::runtime_error(IMG_GetError());
     }
 
-    SoundManager::LoadResources();
+    //SoundManager::LoadResources();
 
     if( TTF_Init() == -1 )
     {

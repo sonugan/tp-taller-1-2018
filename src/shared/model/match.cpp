@@ -68,8 +68,12 @@ string Match::Serialize() {
     result.append(std::to_string(ball->GetLocation()->GetY()));
     result.append("|");
     //  Z
-//    result.append(std::to_string(ball->GetLocation()->GetZ()));
-//    result.append("|");
+    result.append(std::to_string(ball->GetLocation()->GetZ()));
+    result.append("|");
+    // TRAJECTORY TPYE
+    result.append(std::to_string((int) ball->GetTrajectory()->GetTrajectoryType()));
+    result.append("|");
+
 
     //  TEAM A
     
@@ -184,16 +188,16 @@ void Match::DeserializeAndUpdate(string serialized) {
     std::vector<std::string> data = StringUtils::Split(serialized, '|');
 
     //  BALL
-    ball->GetLocation()->Update(SafeStoi(data[1]), SafeStoi(data[2]), 0);
-
+    ball->GetLocation()->Update(SafeStoi(data[1]), SafeStoi(data[2]), SafeStoi(data[3]));
+    ball->GetTrajectory()->UpdateTrajectoryType(static_cast<TRAJECTORY_TYPE>(SafeStoi(data[4])));
 
     //  TEAM A
     for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
 
 
-        int base_index = 3 + (i*6);
+        int base_index = 5 + (i*6);
         Player* player = GetTeamA()->GetPlayerByPositionIndex(i);
-
+//        Logger::getInstance()->debug("(Match:DeserializeAndUpdate) direction");
         player->SetDirection(static_cast<DIRECTION>(SafeStoi(data[base_index])));
 
 
@@ -211,7 +215,7 @@ void Match::DeserializeAndUpdate(string serialized) {
     //  TEAM B
     for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
 
-        int base_index = 3 + 42 + (i*6);
+        int base_index = 5 + 42 + (i*6);
         Player* player = GetTeamB()->GetPlayerByPositionIndex(i);
 
         player->SetDirection(static_cast<DIRECTION>(SafeStoi(data[base_index])));
@@ -228,7 +232,7 @@ void Match::DeserializeAndUpdate(string serialized) {
 
     }
 
-    int base_index = 87;
+    int base_index = 89;
 
     /*Formation* formation_a = new Formation(static_cast<FORMATION>(SafeStoi(data[base_index])), TEAM_NUMBER::TEAM_A);
     GetTeamA()->SetFormation(formation_a);
@@ -240,9 +244,9 @@ void Match::DeserializeAndUpdate(string serialized) {
     GetTeamB()->SetShirt(data[base_index + 3]);
 
     // DESERIALIZO REMAINING GAME TIME
-    this->SetRemainingTime(data[91]);
+    this->SetRemainingTime(data[base_index + 4]);
     // MATCH TIME
-    this->SetMatchTime(static_cast<MATCH_TIME_TYPE>(SafeStoi(data[92])));
+    this->SetMatchTime(static_cast<MATCH_TIME_TYPE>(SafeStoi(data[base_index + 5])));
 
     Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Match deserializado");
 }
@@ -266,4 +270,24 @@ std::string Match::GetRemainingTime() {
 
 void Match::SetRemainingTime(std::string remaining_time) {
 	this->remaining_time = remaining_time;
+}
+
+Team* Match::GetTeamByNumber(TEAM_NUMBER number)
+{
+    if (number == this->team_a->GetTeamNumber())
+    {
+        return this->team_a;
+    }
+
+    return this->team_b;
+}
+
+Team* Match::GetOppositeTeam(Team* team)
+{
+    if (team == this->team_a)
+    {
+        return team_b;
+    }
+
+    return team_a;
 }

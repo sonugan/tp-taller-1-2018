@@ -53,9 +53,9 @@ void Formation::InitializePositionsTeamA()
         positions.push_back(new Location(660, 318, 0));
         positions.push_back(new Location(660, 618, 0));
         positions.push_back(new Location(660, 918, 0));
-        positions.push_back(new Location(800, 318, 0));
+        positions.push_back(new Location(800, 418, 0));
         positions.push_back(new Location(900, 618, 0));
-        positions.push_back(new Location(800, 740, 0));
+        positions.push_back(new Location(800, 818, 0));
     }
     else if (FORMATION::F_3_1_2 == this->value)
     {
@@ -63,9 +63,9 @@ void Formation::InitializePositionsTeamA()
         positions.push_back(new Location(660, 318, 0));
         positions.push_back(new Location(660, 618, 0));
         positions.push_back(new Location(660, 918, 0));
-        positions.push_back(new Location(800, 318, 0));
-        positions.push_back(new Location(900, 618, 0));
-        positions.push_back(new Location(800, 740, 0));
+        positions.push_back(new Location(800, 618, 0));
+        positions.push_back(new Location(900, 418, 0));
+        positions.push_back(new Location(900, 818, 0));
     }
 }
 
@@ -90,9 +90,9 @@ void Formation::InitializePositionsTeamB()
         positions.push_back(new Location(1260, 318, 0));
         positions.push_back(new Location(1260, 618, 0));
         positions.push_back(new Location(1260, 918, 0));
-        positions.push_back(new Location(1120, 318, 0));
+        positions.push_back(new Location(1120, 418, 0));
         positions.push_back(new Location(1020, 618, 0));
-        positions.push_back(new Location(1120, 740, 0));
+        positions.push_back(new Location(1120, 818, 0));
     }
     else if (FORMATION::F_3_1_2 == this->value)
     {
@@ -100,9 +100,9 @@ void Formation::InitializePositionsTeamB()
         positions.push_back(new Location(1260, 318, 0));
         positions.push_back(new Location(1260, 618, 0));
         positions.push_back(new Location(1260, 918, 0));
-        positions.push_back(new Location(1120, 318, 0));
-        positions.push_back(new Location(1020, 618, 0));
-        positions.push_back(new Location(1120, 740, 0));
+        positions.push_back(new Location(1020, 418, 0));
+        positions.push_back(new Location(1120, 618, 0));
+        positions.push_back(new Location(1020, 818, 0));
     }
 
 }
@@ -206,7 +206,6 @@ Location* Formation::GetLocationForPlayer(unsigned int player_index)
 
 Rectangle* Formation::GetDefenseAreaForPlayer(u_int player_index)
 {
-    cout << to_string(defense_areas.size()) << endl;
     return defense_areas[player_index];
 }
 

@@ -3,8 +3,10 @@
 Ball::Ball() {
     this->location = new Location(960, 618, 0);
     this->previous_location = new Location(200, 200, 0);
-    this->trajectory = new Trajectory(DIRECTION::EAST, 0);
+    this->trajectory = new Trajectory(DIRECTION::EAST, 0, TRAJECTORY_TYPE::FLOOR);
     this->circle = new Circle(HALO_RADIUS, new Location(this->location));
+    this->last_owner_player_color = USER_COLOR::NO_COLOR;
+    this->last_owner_team = NULL;
 }
 
 Ball::~Ball() {
@@ -19,6 +21,11 @@ Location* Ball::GetLocation() {
 
 Location* Ball::GetPreviousLocation() {
     return previous_location;
+}
+
+Trajectory* Ball::GetTrajectory()
+{
+    return this->trajectory;
 }
 
 void Ball::SetTrajectory(Trajectory* new_trajectory) {
@@ -63,6 +70,166 @@ Player* Ball::GetPlayer() {
 Circle* Ball::GetCircle()
 {
     return this->circle;
+}
+
+void Ball::SetLastOwner(Team* team, USER_COLOR color)
+{
+    this->last_owner_team = team;
+    this->last_owner_player_color = color;
+}
+
+USER_COLOR Ball::GetLastOwnerColor()
+{
+    return this->last_owner_player_color;
+}
+
+Team* Ball::GetLastOwnerTeam()
+{
+    return this->last_owner_team;
+}
+
+void Ball::ReturnToMiddle()
+{
+	Logger::getInstance()->debug("Ball::ReturnToMiddle");
+    delete this->location;
+    delete this->previous_location;
+    this->location = new Location(960, 618, 0);
+    this->previous_location = new Location(200, 200, 0);
+    //Eliminando la trayectoria de la pelota
+    delete this->trajectory;
+    this->trajectory = new Trajectory(DIRECTION::EAST, 0, TRAJECTORY_TYPE::FLOOR);
+    this->circle->Move(this->location);
+
+
+    this->last_owner_team = NULL;
+    this->last_owner_player_color = USER_COLOR::NO_COLOR;
+}
+
+void Ball::BounceOnThrowIn()
+{
+    if (this->trajectory == NULL)
+    {
+        return;
+    }
+
+    switch(this->trajectory->GetDirection())
+    {
+        case DIRECTION::NORTH:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::SOUTH);
+            break;
+        }
+        case DIRECTION::SOUTH:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::NORTH);
+            break;
+        }
+        case DIRECTION::NORTHEAST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::SOUTHEAST);
+            break;
+        }
+        case DIRECTION::SOUTHEAST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::NORTHEAST);
+            break;
+        }
+        case DIRECTION::NORTHWEST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::SOUTHWEST);
+            break;
+        }
+        case DIRECTION::SOUTHWEST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::NORTHWEST);
+            break;
+        }
+        default:
+        {
+            //La direccion no se actualiza
+            return;
+        }
+    }
+
+    //Desacelero un poco la pelota
+    this->trajectory->UpdateBallSpeed(0.7*this->trajectory->GetBallSpeed());
+}
+
+void Ball::GoToKeeper(Keeper* keeper)
+{
+	Logger::getInstance()->debug("Ball::Going to keeper");
+    delete this->location;
+    delete this->previous_location;
+    this->location = new Location(960, 618, 0);
+    this->previous_location = new Location(200, 200, 0);
+    //Eliminando la trayectoria de la pelota
+    delete this->trajectory;
+    this->trajectory = new Trajectory(DIRECTION::EAST, 0, TRAJECTORY_TYPE::FLOOR);
+    this->circle->Move(this->location);
+
+
+    this->last_owner_team = NULL;
+    this->last_owner_player_color = USER_COLOR::NO_COLOR;
+}
+
+void Ball::BounceOnGoalPost()
+{
+    if (this->trajectory == NULL)
+    {
+        return;
+    }
+
+    switch(this->trajectory->GetDirection())
+    {
+        case DIRECTION::NORTH:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::SOUTH);
+            break;
+        }
+        case DIRECTION::SOUTH:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::NORTH);
+            break;
+        }
+        case DIRECTION::NORTHEAST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::SOUTHEAST);
+            break;
+        }
+        case DIRECTION::SOUTHEAST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::NORTHEAST);
+            break;
+        }
+        case DIRECTION::NORTHWEST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::SOUTHWEST);
+            break;
+        }
+        case DIRECTION::SOUTHWEST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::NORTHWEST);
+            break;
+        }
+        case DIRECTION::EAST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::WEST);
+            break;
+        }
+        case DIRECTION::WEST:
+        {
+            this->trajectory->UpdateDirection(DIRECTION::EAST);
+            break;
+        }
+        default:
+        {
+            //La direccion no se actualiza
+            return;
+        }
+    }
+
+    //Desacelero un poco la pelota
+    this->trajectory->UpdateBallSpeed(0.85*this->trajectory->GetBallSpeed());
 }
 
 void Ball::NotifyAllPlayers()

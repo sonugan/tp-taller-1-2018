@@ -38,6 +38,7 @@ class PlayerView : public AbstractView, public IShowable
         SpriteSheet* selector_sheet;
         void GetSelectorSheet();
         bool IsStill();
+        double GetLookAtBallAngle();
 };
 
 #endif // PLAYERVIEW_H

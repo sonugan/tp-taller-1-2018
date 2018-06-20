@@ -351,7 +351,25 @@ void Player::PassBall()
 {
     if (HasBall())
     {
-        Trajectory* trajectory = new Trajectory(direction, 250);
+        Trajectory* trajectory = new Trajectory(direction, 1, TRAJECTORY_TYPE::FLOOR);
+        team->GetMatch()->GetBall()->SetTrajectory(trajectory);
+    }
+}
+
+void Player::KickBall(int power)
+{
+    if (HasBall())
+    {
+        Trajectory* trajectory = new Trajectory(direction, power, TRAJECTORY_TYPE::FLOOR);
+        team->GetMatch()->GetBall()->SetTrajectory(trajectory);
+    }
+}
+
+void Player::LongPass(int power, TRAJECTORY_TYPE trajectory_type)
+{
+    if (HasBall())
+    {
+        Trajectory* trajectory = new Trajectory(direction, power, trajectory_type);
         team->GetMatch()->GetBall()->SetTrajectory(trajectory);
     }
 }
@@ -473,17 +491,25 @@ bool Player::AreInSameTeam(Player* player)
 
 bool Player::TryRecover()
 {
-    Ball* ball = this->GetTeam()->GetMatch()->GetBall();
-    if(!this->HasBall()
-        && !this->AreInSameTeam(ball->GetPlayer())
-        && ball->GetCircle()->ExistsCollision3d(this->GetCircle()))
+    if(left_ball_counter == 0)
     {
-        if(coin_flipper->Flip() == COIN_RESULT::WIN)
+        Ball* ball = this->GetTeam()->GetMatch()->GetBall();
+        if(!this->HasBall()
+            && !this->AreInSameTeam(ball->GetPlayer())
+            && ball->GetCircle()->ExistsCollision3d(this->GetCircle()))
         {
-            Trajectory* trajectory = new Trajectory(this);
-            ball->SetTrajectory(trajectory);
-            return true;
+            if(coin_flipper->Flip() == COIN_RESULT::WIN)
+            {
+                Trajectory* trajectory = new Trajectory(this);
+                ball->SetTrajectory(trajectory);
+                left_ball_counter = 10;
+                return true;
+            }
         }
+    }
+    else
+    {
+        left_ball_counter--;
     }
     return false;
 }
