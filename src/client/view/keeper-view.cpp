@@ -79,26 +79,26 @@ KeeperView::KeeperView(Keeper* keeper) // @suppress("Class members should be pro
     std::vector<SDL_Rect*> kick_clips;
 
     // Kick sprites
-    SDL_Rect* kick_sprite_1 = new SDL_Rect();
-    kick_sprite_1->x = 0;
-    kick_sprite_1->y = 128;
-    kick_sprite_1->w = this->width;
-    kick_sprite_1->h = this->height;
-    kick_clips.push_back(kick_sprite_1);
-
-    SDL_Rect* kick_sprite_2 = new SDL_Rect();
-    kick_sprite_2->x = 64;
-    kick_sprite_2->y = 128;
-    kick_sprite_2->w = this->width;
-    kick_sprite_2->h = this->height;
-    kick_clips.push_back(kick_sprite_2);
-
-    SDL_Rect* kick_sprite_3 = new SDL_Rect();
-    kick_sprite_3->x = 128;
-    kick_sprite_3->y = 128;
-    kick_sprite_3->w = this->width;
-    kick_sprite_3->h = this->height;
-    kick_clips.push_back(kick_sprite_3);
+//    SDL_Rect* kick_sprite_1 = new SDL_Rect();
+//    kick_sprite_1->x = 0;
+//    kick_sprite_1->y = 128;
+//    kick_sprite_1->w = this->width;
+//    kick_sprite_1->h = this->height;
+//    kick_clips.push_back(kick_sprite_1);
+//
+//    SDL_Rect* kick_sprite_2 = new SDL_Rect();
+//    kick_sprite_2->x = 64;
+//    kick_sprite_2->y = 128;
+//    kick_sprite_2->w = this->width;
+//    kick_sprite_2->h = this->height;
+//    kick_clips.push_back(kick_sprite_2);
+//
+//    SDL_Rect* kick_sprite_3 = new SDL_Rect();
+//    kick_sprite_3->x = 128;
+//    kick_sprite_3->y = 128;
+//    kick_sprite_3->w = this->width;
+//    kick_sprite_3->h = this->height;
+//    kick_clips.push_back(kick_sprite_3);
 
     SDL_Rect* kick_sprite_4 = new SDL_Rect();
     kick_sprite_4->x = 192;
@@ -211,8 +211,12 @@ void KeeperView::GetKeeperAngle()
 {
 	if (this->keeper->IsStill() || this->keeper->IsKicking()) {
 		angle = GetLookAtBallAngle();
-	} else if (this->keeper->IsMovingUp() || this->keeper->IsJumpingUp()) {
+	} else if (this->keeper->IsMovingUp()) {
 		angle = 0;
+	} else if (this->keeper->IsJumpingUp()) {
+		angle = 270;
+	} else if (this->keeper->IsJumpingDown()) {
+		angle = 90;
 	} else {
 		angle = 180;
 	}
@@ -260,8 +264,15 @@ void KeeperView::Render(int x_camera, int y_camera, int max_x, int max_y)
 
     x = keeper->GetLocation()->GetX() - x_camera;
     y = keeper->GetLocation()->GetY() - y_camera;
+    
+    SDL_RendererFlip flip = SDL_RendererFlip::SDL_FLIP_NONE;
+    if (keeper->IsJumpingUp() && keeper->PlaysOnWestSide()) {
+    	flip = SDL_RendererFlip::SDL_FLIP_VERTICAL;
+    } else if (keeper->IsJumpingDown() && !keeper->PlaysOnWestSide()) {
+    	flip = SDL_RendererFlip::SDL_FLIP_VERTICAL;
+    }
 
-    sprite_sheet->Render( x - (SPRITE_WIDTH / 2), y - (SPRITE_HEIGHT / 2), current_clip, this->angle);
+    sprite_sheet->Render( x - (SPRITE_WIDTH / 2), y - (SPRITE_HEIGHT / 2), current_clip, this->angle, NULL, flip);
 
 }
 

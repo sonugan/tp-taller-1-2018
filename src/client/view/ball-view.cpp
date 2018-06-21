@@ -165,6 +165,7 @@ void BallView::Render(int x_camera, int y_camera, int max_x, int max_y) {
 
     if(IsStill()) {
         current_animation_index = 1;
+        Logger::getInstance()->info("BALL IS STILL");
     } else if (this->GoingUp()) {
         current_animation_index = 2;
     }else if (this->GoingDown()) {
@@ -198,8 +199,7 @@ Location* BallView::GetPreviousLocation() {
 bool BallView::IsStill()
 {
     Location* current_location = this->GetLocation();
-    bool still = current_location->GetX() == previous_location->GetX()
-        && current_location->GetY() == previous_location->GetY();
+    bool still = (current_location->GetX() == previous_location->GetX() && current_location->GetY() == previous_location->GetY());
     return still;
 }
 

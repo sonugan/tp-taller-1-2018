@@ -2,18 +2,22 @@
 #define TRAJECTORY_H
 
 #include "player.h"
+#include "keeper.h"
 #include "trajectory-type.h"
 
 class Player;
+class Keeper;
 enum class DIRECTION;
 class Trajectory
 {
     public:
         Trajectory(DIRECTION direction, unsigned int drive, TRAJECTORY_TYPE trajectory_type);
         Trajectory(Player* player);
+        Trajectory(Keeper* keeper);
         virtual ~Trajectory();
         void UpdateToNextLocation(Location* location);
         Player* GetPlayer();
+        Keeper* GetKeeper();
         TRAJECTORY_TYPE GetTrajectoryType();
         void ChangeTrajectoryType(TRAJECTORY_TYPE trajectory_type);
         void UpdateTrajectoryType(TRAJECTORY_TYPE trajectory_type);
@@ -36,7 +40,11 @@ class Trajectory
         unsigned int original_ball_speed;
         bool direction_updated;
         Player* player;
+        Keeper* keeper;
         TRAJECTORY_TYPE trajectory_type;
+        void UpdateToNextLocationForFreeTrajectory(Location* location);
+        void UpdateToNextLocationForPlayerTrajectory(Location* location);
+        void UpdateToNextLocationForKeeperTrajectory(Location* location);
 };
 
 #endif // TRAJECTORY_H

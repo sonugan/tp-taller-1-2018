@@ -4,7 +4,7 @@
 
 //Agregar los request que son los que se van a mandar al servidor.
 
-PlayerController::PlayerController(Team* team, Client* client) {
+PlayerController::PlayerController(Team* team, Client* client) { // @suppress("Class members should be properly initialized")
     this->team = team;
     this->client = client;
     //current_action_timming = 1;
