@@ -35,9 +35,8 @@ void GameState::UpdateMatchState() {
 	case PLAYING:
 		if(this->timer->IsTimeUp()) {
 			if(MATCH_TIME_TYPE::FIRST_TIME == this->match->GetMatchTime()) {
-				this->match->SetMatchTime(MATCH_TIME_TYPE::SECOND_TIME);
 				this->timer->Stop();
-				this->timer->Restart();
+				this->timer->Restart(); //TODO: fixear esto, cuando pasa al segundo tiempo se pierden unos segundos del timer.
 			}
 			this->match->GetMatchState()->SetTimeup();
 		}
@@ -67,6 +66,7 @@ void GameState::UpdateMatchState() {
 			if(MATCH_TIME_TYPE::SECOND_TIME == this->match->GetMatchTime()) {
 				this->match->GetMatchState()->SetFinished();
 			} else {
+				this->match->SetMatchTime(MATCH_TIME_TYPE::SECOND_TIME);
 				// segundo tiempo, saca el team B. esto es arbitrario.
 				this->match->GetMatchState()->SetKickOff(TEAM_NUMBER::TEAM_B);
 			}

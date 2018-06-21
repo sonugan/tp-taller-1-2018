@@ -57,7 +57,7 @@ void MatchState::SetGoalKick(TEAM_NUMBER goal_kick_team) {
 }
 
 void MatchState::SetTimeup() {
-	Logger::getInstance()->debug("(MatchState:SetKickOff) Seteando kickoff state");
+	Logger::getInstance()->debug("(MatchState:SetTimeup) Seteando timeup state");
 	this->type = MATCH_STATE_TYPE::TIME_UP;
 	this->state_start_time = chrono::system_clock::now();
 }
