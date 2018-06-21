@@ -171,6 +171,10 @@ string Match::Serialize() {
     result.append(GetTeamA()->GetShirt());
     result.append("|");
     result.append(GetTeamB()->GetShirt());
+    result.append("|");
+    result.append(std::to_string(GetTeamA()->GetGoals()));
+    result.append("|");
+    result.append(std::to_string(GetTeamB()->GetGoals()));
 
     // REMAINING GAME TIME
     result.append("|");
@@ -178,6 +182,7 @@ string Match::Serialize() {
     // MATCH TIME
     result.append("|");
     result.append(std::to_string(GetMatchTime()));
+
 
 //    Logger::getInstance()->debug("(Match:Serialize) Serialize result: " + result);
     return result;
@@ -242,11 +247,13 @@ void Match::DeserializeAndUpdate(string serialized) {
 
     GetTeamA()->SetShirt(data[base_index + 2]);
     GetTeamB()->SetShirt(data[base_index + 3]);
+    this->GetTeamA()->SetGoals(SafeStoi(data[base_index + 4]));
+    this->GetTeamB()->SetGoals(SafeStoi(data[base_index + 5]));
 
     // DESERIALIZO REMAINING GAME TIME
-    this->SetRemainingTime(data[base_index + 4]);
+    this->SetRemainingTime(data[base_index + 6]);
     // MATCH TIME
-    this->SetMatchTime(static_cast<MATCH_TIME_TYPE>(SafeStoi(data[base_index + 5])));
+    this->SetMatchTime(static_cast<MATCH_TIME_TYPE>(SafeStoi(data[base_index + 7])));
 
     Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Match deserializado");
 }

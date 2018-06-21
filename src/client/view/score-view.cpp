@@ -28,7 +28,7 @@ void ScoreView::RenderRedTeamScore(Team* team)
     SDL_Texture* message = SDL_CreateTextureFromSurface(this->renderer, surface);
     SDL_Rect rect;
 
-    rect.x = 42;
+    rect.x = 144;
     rect.y = 40;
     rect.w = 25;
     rect.h = 25;
@@ -49,7 +49,7 @@ void ScoreView::RenderGreenTeamScore(Team* team)
     SDL_Texture* message = SDL_CreateTextureFromSurface(this->renderer, surface);
     SDL_Rect rect;
 
-    rect.x = 144;
+    rect.x = 42;
     rect.y = 40;
     rect.w = 25;
     rect.h = 25;

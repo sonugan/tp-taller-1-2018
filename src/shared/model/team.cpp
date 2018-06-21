@@ -157,3 +157,8 @@ int Team::GetGoals()
 {
     return this->goals;
 }
+
+int Team::SetGoals(int goals)
+{
+    this->goals = goals;
+}
