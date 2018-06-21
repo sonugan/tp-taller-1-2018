@@ -20,8 +20,13 @@ void PlayerAtackStrategy::Play()
                 Ball* ball = player->GetTeam()->GetMatch()->GetBall();
                 Location* player_ball_location = ball->GetPlayer()->GetLocation();
                 Location* location = player->GetLocation();
+                Team* team_a = player->GetTeam()->GetMatch()->GetTeamA();
                 Location* destination = new Location(player_ball_location->GetX(), location->GetY(), location->GetZ());
-                player->GoTo(destination, false);
+                if((player->GetTeam() == team_a && destination->GetX() >= location->GetX())
+                    || (player->GetTeam() != team_a && destination->GetX() <= location->GetX()))
+                {
+                    player->GoTo(destination, false);
+                }
                 //delete destination; //TODO: revisar
             }
             else

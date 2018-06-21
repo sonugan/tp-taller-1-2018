@@ -491,25 +491,44 @@ bool Player::AreInSameTeam(Player* player)
 
 bool Player::TryRecover()
 {
-    if(left_ball_counter == 0)
+    Ball* ball = this->GetTeam()->GetMatch()->GetBall();
+    if(ball->IsFree())
     {
-        Ball* ball = this->GetTeam()->GetMatch()->GetBall();
-        if(!this->HasBall()
-            && !this->AreInSameTeam(ball->GetPlayer())
-            && ball->GetCircle()->ExistsCollision3d(this->GetCircle()))
-        {
-            if(coin_flipper->Flip() == COIN_RESULT::WIN)
-            {
-                Trajectory* trajectory = new Trajectory(this);
-                ball->SetTrajectory(trajectory);
-                left_ball_counter = 10;
-                return true;
-            }
-        }
+        Trajectory* trajectory = new Trajectory(this);
+        ball->SetTrajectory(trajectory);
+        left_ball_counter = 10;
+        return true;
     }
     else
     {
-        left_ball_counter--;
+        if(left_ball_counter == 0)
+        {
+            if(!this->HasBall()
+                && !this->AreInSameTeam(ball->GetPlayer())
+                && ball->GetCircle()->ExistsCollision3d(this->GetCircle()))
+            {
+                COIN_RESULT result = COIN_RESULT::LOSE;
+                if(current_state == recover_ball_state)
+                {
+                    result = coin_flipper->FlipPorc(4,3);
+                }
+                else
+                {
+                    result =coin_flipper->FlipPorc(4,1);
+                }
+                if(result == COIN_RESULT::WIN)
+                {
+                    Trajectory* trajectory = new Trajectory(this);
+                    ball->SetTrajectory(trajectory);
+                    left_ball_counter = 10;
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            left_ball_counter--;
+        }
     }
     return false;
 }

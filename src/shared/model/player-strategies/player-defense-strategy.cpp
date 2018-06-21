@@ -4,11 +4,13 @@
 PlayerDefenseStrategy::PlayerDefenseStrategy(Player* player)
 {
     this->player = player;
+    this->coin_flipper = new CoinFlipper();
 }
 
 PlayerDefenseStrategy::~PlayerDefenseStrategy()
 {
     delete this->rectangle;
+    delete this->coin_flipper;
 }
 
 void PlayerDefenseStrategy::Play()
@@ -25,7 +27,15 @@ void PlayerDefenseStrategy::Play()
         {
             if(this->rectangle->IsInside(ball->GetLocation()))
             {
-                player->GoTo(ball->GetLocation(), false);
+                if(this->player->GetLocation()->Distance(ball->GetLocation()) < 10 //TODO: MAGIC NUMBER
+                    && this->coin_flipper->FlipPorc(5,3) == COIN_RESULT::WIN)
+                {
+                    player->ChangeToRecover();
+                }
+                else
+                {
+                    player->GoTo(ball->GetLocation(), false);
+                }
             }
             else
             {

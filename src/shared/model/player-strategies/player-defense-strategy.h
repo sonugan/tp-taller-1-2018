@@ -5,6 +5,7 @@
 #include "../player.h"
 #include "player-states.h"
 #include "../../collision/rectangle.h"
+#include "../../utils/coin-flipper.h"
 
 using namespace std;
 
@@ -20,6 +21,7 @@ class PlayerDefenseStrategy : public IPlayerStrategy
         Player* player;
     private:
         Rectangle* rectangle;
+        CoinFlipper* coin_flipper;
 };
 
 #endif // PLAYER_DEFENSE_ESTRATEGY_H
