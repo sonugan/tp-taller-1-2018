@@ -34,6 +34,7 @@ void Keeper::TryToKickOff() {
 	unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_kick_request).count();
 	if (HasBall() && elapsed_millis > KICK_DELAY_MILLIS) {
 		last_kick_request = std::chrono::system_clock::now();
+		this->state = KEEPER_STATE::STILL_KEEPER;
 	}
 }
 
@@ -42,7 +43,7 @@ void Keeper::TryToKick() {
 		unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_kick_request).count();
 		if (elapsed_millis > KICK_DELAY_MILLIS) {
 			Ball* ball = this->GetTeam()->GetMatch()->GetBall();
-			Trajectory* trajectory = new Trajectory(this->PlaysOnWestSide() ? DIRECTION::EAST : DIRECTION::WEST, 2, TRAJECTORY_TYPE::FLOOR);
+			Trajectory* trajectory = new Trajectory(this->PlaysOnWestSide() ? DIRECTION::EAST : DIRECTION::WEST, 1, TRAJECTORY_TYPE::FLOOR);
 			ball->SetTrajectory(trajectory);
 			last_kick_request = std::chrono::system_clock::now();
 			this->state = KEEPER_STATE::KICKING_KEEPER;
@@ -53,8 +54,62 @@ void Keeper::TryToKick() {
 void Keeper::TryToStopKicking() {
 	if (this->state == KEEPER_STATE::KICKING_KEEPER) {
 		unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_kick_request).count();
-		if (elapsed_millis > KICK_DELAY_MILLIS) {
+		if (elapsed_millis > STOP_KICK_DELAY_MILLIS) {
 			this->state = KEEPER_STATE::STILL_KEEPER;
+		}
+	}
+}
+
+void Keeper::TryToStopJumping() {
+	if (this->state == KEEPER_STATE::JUMPING_UP_KEEPER || this->state == KEEPER_STATE::JUMPING_DOWN_KEEPER) {
+		unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_jump_request).count();
+		if (elapsed_millis > JUMP_DURATION_MILLIS) {
+			this->state = KEEPER_STATE::STILL_KEEPER;
+		} else if (this->state == KEEPER_STATE::JUMPING_UP_KEEPER) {
+			this->location->UpdateY(location->GetY() - JUMPING_SPEED);
+			this->circle->Move(this->location);
+		} else {
+			this->location->UpdateY(location->GetY() + JUMPING_SPEED);
+			this->circle->Move(this->location);
+		}
+	}
+}
+
+void Keeper::TryToJump() {
+	if (this->state == KEEPER_STATE::MOVING_DOWN_KEEPER || this->state == KEEPER_STATE::MOVING_UP_KEEPER || this->state == KEEPER_STATE::STILL_KEEPER) {
+		Ball* ball = this->GetTeam()->GetMatch()->GetBall();
+		if (PlaysOnWestSide() && ball->IsGoingToWestGoalZone()) {
+			unsigned int ball_y = ball->GetLocation()->GetY();
+			unsigned int keeper_y = this->GetLocation()->GetY();
+			
+			if ((DIRECTION::SOUTHWEST == ball->GetTrajectory()->GetDirection() && ball_y < keeper_y) || (DIRECTION::WEST == ball->GetTrajectory()->GetDirection() && ball_y > keeper_y)) {
+				last_jump_request = std::chrono::system_clock::now();
+				this->state = KEEPER_STATE::JUMPING_DOWN_KEEPER;
+				this->location->UpdateY(location->GetY() + JUMPING_SPEED);
+				this->circle->Move(this->location);
+			} else if ((DIRECTION::NORTHWEST == ball->GetTrajectory()->GetDirection() && ball_y > keeper_y) || (DIRECTION::WEST == ball->GetTrajectory()->GetDirection() && ball_y < keeper_y)) {
+				last_jump_request = std::chrono::system_clock::now();
+				this->state = KEEPER_STATE::JUMPING_UP_KEEPER;
+				this->location->UpdateY(location->GetY() - JUMPING_SPEED);
+				this->circle->Move(this->location);
+			}
+		}
+		
+		if (!PlaysOnWestSide() && ball->IsGoingToEastGoalZone()) {
+			unsigned int ball_y = ball->GetLocation()->GetY();
+			unsigned int keeper_y = this->GetLocation()->GetY();
+			
+			if ((DIRECTION::SOUTHEAST == ball->GetTrajectory()->GetDirection() && ball_y < keeper_y) || (DIRECTION::EAST == ball->GetTrajectory()->GetDirection() && ball_y > keeper_y)) {
+				last_jump_request = std::chrono::system_clock::now();
+				this->state = KEEPER_STATE::JUMPING_DOWN_KEEPER;
+				this->location->UpdateY(location->GetY() + JUMPING_SPEED);
+				this->circle->Move(this->location);
+			} else if ((DIRECTION::NORTHEAST == ball->GetTrajectory()->GetDirection() && ball_y > keeper_y) || (DIRECTION::EAST == ball->GetTrajectory()->GetDirection() && ball_y < keeper_y)) {
+				last_jump_request = std::chrono::system_clock::now();
+				this->state = KEEPER_STATE::JUMPING_UP_KEEPER;
+				this->location->UpdateY(location->GetY() - JUMPING_SPEED);
+				this->circle->Move(this->location);
+			}
 		}
 	}
 }

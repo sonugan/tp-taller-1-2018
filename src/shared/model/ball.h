@@ -38,6 +38,8 @@ class Ball
         void BounceOnGoalPost();
         void GoToKeeper(Keeper* keeper);
         bool IsHeldByAnyKeeper();
+        bool IsGoingToWestGoalZone();
+        bool IsGoingToEastGoalZone();
     protected:
 
     private:

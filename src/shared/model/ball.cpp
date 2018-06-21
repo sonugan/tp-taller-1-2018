@@ -237,3 +237,23 @@ void Ball::BounceOnGoalPost()
     //Desacelero un poco la pelota
     this->trajectory->UpdateBallSpeed(0.85*this->trajectory->GetBallSpeed());
 }
+
+bool Ball::IsGoingToWestGoalZone() {
+	DIRECTION trajectory_direction = this->trajectory->GetDirection();
+	bool west_direction = DIRECTION::WEST == trajectory_direction || DIRECTION::SOUTHWEST == trajectory_direction || DIRECTION::NORTHWEST == trajectory_direction; 
+	if (west_direction && location->GetX() < 500) {
+		unsigned int ball_speed = this->trajectory->GetBallSpeed();
+		return (ball_speed > 50) && IsFree(); 
+	}
+	return false;
+}
+
+bool Ball::IsGoingToEastGoalZone() {
+	DIRECTION trajectory_direction = this->trajectory->GetDirection();
+	bool west_direction = DIRECTION::EAST == trajectory_direction || DIRECTION::SOUTHEAST == trajectory_direction || DIRECTION::NORTHEAST == trajectory_direction; 
+	if (west_direction && location->GetX() > 1420) {
+		unsigned int ball_speed = this->trajectory->GetBallSpeed();
+		return (ball_speed > 50) && IsFree(); 
+	}
+	return false;
+}

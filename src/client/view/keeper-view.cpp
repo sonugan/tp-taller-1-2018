@@ -211,8 +211,12 @@ void KeeperView::GetKeeperAngle()
 {
 	if (this->keeper->IsStill() || this->keeper->IsKicking()) {
 		angle = GetLookAtBallAngle();
-	} else if (this->keeper->IsMovingUp() || this->keeper->IsJumpingUp()) {
+	} else if (this->keeper->IsMovingUp()) {
 		angle = 0;
+	} else if (this->keeper->IsJumpingUp()) {
+		angle = 270;
+	} else if (this->keeper->IsJumpingDown()) {
+		angle = 90;
 	} else {
 		angle = 180;
 	}
@@ -260,8 +264,15 @@ void KeeperView::Render(int x_camera, int y_camera, int max_x, int max_y)
 
     x = keeper->GetLocation()->GetX() - x_camera;
     y = keeper->GetLocation()->GetY() - y_camera;
+    
+    SDL_RendererFlip flip = SDL_RendererFlip::SDL_FLIP_NONE;
+    if (keeper->IsJumpingUp() && keeper->PlaysOnWestSide()) {
+    	flip = SDL_RendererFlip::SDL_FLIP_VERTICAL;
+    } else if (keeper->IsJumpingDown() && !keeper->PlaysOnWestSide()) {
+    	flip = SDL_RendererFlip::SDL_FLIP_VERTICAL;
+    }
 
-    sprite_sheet->Render( x - (SPRITE_WIDTH / 2), y - (SPRITE_HEIGHT / 2), current_clip, this->angle);
+    sprite_sheet->Render( x - (SPRITE_WIDTH / 2), y - (SPRITE_HEIGHT / 2), current_clip, this->angle, NULL, flip);
 
 }
 

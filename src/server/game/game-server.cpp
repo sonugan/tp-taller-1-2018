@@ -309,6 +309,12 @@ void GameServer::MoveKeepers() {
 	
 	keeper_a->TryToStopKicking();
 	keeper_b->TryToStopKicking();
+	
+	keeper_a->TryToJump();
+	keeper_b->TryToJump();
+	
+	keeper_a->TryToStopJumping();
+	keeper_b->TryToStopJumping();
 }
 
 void GameServer::MakePlayerCatchBall(Player* player) {
