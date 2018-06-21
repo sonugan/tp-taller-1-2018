@@ -420,7 +420,7 @@ bool Player::AreInSameTeam(Player* player)
 bool Player::TryRecover()
 {
     Ball* ball = this->GetTeam()->GetMatch()->GetBall();
-    if(!this->HasBall()
+    if(!this->HasBall() && !ball->IsHeldByAnyKeeper()
         && !this->AreInSameTeam(ball->GetPlayer())
         && ball->GetCircle()->ExistsCollision3d(this->GetCircle()))
     {

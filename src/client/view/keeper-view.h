@@ -19,7 +19,7 @@ class KeeperView : public AbstractView, public IShowable
     private:
         static constexpr float FRAMES_PER_EVENT = 0.1;
         static constexpr int RUN_FRAME_COUNT = 4;
-        static constexpr int KICKING_FRAME_COUNT = 4;
+        static constexpr int KICKING_FRAME_COUNT = 1;
         static constexpr int JUMPING_FRAME_COUNT = 10;
         Keeper* keeper;
         int frame;
