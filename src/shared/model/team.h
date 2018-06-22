@@ -34,6 +34,9 @@ class Team
         TEAM_NUMBER GetTeamNumber();
         void AddPlayer(Player* player);
         int SetGoals(int goals);
+        Location* GetTeamAGoalLine();
+        Location* GetTeamBGoalLine();
+        bool HasBall();
 	static const unsigned int TEAM_SIZE = 6;
         string GetName();
         string GetShirt();
@@ -52,6 +55,8 @@ class Team
         Match* match;
         int goals;
         TEAM_NUMBER team_number;
+        Location* team_a_goal_line;
+        Location* team_b_goal_line;
 };
 
 #endif // TEAM_H

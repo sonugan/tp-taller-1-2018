@@ -5,6 +5,7 @@
 #include <cmath>
 #include "location.h"
 #include "team.h"
+#include "ball.h"
 #include "../configuration/configuration.h"
 #include "trajectory.h"
 #include "ball.h"
@@ -14,6 +15,8 @@
 #include "player-states/player-kick-state.h"
 #include "player-states/player-recover-ball-state.h"
 #include "player-states/player-states.h"
+#include "player-strategies/player-atack-strategy.h"
+#include "player-strategies/player-defense-strategy.h"
 #include "../collision/circle.h"
 #include "../utils/coin-flipper.h"
 #include "trajectory-type.h"
@@ -26,6 +29,8 @@ class PlayerMoveState;
 class PlayerKickState;
 class PlayerRecoverBallState;
 class IPlayerState;
+class PlayerDefenseStrategy;
+class PlayerAtackStrategy;
 class Player
 {
     public:
@@ -55,6 +60,7 @@ class Player
         void SetTeam(Team* team);
         unsigned int GetPositionIndex();
         void GoBackToDefaultPosition();
+        void GoTo(Location* destiny_location, bool run);
         Team* GetTeam();
         bool HasBall();
         void PassBall();
@@ -80,6 +86,8 @@ class Player
         Circle* GetCircle();
         bool AreInSameTeam(Player* player);
         bool TryRecover();
+        IPlayerStrategy* GetStrategy();
+        void NotifyChangeBall(Ball* ball);
     protected:
 
     private:
@@ -103,6 +111,10 @@ class Player
         CoinFlipper* coin_flipper;
         static const u_int HALO_RADIUS = 10;
         unsigned int height = 64;
+        IPlayerStrategy* strategy;
+        PlayerAtackStrategy* atack_stategy;
+        PlayerDefenseStrategy* defense_strategy;
+        u_int left_ball_counter = 0;
 };
 
 #endif // PLAYER_H

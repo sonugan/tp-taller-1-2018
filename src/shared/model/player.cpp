@@ -9,6 +9,10 @@ Player::Player(unsigned int position_index, TEAM_NUMBER team_number) // @suppres
     this->kick_state = new PlayerKickState(this);
     this->recover_ball_state = new PlayerRecoverBallState(this);
 
+    this->defense_strategy = new PlayerDefenseStrategy(this);
+    this->atack_stategy = new PlayerAtackStrategy(this);
+    this->strategy = this->defense_strategy;
+
     this->current_state = this->still_state;
     this->coin_flipper = new CoinFlipper();
 
@@ -47,6 +51,8 @@ Player::~Player()
     delete recover_ball_state;
     delete circle;
     delete coin_flipper;
+    delete atack_stategy;
+    delete defense_strategy;
 }
 
 void Player::MoveLeft(bool run)
@@ -191,7 +197,6 @@ void Player::GoBackToDefaultPosition()
         {
             direction = DIRECTION::WEST;
         }
-        this->Play();
     }
 
     if (abs(default_y - location->GetY()) < PLAYER_SPEED)
@@ -203,6 +208,56 @@ void Player::GoBackToDefaultPosition()
         location->UpdateX(default_location->GetX());
     }
 }
+
+void Player::GoTo(Location* destiny_location, bool run)
+{
+    int destiny_x = destiny_location->GetX();
+    int x = this->location->GetX();
+    int destiny_y = destiny_location->GetY();
+    int y = this->location->GetY();
+    if (x > destiny_x && y > destiny_y)
+    {
+        MoveUpToLeft(run);
+    }
+    else if (x < destiny_x && y > destiny_y)
+    {
+        MoveUpToRight(run);
+    }
+    else if (x < destiny_x && y < destiny_y)
+    {
+        MoveDownToRight(run);
+    }
+    else if (x > destiny_x && y < destiny_y)
+    {
+        MoveDownToLeft(run);
+    }
+    else if (x > destiny_x && y == destiny_y)
+    {
+        MoveLeft(run);
+    }
+    else if (x < destiny_x && y == destiny_y)
+    {
+        MoveRight(run);
+    }
+    else if (x == destiny_x && y > destiny_y)
+    {
+        MoveUp(run);
+    }
+    else if (x == destiny_x && y < destiny_y)
+    {
+        MoveDown(run);
+    }
+
+    if (abs(destiny_y - this->location->GetY()) < PLAYER_SPEED)
+    {
+        this->location->UpdateY(destiny_location->GetY());
+    }
+    if (abs(destiny_x - this->location->GetX()) < PLAYER_SPEED)
+    {
+        this->location->UpdateX(destiny_location->GetX());
+    }
+}
+
 
 Team* Player::GetTeam()
 {
@@ -424,16 +479,49 @@ bool Player::AreInSameTeam(Player* player)
 bool Player::TryRecover()
 {
     Ball* ball = this->GetTeam()->GetMatch()->GetBall();
-    if(!this->HasBall() && !ball->IsHeldByAnyKeeper()
-        && !this->AreInSameTeam(ball->GetPlayer())
-        && ball->GetCircle()->ExistsCollision3d(this->GetCircle()))
+    if(ball->IsFree() && ball->GetCircle()->ExistsCollision3d(this->GetCircle()))
     {
-        if(coin_flipper->Flip() == COIN_RESULT::WIN)
+        Trajectory* trajectory = new Trajectory(this);
+        ball->SetTrajectory(trajectory);
+        left_ball_counter = 30;
+        return true;
+    }
+    else
+    {
+        if(left_ball_counter == 0)
         {
-            Trajectory* trajectory = new Trajectory(this);
-            ball->SetTrajectory(trajectory);
-            return true;
+            if(!this->HasBall() && !ball->IsHeldByAnyKeeper()
+                && !this->AreInSameTeam(ball->GetPlayer())
+                && ball->GetCircle()->ExistsCollision3d(this->GetCircle())) //faltó esto!
+            {
+                if(coin_flipper->Flip() == COIN_RESULT::WIN)
+                {
+                    Trajectory* trajectory = new Trajectory(this);
+                    ball->SetTrajectory(trajectory);
+                    left_ball_counter = 30;
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            left_ball_counter--;
         }
     }
     return false;
+}
+
+IPlayerStrategy* Player::GetStrategy()
+{
+    return this->strategy;
+}
+
+void Player::NotifyChangeBall(Ball* ball)
+{
+    if(this->GetTeam()->HasBall())
+    {
+        this->strategy = this->atack_stategy;
+        return;
+    }
+    this->strategy = this->defense_strategy;
 }

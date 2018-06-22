@@ -77,5 +77,3 @@ bool GameState::WasConnected(User* user) {
 	}
 	return false;
 }
-
-

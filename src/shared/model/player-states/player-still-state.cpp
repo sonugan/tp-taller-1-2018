@@ -72,4 +72,6 @@ void PlayerStillState::CatchBall()
 void PlayerStillState::Play()
 {
     this->player->SetLocation(this->player->GetLocation());
+    this->player->TryRecover();
+    this->player->GetStrategy()->Play();
 }

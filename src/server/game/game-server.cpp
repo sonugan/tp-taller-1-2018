@@ -297,94 +297,83 @@ void GameServer::CatchBall() {
 void GameServer::MoveKeepers() {
 	Keeper* keeper_a = this->GetGameState()->GetMatch()->GetTeamA()->GetKeeper();
 	Keeper* keeper_b = this->GetGameState()->GetMatch()->GetTeamB()->GetKeeper();
-	
+
 	keeper_a->TryToCatchBall();
 	keeper_b->TryToCatchBall();
-	
+
 	keeper_a->TryToRun();
 	keeper_b->TryToRun();
-	
+
 	keeper_a->TryToKick();
 	keeper_b->TryToKick();
-	
+
 	keeper_a->TryToStopKicking();
 	keeper_b->TryToStopKicking();
-	
+
 	keeper_a->TryToJump();
 	keeper_b->TryToJump();
-	
+
 	keeper_a->TryToStopJumping();
 	keeper_b->TryToStopJumping();
 }
 
 void GameServer::MakePlayerCatchBall(Player* player) {
-	if (!player->HasBall()) {
-		Ball* ball = player->GetTeam()->GetMatch()->GetBall();
-		bool collides = ball->GetCircle()->ExistsCollision3d(player->GetCircle());
-		if (ball->IsFree() && collides) {
-			Trajectory* trajectory = new Trajectory(player);
-            ball->SetTrajectory(trajectory);
-			if (USER_COLOR::NO_COLOR == player->GetPlayerColor()) {
-				/*
-				 Si el jugador que agarra la pelota no estaba seleccionado,
-				 es seleccionado por el jugador del mismo equipo que estaba más cerca.
-				 */
-				std::vector<Player*> selected_players = player->GetTeam()->GetSelectedPlayers();
-				Player* closest_selected_player = NULL;
-				unsigned int closest_selected_player_distance_to_ball = 99999;
+	Ball* ball = player->GetTeam()->GetMatch()->GetBall();
+	if(!ball->IsFree())
+	{
+		Player* player_ball = ball->GetPlayer();
+		if (USER_COLOR::NO_COLOR == player_ball->GetPlayerColor())
+		{
+			/*
+			Si el jugador que agarra la pelota no estaba seleccionado,
+			es seleccionado por el jugador del mismo equipo que estaba más cerca.
+			*/
+			std::vector<Player*> selected_players = player_ball->GetTeam()->GetSelectedPlayers();
+			Player* closest_selected_player = NULL;
+			unsigned int closest_selected_player_distance_to_ball = 99999;
 
-				for (unsigned int i = 0; i < selected_players.size(); i++) {
-					Player* selected_player = selected_players[i];
-					unsigned int distance = selected_player->GetLocation()->Distance(ball->GetLocation());
-					if (distance <= closest_selected_player_distance_to_ball) {
-						closest_selected_player = selected_player;
-						closest_selected_player_distance_to_ball = distance;
-					}
-				}
-
-				if (closest_selected_player != NULL) {
-					player->SetPlayerColor(closest_selected_player->GetPlayerColor());
-					User* user = this->session_manager->GetUserByColor(closest_selected_player->GetPlayerColor());
-					user->SetSelectedPlayer(player);
-					closest_selected_player->SetPlayerColor(USER_COLOR::NO_COLOR);
+			for (unsigned int i = 0; i < selected_players.size(); i++) {
+				Player* selected_player = selected_players[i];
+				unsigned int distance = selected_player->GetLocation()->Distance(ball->GetLocation());
+				if (distance <= closest_selected_player_distance_to_ball) {
+					closest_selected_player = selected_player;
+					closest_selected_player_distance_to_ball = distance;
 				}
 			}
 
-			//Si el ultimo poseedor de la pelota era de distinto equipo que el que agarra la pelota => es un "recupero de pelota"
-			if (ball->GetLastOwnerTeam() != NULL && ball->GetLastOwnerTeam() != player->GetTeam()) {
-				User* user = this->session_manager->GetUserByColor(player->GetPlayerColor());
-				if (user != NULL) {
-					Logger::getInstance()->info(
-							"[RECUPERO DE PELOTA] El jugador '" + this->session_manager->GetUserByColor(player->GetPlayerColor())->GetUsername()
-									+ "' recupero la pelota para el equipo " + player->GetTeam()->GetName());
-				} else {
-					Logger::getInstance()->info("[RECUPERO DE PELOTA] LA IA del equipo " + player->GetTeam()->GetName() + " recupero la pelota");
-				}
+			if (closest_selected_player != NULL) {
+				player_ball->SetPlayerColor(closest_selected_player->GetPlayerColor());
+				User* user = this->session_manager->GetUserByColor(closest_selected_player->GetPlayerColor());
+				user->SetSelectedPlayer(player_ball);
+				closest_selected_player->SetPlayerColor(USER_COLOR::NO_COLOR);
 			}
-
-			if (player->IsSelected()) {
-                ball->SetLastOwner(player->GetTeam(), player->GetPlayerColor());
-            } else {
-                ball->SetLastOwner(player->GetTeam(), USER_COLOR::NO_COLOR);
-            }
 		}
+	}
+	//Si el ultimo poseedor de la pelota era de distinto equipo que el que agarra la pelota => es un "recupero de pelota"
+	if (ball->GetLastOwnerTeam() != NULL && ball->GetLastOwnerTeam() != player->GetTeam()) {
+		User* user = this->session_manager->GetUserByColor(player->GetPlayerColor());
+		if (user != NULL) {
+			Logger::getInstance()->info(
+					"[RECUPERO DE PELOTA] El jugador '" + this->session_manager->GetUserByColor(player->GetPlayerColor())->GetUsername()
+							+ "' recupero la pelota para el equipo " + player->GetTeam()->GetName());
+		} else {
+			Logger::getInstance()->info("[RECUPERO DE PELOTA] LA IA del equipo " + player->GetTeam()->GetName() + " recupero la pelota");
+		}
+	}
+
+	if (player->IsSelected()) {
+		ball->SetLastOwner(player->GetTeam(), player->GetPlayerColor());
+	} else {
+		ball->SetLastOwner(player->GetTeam(), USER_COLOR::NO_COLOR);
 	}
 }
 
 void GameServer::MovePlayersToDefaultPositions() {
 	for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
 		Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
-		if (!player_a->IsSelected()) {
-			player_a->GoBackToDefaultPosition();
-		} else {
-			player_a->Play();
-		}
+		player_a->Play();
 		Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
-		if (!player_b->IsSelected()) {
-			player_b->GoBackToDefaultPosition();
-		} else {
-			player_b->Play();
-		}
+		player_b->Play();
 	}
 }
 

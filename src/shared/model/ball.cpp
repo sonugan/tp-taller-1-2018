@@ -38,6 +38,7 @@ void Ball::SetTrajectory(Trajectory* new_trajectory) {
         this->last_freed = std::chrono::system_clock::now();
         Logger::getInstance()->debug("(Ball::SetTrajectory) PASE");
     }
+    this->NotifyAllPlayers();
 }
 
 bool Ball::LastFreedDelayPassed() {
@@ -240,20 +241,33 @@ void Ball::BounceOnGoalPost()
 
 bool Ball::IsGoingToWestGoalZone() {
 	DIRECTION trajectory_direction = this->trajectory->GetDirection();
-	bool west_direction = DIRECTION::WEST == trajectory_direction || DIRECTION::SOUTHWEST == trajectory_direction || DIRECTION::NORTHWEST == trajectory_direction; 
+	bool west_direction = DIRECTION::WEST == trajectory_direction || DIRECTION::SOUTHWEST == trajectory_direction || DIRECTION::NORTHWEST == trajectory_direction;
 	if (west_direction && location->GetX() < 500) {
 		unsigned int ball_speed = this->trajectory->GetBallSpeed();
-		return (ball_speed > 50) && IsFree(); 
+		return (ball_speed > 50) && IsFree();
 	}
 	return false;
 }
 
 bool Ball::IsGoingToEastGoalZone() {
 	DIRECTION trajectory_direction = this->trajectory->GetDirection();
-	bool west_direction = DIRECTION::EAST == trajectory_direction || DIRECTION::SOUTHEAST == trajectory_direction || DIRECTION::NORTHEAST == trajectory_direction; 
+	bool west_direction = DIRECTION::EAST == trajectory_direction || DIRECTION::SOUTHEAST == trajectory_direction || DIRECTION::NORTHEAST == trajectory_direction;
 	if (west_direction && location->GetX() > 1420) {
 		unsigned int ball_speed = this->trajectory->GetBallSpeed();
-		return (ball_speed > 50) && IsFree(); 
+		return (ball_speed > 50) && IsFree();
 	}
 	return false;
+}
+
+void Ball::NotifyAllPlayers()
+{
+    for(u_int i = 0; i < this->players.size(); i++)
+    {
+        this->players[i]->NotifyChangeBall(this);
+    }
+}
+
+void Ball::AddPlayerToObserve(Player* player)
+{
+    this->players.push_back(player);
 }
