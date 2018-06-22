@@ -23,9 +23,10 @@ public:
 	// USAR SOLO EN CLIENT PARA DESERIALIZAR
 	void SetType(MATCH_STATE_TYPE type);
 
-	void SetKickOff(TEAM_NUMBER active_kickoff_team);
+	void SetKickOff(TEAM_NUMBER kicker_team);
 	bool IsKickOff();
 	void SetPlaying();
+	bool IsPlaying();
 	void SetGoal(TEAM_NUMBER goal_scorer_team);
 	void SetGoalKick(TEAM_NUMBER goal_kick_team);
 	void SetTimeup();
@@ -36,7 +37,7 @@ public:
 
 private:
 	MATCH_STATE_TYPE type;
-	TEAM_NUMBER active_kickoff_team;
+	TEAM_NUMBER kicker_team;
 	TEAM_NUMBER goal_scorer_team;
 	TEAM_NUMBER goal_kick_team;
 	const unsigned int STATE_DURATION = 2; // en segundos

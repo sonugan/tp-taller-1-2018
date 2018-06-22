@@ -310,3 +310,38 @@ Team* Match::GetOppositeTeam(Team* team)
 
     return team_a;
 }
+
+void Match::SetKickOffLocations(TEAM_NUMBER kicker_team) {
+	if (TEAM_NUMBER::TEAM_A == kicker_team)
+	{
+		Player* player;
+		Formation* formation_a = GetTeamA()->GetFormation();
+		for (unsigned int i = 1; i < Team::TEAM_SIZE; i++)
+		{
+			player = GetTeamA()->GetPlayerByPositionIndex(i);
+			player->GetLocation()->Update(formation_a->GetKickoffLocationForPlayer(i, true));
+		}
+		Formation* formation_b = GetTeamB()->GetFormation();
+		for (unsigned int i = 1; i < Team::TEAM_SIZE; i++)
+		{
+			player = GetTeamB()->GetPlayerByPositionIndex(i);
+			player->GetLocation()->Update(formation_b->GetKickoffLocationForPlayer(i, false));
+		}
+	}
+	else
+	{
+		Player* player;
+		Formation* formation_a = GetTeamA()->GetFormation();
+		for (unsigned int i = 1; i < Team::TEAM_SIZE; i++)
+		{
+			player = GetTeamA()->GetPlayerByPositionIndex(i);
+			player->GetLocation()->Update(formation_a->GetKickoffLocationForPlayer(i, true));
+		}
+		Formation* formation_b = GetTeamB()->GetFormation();
+		for (unsigned int i = 1; i < Team::TEAM_SIZE; i++)
+		{
+			player = GetTeamB()->GetPlayerByPositionIndex(i);
+			player->GetLocation()->Update(formation_b->GetKickoffLocationForPlayer(i, false));
+		}
+	}
+}

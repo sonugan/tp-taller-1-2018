@@ -37,6 +37,7 @@ class Match
         void SetRemainingTime(std::string remaining_time);
         Team* GetTeamByNumber(TEAM_NUMBER number);
         Team* GetOppositeTeam(Team* team);
+        void SetKickOffLocations(TEAM_NUMBER kicker_team);
     private:
         Team* team_a;
         Team* team_b;

@@ -30,16 +30,20 @@ bool MatchState::IsKickOff() {
 	return MATCH_STATE_TYPE::KICKOFF == GetType();
 }
 
-void MatchState::SetKickOff(TEAM_NUMBER active_kickoff_team) {
+void MatchState::SetKickOff(TEAM_NUMBER kicker_team) {
 	Logger::getInstance()->debug("(MatchState:SetKickOff) Seteando kickoff state");
 	this->type=MATCH_STATE_TYPE::KICKOFF;
-	this->active_kickoff_team = active_kickoff_team;
+	this->kicker_team = kicker_team;
 	this->state_start_time = chrono::system_clock::now();
 }
 
 void MatchState::SetPlaying() {
 	Logger::getInstance()->debug("(MatchState:SetPlaying) Seteando playing state");
 	this->type = MATCH_STATE_TYPE::PLAYING;
+}
+
+bool MatchState::IsPlaying() {
+	return MATCH_STATE_TYPE::PLAYING == GetType();
 }
 
 void MatchState::SetGoal(TEAM_NUMBER goal_scorer_team) {

@@ -27,7 +27,7 @@ public:
     GameState* GetGameState();
     void DoLogin(ClientSocket* client, LoginRequest* login_request);
     void DoQuit(ClientSocket* client);
-    std::string DoRecoverBall(RecoverBallRequest* recover_ball_request, int socket_id);
+    void DoRecoverBall(RecoverBallRequest* recover_ball_request, int socket_id);
     std::string DoMove(MoveRequest* move_request, int socket_id);
     string DoKick(KickBallRequest* kick_ball_request, int client_socket_id);
     string DoLongPass(LongPassRequest* long_pass_request, int client_socket_id);

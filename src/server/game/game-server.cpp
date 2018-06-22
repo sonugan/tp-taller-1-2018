@@ -58,10 +58,9 @@ void GameServer::DoQuit(ClientSocket* client) {
 	this->DisconnectClient(client);
 }
 
-std::string GameServer::DoRecoverBall(RecoverBallRequest* recover_ball_request, int socket_id) {
+void GameServer::DoRecoverBall(RecoverBallRequest* recover_ball_request, int socket_id) {
 	User* user = this->session_manager->GetUserBySocketID(socket_id);
 	user->GetSelectedPlayer()->RecoverBall();
-	return this->game_state->GetMatch()->Serialize();
 }
 
 std::string GameServer::DoKick(KickBallRequest* kick_request, int socket_id) {
@@ -262,6 +261,8 @@ void GameServer::DetectGoals(Ball* ball)
 					"[GOOL] La IA del equipo " + ball->GetLastOwnerTeam()->GetName() + " convirtio un gol para el equipo " + goaler_team->GetName());
 		}
 
+		this->game_state->GetMatch()->GetMatchState()->SetGoal(goaler_team->GetTeamNumber());
+
 		ball->ReturnToMiddle();
 		if (scoring_on_goal_team != goal_scorer_team) {
 			//Si el equipo del que hace el gol es distinto del equipo del arco en el que se hace el gol => suma goles el equipo del goleador (el que hizo el gol)
@@ -372,18 +373,29 @@ void GameServer::MakePlayerCatchBall(Player* player) {
 }
 
 void GameServer::MovePlayersToDefaultPositions() {
-	for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
-		Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
-		if (!player_a->IsSelected()) {
-			player_a->GoBackToDefaultPosition();
-		} else {
-			player_a->Play();
-		}
-		Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
-		if (!player_b->IsSelected()) {
-			player_b->GoBackToDefaultPosition();
-		} else {
-			player_b->Play();
+	if (GetGameState()->GetMatch()->GetMatchState()->IsPlaying())
+	{
+
+		for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
+		{
+			Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
+			if (!player_a->IsSelected())
+			{
+				player_a->GoBackToDefaultPosition();
+			}
+			else
+			{
+				player_a->Play();
+			}
+			Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
+			if (!player_b->IsSelected())
+			{
+				player_b->GoBackToDefaultPosition();
+			}
+			else
+			{
+				player_b->Play();
+			}
 		}
 	}
 }
@@ -428,7 +440,8 @@ int GameServer::GetTeamUsersNum(string team_name) {
 		user_team = this->game_state->GetMatch()->GetTeamB();
 	}
 
-	for (auto const& u : users) {
+	for (const auto& u : users)
+	{
 		current_team = u.second->GetSelectedPlayer()->GetTeam();
 		if (current_team == user_team) {
 			num++;

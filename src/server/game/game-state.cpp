@@ -34,6 +34,7 @@ void GameState::UpdateMatchState() {
 	{
 	case PLAYING:
 		if(this->timer->IsTimeUp()) {
+			Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [PLAYING] - Actualizando a: [TIMEUP]");
 			if(MATCH_TIME_TYPE::FIRST_TIME == this->match->GetMatchTime()) {
 				this->timer->Stop();
 				this->timer->Restart(); //TODO: fixear esto, cuando pasa al segundo tiempo se pierden unos segundos del timer.
@@ -46,28 +47,37 @@ void GameState::UpdateMatchState() {
 		this->timer->Stop();
 		TEAM_NUMBER kicker_team = TEAM_NUMBER::TEAM_A == this->GetMatch()->GetMatchState()->GetGoalScorerTeam() ? TEAM_NUMBER::TEAM_B : TEAM_NUMBER::TEAM_A;
 		if (this->match->GetMatchState()->IsReadyToChange()) {
+			Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [GOAL] - Actualizando a: [KICKOFF]");
+			this->match->SetKickOffLocations(kicker_team);
 			this->match->GetMatchState()->SetKickOff(kicker_team);
 		}
 		break;
 	}
 	case KICKOFF:
 		if (this->match->GetMatchState()->IsReadyToChange()) {
+			Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [KICKOFF] - Actualizando a: [PLAYING]");
 			this->match->GetMatchState()->SetPlaying();
 			this->timer->Start();
 		}
 		break;
 	case GOAL_KICK:
 		if (this->match->GetMatchState()->IsReadyToChange()) {
+			Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [GOAL_KICK] - Actualizando a: [PLAYING]");
 			this->match->GetMatchState()->SetPlaying();
 		}
 		break;
 	case TIME_UP:
 		if (this->match->GetMatchState()->IsReadyToChange()) {
 			if(MATCH_TIME_TYPE::SECOND_TIME == this->match->GetMatchTime()) {
+				// Fin del partido
+				Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [TIME_UP] - Actualizando a: [FINISHED]");
 				this->match->GetMatchState()->SetFinished();
 			} else {
+				Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [TIME_UP] - Actualizando a: [KICKOFF]");
+				// Seteo el segundo tiempo
 				this->match->SetMatchTime(MATCH_TIME_TYPE::SECOND_TIME);
 				// segundo tiempo, saca el team B. esto es arbitrario.
+				this->match->SetKickOffLocations(TEAM_NUMBER::TEAM_B);
 				this->match->GetMatchState()->SetKickOff(TEAM_NUMBER::TEAM_B);
 			}
 		}
