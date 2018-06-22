@@ -20,6 +20,7 @@ class Location
 	    void Update(Location* location);
         float Distance(Location* other_location);
         std::string ToString();
+        static const int MAX_DISTANCE = 100000;
 
     protected:
 

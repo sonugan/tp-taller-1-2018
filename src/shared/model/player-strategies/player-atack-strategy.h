@@ -7,6 +7,7 @@
 #include "../../collision/circle.h"
 #include "../../utils/coin-flipper.h"
 #include <vector>
+#include <cmath>
 
 class Player;
 class PlayerAtackStrategy : public IPlayerStrategy
@@ -21,6 +22,10 @@ class PlayerAtackStrategy : public IPlayerStrategy
         bool PassBall();
         bool IsNearGoalLine(Player* player);
         vector<Player*> GetEnemies();
+        bool IsPlayerInFrontOfMe();
+        bool IsTeamA();
+        bool AreBetween(int a, int b, int value);
+        vector<Player*> GetBuddies();
         Circle* vision_area;
         CoinFlipper* coin_flipper;
 };

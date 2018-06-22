@@ -64,6 +64,7 @@ class Player
         Team* GetTeam();
         bool HasBall();
         void PassBall();
+        void PassBallTo(Player* player);
         void KickBall(int power);
         bool PlaysForTeamA();
         bool PlaysForTeamB();

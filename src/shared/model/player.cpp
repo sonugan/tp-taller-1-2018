@@ -348,6 +348,32 @@ void Player::PassBall()
     }
 }
 
+void Player::PassBallTo(Player* player)
+{
+    int my_x = this->location->GetX();
+    int my_y = this->location->GetY();
+    int x = player->location->GetX();
+    int y = player->location->GetY();
+
+    if(my_x == x)
+    {
+        direction = my_y <= y ? DIRECTION::SOUTH : DIRECTION::NORTH;
+    }
+    else if(my_y == y)
+    {
+        direction = my_x <= x ? DIRECTION::EAST : DIRECTION::WEST;
+    }
+    else if(my_x > x)
+    {
+        direction = my_y <= y ? DIRECTION::SOUTHWEST : DIRECTION::NORTHWEST;
+    }
+    else
+    {
+        direction = my_y <= y ? DIRECTION::SOUTHEAST : DIRECTION::NORTHEAST;
+    }
+    PassBall();
+}
+
 void Player::KickBall(int power)
 {
     if (HasBall())
