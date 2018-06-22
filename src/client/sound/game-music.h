@@ -18,6 +18,7 @@ class GameMusic
         void PlayLoginTheme();
         void Pause();
         void Resume();
+        bool IsPlaying();
 
     protected:
 
@@ -26,6 +27,7 @@ class GameMusic
         const string LOGIN_THEME_PATH = "src/client/sound/login_theme.wav";
 
         Mix_Music* current_track;
+        bool paused;
 
         bool LoadTrack(string track_path);
 };

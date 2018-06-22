@@ -76,6 +76,7 @@ private:
     User* user;
     Client* client;
     GameMusic* game_music;
+    SoundManager* sound_manager;
 
     static const int FRAMES_PER_SECOND = 30;
     u_int STOP_LOOP_MILLISECONDS = 30;
@@ -87,16 +88,20 @@ private:
 
     bool quit;
     bool correctly_initialized;
+    int total_game_goals;
 
     void CreateModel(std::string serialized_model);
     void CreateViews();
+    void CreateGameMusic();
     void CreateControllers();
     void DestroyModel();
     void DestroyViews();
+    void DestroyGameMusic();
     void DestroyControllers();
     void InitSDL();
     void CloseSDL();
     void RenderViews();
+    void HandleGoalEvents();
 
 };
 

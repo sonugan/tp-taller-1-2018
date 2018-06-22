@@ -10,10 +10,6 @@ Game::Game(Configuration* initial_configuration) // @suppress("Class members sho
 {
     this->initial_configuration = initial_configuration;
     this->correctly_initialized = false;
-
-    Logger::getInstance()->debug("inicializa");
-
-    this->game_music = new GameMusic();
 }
 
 void Game::LogIn()
@@ -23,11 +19,9 @@ void Game::LogIn()
     LoginRequest* login_request = new LoginRequest();
     LoginView* login_view = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH, login_request);
 
-        Logger::getInstance()->debug("play login");
-
+    CreateGameMusic();
     this->game_music->PlayLoginTheme();
 
-        Logger::getInstance()->debug("play login ok");
     //Se abre la pantalla de login con su propio "game loop"
     login_view->Open(initial_configuration);
 
@@ -88,7 +82,6 @@ void Game::LogIn()
 
 Game::~Game()
 {
-    delete this->game_music;
 }
 
 bool Game::IsCorrectlyInitialized()
@@ -113,15 +106,9 @@ void Game::Start()
 {
     Logger::getInstance()->info("==================COMIENZA EL JUEGO==================");
     this->quit = false;
-
-    SoundManager* sound_manager = new SoundManager();
-
-    sound_manager->PlayGameTimeStartSound();
-
-            Logger::getInstance()->debug("play main theme");
-
+    this->total_game_goals = 0;
+    this->sound_manager->PlayGameTimeStartSound();
     this->game_music->PlayMainTheme();
-        Logger::getInstance()->debug("play main theme ok");
 
     //Handler de eventos
     SDL_Event e;
@@ -167,6 +154,7 @@ void Game::Start()
         }
 
         RenderViews();
+        HandleGoalEvents();
 
         //Manejo de frames por segundo: http://lazyfoo.net/SDL_tutorials/lesson16/index.php
         //SDL_Delay( ( 100 / FRAMES_PER_SECOND ));//TODO: configurar iteracion
@@ -180,8 +168,6 @@ void Game::Start()
         }
     }
 
-    delete sound_manager;
-
 }
 
 void Game::End()
@@ -191,6 +177,7 @@ void Game::End()
     DestroyModel();
     DestroyViews();
     DestroyControllers();
+    DestroyGameMusic();
     SpritesProvider::FreeResources();
     //SoundManager::FreeResources();
     CloseSDL();
@@ -352,6 +339,7 @@ void Game::DestroyControllers()
     delete game_controller;
     delete player_controller;
     delete team_controller;
+    delete music_controller;
 }
 
 void Game::InitSDL()
@@ -419,4 +407,36 @@ void Game::Quit()
 User* Game::GetUser()
 {
     return user;
+}
+
+void Game::CreateGameMusic()
+{
+    this->game_music = new GameMusic();
+    this->sound_manager = new SoundManager();
+}
+
+void Game::DestroyGameMusic()
+{
+    delete this->game_music;
+    delete sound_manager;
+}
+
+void Game::HandleGoalEvents()
+{
+    int current_total_goals = this->match->GetTeamA()->GetGoals() + this->match->GetTeamB()->GetGoals();
+
+    if (current_total_goals > this->total_game_goals)
+    {
+        if (this->game_music->IsPlaying())
+        {
+            this->game_music->Pause();
+            this->sound_manager->PlayGoalSound();
+            this->game_music->Resume();
+        }
+        else
+        {
+            this->sound_manager->PlayGoalSound();
+        }
+        this->total_game_goals = current_total_goals;
+    }
 }

@@ -9,7 +9,7 @@ GameMusic::GameMusic()
         Logger::getInstance()->debug("Error al cargar musica del juego:");
         Logger::getInstance()->debug(Mix_GetError());
     }
-
+    this->paused = false;
     this->current_track = NULL;
 }
 
@@ -78,11 +78,17 @@ void GameMusic::Pause()
 {
     Logger::getInstance()->debug("(GameMusic::Musica pausada)");
     Mix_PauseMusic();
+    this->paused = true;
 }
 
 void GameMusic::Resume()
 {
     Logger::getInstance()->debug("(GameMusic::Reanudando musica)");
     Mix_ResumeMusic();
+    this->paused = false;
 }
 
+bool GameMusic::IsPlaying()
+{
+    return !this->paused;
+}
