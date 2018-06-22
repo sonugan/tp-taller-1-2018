@@ -263,7 +263,7 @@ void GameServer::DetectGoals(Ball* ball)
 
 		this->game_state->GetMatch()->GetMatchState()->SetGoal(goaler_team->GetTeamNumber());
 
-		ball->ReturnToMiddle();
+//		ball->ReturnToMiddle();
 		if (scoring_on_goal_team != goal_scorer_team) {
 			//Si el equipo del que hace el gol es distinto del equipo del arco en el que se hace el gol => suma goles el equipo del goleador (el que hizo el gol)
 			goal_scorer_team->AddGoal();

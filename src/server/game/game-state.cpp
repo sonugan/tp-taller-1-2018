@@ -49,6 +49,7 @@ void GameState::UpdateMatchState() {
 		if (this->match->GetMatchState()->IsReadyToChange()) {
 			Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [GOAL] - Actualizando a: [KICKOFF]");
 			this->match->SetKickOffLocations(kicker_team);
+			this->match->GetBall()->ReturnToMiddle();
 			this->match->GetMatchState()->SetKickOff(kicker_team);
 		}
 		break;
@@ -76,6 +77,7 @@ void GameState::UpdateMatchState() {
 				Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [TIME_UP] - Actualizando a: [KICKOFF]");
 				// Seteo el segundo tiempo
 				this->match->SetMatchTime(MATCH_TIME_TYPE::SECOND_TIME);
+				this->match->GetBall()->ReturnToMiddle();
 				// segundo tiempo, saca el team B. esto es arbitrario.
 				this->match->SetKickOffLocations(TEAM_NUMBER::TEAM_B);
 				this->match->GetMatchState()->SetKickOff(TEAM_NUMBER::TEAM_B);
