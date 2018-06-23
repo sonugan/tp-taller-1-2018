@@ -34,7 +34,7 @@ class PlayerController : public AbstractController
 
         void PlayerPlay(const Uint8 *keyboard_state_array, SDL_Event e);
         void MovePlayer(const Uint8 *keyboard_state_array);
-        void PassBall(const Uint8 *keyboard_state_array);
+        bool PassBall(const Uint8 *keyboard_state_array);
         bool LongPass(const Uint8 *keyboard_state_array, SDL_Event e);
         bool PlayerRecoverBall(const Uint8 *keyboard_state_array);
         bool KickPlayer(const Uint8 *keyboard_state_array, SDL_Event e);

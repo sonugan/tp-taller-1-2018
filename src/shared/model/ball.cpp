@@ -241,7 +241,7 @@ void Ball::BounceOnGoalPost()
 bool Ball::IsGoingToWestGoalZone() {
 	DIRECTION trajectory_direction = this->trajectory->GetDirection();
 	bool west_direction = DIRECTION::WEST == trajectory_direction || DIRECTION::SOUTHWEST == trajectory_direction || DIRECTION::NORTHWEST == trajectory_direction; 
-	if (west_direction && location->GetX() < 500) {
+	if (west_direction && location->GetX() < 500 && location->GetY() > 300 && location->GetY() < 858) {
 		unsigned int ball_speed = this->trajectory->GetBallSpeed();
 		return (ball_speed > 50) && IsFree(); 
 	}
@@ -251,7 +251,7 @@ bool Ball::IsGoingToWestGoalZone() {
 bool Ball::IsGoingToEastGoalZone() {
 	DIRECTION trajectory_direction = this->trajectory->GetDirection();
 	bool west_direction = DIRECTION::EAST == trajectory_direction || DIRECTION::SOUTHEAST == trajectory_direction || DIRECTION::NORTHEAST == trajectory_direction; 
-	if (west_direction && location->GetX() > 1420) {
+	if (west_direction && location->GetX() > 1420 && location->GetY() > 300 && location->GetY() < 858) {
 		unsigned int ball_speed = this->trajectory->GetBallSpeed();
 		return (ball_speed > 50) && IsFree(); 
 	}
