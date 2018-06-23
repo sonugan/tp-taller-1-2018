@@ -18,6 +18,7 @@
 #include "player-strategies/player-atack-strategy.h"
 #include "player-strategies/player-defense-strategy.h"
 #include "../collision/circle.h"
+#include "../collision/rectangle.h"
 #include "../utils/coin-flipper.h"
 #include "trajectory-type.h"
 
@@ -48,6 +49,7 @@ class Player
         void LongPass(int power, TRAJECTORY_TYPE trajectory_type);
         void RecoverBall();
         Location* GetLocation();
+        Rectangle* GetDefenseArea();
         DIRECTION GetDirection();
         bool IsSelected();
         bool IsKicking();

@@ -110,6 +110,11 @@ Location* Player::GetLocation()
     return location;
 }
 
+Rectangle* Player::GetDefenseArea()
+{
+    return team->GetFormation()->GetDefenseAreaForPlayer(position_index);
+}
+
 DIRECTION Player::GetDirection()
 {
     return this->direction;
@@ -127,7 +132,7 @@ void Player::SetTeam(Team* team)
     this->location = new Location(default_location->GetX(), default_location->GetY(), default_location->GetZ());
     this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
     this->circle = new Circle(HALO_RADIUS, new Location(this->location));
-    //this->shadow = new Shadow(this);
+    this->defense_strategy->SetDefenseArea(this->GetDefenseArea());
 }
 
 unsigned int Player::GetPositionIndex()
