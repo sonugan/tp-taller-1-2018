@@ -20,6 +20,10 @@ MATCH_STATE_TYPE MatchState::GetType(){
 	return this->type;
 }
 
+MATCH_STATE_TYPE MatchState::GetPreviousType() {
+	return this->previous_type;
+}
+
 // USAR SOLO PARA DESERIALIZAR
 void MatchState::SetType(MATCH_STATE_TYPE type) {
 	this->type = type;
@@ -32,6 +36,7 @@ bool MatchState::IsKickOff() {
 
 void MatchState::SetKickOff(TEAM_NUMBER kicker_team) {
 	Logger::getInstance()->debug("(MatchState:SetKickOff) Seteando kickoff state");
+	this->previous_type = this->type;
 	this->type=MATCH_STATE_TYPE::KICKOFF;
 	this->kicker_team = kicker_team;
 	this->state_start_time = chrono::system_clock::now();
@@ -39,6 +44,7 @@ void MatchState::SetKickOff(TEAM_NUMBER kicker_team) {
 
 void MatchState::SetPlaying() {
 	Logger::getInstance()->debug("(MatchState:SetPlaying) Seteando playing state");
+	this->previous_type = this->type;
 	this->type = MATCH_STATE_TYPE::PLAYING;
 }
 
@@ -48,6 +54,7 @@ bool MatchState::IsPlaying() {
 
 void MatchState::SetGoal(TEAM_NUMBER goal_scorer_team) {
 	Logger::getInstance()->debug("(MatchState:SetGoal) Seteando goal state");
+	this->previous_type = this->type;
 	this->type = MATCH_STATE_TYPE::GOAL;
 	this->goal_scorer_team = goal_scorer_team;
 	this->state_start_time = chrono::system_clock::now();
@@ -55,6 +62,7 @@ void MatchState::SetGoal(TEAM_NUMBER goal_scorer_team) {
 
 void MatchState::SetGoalKick(TEAM_NUMBER goal_kick_team) {
 	Logger::getInstance()->debug("(MatchState:SetGoalKick) Seteando goalkick state");
+	this->previous_type = this->type;
 	this->type = MATCH_STATE_TYPE::GOAL_KICK;
 	this->goal_kick_team = goal_kick_team;
 	this->state_start_time = chrono::system_clock::now();
@@ -62,6 +70,7 @@ void MatchState::SetGoalKick(TEAM_NUMBER goal_kick_team) {
 
 void MatchState::SetTimeup() {
 	Logger::getInstance()->debug("(MatchState:SetTimeup) Seteando timeup state");
+	this->previous_type = this->type;
 	this->type = MATCH_STATE_TYPE::TIME_UP;
 	this->state_start_time = chrono::system_clock::now();
 }
@@ -80,6 +89,8 @@ TEAM_NUMBER MatchState::GetGoalScorerTeam() {
 }
 
 void MatchState::SetFinished() {
+	Logger::getInstance()->debug("(MatchState:SetFinished) Seteando finished state");
+	this->previous_type = this->type;
 	this->type = MATCH_STATE_TYPE::FINISHED;
 }
 
