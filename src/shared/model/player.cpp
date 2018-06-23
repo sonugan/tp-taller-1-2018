@@ -117,11 +117,7 @@ Location* Player::GetDefaultLocation()
 void Player::SetTeam(Team* team)
 {
     this->team = team;
-    Location* default_location = GetDefaultLocation();
-    this->location = new Location(default_location->GetX(), default_location->GetY(), default_location->GetZ());
-    this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
-    this->circle = new Circle(HALO_RADIUS, new Location(this->location));
-    //this->shadow = new Shadow(this);
+	this->circle = new Circle(HALO_RADIUS, new Location(this->location));
 }
 
 unsigned int Player::GetPositionIndex()
@@ -437,3 +433,10 @@ bool Player::TryRecover()
     }
     return false;
 }
+
+void Player::SetInitialLocation(Location* initial_location)
+{
+	this->location = new Location(initial_location->GetX(), initial_location->GetY(), initial_location->GetZ());
+	this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
+}
+

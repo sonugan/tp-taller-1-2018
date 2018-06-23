@@ -31,11 +31,13 @@ class Match
         void DeserializeAndUpdate(std::string serialized);
         MATCH_TIME_TYPE GetMatchTime();
         void SetMatchTime(MATCH_TIME_TYPE match_time);
+        MatchState* GetMatchState();
         void SetMatchState(MatchState* state);
         std::string GetRemainingTime();
         void SetRemainingTime(std::string remaining_time);
         Team* GetTeamByNumber(TEAM_NUMBER number);
         Team* GetOppositeTeam(Team* team);
+        void SetKickOffLocations(TEAM_NUMBER kicker_team);
     private:
         Team* team_a;
         Team* team_b;

@@ -103,6 +103,10 @@ std::string SpritesProvider::GetDefaultPath(SPRITE_SHEET sprite_sheet_enum)
     {
         return "team_b/keeper.png";
     }
+    else if (SPLASH == sprite_sheet_enum)
+    {
+        return "splash.png";
+    }
     return NULL;
 }
 

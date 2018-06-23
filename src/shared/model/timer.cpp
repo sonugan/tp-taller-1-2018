@@ -1,4 +1,5 @@
 #include "timer.h"
+#include "../logger.h"
 
 Timer::Timer(std::string finish_time_mm_ss)
 {
@@ -13,15 +14,20 @@ Timer::~Timer()
 }
 
 void Timer::Start() {
+	Logger::getInstance()->debug("(Timer:Start)");
 	this->is_ticking = true;
 	if(IsFinishTimeUnset()) {
+		Logger::getInstance()->debug("(Timer:Start) Set finish time.");
 		this->finish_time = this->AddTimeToNow(this->initial_config_finish_time);
 	}
 }
 
 void Timer::Stop() {
-	this->is_ticking = false;
-	this->last_stop_time = time(NULL);
+	if(is_ticking) {
+		Logger::getInstance()->debug("(Timer:Stop)");
+		this->is_ticking = false;
+		this->last_stop_time = time(NULL);
+	}
 }
 
 std::string Timer::GetRemainingMinutes()
@@ -71,6 +77,7 @@ std::string Timer::GetFinishTime()
 
 void Timer::Restart()
 {
+	Logger::getInstance()->debug("(Timer:Restart)");
     this->finish_time = this->AddTimeToNow(this->initial_config_finish_time);
 }
 
