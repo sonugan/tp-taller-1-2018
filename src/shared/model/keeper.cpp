@@ -83,16 +83,14 @@ void Keeper::TryToJump() {
 			unsigned int keeper_y = this->GetLocation()->GetY();
 			
 			if ((DIRECTION::SOUTHWEST == ball->GetTrajectory()->GetDirection() && ball_y < keeper_y) || (DIRECTION::WEST == ball->GetTrajectory()->GetDirection() && ball_y > keeper_y)) {
-				last_jump_request = std::chrono::system_clock::now();
 				this->state = KEEPER_STATE::JUMPING_DOWN_KEEPER;
 				this->location->UpdateY(location->GetY() + JUMPING_SPEED);
-				this->circle->Move(this->location);
 			} else if ((DIRECTION::NORTHWEST == ball->GetTrajectory()->GetDirection() && ball_y > keeper_y) || (DIRECTION::WEST == ball->GetTrajectory()->GetDirection() && ball_y < keeper_y)) {
-				last_jump_request = std::chrono::system_clock::now();
 				this->state = KEEPER_STATE::JUMPING_UP_KEEPER;
 				this->location->UpdateY(location->GetY() - JUMPING_SPEED);
-				this->circle->Move(this->location);
 			}
+			last_jump_request = std::chrono::system_clock::now();
+			this->circle->Move(this->location);
 		}
 		
 		if (!PlaysOnWestSide() && ball->IsGoingToEastGoalZone()) {
@@ -100,16 +98,14 @@ void Keeper::TryToJump() {
 			unsigned int keeper_y = this->GetLocation()->GetY();
 			
 			if ((DIRECTION::SOUTHEAST == ball->GetTrajectory()->GetDirection() && ball_y < keeper_y) || (DIRECTION::EAST == ball->GetTrajectory()->GetDirection() && ball_y > keeper_y)) {
-				last_jump_request = std::chrono::system_clock::now();
 				this->state = KEEPER_STATE::JUMPING_DOWN_KEEPER;
 				this->location->UpdateY(location->GetY() + JUMPING_SPEED);
-				this->circle->Move(this->location);
 			} else if ((DIRECTION::NORTHEAST == ball->GetTrajectory()->GetDirection() && ball_y > keeper_y) || (DIRECTION::EAST == ball->GetTrajectory()->GetDirection() && ball_y < keeper_y)) {
-				last_jump_request = std::chrono::system_clock::now();
 				this->state = KEEPER_STATE::JUMPING_UP_KEEPER;
 				this->location->UpdateY(location->GetY() - JUMPING_SPEED);
-				this->circle->Move(this->location);
 			}
+			last_jump_request = std::chrono::system_clock::now();
+			this->circle->Move(this->location);
 		}
 	}
 }

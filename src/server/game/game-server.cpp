@@ -179,10 +179,10 @@ void GameServer::StartGame() {
 
 void GameServer::RunArtificialIntelligence() {
 	this->MoveKeepers();
+	this->MoveBall();
 	if (GetGameState()->GetMatch()->GetMatchState()->IsPlaying())
 	{
 		this->CatchBall();
-		this->MoveBall();
 		this->MovePlayersToDefaultPositions();
 		this->DetectBallTouches();
 	}
@@ -295,20 +295,22 @@ void GameServer::MoveKeepers() {
 	Keeper* keeper_a = this->GetGameState()->GetMatch()->GetTeamA()->GetKeeper();
 	Keeper* keeper_b = this->GetGameState()->GetMatch()->GetTeamB()->GetKeeper();
 	
-	keeper_a->TryToCatchBall();
-	keeper_b->TryToCatchBall();
-	
-	keeper_a->TryToRun();
-	keeper_b->TryToRun();
-	
-	keeper_a->TryToKick();
-	keeper_b->TryToKick();
+	if (GetGameState()->GetMatch()->GetMatchState()->IsPlaying()) {
+		keeper_a->TryToCatchBall();
+		keeper_b->TryToCatchBall();
+		
+		keeper_a->TryToRun();
+		keeper_b->TryToRun();
+		
+		keeper_a->TryToKick();
+		keeper_b->TryToKick();
+		
+		keeper_a->TryToJump();
+		keeper_b->TryToJump();
+	}
 	
 	keeper_a->TryToStopKicking();
 	keeper_b->TryToStopKicking();
-	
-	keeper_a->TryToJump();
-	keeper_b->TryToJump();
 	
 	keeper_a->TryToStopJumping();
 	keeper_b->TryToStopJumping();

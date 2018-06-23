@@ -21,19 +21,6 @@ PlayerController::~PlayerController() {
 
 void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array, SDL_Event e) {
 //    Logger::getInstance()->debug("(PlayerController::PlayerPlay)");
-    /*if(!ContinueCurrentAction())
-    {
-        selected_player = this->team->GetSelectedPlayer();
-        bool playerKicked = this->KickPlayer(keyboard_state_array);
-
-        if (!playerKicked) {
-            bool playerRecovered = this->PlayerRecoverBall(keyboard_state_array);
-            if (!playerRecovered) {
-                this->PassBall(keyboard_state_array);
-                this->MovePlayer(keyboard_state_array);
-            }
-        }
-    }*/
     this->PassBall(keyboard_state_array);//TODO: Ver como implementar PassBall en el modelo
     this->PlayerRecoverBall(keyboard_state_array);
     this->KickPlayer(keyboard_state_array, e);
@@ -187,10 +174,6 @@ bool PlayerController::WKeySelected(const Uint8 *keyboard_state_array) {
 bool PlayerController::DKeySelected(const Uint8 *keyboard_state_array) {
     return keyboard_state_array[SDL_SCANCODE_D];
 }
-
-//bool PlayerController::WKeySelected(const Uint8 *keyboard_state_array) {
-//    return keyboard_state_array[SDL_SCANCODE_W];
-//}
 
 bool PlayerController::ShiftKeySelected(const Uint8 *keyboard_state_array) {
     return keyboard_state_array[SDL_SCANCODE_LSHIFT];
