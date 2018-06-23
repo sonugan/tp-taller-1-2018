@@ -15,6 +15,7 @@ class CoinFlipper
         virtual ~CoinFlipper();
         COIN_RESULT Flip();
         COIN_RESULT FlipPorc(int sides, int prob);
+        int GetNumber(int max);
     protected:
     private:
         static const int NUMBER_OF_SIDES = 2;

@@ -335,7 +335,7 @@ void Player::Move(bool run)
 
     this->location->Update(new_location);
     this->circle->Move(this->location);
-
+    
     delete new_location;
 }
 

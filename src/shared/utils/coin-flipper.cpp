@@ -37,3 +37,9 @@ COIN_RESULT CoinFlipper::FlipPorc(int sides, int prob)
         return COIN_RESULT::LOSE;
     }
 }
+
+int CoinFlipper::GetNumber(int max)
+{
+    srand(time(NULL)); //inicializo la semilla
+    int secret = rand() % max;
+}

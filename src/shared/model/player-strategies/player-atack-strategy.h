@@ -26,8 +26,24 @@ class PlayerAtackStrategy : public IPlayerStrategy
         bool IsTeamA();
         bool AreBetween(int a, int b, int value);
         vector<Player*> GetBuddies();
+        bool Kick();
+        bool Cross();
+        bool IsInGoalZone();
+        bool IsInEnemyMiddle();
+        bool IsOutisideShootingRange();
+        bool IsExpectingACross(Player* player);
+        bool LongKick();
+        bool MediumKick();
+        bool IsKeeperInFrontOfMe(Keeper* keeper);
+        Keeper* GetOpponetKeeper();
+        void Point();
         Circle* vision_area;
         CoinFlipper* coin_flipper;
+
+        static const int GOAL_POST_NORTH = 448;
+        static const int GOAL_POST_SOUTH = 790;
+        static const int MIDDLE = 960;
+        static const int WIDTH = 20;
 };
 
 #endif // PLAYER_ATACK_ESTRATEGY_H
