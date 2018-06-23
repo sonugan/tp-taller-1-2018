@@ -33,6 +33,7 @@ class Team
         Match* GetMatch();
         TEAM_NUMBER GetTeamNumber();
         void AddPlayer(Player* player);
+        int SetGoals(int goals);
 	static const unsigned int TEAM_SIZE = 6;
         string GetName();
         string GetShirt();

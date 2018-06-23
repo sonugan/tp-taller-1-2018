@@ -18,6 +18,7 @@
 #include "view/keeper-view.h"
 #include "view/timer-view.h"
 #include "view/splash-view.h"
+#include "view/score-view.h"
 #include "view/mini-player-view.h"
 #include "view/info-panel-view.h"
 #include "view/camera.h"
@@ -72,6 +73,7 @@ private:
     Camera* camera;
     Timer* timer;
     TimerView* timer_view;
+    ScoreView* score_view;
     User* user;
     Client* client;
     GameMusic* game_music;

@@ -40,7 +40,7 @@
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="--config /home/swandelow/config.yml" />
+				<Option parameters='--config=&quot;src/shared/configuration/default-config.yml&quot;' />
 				<Compiler>
 					<Add option="-O2" />
 					<Add directory="src/game" />
@@ -91,9 +91,14 @@
 		<Unit filename="src/client/game.h" />
 		<Unit filename="src/client/sound/game-music.cpp" />
 		<Unit filename="src/client/sound/game-music.h" />
+		<Unit filename="src/client/sound/goal_sound.wav" />
+		<Unit filename="src/client/sound/kick_sound.wav" />
+		<Unit filename="src/client/sound/login_theme.wav" />
+		<Unit filename="src/client/sound/main_theme.wav" />
 		<Unit filename="src/client/sound/select_player.wav" />
 		<Unit filename="src/client/sound/sound-manager.cpp" />
 		<Unit filename="src/client/sound/sound-manager.h" />
+		<Unit filename="src/client/sound/time_start_sound.wav" />
 		<Unit filename="src/client/sprites/ball2-old.png" />
 		<Unit filename="src/client/sprites/ball2.png" />
 		<Unit filename="src/client/sprites/error.png" />
@@ -107,9 +112,11 @@
 		<Unit filename="src/client/sprites/selectors/selector4.png" />
 		<Unit filename="src/client/sprites/team_a/away-kit.png" />
 		<Unit filename="src/client/sprites/team_a/home-kit.png" />
+		<Unit filename="src/client/sprites/team_a/keeper.png" />
 		<Unit filename="src/client/sprites/team_a/mini-player.png" />
 		<Unit filename="src/client/sprites/team_b/away-kit.png" />
 		<Unit filename="src/client/sprites/team_b/home-kit.png" />
+		<Unit filename="src/client/sprites/team_b/keeper.png" />
 		<Unit filename="src/client/sprites/team_b/mini-player.png" />
 		<Unit filename="src/client/sprites/tehkan_world_cup.ttf" />
 		<Unit filename="src/client/sprites/tehkan_world_cup_menu.jpg" />
@@ -137,6 +144,8 @@
 		<Unit filename="src/client/view/pitch-view.h" />
 		<Unit filename="src/client/view/player-view.cpp" />
 		<Unit filename="src/client/view/player-view.h" />
+		<Unit filename="src/client/view/score-view.cpp" />
+		<Unit filename="src/client/view/score-view.h" />
 		<Unit filename="src/client/view/sprite-sheet.cpp" />
 		<Unit filename="src/client/view/sprite-sheet.h" />
 		<Unit filename="src/client/view/sprite-text.cpp" />
