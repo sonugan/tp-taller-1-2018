@@ -89,12 +89,23 @@ bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array, SDL_Event e
                 this->kickballevents = 2.5;
             }
             KickBallRequest r(this->kickballevents);
+            
+            PushFakeEvent();
+            
             this->client->KickBall(&r);
             this->kickballevents = 1;
             return true;
         }
     }
     return false;
+}
+
+void PlayerController::PushFakeEvent() {
+    //  truco para que no se quede pateando si no ocurre otro evento de teclado
+    SDL_Event sdlevent = {};
+    sdlevent.type = SDL_KEYDOWN;
+    sdlevent.key.keysym.sym = SDLK_9;
+    SDL_PushEvent(&sdlevent);
 }
 
 bool PlayerController::LongPass(const Uint8 *keyboard_state_array, SDL_Event e) {
@@ -110,6 +121,9 @@ bool PlayerController::LongPass(const Uint8 *keyboard_state_array, SDL_Event e) 
                 this->longpassevents = 2.5;
             }
             LongPassRequest r(this->longpassevents);
+            
+            PushFakeEvent();
+            
             this->client->LongPass(&r);
             this->longpassevents = 1;
             return true;

@@ -52,6 +52,7 @@ class PlayerController : public AbstractController
         bool ShouldRequestPass(const Uint8 *keyboard_state_array);
         bool SelectedPlayerHasChange();
         bool ContinueCurrentAction();
+        void PushFakeEvent();
 };
 
 #endif // PLAYERCONTROLLER_H
