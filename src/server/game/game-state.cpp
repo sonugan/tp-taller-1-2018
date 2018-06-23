@@ -29,12 +29,67 @@ void GameState::AddUser(string username, string password)
 
 void GameState::UpdateMatchState() {
 	this->match->SetRemainingTime(this->timer->GetRemainingMinutes());
-	if(this->timer->IsTimeUp()) {
-		if(MATCH_TIME_TYPE::FIRST_TIME == this->match->GetMatchTime()) {
-			this->match->SetMatchTime(MATCH_TIME_TYPE::SECOND_TIME);
-			this->timer->Restart();
+	MATCH_STATE_TYPE current_state_type = this->match->GetMatchState()->GetType();
+	switch (current_state_type)
+	{
+	case PLAYING:
+		if(this->timer->IsTimeUp()) {
+			Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [PLAYING] - Actualizando a: [TIMEUP]");
+			if(MATCH_TIME_TYPE::FIRST_TIME == this->match->GetMatchTime()) {
+				this->timer->Stop();
+			}
+			this->match->GetMatchState()->SetTimeup();
 		}
+		break;
+	case GOAL:
+	{
+		this->timer->Stop();
+		TEAM_NUMBER kicker_team = TEAM_NUMBER::TEAM_A == this->GetMatch()->GetMatchState()->GetGoalScorerTeam() ? TEAM_NUMBER::TEAM_B : TEAM_NUMBER::TEAM_A;
+		if (this->match->GetMatchState()->IsReadyToChange()) {
+			Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [GOAL] - Actualizando a: [KICKOFF]");
+			this->match->SetKickOffLocations(kicker_team);
+			this->match->GetBall()->ReturnToMiddle();
+			this->match->GetMatchState()->SetKickOff(kicker_team);
+		}
+		break;
 	}
+	case KICKOFF:
+		if (this->match->GetMatchState()->IsReadyToChange()) {
+			Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [KICKOFF] - Actualizando a: [PLAYING]");
+			if(MATCH_STATE_TYPE::TIME_UP == this->match->GetMatchState()->GetPreviousType()) {
+				this->timer->Restart();
+			}
+			this->match->GetMatchState()->SetPlaying();
+			this->timer->Start();
+		}
+		break;
+	case GOAL_KICK:
+		if (this->match->GetMatchState()->IsReadyToChange()) {
+			Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [GOAL_KICK] - Actualizando a: [PLAYING]");
+			this->match->GetMatchState()->SetPlaying();
+		}
+		break;
+	case TIME_UP:
+		if (this->match->GetMatchState()->IsReadyToChange()) {
+			if(MATCH_TIME_TYPE::SECOND_TIME == this->match->GetMatchTime()) {
+				// Fin del partido
+				Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [TIME_UP] - Actualizando a: [FINISHED]");
+				this->match->GetMatchState()->SetFinished();
+			} else {
+				Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [TIME_UP] - Actualizando a: [KICKOFF]");
+				// Seteo el segundo tiempo
+				this->match->SetMatchTime(MATCH_TIME_TYPE::SECOND_TIME);
+				this->match->GetBall()->ReturnToMiddle();
+				// segundo tiempo, saca el team B. esto es arbitrario.
+				this->match->SetKickOffLocations(TEAM_NUMBER::TEAM_B);
+				this->match->GetMatchState()->SetKickOff(TEAM_NUMBER::TEAM_B);
+			}
+		}
+		break;
+	default:
+		break;
+	}
+
 }
 
 void GameState::Start() {
@@ -44,21 +99,29 @@ void GameState::Start() {
 /* Private methods */
 void GameState::CreateModel(Configuration* initial_configuration)
 {
-    Logger::getInstance()->debug("CREANDO EL MODELO");
+    Logger::getInstance()->debug("(GameState:CreateModel) CREANDO EL MODELO");
 
     Formation* formation_team_a = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_A);
     Team* team_a = new Team(formation_team_a, initial_configuration->GetTeamName(), initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
     Keeper* keeper_a = new Keeper();
+    Player* new_player_a;
     for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
-        team_a->AddPlayer(new Player(i,TEAM_NUMBER::TEAM_A));
+    	new_player_a = new Player(i,TEAM_NUMBER::TEAM_A);
+    	// Se setea de forma arbitratia que el team A sea el primero en sacar
+    	new_player_a->SetInitialLocation(formation_team_a->GetKickoffLocationForPlayer(i, true));
+        team_a->AddPlayer(new_player_a);
     }
     team_a->SetKeeper(keeper_a);
 
     Formation* formation_team_b = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_B);
     Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_NUMBER::TEAM_B); // TODO: TRAER NOMBRE DEL TEAM B Y CAMISETA DE CONFIG
     Keeper* keeper_b = new Keeper();
+    Player* new_player_b;
     for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
-        team_b->AddPlayer(new Player(i, TEAM_NUMBER::TEAM_B));
+    	new_player_b = new Player(i,TEAM_NUMBER::TEAM_B);
+    	// Se setea de forma arbitratia que el team A sea el primero en sacar
+    	new_player_b->SetInitialLocation(formation_team_b->GetKickoffLocationForPlayer(i, false));
+        team_b->AddPlayer(new_player_b);
     }
     team_b->SetKeeper(keeper_b);
 
