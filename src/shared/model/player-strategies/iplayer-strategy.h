@@ -8,6 +8,7 @@ class IPlayerStrategy
     public:
         void virtual Play(){};
         bool virtual IsRunningToArea(){ return false;};
+        bool virtual IsRecovering(){ return false; };
     protected:
     private:
 

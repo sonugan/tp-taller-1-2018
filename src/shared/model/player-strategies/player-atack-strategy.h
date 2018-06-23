@@ -24,9 +24,12 @@ class PlayerAtackStrategy : public IPlayerStrategy
         bool IsNearGoalLine(Player* player);
         vector<Player*> GetEnemies();
         bool IsPlayerInFrontOfMe();
+        bool ThereIsAnEnemyInFrontOfMe();
         bool IsTeamA();
         bool AreBetween(int a, int b, int value);
         vector<Player*> GetBuddies();
+        bool RecoverInAtack();
+        bool RunWithBall();
         bool RunToArea();
         bool Convoy();
         bool StayDefend();
@@ -37,6 +40,7 @@ class PlayerAtackStrategy : public IPlayerStrategy
         bool IsOutisideShootingRange();
         bool IsExpectingACross(Player* player);
         bool IsBallInMyMiddle();
+        bool IsRecovering();
         bool LongKick();
         bool MediumKick();
         bool IsKeeperInFrontOfMe(Keeper* keeper);
@@ -53,6 +57,7 @@ class PlayerAtackStrategy : public IPlayerStrategy
         static const int TEAM_A_GOAL_ZONE_X = 1422;
         static const int TEAM_B_GOAL_ZONE_X = 492;
         bool is_running_to_area = false;
+        bool is_recovering = false;
 };
 
 #endif // PLAYER_ATACK_ESTRATEGY_H

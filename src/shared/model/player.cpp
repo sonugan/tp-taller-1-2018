@@ -585,13 +585,10 @@ bool Player::DefineForward()
         Player* buddy = buddies[i];
         if(buddy != this)
         {
-            if(FORMATION::F_3_3)
+            if((IsTeamA() && buddy->GetLocation()->GetX() < this->GetLocation()->GetX())
+                || (!IsTeamA() && buddy->GetLocation()->GetX() > this->GetLocation()->GetX()))
             {
-                if((IsTeamA() && buddy->GetLocation()->GetX() < this->GetLocation()->GetX())
-                    || (!IsTeamA() && buddy->GetLocation()->GetX() > this->GetLocation()->GetX()))
-                {
-                    return true;
-                }
+                return true;
             }
         }
     }
@@ -607,13 +604,10 @@ bool Player::DefineDefender()
         Player* buddy = buddies[i];
         if(buddy != this)
         {
-            if(FORMATION::F_3_3)
+            if((IsTeamA() && buddy->GetLocation()->GetX() > this->GetLocation()->GetX())
+                || (!IsTeamA() && buddy->GetLocation()->GetX() < this->GetLocation()->GetX()))
             {
-                if((IsTeamA() && buddy->GetLocation()->GetX() > this->GetLocation()->GetX())
-                    || (!IsTeamA() && buddy->GetLocation()->GetX() < this->GetLocation()->GetX()))
-                {
-                    return true;
-                }
+                return true;
             }
         }
     }
@@ -629,9 +623,22 @@ bool Player::DefineNorthWinger()
         Player* buddy = buddies[i];
         if(buddy != this)
         {
-            if(buddy->GetLocation()->GetY() > this->GetLocation()->GetY())
+            if(this->GetTeam()->GetFormation()->GetValue() == FORMATION::F_3_3)
             {
-                return false;
+                if(buddy->GetLocation()->GetY() > this->GetLocation()->GetY())
+                {
+                    return false;
+                }
+            }
+            else if(this->GetTeam()->GetFormation()->GetValue() == FORMATION::F_3_1_2
+                || this->GetTeam()->GetFormation()->GetValue() == FORMATION::F_3_2_1)
+            {
+                if(!((IsTeamA() && buddy->GetLocation()->GetX() > this->GetLocation()->GetX())
+                    || (!IsTeamA() && buddy->GetLocation()->GetX() < this->GetLocation()->GetX())) ||
+                    buddy->GetLocation()->GetY() > this->GetLocation()->GetY())
+                {
+                    return false;
+                }
             }
         }
     }
@@ -647,9 +654,22 @@ bool Player::DefineSouthWinger()
         Player* buddy = buddies[i];
         if(buddy != this)
         {
-            if(buddy->GetLocation()->GetY() < this->GetLocation()->GetY())
+            if(this->GetTeam()->GetFormation()->GetValue() == FORMATION::F_3_3)
             {
-                return false;
+                if(buddy->GetLocation()->GetY() < this->GetLocation()->GetY())
+                {
+                    return false;
+                }
+            }
+            else if(this->GetTeam()->GetFormation()->GetValue() == FORMATION::F_3_1_2
+                || this->GetTeam()->GetFormation()->GetValue() == FORMATION::F_3_2_1)
+            {
+                if(!((IsTeamA() && buddy->GetLocation()->GetX() > this->GetLocation()->GetX())
+                    || (!IsTeamA() && buddy->GetLocation()->GetX() < this->GetLocation()->GetX())) ||
+                    buddy->GetLocation()->GetY() > this->GetLocation()->GetY())
+                {
+                    return false;
+                }
             }
         }
     }

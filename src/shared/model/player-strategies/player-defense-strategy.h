@@ -18,6 +18,7 @@ class PlayerDefenseStrategy : public IPlayerStrategy
         void Play();
         void SetDefenseArea(Rectangle* rectangle);
         bool IsRunningToArea() { return false; };
+        bool IsRecovering(){ return false; };
     protected:
         Player* player;
     private:
