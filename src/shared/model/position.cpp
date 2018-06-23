@@ -23,6 +23,7 @@ Position::~Position()
 {
 	delete default_location;
 	delete kickoff_location;
+	delete passive_kickoff_location;
 }
 
 Location* Position::GetDefaultLocation() {

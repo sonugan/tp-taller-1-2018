@@ -20,6 +20,7 @@ void Game::LogIn()
     LoginView* login_view = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH, login_request);
 
     CreateGameMusic();
+
     this->game_music->PlayLoginTheme();
 
     //Se abre la pantalla de login con su propio "game loop"
@@ -245,12 +246,8 @@ void Game::CreateModel(std::string serialized_model)
 
     Ball* ball = new Ball();
 
-    //this->timer = new Timer("02:00"); // TODO: VER DE DONDE SE TOMA EL TIEMPO, DEBERIA VENIR DE CONFIG?
-
     Pitch* pitch = new Pitch(team_a, team_b);
-
     this->match = new Match(pitch, team_a, team_b, ball);
-    //this->match = new Match(pitch, team_a, team_b, ball, this->timer);
 
     this->match->DeserializeAndUpdate(serialized_model);
 

@@ -176,9 +176,9 @@ void GameServer::StartGame() {
 }
 
 void GameServer::RunArtificialIntelligence() {
+	this->MoveKeepers();
 	if (GetGameState()->GetMatch()->GetMatchState()->IsPlaying())
 	{
-		this->MoveKeepers();
 		this->CatchBall();
 		this->MoveBall();
 		this->MovePlayersToDefaultPositions();
@@ -258,7 +258,6 @@ void GameServer::DetectGoals(Ball* ball)
 
 		this->game_state->GetMatch()->GetMatchState()->SetGoal(goaler_team->GetTeamNumber());
 
-//		ball->ReturnToMiddle();
 		if (scoring_on_goal_team != goal_scorer_team) {
 			//Si el equipo del que hace el gol es distinto del equipo del arco en el que se hace el gol => suma goles el equipo del goleador (el que hizo el gol)
 			goal_scorer_team->AddGoal();
@@ -277,14 +276,14 @@ void GameServer::DetectGoals(Ball* ball)
 
 void GameServer::CatchBall() {
 	Ball* ball = this->GetGameState()->GetMatch()->GetBall();
-	if (this->GetGameState()->GetMatch()->GetBall()->LastFreedDelayPassed() && !ball->IsHeldByAnyKeeper()) {
-		if (!ball->IsHeldByAnyKeeper()) {
-			for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
-				Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
-				MakePlayerCatchBall(player_a);
-				Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
-				MakePlayerCatchBall(player_b);
-			}
+	if (this->GetGameState()->GetMatch()->GetBall()->LastFreedDelayPassed() && !ball->IsHeldByAnyKeeper())
+	{
+		for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
+		{
+			Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
+			MakePlayerCatchBall(player_a);
+			Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
+			MakePlayerCatchBall(player_b);
 		}
 	}
 
