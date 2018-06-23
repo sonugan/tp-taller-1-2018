@@ -79,7 +79,7 @@ class Player
         void ChangeToCatchBall();
         void ChangeToStill();
 
-        void Move(bool run);
+        void Move(bool run, bool jog = false);
         void Play();
         void SetIsStill(bool is_still);
         bool GetIsStill();
@@ -89,12 +89,18 @@ class Player
         bool TryRecover();
         IPlayerStrategy* GetStrategy();
         void NotifyChangeBall(Ball* ball);
+        bool IsForward();
+        bool IsDefender();
+        bool IsSouthWinger();
+        bool IsNorthWinger();
+        bool IsCenter();
     protected:
 
     private:
         DIRECTION direction;
 	static const int PLAYER_SPEED = 6;
 	static const int PLAYER_RUNNING_SPEED = 10;
+    static const int PLAYER_JOGGIN_SPEED = 8;
         USER_COLOR color;
         bool plays_for_team_a;
         bool plays_for_team_b;
@@ -116,6 +122,19 @@ class Player
         PlayerAtackStrategy* atack_stategy;
         PlayerDefenseStrategy* defense_strategy;
         u_int left_ball_counter = 0;
+
+        bool IsTeamA();
+        void InitializePosition();
+        bool DefineForward();
+        bool DefineDefender();
+        bool DefineSouthWinger();
+        bool DefineNorthWinger();
+        bool position_has_been_initialized = false;
+        bool is_defender = false;
+        bool is_forward = false;
+        bool is_center = false;
+        bool is_north_winger = false;
+        bool is_south_winger = false;
 };
 
 #endif // PLAYER_H

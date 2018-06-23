@@ -28,7 +28,9 @@ void PlayerAtackStrategy::Play()
         {
             if(!player->HasBall())
             {
-                if(!IsPlayerInFrontOfMe())
+                if(!RunToArea() && !StayDefend())
+                    Convoy();
+                /*if(!IsPlayerInFrontOfMe())
                 {
                     Ball* ball = player->GetTeam()->GetMatch()->GetBall();
                     Location* player_ball_location = ball->GetPlayer()->GetLocation();
@@ -41,7 +43,8 @@ void PlayerAtackStrategy::Play()
                         player->GoTo(destination, false);
                     }
                 }
-                //delete destination; //TODO: revisar
+                //delete destination; //TODO: revisar*/
+
             }
             else
             {
@@ -171,7 +174,7 @@ bool PlayerAtackStrategy::Kick()
     {
         return false;
     }
-    if(IsInEnemyMiddle())
+    /*if(IsInEnemyMiddle())
     {
         if(LongKick())
         {
@@ -185,7 +188,7 @@ bool PlayerAtackStrategy::Kick()
             this->player->PassBall();//TODO: KICK
             return true;
         }
-    }
+    }*/
     if(IsInGoalZone())
     {
         Keeper* keeper = GetOpponetKeeper();
@@ -257,11 +260,11 @@ bool PlayerAtackStrategy::IsInGoalZone()
     int y = this->player->GetLocation()->GetY();
     if(IsTeamA())
     {
-        return x >= 1422;// && y >= 252 && y <= 790;
+        return x >= TEAM_A_GOAL_ZONE_X;// && y >= 252 && y <= 790;
     }
     else
     {
-        return x <= 492;// && y >= 252 && y <= 790;
+        return x <= TEAM_B_GOAL_ZONE_X;// && y >= 252 && y <= 790;
     }
 }
 
@@ -297,6 +300,19 @@ bool PlayerAtackStrategy::IsOutisideShootingRange()
 bool PlayerAtackStrategy::IsExpectingACross(Player* player)
 {
     return false;
+}
+
+bool PlayerAtackStrategy::IsBallInMyMiddle()
+{
+    Ball* ball = this->player->GetTeam()->GetMatch()->GetBall();
+    if(IsTeamA())
+    {
+        return ball->GetLocation()->GetX() < 960;
+    }
+    else
+    {
+        return ball->GetLocation()->GetX() > 960;
+    }
 }
 
 bool PlayerAtackStrategy::LongKick()
@@ -381,4 +397,89 @@ void PlayerAtackStrategy::Point()
             this->player->SetDirection(DIRECTION::NORTHWEST);
         }
     }
+}
+
+bool PlayerAtackStrategy::RunToArea()
+{
+    if(IsInGoalZone())
+    {
+        is_running_to_area = false;
+        return false;
+    }
+    vector<Player*> buddies = this->player->GetTeam()->GetPlayers();
+    for(int i = 0; i < buddies.size(); i++)
+    {
+        Player* buddy = buddies[i];
+        if(buddy != this->player && buddy->GetStrategy()->IsRunningToArea())
+        {
+            is_running_to_area = false;
+            return false;
+        }
+    }
+
+    int prob = 1;
+    if(this->player->IsSouthWinger() || this->player->IsNorthWinger())
+    {
+        if(this->player->IsDefender()) prob = 40;
+        else prob = 70;
+    }
+    else if(this->player->IsCenter())
+    {
+        if(this->player->IsDefender()) prob = 30;
+        else prob = 50;
+    }
+    if(WinFlip(100, prob))
+    {
+        Location* location = this->player->GetLocation();
+        Location* destination = nullptr;
+        if(IsTeamA()) destination = new Location(TEAM_A_GOAL_ZONE_X + 150, location->GetY(), location->GetZ());
+        else destination = new Location(TEAM_B_GOAL_ZONE_X - 150, location->GetY(), location->GetZ());
+
+        this->player->GoTo(destination, true);
+        is_running_to_area = true;
+        return true;
+    }
+    return false;
+}
+
+bool PlayerAtackStrategy::StayDefend()
+{
+    int prob = 1;
+    if(this->player->IsDefender())
+    {
+        if(IsInEnemyMiddle()) prob = 30;
+        else prob = 100;
+    }
+    return !WinFlip(100, prob);
+}
+
+bool PlayerAtackStrategy::Convoy()
+{
+    int prob = 100;
+    if(this->player->IsDefender())
+    {
+        if(IsInEnemyMiddle()) prob = 60;
+        else prob = 30;
+    }
+
+    if(WinFlip(100, prob) && !IsPlayerInFrontOfMe())
+    {
+        Ball* ball = player->GetTeam()->GetMatch()->GetBall();
+        Location* player_ball_location = ball->GetPlayer()->GetLocation();
+        Location* location = player->GetLocation();
+        Team* team_a = player->GetTeam()->GetMatch()->GetTeamA();
+        Location* destination = new Location(player_ball_location->GetX(), location->GetY(), location->GetZ());
+        if((player->GetTeam() == team_a && destination->GetX() >= location->GetX())
+            || (player->GetTeam() != team_a && destination->GetX() <= location->GetX()))
+        {
+            player->GoTo(destination, false);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool PlayerAtackStrategy::WinFlip(int sides, int prob)
+{
+    return this->coin_flipper->FlipPorc(sides, prob) == COIN_RESULT::WIN;
 }

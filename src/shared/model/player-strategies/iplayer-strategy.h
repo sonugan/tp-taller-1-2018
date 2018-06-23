@@ -7,6 +7,7 @@ class IPlayerStrategy
 {
     public:
         void virtual Play(){};
+        bool virtual IsRunningToArea(){ return false;};
     protected:
     private:
 

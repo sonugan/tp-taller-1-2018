@@ -284,7 +284,7 @@ bool Player::IsRecoveringBall()
     return this->current_state->IsRecoveringBall();
 }
 
-void Player::Move(bool run)
+void Player::Move(bool run, bool jog)
 {
     int speed;
     if (this->IsRecoveringBall())
@@ -294,6 +294,10 @@ void Player::Move(bool run)
     else if (run)
     {
         speed = PLAYER_RUNNING_SPEED;
+    }
+    else if(jog)
+    {
+        speed = PLAYER_JOGGIN_SPEED;
     }
     else
     {
@@ -335,7 +339,7 @@ void Player::Move(bool run)
 
     this->location->Update(new_location);
     this->circle->Move(this->location);
-    
+
     delete new_location;
 }
 
@@ -450,6 +454,11 @@ void Player::ChangeToStill()
 
 void Player::Play()
 {
+    if(this->GetLocation() != nullptr && !position_has_been_initialized)
+    {
+        InitializePosition();
+        position_has_been_initialized = true;
+    }
     this->current_state->Play();
 }
 
@@ -550,4 +559,120 @@ void Player::NotifyChangeBall(Ball* ball)
         return;
     }
     this->strategy = this->defense_strategy;
+}
+
+bool Player::IsTeamA()
+{
+    Team* team_a = this->GetTeam()->GetMatch()->GetTeamA();
+    return this->GetTeam() == team_a;
+}
+
+void Player::InitializePosition()
+{
+    this->is_defender = DefineDefender();
+    this->is_forward = DefineForward();
+    this->is_north_winger = DefineNorthWinger();
+    this->is_south_winger = DefineSouthWinger();
+    this->is_center = !is_south_winger && !is_north_winger;//TODO
+}
+
+bool Player::DefineForward()
+{
+    Location* location = this->GetLocation();
+    vector<Player*> buddies = this->GetTeam()->GetPlayers();
+    for(int i = 0; i < buddies.size(); i++)
+    {
+        Player* buddy = buddies[i];
+        if(buddy != this)
+        {
+            if(FORMATION::F_3_3)
+            {
+                if((IsTeamA() && buddy->GetLocation()->GetX() < this->GetLocation()->GetX())
+                    || (!IsTeamA() && buddy->GetLocation()->GetX() > this->GetLocation()->GetX()))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Player::DefineDefender()
+{
+    Location* location = this->GetLocation();
+    vector<Player*> buddies = this->GetTeam()->GetPlayers();
+    for(int i = 0; i < buddies.size(); i++)
+    {
+        Player* buddy = buddies[i];
+        if(buddy != this)
+        {
+            if(FORMATION::F_3_3)
+            {
+                if((IsTeamA() && buddy->GetLocation()->GetX() > this->GetLocation()->GetX())
+                    || (!IsTeamA() && buddy->GetLocation()->GetX() < this->GetLocation()->GetX()))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Player::DefineNorthWinger()
+{
+    Location* location = this->GetLocation();
+    vector<Player*> buddies = this->GetTeam()->GetPlayers();
+    for(int i = 0; i < buddies.size(); i++)
+    {
+        Player* buddy = buddies[i];
+        if(buddy != this)
+        {
+            if(buddy->GetLocation()->GetY() > this->GetLocation()->GetY())
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool Player::DefineSouthWinger()
+{
+    Location* location = this->GetLocation();
+    vector<Player*> buddies = this->GetTeam()->GetPlayers();
+    for(int i = 0; i < buddies.size(); i++)
+    {
+        Player* buddy = buddies[i];
+        if(buddy != this)
+        {
+            if(buddy->GetLocation()->GetY() < this->GetLocation()->GetY())
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool Player::IsForward()
+{
+    return this->is_forward;
+}
+bool Player::IsDefender()
+{
+    return this->is_defender;
+}
+bool Player::IsSouthWinger()
+{
+    return this->is_south_winger;
+}
+bool Player::IsNorthWinger()
+{
+    return this->is_north_winger;
+}
+bool Player::IsCenter()
+{
+    return this->is_center;
 }

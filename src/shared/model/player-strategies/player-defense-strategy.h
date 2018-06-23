@@ -17,6 +17,7 @@ class PlayerDefenseStrategy : public IPlayerStrategy
         virtual ~PlayerDefenseStrategy();
         void Play();
         void SetDefenseArea(Rectangle* rectangle);
+        bool IsRunningToArea() { return false; };
     protected:
         Player* player;
     private:

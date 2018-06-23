@@ -26,8 +26,12 @@ COIN_RESULT CoinFlipper::Flip()
 
 COIN_RESULT CoinFlipper::FlipPorc(int sides, int prob)
 {
-    srand(time(NULL)); //inicializo la semilla
-    int secret = rand() % sides + 1; //resultado está entre 1 y NUMBER_OF_SIDES
+    //srand(time(NULL)); //inicializo la semilla
+    random_device seeder;
+    mt19937 engine(seeder());
+    uniform_int_distribution<int>dist(1, sides);
+    int secret = dist(engine);
+    //int secret = rand() % sides + 1; //resultado está entre 1 y NUMBER_OF_SIDES
     if(secret <= prob)
     {
         return COIN_RESULT::WIN;
