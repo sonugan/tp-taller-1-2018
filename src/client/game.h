@@ -89,7 +89,6 @@ private:
 
     bool quit;
     bool correctly_initialized;
-    int total_game_goals;
 
     void CreateModel(std::string serialized_model);
     void CreateViews();
@@ -102,7 +101,9 @@ private:
     void InitSDL();
     void CloseSDL();
     void RenderViews();
-    void HandleGoalEvents();
+    void PlaySounds();
+    void PlayGoalSound();
+    bool MatchStateHasChanged(int last_match_state);
 
 };
 

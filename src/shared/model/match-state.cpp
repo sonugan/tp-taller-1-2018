@@ -94,3 +94,10 @@ void MatchState::SetFinished() {
 	this->type = MATCH_STATE_TYPE::FINISHED;
 }
 
+bool MatchState::IsTimeup() {
+	return MATCH_STATE_TYPE::TIME_UP == GetType();
+}
+
+bool MatchState::IsGoal() {
+	return MATCH_STATE_TYPE::GOAL == GetType();
+}

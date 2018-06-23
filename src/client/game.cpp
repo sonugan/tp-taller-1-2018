@@ -105,10 +105,8 @@ void Game::RenderViews()
 void Game::Start()
 {
     Logger::getInstance()->info("==================COMIENZA EL JUEGO==================");
+
     this->quit = false;
-    this->total_game_goals = 0;
-    this->sound_manager->PlayGameTimeStartSound();
-    this->game_music->PlayMainTheme();
 
     //Handler de eventos
     SDL_Event e;
@@ -117,6 +115,10 @@ void Game::Start()
 
     const Uint8* keyboard_state_array = SDL_GetKeyboardState(NULL);
 
+    MATCH_STATE_TYPE last_match_state = (MATCH_STATE_TYPE)-1;
+
+    this->game_music->PlayMainTheme();
+    this->sound_manager->PlayKickOffSound();
 
     // GAME LOOP
     while( !quit )
@@ -139,7 +141,8 @@ void Game::Start()
             continue;
         }
 
-        if (this->match->GetMatchState()->IsPlaying()) {
+        if (this->match->GetMatchState()->IsPlaying())
+        {
 			this->player_controller->SetEvent(e);
 			this->player_controller->Handle(keyboard_state_array);
 			this->team_controller->Handle(keyboard_state_array);
@@ -157,7 +160,12 @@ void Game::Start()
         }
 
         RenderViews();
-        HandleGoalEvents();
+
+        if (MatchStateHasChanged(last_match_state)) {
+            // Chequeo si el match state cambio, ya que sino el mismo sonido se
+            // repetia mas de una vez, por ser muy rapido el game loop
+            PlaySounds();
+        }
 
         //Manejo de frames por segundo: http://lazyfoo.net/SDL_tutorials/lesson16/index.php
         //SDL_Delay( ( 100 / FRAMES_PER_SECOND ));//TODO: configurar iteracion
@@ -169,6 +177,8 @@ void Game::Start()
             //Apreta ESCAPE
             quit = ( e.type == SDL_QUIT );
         }
+
+        last_match_state = this->match->GetMatchState()->GetType();
     }
 
 }
@@ -422,6 +432,11 @@ User* Game::GetUser()
     return user;
 }
 
+bool Game::MatchStateHasChanged(int last_match_state)
+{
+    return last_match_state != -1 && last_match_state != this->match->GetMatchState()->GetType();
+}
+
 void Game::CreateGameMusic()
 {
     this->game_music = new GameMusic();
@@ -431,25 +446,39 @@ void Game::CreateGameMusic()
 void Game::DestroyGameMusic()
 {
     delete this->game_music;
-    delete sound_manager;
+    delete this->sound_manager;
 }
 
-void Game::HandleGoalEvents()
+void Game::PlaySounds()
 {
-    int current_total_goals = this->match->GetTeamA()->GetGoals() + this->match->GetTeamB()->GetGoals();
-
-    if (current_total_goals > this->total_game_goals)
+    if (this->match->GetMatchState()->IsKickOff())
     {
-        if (this->game_music->IsPlaying())
-        {
-            this->game_music->Pause();
-            this->sound_manager->PlayGoalSound();
-            this->game_music->Resume();
-        }
-        else
-        {
-            this->sound_manager->PlayGoalSound();
-        }
-        this->total_game_goals = current_total_goals;
+        this->sound_manager->PlayKickOffSound();
+    }
+    else if (this->match->GetMatchState()->IsTimeup())
+    {
+        this->sound_manager->PlayTimeUpSound();
+    }
+    else if (this->match->GetMatchState()->IsGoal())
+    {
+        PlayGoalSound();
+    }
+
+}
+
+void Game::PlayGoalSound()
+{
+    if (this->game_music->IsPlaying())
+    {
+        // Si estaba sonando el tema principal, tengo que pausarlo y despues
+        // reaundarlo, ya que sino pisa la musica de gol
+        this->game_music->Pause();
+        this->sound_manager->PlayGoalSound();
+        this->game_music->Resume();
+    }
+    else
+    {
+        this->sound_manager->PlayGoalSound();
     }
 }
+

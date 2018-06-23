@@ -10,14 +10,16 @@ class SoundManager
         SoundManager();
         virtual ~SoundManager();
         void PlayPlayerSelectionSound();
-        void PlayGameTimeStartSound();
+        void PlayKickOffSound();
         void PlayKickBallSound();
         void PlayGoalSound();
+        void PlayTimeUpSound();
     protected:
 
     private:
         Mix_Chunk* sound;
         void PlaySound(char* path);
+        bool IsPlayingSound();
 };
 
 #endif // SOUNDMANAGER_H

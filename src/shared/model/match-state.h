@@ -34,7 +34,8 @@ public:
 	bool IsReadyToChange();
 	TEAM_NUMBER GetGoalScorerTeam();
 	void SetFinished();
-
+	bool IsTimeup();
+	bool IsGoal();
 
 private:
 	MATCH_STATE_TYPE type;

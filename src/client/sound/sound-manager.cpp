@@ -39,7 +39,7 @@ void SoundManager::PlaySound(char* path)
     }
 }
 
-void SoundManager::PlayGameTimeStartSound()
+void SoundManager::PlayKickOffSound()
 {
     /* SONIDO DE COMIENZO DE TIEMPO DE JUEGO */
     char* path = "src/client/sound/time_start_sound.wav";
@@ -65,7 +65,7 @@ void SoundManager::PlayGoalSound()
     /* SONIDO DE GOL */
     char* path = "src/client/sound/goal_sound.wav";
     this->PlaySound(path);
-    while(Mix_Playing(1) != 0)
+    while(IsPlayingSound())
     {
         // Espero a que termine la musica de gol, para que quede pausada la musica principal
         // del juego, si es que esta sonando
@@ -73,5 +73,14 @@ void SoundManager::PlayGoalSound()
     }
 }
 
+void SoundManager::PlayTimeUpSound()
+{
+    /* SONIDO DE FIN DE TIEMPO */
+    char* path = "src/client/sound/time_up_sound.wav";
+    this->PlaySound(path);
+}
 
-
+bool SoundManager::IsPlayingSound()
+{
+    return Mix_Playing(1) != 0;
+}
