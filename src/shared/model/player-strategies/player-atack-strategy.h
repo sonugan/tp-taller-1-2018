@@ -8,6 +8,7 @@
 #include "../../utils/coin-flipper.h"
 #include <vector>
 #include <cmath>
+#include "../../logger.h"
 
 class Player;
 class PlayerAtackStrategy : public IPlayerStrategy
@@ -47,6 +48,7 @@ class PlayerAtackStrategy : public IPlayerStrategy
         Keeper* GetOpponetKeeper();
         void Point();
         bool WinFlip(int sides, int prob);
+        bool BallIsFree();
 
         Circle* vision_area;
         CoinFlipper* coin_flipper;

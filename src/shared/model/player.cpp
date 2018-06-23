@@ -359,21 +359,25 @@ void Player::PassBallTo(Player* player)
     int x = player->location->GetX();
     int y = player->location->GetY();
 
-    if(my_x == x)
+    if(abs(my_x - x) <= 15)
     {
+        //direction = my_y <= y ? DIRECTION::SOUTH : DIRECTION::NORTH;
         direction = my_y <= y ? DIRECTION::SOUTH : DIRECTION::NORTH;
     }
-    else if(my_y == y)
+    else if(abs(my_y - y) <= 15)
     {
         direction = my_x <= x ? DIRECTION::EAST : DIRECTION::WEST;
     }
-    else if(my_x > x)
+    else if(abs(my_x - x) > 15)
     {
-        direction = my_y <= y ? DIRECTION::SOUTHWEST : DIRECTION::NORTHWEST;
-    }
-    else
-    {
-        direction = my_y <= y ? DIRECTION::SOUTHEAST : DIRECTION::NORTHEAST;
+        if(my_x > x)
+        {
+            direction = my_y <= y ? DIRECTION::SOUTHWEST : DIRECTION::NORTHWEST;
+        }
+        else
+        {
+            direction = my_y <= y ? DIRECTION::SOUTHEAST : DIRECTION::NORTHEAST;
+        }
     }
     PassBall();
 }
