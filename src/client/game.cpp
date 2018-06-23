@@ -10,9 +10,6 @@ Game::Game(Configuration* initial_configuration) // @suppress("Class members sho
 {
     this->initial_configuration = initial_configuration;
     this->correctly_initialized = false;
-
-    Logger::getInstance()->debug("inicializa");
-
     this->game_music = new GameMusic();
 }
 
@@ -23,11 +20,8 @@ void Game::LogIn()
     LoginRequest* login_request = new LoginRequest();
     LoginView* login_view = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH, login_request);
 
-        Logger::getInstance()->debug("play login");
-
     this->game_music->PlayLoginTheme();
 
-        Logger::getInstance()->debug("play login ok");
     //Se abre la pantalla de login con su propio "game loop"
     login_view->Open(initial_configuration);
 
@@ -118,10 +112,7 @@ void Game::Start()
 
     sound_manager->PlayGameTimeStartSound();
 
-            Logger::getInstance()->debug("play main theme");
-
     this->game_music->PlayMainTheme();
-        Logger::getInstance()->debug("play main theme ok");
 
     //Handler de eventos
     SDL_Event e;
