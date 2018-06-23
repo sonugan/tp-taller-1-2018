@@ -413,7 +413,7 @@ void GameServer::ChangeFormation(ChangeFormationRequest* cfRequest, int socket_i
 	User* user = this->session_manager->GetUserBySocketID(socket_id);
 	Team* team = user->GetSelectedPlayer()->GetTeam();
 	team->GetFormation()->ChangeFormation(cfRequest->GetFormation());
-	team->UpdateFormation();
+//	team->UpdateFormation();
 	Logger::getInstance()->info(
 			"(Server:HandleChangeFormationRequest) El usuario " + user->GetUsername() + " cambio la formacion de su equipo (" + team->GetName() + ") a "
 					+ cfRequest->GetFormation());
