@@ -28,8 +28,8 @@ class PlayerController : public AbstractController
         std::chrono::time_point<std::chrono::system_clock> last_pass;
         static const unsigned int PASS_DELAY_MILLIS = 200;
         const Uint8* last_keyboard_state_array;
-        unsigned int kickballevents;
-        unsigned int longpassevents;
+        float kickballevents;
+        float longpassevents;
         SDL_Event event;
 
         void PlayerPlay(const Uint8 *keyboard_state_array, SDL_Event e);

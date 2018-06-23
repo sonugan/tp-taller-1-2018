@@ -27,6 +27,7 @@ public:
     GameState* GetGameState();
     void DoLogin(ClientSocket* client, LoginRequest* login_request);
     void DoQuit(ClientSocket* client);
+    Location* FindNearestPlayer(Player* player);
     void DoRecoverBall(RecoverBallRequest* recover_ball_request, int socket_id);
     void DoMove(MoveRequest* move_request, int socket_id);
     void DoKick(KickBallRequest* kick_ball_request, int client_socket_id);

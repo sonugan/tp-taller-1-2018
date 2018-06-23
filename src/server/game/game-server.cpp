@@ -75,10 +75,12 @@ void GameServer::DoLongPass(LongPassRequest* long_pass_request, int socket_id) {
 	user->GetSelectedPlayer()->LongPass(power, TRAJECTORY_TYPE::UPWARDS); //Mirar esto!!!
 }
 
-void GameServer::DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request) {
-	Logger::getInstance()->debug("(GameServer::DoPassBall) REQUEST DE PASE RECIBIDO");
-	User* user = this->session_manager->GetUserBySocketID(client->socket_id);
-	user->GetSelectedPlayer()->PassBall();
+void GameServer::DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request)
+{
+    Logger::getInstance()->debug("(GameServer::DoPassBall) REQUEST DE PASE RECIBIDO");
+    User* user = this->session_manager->GetUserBySocketID(client->socket_id);
+    Location* nearestPlayer = this->FindNearestPlayer(user->GetSelectedPlayer());
+    user->GetSelectedPlayer()->PassBall(nearestPlayer);
 }
 
 void GameServer::DoMove(MoveRequest* move_request, int socket_id) {
@@ -364,6 +366,59 @@ void GameServer::MakePlayerCatchBall(Player* player) {
             }
 		}
 	}
+}
+
+Location* GameServer::FindNearestPlayer(Player* player) {
+    for (unsigned int i = 0; i < Team::TEAM_SIZE; i++) {
+        Player* player_a = player->GetTeam()->GetPlayers()[i];
+        int x_player_a = player_a->GetLocation()->GetX();
+        int y_player_a = player_a->GetLocation()->GetY();
+        DIRECTION direction = player->GetDirection();
+        if (DIRECTION::EAST == direction) {
+            if ((y_player_a > player->GetLocation()->GetY() - 100) &&
+            (y_player_a < player->GetLocation()->GetY() + 100) && (x_player_a > player->GetLocation()->GetX())){
+                return player_a->GetLocation();
+            }
+
+        }else if (DIRECTION::WEST == direction) {
+           if ((y_player_a > player->GetLocation()->GetY() - 100) &&
+            (y_player_a < player->GetLocation()->GetY() + 100) && (x_player_a < player->GetLocation()->GetX())){
+                return player_a->GetLocation();
+            }
+
+        }else if (DIRECTION::NORTH == direction) {
+           if ((x_player_a > player->GetLocation()->GetX() - 100) &&
+            (x_player_a < player->GetLocation()->GetX() + 100) && (y_player_a < player->GetLocation()->GetY())){
+                return player_a->GetLocation();
+            }
+
+        }else if (DIRECTION::SOUTH == direction) {
+           if ((x_player_a > player->GetLocation()->GetX() - 100) &&
+            (x_player_a < player->GetLocation()->GetX() + 100) && (y_player_a > player->GetLocation()->GetY())){
+                return player_a->GetLocation();
+            }
+        }else if (DIRECTION::NORTHWEST == direction) {
+           if ((y_player_a < player->GetLocation()->GetY()) && (x_player_a < player->GetLocation()->GetX())){
+                return player_a->GetLocation();
+            }
+
+        }else if (DIRECTION::NORTHEAST == direction) {
+           if ((x_player_a > player->GetLocation()->GetX()) && (y_player_a < player->GetLocation()->GetY())){
+                return player_a->GetLocation();
+            }
+
+        }else if (DIRECTION::SOUTHWEST == direction) {
+           if ((x_player_a < player->GetLocation()->GetX()) && (y_player_a > player->GetLocation()->GetY())){
+                return player_a->GetLocation();
+            }
+        }else if (DIRECTION::SOUTHEAST == direction) {
+           if ((x_player_a > player->GetLocation()->GetX()) && (y_player_a > player->GetLocation()->GetY())){
+                return player_a->GetLocation();
+            }
+        }else{
+            return NULL;
+        }
+    }
 }
 
 void GameServer::MovePlayersToDefaultPositions() {

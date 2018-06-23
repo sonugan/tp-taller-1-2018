@@ -11,8 +11,8 @@ PlayerController::PlayerController(Team* team, Client* client) { // @suppress("C
     //current_action = PLAYER_IS_STILL;
     this->last_pass = std::chrono::system_clock::now();
     this->last_keyboard_state_array = NULL;
-    this->kickballevents = 1;
-    this->longpassevents = 1;
+    this->kickballevents = 1.0;
+    this->longpassevents = 1.0;
 }
 
 PlayerController::~PlayerController() {
@@ -81,10 +81,13 @@ bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array, SDL_Event e
     {
         if ((e.key.state == SDL_PRESSED) && (e.key.repeat != 0))
         {
-            this->kickballevents = 2;
+            this->kickballevents = this->kickballevents + 0.2;
         }
         if (e.key.state == SDL_RELEASED)
         {
+            if (this->kickballevents > 2.5){
+                this->kickballevents = 2.5;
+            }
             KickBallRequest r(this->kickballevents);
             this->client->KickBall(&r);
             this->kickballevents = 1;
@@ -99,10 +102,13 @@ bool PlayerController::LongPass(const Uint8 *keyboard_state_array, SDL_Event e) 
     {
         if ((e.key.state == SDL_PRESSED) && (e.key.repeat != 0))
         {
-            this->longpassevents = 2;
+            this->longpassevents = this->longpassevents + 0.2;
         }
         if (e.key.state == SDL_RELEASED)
         {
+            if (this->longpassevents > 2.5){
+                this->longpassevents = 2.5;
+            }
             LongPassRequest r(this->longpassevents);
             this->client->LongPass(&r);
             this->longpassevents = 1;
@@ -167,6 +173,10 @@ bool PlayerController::WKeySelected(const Uint8 *keyboard_state_array) {
 bool PlayerController::DKeySelected(const Uint8 *keyboard_state_array) {
     return keyboard_state_array[SDL_SCANCODE_D];
 }
+
+//bool PlayerController::WKeySelected(const Uint8 *keyboard_state_array) {
+//    return keyboard_state_array[SDL_SCANCODE_W];
+//}
 
 bool PlayerController::ShiftKeySelected(const Uint8 *keyboard_state_array) {
     return keyboard_state_array[SDL_SCANCODE_LSHIFT];

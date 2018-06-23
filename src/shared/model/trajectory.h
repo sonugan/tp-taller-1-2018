@@ -12,6 +12,7 @@ class Trajectory
 {
     public:
         Trajectory(DIRECTION direction, unsigned int drive, TRAJECTORY_TYPE trajectory_type);
+        Trajectory(DIRECTION direction, unsigned int drive, TRAJECTORY_TYPE trajectory_type, Location* nearest_player);
         Trajectory(Player* player);
         Trajectory(Keeper* keeper);
         virtual ~Trajectory();
@@ -45,6 +46,7 @@ class Trajectory
         void UpdateToNextLocationForFreeTrajectory(Location* location);
         void UpdateToNextLocationForPlayerTrajectory(Location* location);
         void UpdateToNextLocationForKeeperTrajectory(Location* location);
+        Location* nearest_player;
 };
 
 #endif // TRAJECTORY_H
