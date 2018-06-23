@@ -33,6 +33,7 @@ public:
     string DoLongPass(LongPassRequest* long_pass_request, int client_socket_id);
     Message* DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request);
     string ChangePlayer(ChangePlayerRequest* change_player_request, int socket_id);
+    Location* FindNearestPlayer(Player* player);
     bool IsReadyToStart();
     void StartGame();
     bool IsRunning();

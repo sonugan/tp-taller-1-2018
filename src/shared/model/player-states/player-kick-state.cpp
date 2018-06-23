@@ -92,7 +92,7 @@ void PlayerKickState::PassBall()
     if(!ContinueKicking())
     {
         this->player->ChangeToPass();
-        this->player->PassBall();
+        this->player->PassBall(NULL);
     }
 }
 void PlayerKickState::CatchBall()

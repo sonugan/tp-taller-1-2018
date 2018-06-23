@@ -93,7 +93,8 @@ BallView::BallView(Ball* ball)
     upwards_ball_clips.push_back(sprite10);
     upwards_ball_clips.push_back(sprite11);
 
-    animations.push_back(new Animation("upwards_ball", upwards_ball_clips, 0.3));
+    unsigned int ball_speed = ball->GetTrajectory()->GetBallSpeed();
+    animations.push_back(new Animation("upwards_ball", upwards_ball_clips, 0.7));
 
     std::vector<SDL_Rect*> downwards_ball_clips;
 
@@ -140,7 +141,7 @@ BallView::BallView(Ball* ball)
     downwards_ball_clips.push_back(sprite16);
     downwards_ball_clips.push_back(sprite17);
 
-    animations.push_back(new Animation("downwards_ball", downwards_ball_clips, 0.3));
+    animations.push_back(new Animation("downwards_ball", downwards_ball_clips, 0.6));
 
     current_animation_index = 0;
 
@@ -172,10 +173,11 @@ void BallView::Render(int x_camera, int y_camera, int max_x, int max_y) {
         current_animation_index = 3;
     }else{
         current_animation_index = 0;
+        this->animations[2]->Restart();
+        this->animations[3]->Restart();
     }
 
     SDL_Rect* current_clip = this->animations[current_animation_index]->NextClip();
-
     int x, y;
 
     this->previous_location->UpdateX(ball->GetLocation()->GetX());

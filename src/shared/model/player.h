@@ -57,7 +57,7 @@ class Player
         void GoBackToDefaultPosition();
         Team* GetTeam();
         bool HasBall();
-        void PassBall();
+        void PassBall(Location* nearestPlayer);
         void KickBall(int power);
         bool PlaysForTeamA();
         bool PlaysForTeamB();
