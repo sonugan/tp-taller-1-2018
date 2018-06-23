@@ -143,10 +143,13 @@ void Game::Start()
             continue;
         }
 
-        this->player_controller->SetEvent(e);
+        if (this->match->GetMatchState()->IsPlaying()) {
+			this->player_controller->SetEvent(e);
+			this->player_controller->Handle(keyboard_state_array);
+			this->team_controller->Handle(keyboard_state_array);
+        }
+
         this->game_controller->Handle(keyboard_state_array);
-        this->player_controller->Handle(keyboard_state_array);
-        this->team_controller->Handle(keyboard_state_array);
         this->music_controller->Handle(keyboard_state_array);
 
         string serialized_match = this->client->GetGameState();
@@ -201,20 +204,27 @@ void Game::CreateModel(std::string serialized_model)
     Team* team_a = new Team(formation_team_a, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
 
     Keeper* keeper_a = new Keeper();
-    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
-    {
-        team_a->AddPlayer(new Player(i,TEAM_NUMBER::TEAM_A));
-    }
+	Player* new_player_a;
+	for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
+	{
+		new_player_a = new Player(i, TEAM_NUMBER::TEAM_A);
+		// Se setea de forma arbitratia que el team A sea el primero en sacar
+		new_player_a->SetInitialLocation(formation_team_a->GetKickoffLocationForPlayer(i, true));
+		team_a->AddPlayer(new_player_a);
+	}
     team_a->SetKeeper(keeper_a);
 
     Formation* formation_team_b = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_B);
     Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_NUMBER::TEAM_B); // TODO: TRAER NOMBRE DEL TEAM B Y CAMISETA DE CONFIG
 
     Keeper* keeper_b = new Keeper();
-    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
-    {
-        team_b->AddPlayer(new Player(i, TEAM_NUMBER::TEAM_B));
-    }
+	Player* new_player_b;
+	for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
+	{
+		new_player_b = new Player(i, TEAM_NUMBER::TEAM_B);
+		new_player_b->SetInitialLocation(formation_team_b->GetKickoffLocationForPlayer(i, false));
+		team_b->AddPlayer(new_player_b);
+	}
     team_b->SetKeeper(keeper_b);
 
     // DEFINIR COMO SE SELECCIONA EL JUGADOR
@@ -229,12 +239,8 @@ void Game::CreateModel(std::string serialized_model)
 
     Ball* ball = new Ball();
 
-    //this->timer = new Timer("02:00"); // TODO: VER DE DONDE SE TOMA EL TIEMPO, DEBERIA VENIR DE CONFIG?
-
     Pitch* pitch = new Pitch(team_a, team_b);
-
     this->match = new Match(pitch, team_a, team_b, ball);
-    //this->match = new Match(pitch, team_a, team_b, ball, this->timer);
 
     this->match->DeserializeAndUpdate(serialized_model);
 
@@ -291,7 +297,10 @@ void Game::CreateViews()
     this->camera->AddMiniBallView(mini_ball_view);
 
     this->timer_view = new TimerView(renderer);
-    this->score_view = new ScoreView(renderer);
+    
+    SplashView* splash_view = new SplashView(match->GetMatchState());
+    this->camera->Add(splash_view);
+	this->score_view = new ScoreView(renderer);
 
 }
 

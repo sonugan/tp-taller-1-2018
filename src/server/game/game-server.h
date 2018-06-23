@@ -27,12 +27,12 @@ public:
     GameState* GetGameState();
     void DoLogin(ClientSocket* client, LoginRequest* login_request);
     void DoQuit(ClientSocket* client);
-    std::string DoRecoverBall(RecoverBallRequest* recover_ball_request, int socket_id);
-    std::string DoMove(MoveRequest* move_request, int socket_id);
-    string DoKick(KickBallRequest* kick_ball_request, int client_socket_id);
-    string DoLongPass(LongPassRequest* long_pass_request, int client_socket_id);
-    Message* DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request);
-    string ChangePlayer(ChangePlayerRequest* change_player_request, int socket_id);
+    void DoRecoverBall(RecoverBallRequest* recover_ball_request, int socket_id);
+    void DoMove(MoveRequest* move_request, int socket_id);
+    void DoKick(KickBallRequest* kick_ball_request, int client_socket_id);
+    void DoLongPass(LongPassRequest* long_pass_request, int client_socket_id);
+    void DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request);
+    void ChangePlayer(ChangePlayerRequest* change_player_request, int socket_id);
     bool IsReadyToStart();
     void StartGame();
     bool IsRunning();
