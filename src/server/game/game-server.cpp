@@ -184,11 +184,14 @@ void GameServer::StartGame() {
 }
 
 void GameServer::RunArtificialIntelligence() {
-	this->MoveKeepers();
-	this->CatchBall();
-	this->MoveBall();
-	this->MovePlayersToDefaultPositions();
-	this->DetectBallTouches();
+	if (GetGameState()->GetMatch()->GetMatchState()->IsPlaying())
+	{
+		this->MoveKeepers();
+		this->CatchBall();
+		this->MoveBall();
+		this->MovePlayersToDefaultPositions();
+		this->DetectBallTouches();
+	}
 }
 
 void GameServer::DetectBallTouches()
@@ -373,31 +376,29 @@ void GameServer::MakePlayerCatchBall(Player* player) {
 }
 
 void GameServer::MovePlayersToDefaultPositions() {
-	if (GetGameState()->GetMatch()->GetMatchState()->IsPlaying())
-	{
 
-		for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
+	for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
+	{
+		Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
+		if (!player_a->IsSelected())
 		{
-			Player* player_a = this->GetGameState()->GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
-			if (!player_a->IsSelected())
-			{
-				player_a->GoBackToDefaultPosition();
-			}
-			else
-			{
-				player_a->Play();
-			}
-			Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
-			if (!player_b->IsSelected())
-			{
-				player_b->GoBackToDefaultPosition();
-			}
-			else
-			{
-				player_b->Play();
-			}
+			player_a->GoBackToDefaultPosition();
+		}
+		else
+		{
+			player_a->Play();
+		}
+		Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
+		if (!player_b->IsSelected())
+		{
+			player_b->GoBackToDefaultPosition();
+		}
+		else
+		{
+			player_b->Play();
 		}
 	}
+	
 }
 
 void GameServer::MoveBall() {

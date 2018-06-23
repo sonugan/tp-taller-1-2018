@@ -291,6 +291,9 @@ void Game::CreateViews()
     this->camera->AddMiniBallView(mini_ball_view);
 
     this->timer_view = new TimerView(renderer);
+    
+    SplashView* splash_view = new SplashView(match->GetMatchState());
+    this->camera->Add(splash_view);
 
 }
 

@@ -10,6 +10,7 @@
 
 #include "abstract-view.h"
 #include "../../shared/model/match-state.h"
+#include "sprites-provider.h"
 
 class SplashView : public AbstractView
 {
