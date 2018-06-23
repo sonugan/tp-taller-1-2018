@@ -21,4 +21,5 @@ users:
         name: user4
         password: 1234
 
-game_duration: 05:00
+
+game_duration: 02:00
