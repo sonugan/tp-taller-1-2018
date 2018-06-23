@@ -439,7 +439,7 @@ bool PlayerAtackStrategy::RunWithBall()
     Location* destination = nullptr;
 
     int y = location->GetY();
-    if(ThereIsAnEnemyInFrontOfMe())
+    if(ThereIsAnEnemyInFrontOfMe() && this->WinFlip(3,2))
     {
         y += (this->WinFlip(2,1)? 10 : -10);
     }
