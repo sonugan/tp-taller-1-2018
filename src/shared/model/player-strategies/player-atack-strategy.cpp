@@ -63,7 +63,7 @@ bool PlayerAtackStrategy::PassBall()//TODO: los angulos de pase son de 45°, lo 
                                     // reduciendose su efectividad cuanto mayor es la distancia
 {
     Logger::getInstance()->debug("PlayerAtackStrategy::PassBall");
-    if(!this->WinFlip(10,5)) return false;
+    if(!this->coin_flipper->Win(10,5)) return false;
     vector<Player*> pass_ball_players;
     vector<Player*> buddies = this->player->GetTeam()->GetPlayers();
     for(int i = 0; i < buddies.size(); i++)
@@ -404,11 +404,11 @@ void PlayerAtackStrategy::Point()
         if(y > GOAL_POST_NORTH && y < GOAL_POST_SOUTH)
         {
             if(!IsKeeperInFrontOfMe(keeper) || !IsInGoalZone())
-                this->player->SetDirection(this->WinFlip(3,1)? DIRECTION::NORTHEAST :
-                    (this->WinFlip(3,1) ? DIRECTION::SOUTHEAST : DIRECTION::EAST));
+                this->player->SetDirection(this->coin_flipper->Win(3,1)? DIRECTION::NORTHEAST :
+                    (this->coin_flipper->Win(3,1) ? DIRECTION::SOUTHEAST : DIRECTION::EAST));
             else
             {
-                this->player->SetDirection(this->WinFlip(2,1)? DIRECTION::SOUTHEAST : DIRECTION::NORTHEAST);
+                this->player->SetDirection(this->coin_flipper->Win(2,1)? DIRECTION::SOUTHEAST : DIRECTION::NORTHEAST);
             }
         }
         else if(y <= GOAL_POST_NORTH)
@@ -425,11 +425,11 @@ void PlayerAtackStrategy::Point()
         if(y > GOAL_POST_NORTH && y < GOAL_POST_SOUTH)
         {
             if(!IsKeeperInFrontOfMe(keeper) || !IsInGoalZone())
-            this->player->SetDirection(this->WinFlip(3,1)? DIRECTION::NORTHWEST :
-                (this->WinFlip(3,1) ? DIRECTION::SOUTHWEST : DIRECTION::WEST));
+            this->player->SetDirection(this->coin_flipper->Win(3,1)? DIRECTION::NORTHWEST :
+                (this->coin_flipper->Win(3,1) ? DIRECTION::SOUTHWEST : DIRECTION::WEST));
             else
             {
-                this->player->SetDirection(this->WinFlip(2,1)? DIRECTION::SOUTHWEST : DIRECTION::NORTHWEST);
+                this->player->SetDirection(this->coin_flipper->Win(2,1)? DIRECTION::SOUTHWEST : DIRECTION::NORTHWEST);
             }
         }
         else if(y <= GOAL_POST_NORTH)
@@ -484,15 +484,15 @@ bool PlayerAtackStrategy::RunWithBall()
 
     int prob = 100;
     if(this->player->IsDefender()) prob = 60;
-    bool run = WinFlip(100, prob);
+    bool run = coin_flipper->Win(100, prob);
 
     Location* location = this->player->GetLocation();
     Location* destination = nullptr;
 
     int y = location->GetY();
-    if(ThereIsAnEnemyInFrontOfMe() && this->WinFlip(3,2))
+    if(ThereIsAnEnemyInFrontOfMe() && this->coin_flipper->Win(3,2))
     {
-        y += (this->WinFlip(2,1)? 10 : -10);
+        y += (this->coin_flipper->Win(2,1)? 10 : -10);
     }
 
     if(IsTeamA()) destination = new Location(TEAM_A_GOAL_ZONE_X + 150, y, location->GetZ());
@@ -532,7 +532,7 @@ bool PlayerAtackStrategy::RunToArea()
         if(this->player->IsDefender()) prob = 30;
         else prob = 50;
     }
-    if(WinFlip(100, prob))
+    if(coin_flipper->Win(100, prob))
     {
         Location* location = this->player->GetLocation();
         Location* destination = nullptr;
@@ -555,7 +555,7 @@ bool PlayerAtackStrategy::StayDefend()
         if(IsInEnemyMiddle()) prob = 30;
         else prob = 100;
     }
-    return !WinFlip(100, prob);
+    return !coin_flipper->Win(100, prob);
 }
 
 bool PlayerAtackStrategy::Convoy()
@@ -568,7 +568,7 @@ bool PlayerAtackStrategy::Convoy()
         else prob = 30;
     }
 
-    if(WinFlip(100, prob) && !IsPlayerInFrontOfMe())
+    if(coin_flipper->Win(100, prob) && !IsPlayerInFrontOfMe())
     {
         Ball* ball = player->GetTeam()->GetMatch()->GetBall();
         Location* player_ball_location = ball->GetPlayer()->GetLocation();
@@ -583,12 +583,6 @@ bool PlayerAtackStrategy::Convoy()
         }
     }
     return false;
-}
-
-bool PlayerAtackStrategy::WinFlip(int sides, int prob)
-{
-    Logger::getInstance()->debug("PlayerAtackStrategy::WinFlip");
-    return this->coin_flipper->FlipPorc(sides, prob) == COIN_RESULT::WIN;
 }
 
 bool PlayerAtackStrategy::BallIsFree()

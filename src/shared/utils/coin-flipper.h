@@ -16,6 +16,7 @@ class CoinFlipper
         virtual ~CoinFlipper();
         COIN_RESULT Flip();
         COIN_RESULT FlipPorc(int sides, int prob);
+        bool Win(int sides, int prob);
         int GetNumber(int max);
     protected:
     private:

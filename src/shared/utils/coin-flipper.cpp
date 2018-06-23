@@ -47,3 +47,8 @@ int CoinFlipper::GetNumber(int max)
     srand(time(NULL)); //inicializo la semilla
     return rand() % max;
 }
+
+bool CoinFlipper::Win(int sides, int prob)
+{
+    return FlipPorc(sides, prob) == COIN_RESULT::WIN;
+}

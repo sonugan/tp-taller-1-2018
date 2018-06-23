@@ -47,7 +47,6 @@ class PlayerAtackStrategy : public IPlayerStrategy
         bool IsKeeperInFrontOfMe(Keeper* keeper);
         Keeper* GetOpponetKeeper();
         void Point();
-        bool WinFlip(int sides, int prob);
         bool BallIsFree();
 
         Circle* vision_area;
