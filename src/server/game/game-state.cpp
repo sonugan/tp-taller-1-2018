@@ -37,7 +37,6 @@ void GameState::UpdateMatchState() {
 			Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [PLAYING] - Actualizando a: [TIMEUP]");
 			if(MATCH_TIME_TYPE::FIRST_TIME == this->match->GetMatchTime()) {
 				this->timer->Stop();
-				this->timer->Restart(); //TODO: fixear esto, cuando pasa al segundo tiempo se pierden unos segundos del timer.
 			}
 			this->match->GetMatchState()->SetTimeup();
 		}
@@ -57,6 +56,9 @@ void GameState::UpdateMatchState() {
 	case KICKOFF:
 		if (this->match->GetMatchState()->IsReadyToChange()) {
 			Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [KICKOFF] - Actualizando a: [PLAYING]");
+			if(MATCH_STATE_TYPE::TIME_UP == this->match->GetMatchState()->GetPreviousType()) {
+				this->timer->Restart();
+			}
 			this->match->GetMatchState()->SetPlaying();
 			this->timer->Start();
 		}

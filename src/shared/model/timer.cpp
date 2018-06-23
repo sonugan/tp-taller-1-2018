@@ -17,6 +17,7 @@ void Timer::Start() {
 	Logger::getInstance()->debug("(Timer:Start)");
 	this->is_ticking = true;
 	if(IsFinishTimeUnset()) {
+		Logger::getInstance()->debug("(Timer:Start) Set finish time.");
 		this->finish_time = this->AddTimeToNow(this->initial_config_finish_time);
 	}
 }
