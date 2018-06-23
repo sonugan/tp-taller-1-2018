@@ -25,6 +25,7 @@ class Trajectory
         DIRECTION GetDirection();
         void UpdateDirection(DIRECTION direction);
         unsigned int GetBallSpeed();
+        unsigned int GetActualBallSpeed();
         void UpdateBallSpeed(unsigned int ball_speed);
     protected:
 

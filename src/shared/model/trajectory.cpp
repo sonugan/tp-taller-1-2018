@@ -289,7 +289,7 @@ void Trajectory::ChangeTrajectoryType(TRAJECTORY_TYPE trajectory_type)
 
 unsigned int Trajectory::GetBallSpeed()
 {
-    return this->original_ball_speed;
+    return this->ball_speed;
 }
 
 void Trajectory::UpdateTrajectoryType(TRAJECTORY_TYPE trajectory_type)
