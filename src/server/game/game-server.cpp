@@ -63,28 +63,25 @@ void GameServer::DoRecoverBall(RecoverBallRequest* recover_ball_request, int soc
 	user->GetSelectedPlayer()->RecoverBall();
 }
 
-std::string GameServer::DoKick(KickBallRequest* kick_request, int socket_id) {
+void GameServer::DoKick(KickBallRequest* kick_request, int socket_id) {
 	User* user = this->session_manager->GetUserBySocketID(socket_id);
 	unsigned int power = kick_request->GetPower();
 	user->GetSelectedPlayer()->KickBall(power);
-	return this->game_state->GetMatch()->Serialize();
 }
 
-std::string GameServer::DoLongPass(LongPassRequest* long_pass_request, int socket_id) {
+void GameServer::DoLongPass(LongPassRequest* long_pass_request, int socket_id) {
 	User* user = this->session_manager->GetUserBySocketID(socket_id);
 	unsigned int power = long_pass_request->GetPower();
 	user->GetSelectedPlayer()->LongPass(power, TRAJECTORY_TYPE::UPWARDS); //Mirar esto!!!
-	return this->game_state->GetMatch()->Serialize();
 }
 
-Message* GameServer::DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request) {
+void GameServer::DoPassBall(ClientSocket* client, PassBallRequest* pass_ball_request) {
 	Logger::getInstance()->debug("(GameServer::DoPassBall) REQUEST DE PASE RECIBIDO");
 	User* user = this->session_manager->GetUserBySocketID(client->socket_id);
 	user->GetSelectedPlayer()->PassBall();
-	return new Message(this->game_state->GetMatch()->Serialize());
 }
 
-std::string GameServer::DoMove(MoveRequest* move_request, int socket_id) {
+void GameServer::DoMove(MoveRequest* move_request, int socket_id) {
 	User* user = this->session_manager->GetUserBySocketID(socket_id);
 	DIRECTION direction = move_request->GetDirection();
 	bool running = move_request->IsRunning();
@@ -105,12 +102,9 @@ std::string GameServer::DoMove(MoveRequest* move_request, int socket_id) {
 	} else if (direction == DIRECTION::SOUTHWEST) {
 		user->GetSelectedPlayer()->MoveDownToLeft(running);
 	}
-
-	return this->game_state->GetMatch()->Serialize();
-
 }
 
-string GameServer::ChangePlayer(ChangePlayerRequest* change_player_request, int socket_id) {
+void GameServer::ChangePlayer(ChangePlayerRequest* change_player_request, int socket_id) {
 	User* user = this->session_manager->GetUserBySocketID(socket_id);
 	Player* last_selected_player = user->GetSelectedPlayer();
 
@@ -137,8 +131,6 @@ string GameServer::ChangePlayer(ChangePlayerRequest* change_player_request, int 
 	last_selected_player->SetPlayerColor(USER_COLOR::NO_COLOR);
 	next_player->SetPlayerColor(user->GetUserColor());
 	user->SetSelectedPlayer(next_player);
-
-	return this->game_state->GetMatch()->Serialize();
 }
 
 bool GameServer::IsReadyToStart() {
