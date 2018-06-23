@@ -140,10 +140,13 @@ void Game::Start()
             continue;
         }
 
-        this->player_controller->SetEvent(e);
+        if (this->match->GetMatchState()->IsPlaying()) {
+			this->player_controller->SetEvent(e);
+			this->player_controller->Handle(keyboard_state_array);
+			this->team_controller->Handle(keyboard_state_array);
+        }
+
         this->game_controller->Handle(keyboard_state_array);
-        this->player_controller->Handle(keyboard_state_array);
-        this->team_controller->Handle(keyboard_state_array);
         this->music_controller->Handle(keyboard_state_array);
 
         string serialized_match = this->client->GetGameState();
