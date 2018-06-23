@@ -21,25 +21,15 @@ PlayerController::~PlayerController() {
 
 void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array, SDL_Event e) {
 //    Logger::getInstance()->debug("(PlayerController::PlayerPlay)");
-    /*if(!ContinueCurrentAction())
-    {
-        selected_player = this->team->GetSelectedPlayer();
-        bool playerKicked = this->KickPlayer(keyboard_state_array);
-
-        if (!playerKicked) {
-            bool playerRecovered = this->PlayerRecoverBall(keyboard_state_array);
-            if (!playerRecovered) {
-                this->PassBall(keyboard_state_array);
-                this->MovePlayer(keyboard_state_array);
-            }
-        }
-    }*/
-    this->PassBall(keyboard_state_array);//TODO: Ver como implementar PassBall en el modelo
-    this->PlayerRecoverBall(keyboard_state_array);
-    this->KickPlayer(keyboard_state_array, e);
-    this->LongPass(keyboard_state_array, e);
-    this->MovePlayer(keyboard_state_array);
-    this->PlayKickSound(keyboard_state_array);
+    bool pass_ball = this->PassBall(keyboard_state_array);//TODO: Ver como implementar PassBall en el modelo
+    bool shoot = this->KickPlayer(keyboard_state_array, e);
+    bool aerial_pass = this->LongPass(keyboard_state_array, e);
+    if (pass_ball || shoot || aerial_pass) {
+		this->PlayKickSound(keyboard_state_array);
+    } else {
+		this->PlayerRecoverBall(keyboard_state_array);
+		this->MovePlayer(keyboard_state_array);
+    }
     this->last_keyboard_state_array = keyboard_state_array;
 }
 
@@ -132,12 +122,14 @@ bool PlayerController::LongPass(const Uint8 *keyboard_state_array, SDL_Event e) 
     return false;
 }
 
-void PlayerController::PassBall(const Uint8 *keyboard_state_array) {
+bool PlayerController::PassBall(const Uint8 *keyboard_state_array) {
     if (ShouldRequestPass(keyboard_state_array)) {
         PassBallRequest r;
         this->client->PassBall(&r);
         last_pass = std::chrono::system_clock::now();
+        return true;
     }
+    return false;
 }
 
 bool PlayerController::ShouldRequestPass(const Uint8 *keyboard_state_array) {
@@ -187,10 +179,6 @@ bool PlayerController::WKeySelected(const Uint8 *keyboard_state_array) {
 bool PlayerController::DKeySelected(const Uint8 *keyboard_state_array) {
     return keyboard_state_array[SDL_SCANCODE_D];
 }
-
-//bool PlayerController::WKeySelected(const Uint8 *keyboard_state_array) {
-//    return keyboard_state_array[SDL_SCANCODE_W];
-//}
 
 bool PlayerController::ShiftKeySelected(const Uint8 *keyboard_state_array) {
     return keyboard_state_array[SDL_SCANCODE_LSHIFT];
