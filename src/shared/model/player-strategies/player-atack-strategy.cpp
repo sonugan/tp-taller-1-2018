@@ -10,21 +10,12 @@ PlayerAtackStrategy::PlayerAtackStrategy(Player* player)
 PlayerAtackStrategy::~PlayerAtackStrategy()
 {
     Logger::getInstance()->debug("DESTRUYENDO PlayerAtackStrategy");
-    if(this->vision_area != nullptr)
-        delete this->vision_area;
     delete this->coin_flipper;
 }
 
 void PlayerAtackStrategy::Play()
 {
     Logger::getInstance()->debug("PlayerAtackStrategy::Play");
-    if(this->vision_area == nullptr)
-    {
-        if(player->GetLocation() != nullptr)
-            this->vision_area = new Circle(80, player->GetLocation());
-        else
-            return;
-    }
     if(!player->IsSelected())
     {
         if(this->player->GetTeam()->HasBall())

@@ -129,6 +129,8 @@
 		<Unit filename="src/client/view/keeper-view.h" />
 		<Unit filename="src/client/view/login-view.cpp" />
 		<Unit filename="src/client/view/login-view.h" />
+		<Unit filename="src/client/view/match-time-view.cpp" />
+		<Unit filename="src/client/view/match-time-view.h" />
 		<Unit filename="src/client/view/mini-ball-view.cpp" />
 		<Unit filename="src/client/view/mini-ball-view.h" />
 		<Unit filename="src/client/view/mini-player-view.cpp" />
@@ -137,11 +139,8 @@
 		<Unit filename="src/client/view/pitch-view.h" />
 		<Unit filename="src/client/view/player-view.cpp" />
 		<Unit filename="src/client/view/player-view.h" />
-<<<<<<< HEAD
-=======
 		<Unit filename="src/client/view/score-view.cpp" />
 		<Unit filename="src/client/view/score-view.h" />
->>>>>>> develop
 		<Unit filename="src/client/view/splash-view.cpp" />
 		<Unit filename="src/client/view/splash-view.h" />
 		<Unit filename="src/client/view/sprite-sheet.cpp" />

@@ -49,7 +49,6 @@ class PlayerAtackStrategy : public IPlayerStrategy
         void Point();
         bool BallIsFree();
 
-        Circle* vision_area;
         CoinFlipper* coin_flipper;
         static const int GOAL_POST_NORTH = 448;
         static const int GOAL_POST_SOUTH = 790;
