@@ -105,3 +105,7 @@ bool MatchState::IsTimeup() {
 bool MatchState::IsGoal() {
 	return MATCH_STATE_TYPE::GOAL == GetType();
 }
+
+bool MatchState::IsFinished() {
+	return MATCH_STATE_TYPE::FINISHED == GetType();
+}
