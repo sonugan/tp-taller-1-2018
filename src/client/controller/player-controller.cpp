@@ -79,9 +79,9 @@ bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array, SDL_Event e
                 this->kickballevents = 2.5;
             }
             KickBallRequest r(this->kickballevents);
-            
+
             PushFakeEvent();
-            
+
             this->client->KickBall(&r);
             this->kickballevents = 1;
             return true;
@@ -111,9 +111,9 @@ bool PlayerController::LongPass(const Uint8 *keyboard_state_array, SDL_Event e) 
                 this->longpassevents = 2.5;
             }
             LongPassRequest r(this->longpassevents);
-            
+
             PushFakeEvent();
-            
+
             this->client->LongPass(&r);
             this->longpassevents = 1;
             return true;
@@ -236,10 +236,10 @@ bool PlayerController::ContinueCurrentAction()
 void PlayerController::PlayKickSound(const Uint8 *keyboard_state_array)
 {
     // CHEQUEO SI EL JUGADOR ESTA PATEANDO EN CUALQUIERA DE SUS FORMAS
-    if (SKeySelected(keyboard_state_array) || DKeySelected(keyboard_state_array) || WKeySelected(keyboard_state_array))
-    {
+    /*if (SKeySelected(keyboard_state_array) || DKeySelected(keyboard_state_array) || WKeySelected(keyboard_state_array))
+    {*/
         this->sound_manager->PlayKickBallSound();
-    }
+    //}
 }
 
 
