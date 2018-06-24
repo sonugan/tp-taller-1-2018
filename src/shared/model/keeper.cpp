@@ -75,64 +75,82 @@ void Keeper::TryToStopJumping() {
 	}
 }
 
+void Keeper::TryToStopRunning() {
+	if ((this->state == KEEPER_STATE::MOVING_UP_KEEPER || this->state == KEEPER_STATE::MOVING_DOWN_KEEPER) && !this->team->GetMatch()->GetMatchState()->IsPlaying()) {
+		this->state = KEEPER_STATE::STILL_KEEPER;
+	}
+}
+
 void Keeper::TryToJump() {
-	if (this->state == KEEPER_STATE::MOVING_DOWN_KEEPER || this->state == KEEPER_STATE::MOVING_UP_KEEPER || this->state == KEEPER_STATE::STILL_KEEPER) {
-		Ball* ball = this->GetTeam()->GetMatch()->GetBall();
-		if (PlaysOnWestSide() && ball->IsGoingToWestGoalZone()) {
-			unsigned int ball_y = ball->GetLocation()->GetY();
-			unsigned int keeper_y = this->GetLocation()->GetY();
-			
-			if ((DIRECTION::SOUTHWEST == ball->GetTrajectory()->GetDirection() && ball_y < keeper_y) || (DIRECTION::WEST == ball->GetTrajectory()->GetDirection() && ball_y > keeper_y)) {
-				this->state = KEEPER_STATE::JUMPING_DOWN_KEEPER;
-				this->location->UpdateY(location->GetY() + JUMPING_SPEED);
-			} else if ((DIRECTION::NORTHWEST == ball->GetTrajectory()->GetDirection() && ball_y > keeper_y) || (DIRECTION::WEST == ball->GetTrajectory()->GetDirection() && ball_y < keeper_y)) {
-				this->state = KEEPER_STATE::JUMPING_UP_KEEPER;
-				this->location->UpdateY(location->GetY() - JUMPING_SPEED);
+	if (this->GetTeam()->GetMatch()->GetMatchState()->IsPlaying()) {
+		
+		if (this->state == KEEPER_STATE::MOVING_DOWN_KEEPER || this->state == KEEPER_STATE::MOVING_UP_KEEPER || this->state == KEEPER_STATE::STILL_KEEPER) {
+			Ball* ball = this->GetTeam()->GetMatch()->GetBall();
+			if (PlaysOnWestSide() && ball->IsGoingToWestGoalZone()) {
+				unsigned int ball_y = ball->GetLocation()->GetY();
+				unsigned int keeper_y = this->GetLocation()->GetY();
+				
+				if ((DIRECTION::SOUTHWEST == ball->GetTrajectory()->GetDirection() && ball_y < keeper_y) || (DIRECTION::WEST == ball->GetTrajectory()->GetDirection() && ball_y > keeper_y)) {
+					this->state = KEEPER_STATE::JUMPING_DOWN_KEEPER;
+					this->location->UpdateY(location->GetY() + JUMPING_SPEED);
+				} else if ((DIRECTION::NORTHWEST == ball->GetTrajectory()->GetDirection() && ball_y > keeper_y) || (DIRECTION::WEST == ball->GetTrajectory()->GetDirection() && ball_y < keeper_y)) {
+					this->state = KEEPER_STATE::JUMPING_UP_KEEPER;
+					this->location->UpdateY(location->GetY() - JUMPING_SPEED);
+				}
+				last_jump_request = std::chrono::system_clock::now();
+				this->circle->Move(this->location);
 			}
-			last_jump_request = std::chrono::system_clock::now();
-			this->circle->Move(this->location);
+			
+			if (!PlaysOnWestSide() && ball->IsGoingToEastGoalZone()) {
+				unsigned int ball_y = ball->GetLocation()->GetY();
+				unsigned int keeper_y = this->GetLocation()->GetY();
+				
+				if ((DIRECTION::SOUTHEAST == ball->GetTrajectory()->GetDirection() && ball_y < keeper_y) || (DIRECTION::EAST == ball->GetTrajectory()->GetDirection() && ball_y > keeper_y)) {
+					this->state = KEEPER_STATE::JUMPING_DOWN_KEEPER;
+					this->location->UpdateY(location->GetY() + JUMPING_SPEED);
+				} else if ((DIRECTION::NORTHEAST == ball->GetTrajectory()->GetDirection() && ball_y > keeper_y) || (DIRECTION::EAST == ball->GetTrajectory()->GetDirection() && ball_y < keeper_y)) {
+					this->state = KEEPER_STATE::JUMPING_UP_KEEPER;
+					this->location->UpdateY(location->GetY() - JUMPING_SPEED);
+				}
+				last_jump_request = std::chrono::system_clock::now();
+				this->circle->Move(this->location);
+			}
 		}
 		
-		if (!PlaysOnWestSide() && ball->IsGoingToEastGoalZone()) {
-			unsigned int ball_y = ball->GetLocation()->GetY();
-			unsigned int keeper_y = this->GetLocation()->GetY();
-			
-			if ((DIRECTION::SOUTHEAST == ball->GetTrajectory()->GetDirection() && ball_y < keeper_y) || (DIRECTION::EAST == ball->GetTrajectory()->GetDirection() && ball_y > keeper_y)) {
-				this->state = KEEPER_STATE::JUMPING_DOWN_KEEPER;
-				this->location->UpdateY(location->GetY() + JUMPING_SPEED);
-			} else if ((DIRECTION::NORTHEAST == ball->GetTrajectory()->GetDirection() && ball_y > keeper_y) || (DIRECTION::EAST == ball->GetTrajectory()->GetDirection() && ball_y < keeper_y)) {
-				this->state = KEEPER_STATE::JUMPING_UP_KEEPER;
-				this->location->UpdateY(location->GetY() - JUMPING_SPEED);
-			}
-			last_jump_request = std::chrono::system_clock::now();
-			this->circle->Move(this->location);
-		}
 	}
 }
 
 bool Keeper::HasBall() {
+	Logger::getInstance()->info("Keeper::HasBall");
 	Ball* ball = this->GetTeam()->GetMatch()->GetBall();
 	return ball->GetKeeper() != nullptr && this == ball->GetKeeper();
 }
 
 void Keeper::TryToRun() {
-	if (this->state == KEEPER_STATE::STILL_KEEPER || this->state == KEEPER_STATE::MOVING_UP_KEEPER || this->state == KEEPER_STATE::MOVING_DOWN_KEEPER) {
+	if (this->GetTeam()->GetMatch()->GetMatchState()->IsPlaying()) {
 		
-		Ball* ball = this->GetTeam()->GetMatch()->GetBall();
-		unsigned int ball_y = ball->GetLocation()->GetY();
-		unsigned int keeper_y = this->GetLocation()->GetY();
-		
-		if (ball_y > keeper_y && keeper_y < (PITCH_Y_CENTER + KEEPER_Y_RANGE)) {
-			this->state = KEEPER_STATE::MOVING_DOWN_KEEPER;
-			this->location->UpdateY(location->GetY() + WALKING_SPEED);
-			this->circle->Move(this->location);
-		} else if (ball_y < keeper_y && keeper_y > (PITCH_Y_CENTER - KEEPER_Y_RANGE)) {
-			this->state = KEEPER_STATE::MOVING_UP_KEEPER;
-			this->location->UpdateY(location->GetY() - WALKING_SPEED);
-			this->circle->Move(this->location);
-		} else {
-			this->state = KEEPER_STATE::STILL_KEEPER;
+		if (this->state == KEEPER_STATE::STILL_KEEPER || this->state == KEEPER_STATE::MOVING_UP_KEEPER || this->state == KEEPER_STATE::MOVING_DOWN_KEEPER) {
+			
+			Ball* ball = this->GetTeam()->GetMatch()->GetBall();
+			unsigned int ball_y = ball->GetLocation()->GetY();
+			unsigned int keeper_y = this->GetLocation()->GetY();
+			
+			if (abs(ball_y - keeper_y) < WALKING_SPEED) {
+				this->location->UpdateY(ball_y);
+				this->state = KEEPER_STATE::STILL_KEEPER;
+			} else if (ball_y > keeper_y && keeper_y < (PITCH_Y_CENTER + KEEPER_Y_RANGE)) {
+				this->state = KEEPER_STATE::MOVING_DOWN_KEEPER;
+				this->location->UpdateY(location->GetY() + WALKING_SPEED);
+				this->circle->Move(this->location);
+			} else if (ball_y < keeper_y && keeper_y > (PITCH_Y_CENTER - KEEPER_Y_RANGE)) {
+				this->state = KEEPER_STATE::MOVING_UP_KEEPER;
+				this->location->UpdateY(location->GetY() - WALKING_SPEED);
+				this->circle->Move(this->location);
+			} else {
+				this->state = KEEPER_STATE::STILL_KEEPER;
+			}
 		}
+		
 	}
 }
 

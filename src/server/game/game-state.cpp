@@ -66,7 +66,9 @@ void GameState::UpdateMatchState() {
 	case GOAL_KICK:
 		if (this->match->GetMatchState()->IsReadyToChange()) {
 			Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [GOAL_KICK] - Actualizando a: [PLAYING]");
-			Keeper* keeper = this->match->GetTeamByNumber(this->match->GetMatchState()->GetGoalKickTeam())->GetKeeper();
+			TEAM_NUMBER goal_kick_team = this->match->GetMatchState()->GetGoalKickTeam();
+			Team* team = this->match->GetTeamByNumber(goal_kick_team);
+			Keeper* keeper = team->GetKeeper();
 			this->match->GetBall()->GoToKeeper(keeper);
 			this->match->GetMatchState()->SetPlaying();
 		}

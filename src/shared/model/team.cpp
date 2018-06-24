@@ -178,5 +178,5 @@ Location* Team::GetTeamBGoalLine()
 bool Team::HasBall()
 {
     Ball* ball = this->GetMatch()->GetBall();
-    return !ball->IsFree() && ball->GetPlayer()->GetTeam() == this;
+    return !ball->IsFree() && ((ball->GetPlayer() != NULL && ball->GetPlayer()->GetTeam() == this) || (ball->GetKeeper() != NULL && ball->GetKeeper()->GetTeam() == this));
 }

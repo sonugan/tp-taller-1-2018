@@ -311,13 +311,16 @@ void GameServer::MoveKeepers() {
 	keeper_a->TryToStopKicking();
 	keeper_b->TryToStopKicking();
 	
+	keeper_a->TryToStopRunning();
+	keeper_b->TryToStopRunning();
+	
 	keeper_a->TryToStopJumping();
 	keeper_b->TryToStopJumping();
 }
 
 void GameServer::MakePlayerCatchBall(Player* player) {
 	Ball* ball = player->GetTeam()->GetMatch()->GetBall();
-	if(!ball->IsFree())
+	if(ball->IsHeldByAnyPlayer())
 	{
 		Player* player_ball = ball->GetPlayer();
 		if (USER_COLOR::NO_COLOR == player_ball->GetPlayerColor())
