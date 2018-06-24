@@ -25,7 +25,7 @@ void TimerView::Render(std::string remaining_time)
     SDL_Texture* message = SDL_CreateTextureFromSurface(this->renderer, surface);
     SDL_Rect rect;
 
-    rect.x = 690;
+    rect.x = 710;
     rect.y = 40;
     rect.w = 80;
     rect.h = 30;

@@ -99,6 +99,7 @@ void Game::RenderViews()
 
     this->score_view->Render(this->match->GetTeamA(), this->match->GetTeamB());
     this->timer_view->Render(this->match->GetRemainingTime());
+    this->match_time_view->Render(this->match->GetMatchTime());
 
     SDL_RenderPresent( renderer );
 }
@@ -308,6 +309,7 @@ void Game::CreateViews()
 
     this->timer_view = new TimerView(renderer);
     this->score_view = new ScoreView(renderer);
+    this->match_time_view = new MatchTimeView(renderer);
 
 }
 
@@ -351,6 +353,7 @@ void Game::DestroyViews()
     delete this->camera;
     delete this->timer_view;
     delete this->score_view;
+    delete this->match_time_view;
 }
 
 void Game::DestroyControllers()
