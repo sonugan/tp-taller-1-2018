@@ -538,7 +538,7 @@ bool Player::TryRecover()
                 && !this->AreInSameTeam(ball->GetPlayer())
                 && ball->GetCircle()->ExistsCollision3d(this->GetCircle())) //faltó esto!
             {
-                if(coin_flipper->Flip() == COIN_RESULT::WIN)
+                if(coin_flipper->Win(100, 70))
                 {
                     Trajectory* trajectory = new Trajectory(this);
                     ball->SetTrajectory(trajectory);

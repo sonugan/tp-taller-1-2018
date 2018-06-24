@@ -203,8 +203,13 @@ bool PlayerAtackStrategy::ThereIsAnEnemyInFrontOfMe()
 bool PlayerAtackStrategy::IsTeamA()
 {
     Logger::getInstance()->debug("PlayerAtackStrategy::IsTeamA");
-    Team* team_a = this->player->GetTeam()->GetMatch()->GetTeamA();
-    return this->player->GetTeam() == team_a;
+    if(this->player->GetTeam() != nullptr &&
+        this->player->GetTeam()->GetMatch() != nullptr)
+        {
+        Team* team_a = this->player->GetTeam()->GetMatch()->GetTeamA();
+        return this->player->GetTeam() == team_a;
+    }
+    return false;
 }
 
 bool PlayerAtackStrategy::AreBetween(int a, int b, int value)
