@@ -91,7 +91,7 @@ void PlayerRecoverBallState::PassBall()
     if(!ContinueRecovering())
     {
         this->player->ChangeToPass();
-        this->player->PassBall();
+        this->player->PassBall(NULL);
     }
 }
 void PlayerRecoverBallState::CatchBall()

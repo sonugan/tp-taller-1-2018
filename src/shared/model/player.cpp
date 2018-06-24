@@ -280,11 +280,11 @@ void Player::Move(bool run)
     delete new_location;
 }
 
-void Player::PassBall()
+void Player::PassBall(Location* nearestPlayer)
 {
     if (HasBall())
     {
-        Trajectory* trajectory = new Trajectory(direction, 1, TRAJECTORY_TYPE::FLOOR);
+        Trajectory* trajectory = new Trajectory(direction, 2, TRAJECTORY_TYPE::FLOOR, nearestPlayer);
         team->GetMatch()->GetBall()->SetTrajectory(trajectory);
     }
 }
