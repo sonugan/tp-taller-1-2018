@@ -122,6 +122,8 @@
 		<Unit filename="src/client/view/camera.h" />
 		<Unit filename="src/client/view/disconect-view.cpp" />
 		<Unit filename="src/client/view/disconect-view.h" />
+		<Unit filename="src/client/view/game-statistics-view.cpp" />
+		<Unit filename="src/client/view/game-statistics-view.h" />
 		<Unit filename="src/client/view/info-panel-view.cpp" />
 		<Unit filename="src/client/view/info-panel-view.h" />
 		<Unit filename="src/client/view/ishowable.h" />
