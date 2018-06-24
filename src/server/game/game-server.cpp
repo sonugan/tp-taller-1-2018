@@ -111,28 +111,42 @@ void GameServer::ChangePlayer(ChangePlayerRequest* change_player_request, int so
 	Player* last_selected_player = user->GetSelectedPlayer();
 
 	Player* next_player = NULL;
+	int min_distance = 99999;
 	Team* team = user->GetSelectedPlayer()->GetTeam();
+	Ball* ball = team->GetMatch()->GetBall();
+	
+	for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
 
-	unsigned int new_selected_player_position_index = user->GetSelectedPlayer()->GetPositionIndex();
-
-	for (unsigned int i = 0; i < (Team::TEAM_SIZE - 1); i++) {
-
-		if (new_selected_player_position_index == Team::TEAM_SIZE) {
-			new_selected_player_position_index = 1;
-		} else {
-			new_selected_player_position_index++;
-		}
-
-		Player* possible_player = team->GetPlayerByPositionIndex(new_selected_player_position_index);
-		if (!possible_player->IsSelected()) {
+		Player* possible_player = team->GetPlayerByPositionIndex(i);
+		int possible_player_distance_to_ball = possible_player->GetLocation()->Distance(ball->GetLocation());
+		if (!possible_player->IsSelected() && possible_player_distance_to_ball < min_distance) {
+			min_distance = possible_player_distance_to_ball;
 			next_player = possible_player;
-			break;
 		}
 	}
 
-	last_selected_player->SetPlayerColor(USER_COLOR::NO_COLOR);
-	next_player->SetPlayerColor(user->GetUserColor());
-	user->SetSelectedPlayer(next_player);
+//	unsigned int new_selected_player_position_index = user->GetSelectedPlayer()->GetPositionIndex();
+//
+//	for (unsigned int i = 0; i < (Team::TEAM_SIZE - 1); i++) {
+//
+//		if (new_selected_player_position_index == Team::TEAM_SIZE) {
+//			new_selected_player_position_index = 1;
+//		} else {
+//			new_selected_player_position_index++;
+//		}
+//
+//		Player* possible_player = team->GetPlayerByPositionIndex(new_selected_player_position_index);
+//		if (!possible_player->IsSelected()) {
+//			next_player = possible_player;
+//			break;
+//		}
+//	}
+
+	if (last_selected_player != next_player) {
+		last_selected_player->SetPlayerColor(USER_COLOR::NO_COLOR);
+		next_player->SetPlayerColor(user->GetUserColor());
+		user->SetSelectedPlayer(next_player);
+	}
 }
 
 bool GameServer::IsReadyToStart() {
