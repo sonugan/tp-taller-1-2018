@@ -22,6 +22,7 @@
 #include "view/match-time-view.h"
 #include "view/mini-player-view.h"
 #include "view/info-panel-view.h"
+#include "view/game-statistics-view.h"
 #include "view/camera.h"
 #include "sound/game-music.h"
 #include "sound/sound-manager.h"
@@ -76,6 +77,7 @@ private:
     TimerView* timer_view;
     ScoreView* score_view;
     MatchTimeView* match_time_view;
+    GameStatisticsView* game_statistics_view;
     User* user;
     Client* client;
     GameMusic* game_music;
@@ -103,6 +105,7 @@ private:
     void InitSDL();
     void CloseSDL();
     void RenderViews();
+    void RenderGameStatisticsView();
     void PlaySounds();
     void PlayGoalSound();
     bool MatchStateHasChanged(int last_match_state);

@@ -37,6 +37,7 @@ public:
 	void SetFinished();
 	bool IsTimeup();
 	bool IsGoal();
+	bool IsFinished();
 
 private:
 	MATCH_STATE_TYPE type;

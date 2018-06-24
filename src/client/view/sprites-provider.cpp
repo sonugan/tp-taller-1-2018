@@ -107,6 +107,10 @@ std::string SpritesProvider::GetDefaultPath(SPRITE_SHEET sprite_sheet_enum)
     {
         return "splash.png";
     }
+    else if (GAME_STATISTICS == sprite_sheet_enum)
+    {
+        return "game_statistics_screen.png";
+    }
     return NULL;
 }
 

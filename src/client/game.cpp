@@ -101,6 +101,11 @@ void Game::RenderViews()
     this->timer_view->Render(this->match->GetRemainingTime());
     this->match_time_view->Render(this->match->GetMatchTime());
 
+    if (this->match->GetMatchState()->IsFinished())
+    {
+        this->game_statistics_view->Render(this->match->GetTeamA(), this->match->GetTeamB());
+    }
+
     SDL_RenderPresent( renderer );
 }
 
@@ -310,6 +315,7 @@ void Game::CreateViews()
     this->timer_view = new TimerView(renderer);
     this->score_view = new ScoreView(renderer);
     this->match_time_view = new MatchTimeView(renderer);
+    this->game_statistics_view = new GameStatisticsView(renderer);
 
 }
 
@@ -354,6 +360,7 @@ void Game::DestroyViews()
     delete this->timer_view;
     delete this->score_view;
     delete this->match_time_view;
+    delete this->game_statistics_view;
 }
 
 void Game::DestroyControllers()
@@ -481,4 +488,6 @@ void Game::PlayGoalSound()
         this->sound_manager->PlayGoalSound();
     }
 }
+
+
 
