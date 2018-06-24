@@ -1,7 +1,7 @@
 #ifndef IPLAYER_STRATEGY_H
 #define IPLAYER_STRATEGY_H
 
-#include "player-states.h"
+#include "../player-states/player-states.h"
 
 class IPlayerStrategy
 {

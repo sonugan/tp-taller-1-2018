@@ -11,8 +11,8 @@ PlayerController::PlayerController(Team* team, Client* client) { // @suppress("C
     //current_action = PLAYER_IS_STILL;
     this->last_pass = std::chrono::system_clock::now();
     this->last_keyboard_state_array = NULL;
-    this->kickballevents = 1;
-    this->longpassevents = 1;
+    this->kickballevents = 1.0;
+    this->longpassevents = 1.0;
 }
 
 PlayerController::~PlayerController() {
@@ -21,25 +21,15 @@ PlayerController::~PlayerController() {
 
 void PlayerController::PlayerPlay(const Uint8 *keyboard_state_array, SDL_Event e) {
 //    Logger::getInstance()->debug("(PlayerController::PlayerPlay)");
-    /*if(!ContinueCurrentAction())
-    {
-        selected_player = this->team->GetSelectedPlayer();
-        bool playerKicked = this->KickPlayer(keyboard_state_array);
-
-        if (!playerKicked) {
-            bool playerRecovered = this->PlayerRecoverBall(keyboard_state_array);
-            if (!playerRecovered) {
-                this->PassBall(keyboard_state_array);
-                this->MovePlayer(keyboard_state_array);
-            }
-        }
-    }*/
-    this->PassBall(keyboard_state_array);//TODO: Ver como implementar PassBall en el modelo
-    this->PlayerRecoverBall(keyboard_state_array);
-    this->KickPlayer(keyboard_state_array, e);
-    this->LongPass(keyboard_state_array, e);
-    this->MovePlayer(keyboard_state_array);
-    this->PlayKickSound(keyboard_state_array);
+    bool pass_ball = this->PassBall(keyboard_state_array);//TODO: Ver como implementar PassBall en el modelo
+    bool shoot = this->KickPlayer(keyboard_state_array, e);
+    bool aerial_pass = this->LongPass(keyboard_state_array, e);
+    if (pass_ball || shoot || aerial_pass) {
+		this->PlayKickSound(keyboard_state_array);
+    } else {
+		this->PlayerRecoverBall(keyboard_state_array);
+		this->MovePlayer(keyboard_state_array);
+    }
     this->last_keyboard_state_array = keyboard_state_array;
 }
 
@@ -81,11 +71,17 @@ bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array, SDL_Event e
     {
         if ((e.key.state == SDL_PRESSED) && (e.key.repeat != 0))
         {
-            this->kickballevents = 2;
+            this->kickballevents = this->kickballevents + 0.2;
         }
         if (e.key.state == SDL_RELEASED)
         {
+            if (this->kickballevents > 2.5){
+                this->kickballevents = 2.5;
+            }
             KickBallRequest r(this->kickballevents);
+
+            PushFakeEvent();
+
             this->client->KickBall(&r);
             this->kickballevents = 1;
             return true;
@@ -94,16 +90,30 @@ bool PlayerController::KickPlayer(const Uint8 *keyboard_state_array, SDL_Event e
     return false;
 }
 
+void PlayerController::PushFakeEvent() {
+    //  truco para que no se quede pateando si no ocurre otro evento de teclado
+    SDL_Event sdlevent = {};
+    sdlevent.type = SDL_KEYDOWN;
+    sdlevent.key.keysym.sym = SDLK_9;
+    SDL_PushEvent(&sdlevent);
+}
+
 bool PlayerController::LongPass(const Uint8 *keyboard_state_array, SDL_Event e) {
     if (e.key.keysym.sym == SDLK_w)
     {
         if ((e.key.state == SDL_PRESSED) && (e.key.repeat != 0))
         {
-            this->longpassevents = 2;
+            this->longpassevents = this->longpassevents + 0.2;
         }
         if (e.key.state == SDL_RELEASED)
         {
+            if (this->longpassevents > 2.5){
+                this->longpassevents = 2.5;
+            }
             LongPassRequest r(this->longpassevents);
+
+            PushFakeEvent();
+
             this->client->LongPass(&r);
             this->longpassevents = 1;
             return true;
@@ -112,12 +122,14 @@ bool PlayerController::LongPass(const Uint8 *keyboard_state_array, SDL_Event e) 
     return false;
 }
 
-void PlayerController::PassBall(const Uint8 *keyboard_state_array) {
+bool PlayerController::PassBall(const Uint8 *keyboard_state_array) {
     if (ShouldRequestPass(keyboard_state_array)) {
         PassBallRequest r;
         this->client->PassBall(&r);
         last_pass = std::chrono::system_clock::now();
+        return true;
     }
+    return false;
 }
 
 bool PlayerController::ShouldRequestPass(const Uint8 *keyboard_state_array) {
@@ -224,10 +236,10 @@ bool PlayerController::ContinueCurrentAction()
 void PlayerController::PlayKickSound(const Uint8 *keyboard_state_array)
 {
     // CHEQUEO SI EL JUGADOR ESTA PATEANDO EN CUALQUIERA DE SUS FORMAS
-    if (SKeySelected(keyboard_state_array) || DKeySelected(keyboard_state_array) || WKeySelected(keyboard_state_array))
-    {
+    /*if (SKeySelected(keyboard_state_array) || DKeySelected(keyboard_state_array) || WKeySelected(keyboard_state_array))
+    {*/
         this->sound_manager->PlayKickBallSound();
-    }
+    //}
 }
 
 

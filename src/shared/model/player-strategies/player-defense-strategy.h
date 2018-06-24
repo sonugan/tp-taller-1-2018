@@ -3,7 +3,7 @@
 
 #include "iplayer-strategy.h"
 #include "../player.h"
-#include "player-states.h"
+#include "../player-states/player-states.h"
 #include "../../collision/rectangle.h"
 #include "../../utils/coin-flipper.h"
 

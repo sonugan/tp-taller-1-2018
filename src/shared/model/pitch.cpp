@@ -9,7 +9,7 @@ Pitch::Pitch(Team* team_a, Team* team_b)
     this->west_goal = new GoalZone(team_b, new Location(1734 +  Ball::BALL_TRIDIMENSIONAL_OFFSET, 554, 0), new Location(1774, 684, goal_height));
 
     //Creando zonas de lateral
-    int throw_in_height = 150;
+    int throw_in_height = 300;
     throw_in_zones[0] = new ThrowInZone(new Location(186, 78, 0), new Location(1734, 99, throw_in_height));
     throw_in_zones[1] = new ThrowInZone(new Location(186, 1139, 0), new Location(1734, 1158, throw_in_height));
 

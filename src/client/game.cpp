@@ -10,10 +10,6 @@ Game::Game(Configuration* initial_configuration) // @suppress("Class members sho
 {
     this->initial_configuration = initial_configuration;
     this->correctly_initialized = false;
-
-    Logger::getInstance()->debug("inicializa");
-
-    this->game_music = new GameMusic();
 }
 
 void Game::LogIn()
@@ -23,11 +19,10 @@ void Game::LogIn()
     LoginRequest* login_request = new LoginRequest();
     LoginView* login_view = new LoginView(this->renderer, SCREEN_HEIGHT, SCREEN_WIDTH, login_request);
 
-        Logger::getInstance()->debug("play login");
+    CreateGameMusic();
 
     this->game_music->PlayLoginTheme();
 
-        Logger::getInstance()->debug("play login ok");
     //Se abre la pantalla de login con su propio "game loop"
     login_view->Open(initial_configuration);
 
@@ -88,7 +83,6 @@ void Game::LogIn()
 
 Game::~Game()
 {
-    delete this->game_music;
 }
 
 bool Game::IsCorrectlyInitialized()
@@ -105,6 +99,7 @@ void Game::RenderViews()
 
     this->score_view->Render(this->match->GetTeamA(), this->match->GetTeamB());
     this->timer_view->Render(this->match->GetRemainingTime());
+    this->match_time_view->Render(this->match->GetMatchTime());
 
     SDL_RenderPresent( renderer );
 }
@@ -112,16 +107,8 @@ void Game::RenderViews()
 void Game::Start()
 {
     Logger::getInstance()->info("==================COMIENZA EL JUEGO==================");
+
     this->quit = false;
-
-    SoundManager* sound_manager = new SoundManager();
-
-    sound_manager->PlayGameTimeStartSound();
-
-            Logger::getInstance()->debug("play main theme");
-
-    this->game_music->PlayMainTheme();
-        Logger::getInstance()->debug("play main theme ok");
 
     //Handler de eventos
     SDL_Event e;
@@ -130,6 +117,10 @@ void Game::Start()
 
     const Uint8* keyboard_state_array = SDL_GetKeyboardState(NULL);
 
+    MATCH_STATE_TYPE last_match_state = (MATCH_STATE_TYPE)-1;
+
+    this->game_music->PlayMainTheme();
+    this->sound_manager->PlayKickOffSound();
 
     // GAME LOOP
     while( !quit )
@@ -152,10 +143,14 @@ void Game::Start()
             continue;
         }
 
-        this->player_controller->SetEvent(e);
+        if (this->match->GetMatchState()->IsPlaying())
+        {
+			this->player_controller->SetEvent(e);
+			this->player_controller->Handle(keyboard_state_array);
+			this->team_controller->Handle(keyboard_state_array);
+        }
+
         this->game_controller->Handle(keyboard_state_array);
-        this->player_controller->Handle(keyboard_state_array);
-        this->team_controller->Handle(keyboard_state_array);
         this->music_controller->Handle(keyboard_state_array);
 
         string serialized_match = this->client->GetGameState();
@@ -168,6 +163,12 @@ void Game::Start()
 
         RenderViews();
 
+        if (MatchStateHasChanged(last_match_state)) {
+            // Chequeo si el match state cambio, ya que sino el mismo sonido se
+            // repetia mas de una vez, por ser muy rapido el game loop
+            PlaySounds();
+        }
+
         //Manejo de frames por segundo: http://lazyfoo.net/SDL_tutorials/lesson16/index.php
         //SDL_Delay( ( 100 / FRAMES_PER_SECOND ));//TODO: configurar iteracion
         SDL_Delay(STOP_LOOP_MILLISECONDS);
@@ -178,9 +179,9 @@ void Game::Start()
             //Apreta ESCAPE
             quit = ( e.type == SDL_QUIT );
         }
-    }
 
-    delete sound_manager;
+        last_match_state = this->match->GetMatchState()->GetType();
+    }
 
 }
 
@@ -191,6 +192,7 @@ void Game::End()
     DestroyModel();
     DestroyViews();
     DestroyControllers();
+    DestroyGameMusic();
     SpritesProvider::FreeResources();
     //SoundManager::FreeResources();
     CloseSDL();
@@ -210,20 +212,27 @@ void Game::CreateModel(std::string serialized_model)
     Team* team_a = new Team(formation_team_a, this->initial_configuration->GetTeamName(), this->initial_configuration->GetShirt(), TEAM_NUMBER::TEAM_A);
 
     Keeper* keeper_a = new Keeper();
-    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
-    {
-        team_a->AddPlayer(new Player(i,TEAM_NUMBER::TEAM_A));
-    }
+	Player* new_player_a;
+	for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
+	{
+		new_player_a = new Player(i, TEAM_NUMBER::TEAM_A);
+		// Se setea de forma arbitratia que el team A sea el primero en sacar
+		new_player_a->SetInitialLocation(formation_team_a->GetKickoffLocationForPlayer(i, true));
+		team_a->AddPlayer(new_player_a);
+	}
     team_a->SetKeeper(keeper_a);
 
     Formation* formation_team_b = new Formation(initial_configuration->GetFormation(), TEAM_NUMBER::TEAM_B);
     Team* team_b = new Team(formation_team_b, "team_b", "away", TEAM_NUMBER::TEAM_B); // TODO: TRAER NOMBRE DEL TEAM B Y CAMISETA DE CONFIG
 
     Keeper* keeper_b = new Keeper();
-    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
-    {
-        team_b->AddPlayer(new Player(i, TEAM_NUMBER::TEAM_B));
-    }
+	Player* new_player_b;
+	for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
+	{
+		new_player_b = new Player(i, TEAM_NUMBER::TEAM_B);
+		new_player_b->SetInitialLocation(formation_team_b->GetKickoffLocationForPlayer(i, false));
+		team_b->AddPlayer(new_player_b);
+	}
     team_b->SetKeeper(keeper_b);
 
     // DEFINIR COMO SE SELECCIONA EL JUGADOR
@@ -238,12 +247,8 @@ void Game::CreateModel(std::string serialized_model)
 
     Ball* ball = new Ball();
 
-    //this->timer = new Timer("02:00"); // TODO: VER DE DONDE SE TOMA EL TIEMPO, DEBERIA VENIR DE CONFIG?
-
     Pitch* pitch = new Pitch(team_a, team_b);
-
     this->match = new Match(pitch, team_a, team_b, ball);
-    //this->match = new Match(pitch, team_a, team_b, ball, this->timer);
 
     this->match->DeserializeAndUpdate(serialized_model);
 
@@ -299,8 +304,12 @@ void Game::CreateViews()
     MiniBallView* mini_ball_view = new MiniBallView(match->GetBall(), PITCH_HEIGHT, PITCH_WIDTH);
     this->camera->AddMiniBallView(mini_ball_view);
 
+    SplashView* splash_view = new SplashView(match->GetMatchState());
+    this->camera->Add(splash_view);
+
     this->timer_view = new TimerView(renderer);
     this->score_view = new ScoreView(renderer);
+    this->match_time_view = new MatchTimeView(renderer);
 
 }
 
@@ -344,6 +353,7 @@ void Game::DestroyViews()
     delete this->camera;
     delete this->timer_view;
     delete this->score_view;
+    delete this->match_time_view;
 }
 
 void Game::DestroyControllers()
@@ -352,6 +362,7 @@ void Game::DestroyControllers()
     delete game_controller;
     delete player_controller;
     delete team_controller;
+    delete music_controller;
 }
 
 void Game::InitSDL()
@@ -420,3 +431,54 @@ User* Game::GetUser()
 {
     return user;
 }
+
+bool Game::MatchStateHasChanged(int last_match_state)
+{
+    return last_match_state != -1 && last_match_state != this->match->GetMatchState()->GetType();
+}
+
+void Game::CreateGameMusic()
+{
+    this->game_music = new GameMusic();
+    this->sound_manager = new SoundManager();
+}
+
+void Game::DestroyGameMusic()
+{
+    delete this->game_music;
+    delete this->sound_manager;
+}
+
+void Game::PlaySounds()
+{
+    if (this->match->GetMatchState()->IsKickOff())
+    {
+        this->sound_manager->PlayKickOffSound();
+    }
+    else if (this->match->GetMatchState()->IsTimeup())
+    {
+        this->sound_manager->PlayTimeUpSound();
+    }
+    else if (this->match->GetMatchState()->IsGoal())
+    {
+        PlayGoalSound();
+    }
+
+}
+
+void Game::PlayGoalSound()
+{
+    if (this->game_music->IsPlaying())
+    {
+        // Si estaba sonando el tema principal, tengo que pausarlo y despues
+        // reaundarlo, ya que sino pisa la musica de gol
+        this->game_music->Pause();
+        this->sound_manager->PlayGoalSound();
+        this->game_music->Resume();
+    }
+    else
+    {
+        this->sound_manager->PlayGoalSound();
+    }
+}
+

@@ -21,6 +21,7 @@ Match::~Match() {
     delete team_a;
     delete team_b;
     delete ball;
+    delete match_state;
 }
 
 Team* Match::GetTeamA() {
@@ -45,6 +46,10 @@ MATCH_TIME_TYPE Match::GetMatchTime() {
 
 void Match::SetMatchTime(MATCH_TIME_TYPE match_time){
 	this->match_time = match_time;
+}
+
+MatchState* Match::GetMatchState() {
+	return this->match_state;
 }
 
 void Match::SetMatchState(MatchState* state) {
@@ -183,7 +188,9 @@ string Match::Serialize() {
     // MATCH TIME
     result.append("|");
     result.append(std::to_string(GetMatchTime()));
-
+    // MATCH STATE TYPE
+    result.append("|");
+    result.append(std::to_string(GetMatchState()->GetType()));
 
 //    Logger::getInstance()->debug("(Match:Serialize) Serialize result: " + result);
     return result;
@@ -263,6 +270,7 @@ void Match::DeserializeAndUpdate(string serialized) {
     this->SetRemainingTime(data[base_index + 6]);
     // MATCH TIME
     this->SetMatchTime(static_cast<MATCH_TIME_TYPE>(SafeStoi(data[base_index + 7])));
+	this->match_state->SetType(static_cast<MATCH_STATE_TYPE>(SafeStoi(data[base_index + 8])));
 
     Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Match deserializado");
 }
@@ -306,4 +314,39 @@ Team* Match::GetOppositeTeam(Team* team)
     }
 
     return team_a;
+}
+
+void Match::SetKickOffLocations(TEAM_NUMBER kicker_team) {
+	if (TEAM_NUMBER::TEAM_A == kicker_team)
+	{
+		Player* player;
+		Formation* formation_a = GetTeamA()->GetFormation();
+		for (unsigned int i = 1; i < Team::TEAM_SIZE; i++)
+		{
+			player = GetTeamA()->GetPlayerByPositionIndex(i);
+			player->GetLocation()->Update(formation_a->GetKickoffLocationForPlayer(i, true));
+		}
+		Formation* formation_b = GetTeamB()->GetFormation();
+		for (unsigned int i = 1; i < Team::TEAM_SIZE; i++)
+		{
+			player = GetTeamB()->GetPlayerByPositionIndex(i);
+			player->GetLocation()->Update(formation_b->GetKickoffLocationForPlayer(i, false));
+		}
+	}
+	else
+	{
+		Player* player;
+		Formation* formation_a = GetTeamA()->GetFormation();
+		for (unsigned int i = 1; i < Team::TEAM_SIZE; i++)
+		{
+			player = GetTeamA()->GetPlayerByPositionIndex(i);
+			player->GetLocation()->Update(formation_a->GetKickoffLocationForPlayer(i, true));
+		}
+		Formation* formation_b = GetTeamB()->GetFormation();
+		for (unsigned int i = 1; i < Team::TEAM_SIZE; i++)
+		{
+			player = GetTeamB()->GetPlayerByPositionIndex(i);
+			player->GetLocation()->Update(formation_b->GetKickoffLocationForPlayer(i, false));
+		}
+	}
 }

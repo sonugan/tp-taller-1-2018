@@ -64,7 +64,6 @@ void Server::ConnectingUsers()
         ClientSocket* client = msg->first;
         Message* message = msg->second;
         this->ProcessMessage(client, message);
-
     }
     pthread_cancel(wait_connections_thread.native_handle());
     wait_connections_thread.join();
@@ -361,6 +360,7 @@ void Server::NotifyGameState()
 
         std::this_thread::sleep_for(std::chrono::milliseconds(SEND_GAME_STATE_EVERY_MILLISECONDS));
 
+//        unique_lock<mutex> lock(input_msg_mutex);
         this->game->Run();
     }
 }

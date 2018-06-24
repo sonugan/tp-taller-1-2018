@@ -65,8 +65,8 @@ class Player
         void GoTo(Location* destiny_location, bool run);
         Team* GetTeam();
         bool HasBall();
-        void PassBall();
         void PassBallTo(Player* player);
+        void PassBall(Location* nearestPlayer);
         void KickBall(int power);
         bool PlaysForTeamA();
         bool PlaysForTeamB();
@@ -96,13 +96,14 @@ class Player
         bool IsSouthWinger();
         bool IsNorthWinger();
         bool IsCenter();
+        void SetInitialLocation(Location* initial_location);
     protected:
 
     private:
         DIRECTION direction;
-	static const int PLAYER_SPEED = 6;
-	static const int PLAYER_RUNNING_SPEED = 10;
-    static const int PLAYER_JOGGIN_SPEED = 8;
+		static const int PLAYER_SPEED = 6;
+		static const int PLAYER_RUNNING_SPEED = 10;
+		static const int PLAYER_JOGGIN_SPEED = 8;
         USER_COLOR color;
         bool plays_for_team_a;
         bool plays_for_team_b;

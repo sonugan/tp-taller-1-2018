@@ -244,13 +244,13 @@ bool PlayerAtackStrategy::Kick()
             if(LongKick())
             {
                 this->Point();
-                this->player->PassBall();//TODO: KICK
+                this->player->PassBall(NULL);//TODO: KICK
                 return true;
             }
             else if(MediumKick())
             {
                 this->Point();
-                this->player->PassBall();//TODO: KICK
+                this->player->PassBall(NULL);//TODO: KICK
                 return true;
             }
         }

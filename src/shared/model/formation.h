@@ -8,6 +8,7 @@
 #include "../configuration/configuration.h"
 #include "team.h"
 #include "../collision/rectangle.h"
+#include "position.h"
 
 class Team;
 
@@ -25,18 +26,21 @@ public:
     void ChangeFormation(string formation);
     bool ChangedByUser();
     Rectangle* GetDefenseAreaForPlayer(u_int player_index);
+    Location* GetKickoffLocationForPlayer(unsigned int player_index, bool is_kicker_team);
+    Location* GetKeeperKickoffLocation();
 protected:
     void SetValueFromStringFormation(string string_value);
 
 private:
     FORMATION value;
     TEAM_NUMBER team_number;
-    std::vector<Location*> positions;
     std::vector<Rectangle*> defense_areas;
+    std::vector<Position*> positions;
     bool changed_by_user;
     void InitializePositions();
     void InitializePositionsTeamA();
     void InitializePositionsTeamB();
     void InitializeDefenseAreas();
+    Position* CreatePosition(Location* defaul_location, Location* kickoff_location, Location* passive_kickoff_location);
 };
 #endif // FORMATION_H

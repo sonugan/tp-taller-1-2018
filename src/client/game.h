@@ -17,7 +17,9 @@
 #include "view/player-view.h"
 #include "view/keeper-view.h"
 #include "view/timer-view.h"
+#include "view/splash-view.h"
 #include "view/score-view.h"
+#include "view/match-time-view.h"
 #include "view/mini-player-view.h"
 #include "view/info-panel-view.h"
 #include "view/camera.h"
@@ -73,9 +75,11 @@ private:
     Timer* timer;
     TimerView* timer_view;
     ScoreView* score_view;
+    MatchTimeView* match_time_view;
     User* user;
     Client* client;
     GameMusic* game_music;
+    SoundManager* sound_manager;
 
     static const int FRAMES_PER_SECOND = 30;
     u_int STOP_LOOP_MILLISECONDS = 30;
@@ -90,13 +94,18 @@ private:
 
     void CreateModel(std::string serialized_model);
     void CreateViews();
+    void CreateGameMusic();
     void CreateControllers();
     void DestroyModel();
     void DestroyViews();
+    void DestroyGameMusic();
     void DestroyControllers();
     void InitSDL();
     void CloseSDL();
     void RenderViews();
+    void PlaySounds();
+    void PlayGoalSound();
+    bool MatchStateHasChanged(int last_match_state);
 
 };
 

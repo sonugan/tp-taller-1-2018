@@ -348,11 +348,11 @@ void Player::Move(bool run, bool jog)
     delete new_location;
 }
 
-void Player::PassBall()
+void Player::PassBall(Location* nearestPlayer)
 {
     if (HasBall())
     {
-        Trajectory* trajectory = new Trajectory(direction, 1, TRAJECTORY_TYPE::FLOOR);
+        Trajectory* trajectory = new Trajectory(direction, 2, TRAJECTORY_TYPE::FLOOR, nearestPlayer);
         team->GetMatch()->GetBall()->SetTrajectory(trajectory);
     }
 }
@@ -384,7 +384,7 @@ void Player::PassBallTo(Player* player)
             direction = my_y <= y ? DIRECTION::SOUTHEAST : DIRECTION::NORTHEAST;
         }
     }
-    PassBall();
+    PassBall(NULL);
 }
 
 void Player::KickBall(int power)
@@ -705,3 +705,9 @@ bool Player::IsCenter()
 {
     return this->is_center;
 }
+void Player::SetInitialLocation(Location* initial_location)
+{
+	this->location = new Location(initial_location->GetX(), initial_location->GetY(), initial_location->GetZ());
+	this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
+}
+
