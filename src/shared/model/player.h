@@ -101,9 +101,9 @@ class Player
 
     private:
         DIRECTION direction;
-		static const int PLAYER_SPEED = 6;
-		static const int PLAYER_RUNNING_SPEED = 10;
-		static const int PLAYER_JOGGIN_SPEED = 8;
+		static const int PLAYER_SPEED = 5;
+		static const int PLAYER_RUNNING_SPEED = 8;
+		static const int PLAYER_JOGGIN_SPEED = 7;
         USER_COLOR color;
         bool plays_for_team_a;
         bool plays_for_team_b;

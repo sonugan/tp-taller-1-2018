@@ -135,7 +135,10 @@ void Keeper::TryToRun() {
 			unsigned int ball_y = ball->GetLocation()->GetY();
 			unsigned int keeper_y = this->GetLocation()->GetY();
 			
-			if (ball_y > keeper_y && keeper_y < (PITCH_Y_CENTER + KEEPER_Y_RANGE)) {
+			if (abs(ball_y - keeper_y) < WALKING_SPEED) {
+				this->location->UpdateY(ball_y);
+				this->state = KEEPER_STATE::STILL_KEEPER;
+			} else if (ball_y > keeper_y && keeper_y < (PITCH_Y_CENTER + KEEPER_Y_RANGE)) {
 				this->state = KEEPER_STATE::MOVING_DOWN_KEEPER;
 				this->location->UpdateY(location->GetY() + WALKING_SPEED);
 				this->circle->Move(this->location);

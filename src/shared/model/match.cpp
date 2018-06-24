@@ -228,9 +228,6 @@ void Match::DeserializeAndUpdate(string serialized) {
 
         player->GetLocation()->Update(SafeStoi(data[base_index + 4]), SafeStoi(data[base_index + 5]), 0);
         
-        Logger::getInstance()->info("Match::DeserializeAndUpdate GetIsStill" + to_string(player->GetIsStill()));
-        Logger::getInstance()->info("Match::DeserializeAndUpdate IsStill" + to_string(player->IsStill()));
-
     }
 
     //  TEAM B

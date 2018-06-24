@@ -6,7 +6,11 @@ Trajectory::Trajectory(DIRECTION direction, unsigned int power, TRAJECTORY_TYPE 
     this->player = NULL;
     this->keeper = NULL;
     this->direction_updated = false;
-    this->drive = 125;
+    if (TRAJECTORY_TYPE::UPWARDS == trajectory_type) {
+		this->drive = 190;
+    } else {
+    	this->drive = 210;
+    }
     this->trajectory_type = trajectory_type;
     this->original_ball_speed = this->drive * this->power;
     this->ball_speed = this->original_ball_speed;
