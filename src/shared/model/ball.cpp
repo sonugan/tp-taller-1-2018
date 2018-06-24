@@ -57,7 +57,7 @@ void Ball::Move() {
 }
 
 bool Ball::IsFree() {
-    return (this->trajectory == NULL) || (this->trajectory != NULL && this->trajectory->GetPlayer() == NULL);
+    return (this->trajectory == NULL) || (this->trajectory != NULL && this->trajectory->GetPlayer() == NULL && this->trajectory->GetKeeper() == NULL);
 }
 
 Player* Ball::GetPlayer() {
