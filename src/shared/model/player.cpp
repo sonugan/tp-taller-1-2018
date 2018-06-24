@@ -384,7 +384,7 @@ void Player::PassBallTo(Player* player)
             direction = my_y <= y ? DIRECTION::SOUTHEAST : DIRECTION::NORTHEAST;
         }
     }
-    PassBall(NULL);
+    PassBall(player->GetLocation());
 }
 
 void Player::KickBall(int power)
@@ -706,4 +706,3 @@ void Player::SetInitialLocation(Location* initial_location)
 	this->location = new Location(initial_location->GetX(), initial_location->GetY(), initial_location->GetZ());
 	this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
 }
-
