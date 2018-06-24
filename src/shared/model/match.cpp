@@ -123,8 +123,6 @@ string Match::Serialize() {
 //        result.append(std::to_string(player->GetLocation()->GetZ()));
 //        result.append("|");
         
-        Logger::getInstance()->info("Match::Serialize GetIsStill" + to_string(player->GetIsStill()));
-        Logger::getInstance()->info("Match::Serialize IsStill" + to_string(player->IsStill()));
     }
 
     //  TEAM B
@@ -171,8 +169,6 @@ string Match::Serialize() {
         //  Z
 //        result.append(std::to_string(player->GetLocation()->GetZ()));
 //        result.append("|");
-        Logger::getInstance()->info("Match::Serialize GetIsStill" + to_string(player->GetIsStill()));
-        Logger::getInstance()->info("Match::Serialize IsStill" + to_string(player->IsStill()));
     }
 
     result.append(std::to_string((int) GetTeamA()->GetFormation()->GetValue()));

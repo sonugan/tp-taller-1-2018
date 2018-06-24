@@ -39,6 +39,7 @@ class Ball
         void BounceOnGoalPost();
         void GoToKeeper(Keeper* keeper);
         bool IsHeldByAnyKeeper();
+        bool IsHeldByAnyPlayer();
         bool IsGoingToWestGoalZone();
         bool IsGoingToEastGoalZone();
         void NotifyAllPlayers();

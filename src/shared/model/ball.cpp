@@ -34,7 +34,7 @@ void Ball::SetTrajectory(Trajectory* new_trajectory) {
     if (old_trajectory != NULL) {
         delete old_trajectory;
     }
-    if (this->trajectory->GetPlayer() == NULL) {
+    if (this->trajectory->GetPlayer() == NULL && this->trajectory->GetKeeper() == NULL) {
         this->last_freed = std::chrono::system_clock::now();
         Logger::getInstance()->debug("(Ball::SetTrajectory) PASE");
     }
@@ -76,6 +76,10 @@ Keeper* Ball::GetKeeper() {
 
 bool Ball::IsHeldByAnyKeeper() {
 	return GetKeeper() != NULL;
+}
+
+bool Ball::IsHeldByAnyPlayer() {
+	return GetPlayer() != NULL;
 }
 
 
@@ -169,7 +173,7 @@ void Ball::BounceOnThrowIn()
 
 void Ball::GoToKeeper(Keeper* keeper)
 {
-	Logger::getInstance()->debug("Ball::Going to keeper");
+	Logger::getInstance()->info("Ball::Going to keeper");
 	Trajectory* keeper_trajectory = new Trajectory(keeper);
 	this->SetTrajectory(keeper_trajectory);
     delete this->location;
@@ -261,8 +265,10 @@ bool Ball::IsGoingToEastGoalZone() {
 
 void Ball::NotifyAllPlayers()
 {
+	Logger::getInstance()->info("(Ball::NotifyAllPlayers)");
     for(u_int i = 0; i < this->players.size(); i++)
     {
+    	Logger::getInstance()->info("(Ball::NotifyAllPlayers) NotifyChangeBall f");
         this->players[i]->NotifyChangeBall(this);
     }
 }

@@ -19,7 +19,7 @@ void PlayerDefenseStrategy::Play()
     {
         Ball* ball = player->GetTeam()->GetMatch()->GetBall();
         Team* ball_team = nullptr;
-        if(!ball->IsFree())
+        if(ball->IsHeldByAnyPlayer())
         {
             ball_team = ball->GetPlayer()->GetTeam();
         }

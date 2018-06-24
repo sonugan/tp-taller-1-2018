@@ -562,7 +562,7 @@ IPlayerStrategy* Player::GetStrategy()
 
 void Player::NotifyChangeBall(Ball* ball)
 {
-    if(this->GetTeam()->HasBall())
+    if(this->GetTeam()->HasBall() && ball->IsHeldByAnyPlayer())
     {
         this->strategy = this->atack_stategy;
         return;
@@ -587,9 +587,8 @@ void Player::InitializePosition()
 
 bool Player::DefineForward()
 {
-    Location* location = this->GetLocation();
     vector<Player*> buddies = this->GetTeam()->GetPlayers();
-    for(int i = 0; i < buddies.size(); i++)
+    for(unsigned int i = 0; i < buddies.size(); i++)
     {
         Player* buddy = buddies[i];
         if(buddy != this)
@@ -606,9 +605,8 @@ bool Player::DefineForward()
 
 bool Player::DefineDefender()
 {
-    Location* location = this->GetLocation();
     vector<Player*> buddies = this->GetTeam()->GetPlayers();
-    for(int i = 0; i < buddies.size(); i++)
+    for(unsigned int i = 0; i < buddies.size(); i++)
     {
         Player* buddy = buddies[i];
         if(buddy != this)
@@ -625,9 +623,8 @@ bool Player::DefineDefender()
 
 bool Player::DefineNorthWinger()
 {
-    Location* location = this->GetLocation();
     vector<Player*> buddies = this->GetTeam()->GetPlayers();
-    for(int i = 0; i < buddies.size(); i++)
+    for(unsigned int i = 0; i < buddies.size(); i++)
     {
         Player* buddy = buddies[i];
         if(buddy != this)
@@ -656,9 +653,8 @@ bool Player::DefineNorthWinger()
 
 bool Player::DefineSouthWinger()
 {
-    Location* location = this->GetLocation();
     vector<Player*> buddies = this->GetTeam()->GetPlayers();
-    for(int i = 0; i < buddies.size(); i++)
+    for(unsigned int i = 0; i < buddies.size(); i++)
     {
         Player* buddy = buddies[i];
         if(buddy != this)

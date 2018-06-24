@@ -31,6 +31,7 @@ public:
 	void TryToKickOff();
 	void TryToJump();
 	void TryToStopJumping();
+	void TryToStopRunning();
 	bool HasBall();
 	KEEPER_STATE GetState();
 	void UpdateState(KEEPER_STATE state);
