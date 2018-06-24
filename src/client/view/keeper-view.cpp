@@ -240,21 +240,21 @@ void KeeperView::Render(int x_camera, int y_camera, int max_x, int max_y)
     this->GetKeeperAngle();
     int animation_index = current_animation_index;
 
-    if (this->keeper->IsKicking()) {
-        current_animation_index = KICKING_ANIMATION_INDEX;
-    } else if (this->keeper->IsJumpingUp() || this->keeper->IsJumpingDown()) {
-        current_animation_index = JUMPING_ANIMATION_INDEX;
-    } else if(this->keeper->IsStill()) {
-        current_animation_index = STILL_ANIMATION_INDEX;
-    } else if(this->keeper->IsMovingUp() || this->keeper->IsMovingDown()){
-        current_animation_index = RUN_ANIMATION_INDEX;
-    } else {
-        current_animation_index = STILL_ANIMATION_INDEX;
-    }
-    if(animation_index != current_animation_index)
-    {
-        animations[current_animation_index]->Restart();
-    }
+	if (this->keeper->IsKicking()) {
+		current_animation_index = KICKING_ANIMATION_INDEX;
+	} else if (this->keeper->IsJumpingUp() || this->keeper->IsJumpingDown()) {
+		current_animation_index = JUMPING_ANIMATION_INDEX;
+	} else if(this->keeper->IsStill()) {
+		current_animation_index = STILL_ANIMATION_INDEX;
+	} else if(this->keeper->IsMovingUp() || this->keeper->IsMovingDown()){
+		current_animation_index = RUN_ANIMATION_INDEX;
+	} else {
+		current_animation_index = STILL_ANIMATION_INDEX;
+	}
+	if(animation_index != current_animation_index)
+	{
+		animations[current_animation_index]->Restart();
+	}
 
     SDL_Rect* current_clip = animations[current_animation_index]->NextClip();
     int x, y;

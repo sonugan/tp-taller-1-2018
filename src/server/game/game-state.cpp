@@ -66,6 +66,8 @@ void GameState::UpdateMatchState() {
 	case GOAL_KICK:
 		if (this->match->GetMatchState()->IsReadyToChange()) {
 			Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [GOAL_KICK] - Actualizando a: [PLAYING]");
+			Keeper* keeper = this->match->GetTeamByNumber(this->match->GetMatchState()->GetGoalKickTeam())->GetKeeper();
+			this->match->GetBall()->GoToKeeper(keeper);
 			this->match->GetMatchState()->SetPlaying();
 		}
 		break;
@@ -74,6 +76,16 @@ void GameState::UpdateMatchState() {
 			if(MATCH_TIME_TYPE::SECOND_TIME == this->match->GetMatchTime()) {
 				// Fin del partido
 				Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [TIME_UP] - Actualizando a: [FINISHED]");
+				for (unsigned int i = 1; i < Team::TEAM_SIZE; i++)
+				{
+					Player* player_a = GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
+					player_a->ChangeToStill();
+					player_a->SetIsStill(true);
+					
+					Player* player_b = GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
+					player_b->ChangeToStill();
+					player_b->SetIsStill(true);
+				}
 				this->match->GetMatchState()->SetFinished();
 			} else {
 				Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [TIME_UP] - Actualizando a: [KICKOFF]");

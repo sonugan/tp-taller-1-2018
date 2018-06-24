@@ -88,6 +88,10 @@ TEAM_NUMBER MatchState::GetGoalScorerTeam() {
 	return this->goal_scorer_team;
 }
 
+TEAM_NUMBER MatchState::GetGoalKickTeam() {
+	return this->goal_kick_team;
+}
+
 void MatchState::SetFinished() {
 	Logger::getInstance()->debug("(MatchState:SetFinished) Seteando finished state");
 	this->previous_type = this->type;

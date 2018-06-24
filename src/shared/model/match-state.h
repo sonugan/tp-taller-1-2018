@@ -33,6 +33,7 @@ public:
 	void SetTimeup();
 	bool IsReadyToChange();
 	TEAM_NUMBER GetGoalScorerTeam();
+	TEAM_NUMBER GetGoalKickTeam();
 	void SetFinished();
 	bool IsTimeup();
 	bool IsGoal();

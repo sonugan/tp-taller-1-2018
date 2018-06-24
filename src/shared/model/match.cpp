@@ -122,6 +122,9 @@ string Match::Serialize() {
         //  Z
 //        result.append(std::to_string(player->GetLocation()->GetZ()));
 //        result.append("|");
+        
+        Logger::getInstance()->info("Match::Serialize GetIsStill" + to_string(player->GetIsStill()));
+        Logger::getInstance()->info("Match::Serialize IsStill" + to_string(player->IsStill()));
     }
 
     //  TEAM B
@@ -168,6 +171,8 @@ string Match::Serialize() {
         //  Z
 //        result.append(std::to_string(player->GetLocation()->GetZ()));
 //        result.append("|");
+        Logger::getInstance()->info("Match::Serialize GetIsStill" + to_string(player->GetIsStill()));
+        Logger::getInstance()->info("Match::Serialize IsStill" + to_string(player->IsStill()));
     }
 
     result.append(std::to_string((int) GetTeamA()->GetFormation()->GetValue()));
@@ -226,6 +231,9 @@ void Match::DeserializeAndUpdate(string serialized) {
         player->SetIsStill((bool)(SafeStoi(data[base_index + 3])));
 
         player->GetLocation()->Update(SafeStoi(data[base_index + 4]), SafeStoi(data[base_index + 5]), 0);
+        
+        Logger::getInstance()->info("Match::DeserializeAndUpdate GetIsStill" + to_string(player->GetIsStill()));
+        Logger::getInstance()->info("Match::DeserializeAndUpdate IsStill" + to_string(player->IsStill()));
 
     }
 
@@ -250,6 +258,9 @@ void Match::DeserializeAndUpdate(string serialized) {
         player->SetIsStill((bool)(SafeStoi(data[base_index + 3])));
 
         player->GetLocation()->Update(SafeStoi(data[base_index + 4]), SafeStoi(data[base_index + 5]), 0);
+        
+        Logger::getInstance()->info("Match::DeserializeAndUpdate GetIsStill" + to_string(player->GetIsStill()));
+        Logger::getInstance()->info("Match::DeserializeAndUpdate IsStill" + to_string(player->IsStill()));
 
     }
 
@@ -324,12 +335,16 @@ void Match::SetKickOffLocations(TEAM_NUMBER kicker_team) {
 		for (unsigned int i = 1; i < Team::TEAM_SIZE; i++)
 		{
 			player = GetTeamA()->GetPlayerByPositionIndex(i);
+			player->ChangeToStill();
+			player->SetIsStill(true);
 			player->GetLocation()->Update(formation_a->GetKickoffLocationForPlayer(i, true));
 		}
 		Formation* formation_b = GetTeamB()->GetFormation();
 		for (unsigned int i = 1; i < Team::TEAM_SIZE; i++)
 		{
 			player = GetTeamB()->GetPlayerByPositionIndex(i);
+			player->ChangeToStill();
+			player->SetIsStill(true);
 			player->GetLocation()->Update(formation_b->GetKickoffLocationForPlayer(i, false));
 		}
 	}
@@ -340,12 +355,16 @@ void Match::SetKickOffLocations(TEAM_NUMBER kicker_team) {
 		for (unsigned int i = 1; i < Team::TEAM_SIZE; i++)
 		{
 			player = GetTeamA()->GetPlayerByPositionIndex(i);
+			player->ChangeToStill();
+			player->SetIsStill(true);
 			player->GetLocation()->Update(formation_a->GetKickoffLocationForPlayer(i, true));
 		}
 		Formation* formation_b = GetTeamB()->GetFormation();
 		for (unsigned int i = 1; i < Team::TEAM_SIZE; i++)
 		{
 			player = GetTeamB()->GetPlayerByPositionIndex(i);
+			player->ChangeToStill();
+			player->SetIsStill(true);
 			player->GetLocation()->Update(formation_b->GetKickoffLocationForPlayer(i, false));
 		}
 	}

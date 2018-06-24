@@ -262,7 +262,7 @@ void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
         current_animation_index = KICKING_ANIMATION_INDEX;
     } else if (this->player->IsRecoveringBall()) {
         current_animation_index = RECOVERING_BALL_ANIMATION_INDEX;
-    } else if(this->player->GetIsStill()) {
+    } else if(!this->player->GetTeam()->GetMatch()->GetMatchState()->IsPlaying() || this->player->IsStill() || this->player->GetIsStill()) {
         current_animation_index = STILL_ANIMATION_INDEX;
     } else if(this->player->IsMoving()){
         current_animation_index = RUN_ANIMATION_INDEX;

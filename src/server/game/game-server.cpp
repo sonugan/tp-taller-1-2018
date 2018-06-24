@@ -218,8 +218,7 @@ void GameServer::ReturnBallToKeeperOnGoalKick(Ball* ball)
     if (goal_keeper_team != NULL)
     {
         Logger::getInstance()->info("[SAQUE DE ARCO] La pelota se fue por la linea de fondo y es saque de arco para el equipo " + goal_keeper_team->GetName());
-        ///Le doy la pelota al arquero del equipo
-        ball->GoToKeeper(goal_keeper_team->GetKeeper());
+        this->game_state->GetMatch()->GetMatchState()->SetGoalKick(goal_keeper_team->GetTeamNumber());
     }
 }
 
