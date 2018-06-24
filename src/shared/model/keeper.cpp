@@ -43,7 +43,7 @@ void Keeper::TryToKick() {
 		unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_kick_request).count();
 		if (elapsed_millis > KICK_DELAY_MILLIS) {
 			Ball* ball = this->GetTeam()->GetMatch()->GetBall();
-			Trajectory* trajectory = new Trajectory(this->PlaysOnWestSide() ? DIRECTION::EAST : DIRECTION::WEST, 1, TRAJECTORY_TYPE::FLOOR);
+			Trajectory* trajectory = new Trajectory(this->PlaysOnWestSide() ? DIRECTION::EAST : DIRECTION::WEST, 2, TRAJECTORY_TYPE::UPWARDS);
 			ball->SetTrajectory(trajectory);
 			last_kick_request = std::chrono::system_clock::now();
 			this->state = KEEPER_STATE::KICKING_KEEPER;
