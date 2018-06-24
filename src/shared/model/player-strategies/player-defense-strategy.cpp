@@ -23,7 +23,8 @@ void PlayerDefenseStrategy::Play()
         {
             ball_team = ball->GetPlayer()->GetTeam();
         }
-        if(ball_team == nullptr || ball_team != this->player->GetTeam())
+        bool my_keeper_has_ball = ball->IsHeldByAnyKeeper() && ball->GetKeeper() == this->player->GetTeam()->GetKeeper();
+        if((ball_team == nullptr || ball_team != this->player->GetTeam()) && !my_keeper_has_ball)
         {
             if(this->rectangle->IsInside(ball->GetLocation()))
             {
@@ -42,7 +43,7 @@ void PlayerDefenseStrategy::Play()
                 player->GoBackToDefaultPosition();
             }
         }
-        if(player->HasBall())
+        if(player->HasBall() || my_keeper_has_ball)
         {
             player->GoBackToDefaultPosition();
         }
