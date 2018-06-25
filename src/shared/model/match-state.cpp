@@ -88,6 +88,10 @@ TEAM_NUMBER MatchState::GetGoalScorerTeam() {
 	return this->goal_scorer_team;
 }
 
+void MatchState::SetGoalScorerTeam(TEAM_NUMBER team_number) {
+	this->goal_scorer_team = team_number;
+}
+
 TEAM_NUMBER MatchState::GetGoalKickTeam() {
 	return this->goal_kick_team;
 }

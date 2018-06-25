@@ -265,10 +265,9 @@ bool Ball::IsGoingToEastGoalZone() {
 
 void Ball::NotifyAllPlayers()
 {
-	Logger::getInstance()->info("(Ball::NotifyAllPlayers)");
+//	Logger::getInstance()->info("(Ball::NotifyAllPlayers)");
     for(u_int i = 0; i < this->players.size(); i++)
     {
-    	Logger::getInstance()->info("(Ball::NotifyAllPlayers) NotifyChangeBall f");
         this->players[i]->NotifyChangeBall(this);
     }
 }

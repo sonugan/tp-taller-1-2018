@@ -121,7 +121,7 @@ void Keeper::TryToJump() {
 }
 
 bool Keeper::HasBall() {
-	Logger::getInstance()->info("Keeper::HasBall");
+//	Logger::getInstance()->info("Keeper::HasBall");
 	Ball* ball = this->GetTeam()->GetMatch()->GetBall();
 	return ball->GetKeeper() != nullptr && this == ball->GetKeeper();
 }

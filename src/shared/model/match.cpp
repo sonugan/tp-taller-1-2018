@@ -192,6 +192,9 @@ string Match::Serialize() {
     // MATCH STATE TYPE
     result.append("|");
     result.append(std::to_string(GetMatchState()->GetType()));
+    // SCORER TEAM
+    result.append("|");
+    result.append(std::to_string((int) GetMatchState()->GetGoalScorerTeam()));
 
 //    Logger::getInstance()->debug("(Match:Serialize) Serialize result: " + result);
     return result;
@@ -274,7 +277,8 @@ void Match::DeserializeAndUpdate(string serialized) {
     this->SetRemainingTime(data[base_index + 6]);
     // MATCH TIME
     this->SetMatchTime(static_cast<MATCH_TIME_TYPE>(SafeStoi(data[base_index + 7])));
-	this->match_state->SetType(static_cast<MATCH_STATE_TYPE>(SafeStoi(data[base_index + 8])));
+    this->match_state->SetType(static_cast<MATCH_STATE_TYPE>(SafeStoi(data[base_index + 8])));
+    this->match_state->SetGoalScorerTeam(static_cast<TEAM_NUMBER>(SafeStoi(data[base_index + 9])));
 
     Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Match deserializado");
 }

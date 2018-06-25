@@ -97,6 +97,7 @@ class Player
         bool IsNorthWinger();
         bool IsCenter();
         void SetInitialLocation(Location* initial_location);
+        bool TeamScored();
     protected:
 
     private:
@@ -138,6 +139,7 @@ class Player
         bool is_center = false;
         bool is_north_winger = false;
         bool is_south_winger = false;
+        
 };
 
 #endif // PLAYER_H

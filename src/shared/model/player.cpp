@@ -706,3 +706,13 @@ void Player::SetInitialLocation(Location* initial_location)
 	this->location = new Location(initial_location->GetX(), initial_location->GetY(), initial_location->GetZ());
 	this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
 }
+
+bool Player::TeamScored() {
+	bool is_goal = this->GetTeam()->GetMatch()->GetMatchState()->IsGoal();
+	if (is_goal) {
+		Match* match = this->GetTeam()->GetMatch();
+		Team* scorer_team = match->GetTeamByNumber(match->GetMatchState()->GetGoalScorerTeam());
+		return scorer_team == this->GetTeam();
+	}
+    return false;
+}

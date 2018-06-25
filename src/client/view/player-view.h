@@ -27,7 +27,8 @@ class PlayerView : public AbstractView, public IShowable
         static constexpr int STILL_ANIMATION_INDEX = 1;
         static constexpr int KICKING_ANIMATION_INDEX = 2;
         static constexpr int RECOVERING_BALL_ANIMATION_INDEX = 3;
-        static constexpr int SELECTOR_ANIMATION_INDEX = 4;
+        static constexpr int CELEBRATION_ANIMATION_INDEX = 4;
+        static constexpr int SELECTOR_ANIMATION_INDEX = 5;
         static const int SPRITE_WIDTH = 64;
         static const int SPRITE_HEIGHT = 64;
         static const int SELECTOR_SPRITE_WIDTH = 64;

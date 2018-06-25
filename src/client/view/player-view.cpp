@@ -161,6 +161,18 @@ PlayerView::PlayerView(Player* player) // @suppress("Class members should be pro
     recover_ball_clips.push_back(recover_sprite_7);
 
     animations.push_back(new Animation("recover", recover_ball_clips, FRAMES_PER_EVENT));
+    
+    // Celebration sprites
+    std::vector<SDL_Rect*> celebration_clips;
+    
+    SDL_Rect* celebration_1 = new SDL_Rect();
+    celebration_1->x = 0;
+    celebration_1->y = 512;
+    celebration_1->w = this->width;
+    celebration_1->h = this->height;
+    celebration_clips.push_back(celebration_1);
+
+    animations.push_back(new Animation("celebration", celebration_clips, FRAMES_PER_EVENT));
 
     current_animation_index = 0;
 
@@ -258,7 +270,9 @@ void PlayerView::Render(int x_camera, int y_camera, int max_x, int max_y)
     this->GetPlayerAngle();
     int animation_index = current_animation_index;
 
-    if (this->player->IsKicking()) {
+    if (this->player->TeamScored()) {
+    	current_animation_index = CELEBRATION_ANIMATION_INDEX;
+    } else if (this->player->IsKicking()) {
         current_animation_index = KICKING_ANIMATION_INDEX;
     } else if (this->player->IsRecoveringBall()) {
         current_animation_index = RECOVERING_BALL_ANIMATION_INDEX;
