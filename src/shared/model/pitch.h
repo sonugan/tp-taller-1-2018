@@ -17,6 +17,7 @@ class Pitch
         bool BallTouchingThrowIn(Ball* ball);
         Team* BallTouchingEndLineZone(Ball* ball);
         bool BallTouchingGoalPost(Ball* ball);
+        void ChangeTeamSides(Team* team_a, Team* team_b);
     protected:
         GoalZone* east_goal;
         GoalZone* west_goal;

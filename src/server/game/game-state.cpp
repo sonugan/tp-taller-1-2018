@@ -44,7 +44,7 @@ void GameState::UpdateMatchState() {
 	case GOAL:
 	{
 		this->timer->Stop();
-		TEAM_NUMBER kicker_team = TEAM_NUMBER::TEAM_A == this->GetMatch()->GetMatchState()->GetGoalScorerTeam() ? TEAM_NUMBER::TEAM_B : TEAM_NUMBER::TEAM_A;
+		TEAM_NUMBER kicker_team = this->match->GetOppositeTeam(this->match->GetTeamByNumber(this->match->GetMatchState()->GetGoalScorerTeam()))->GetTeamNumber();
 		if (this->match->GetMatchState()->IsReadyToChange()) {
 			Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [GOAL] - Actualizando a: [KICKOFF]");
 			this->match->SetKickOffLocations(kicker_team);
@@ -78,15 +78,16 @@ void GameState::UpdateMatchState() {
 			if(MATCH_TIME_TYPE::SECOND_TIME == this->match->GetMatchTime()) {
 				// Fin del partido
 				Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [TIME_UP] - Actualizando a: [FINISHED]");
-				for (unsigned int i = 1; i < Team::TEAM_SIZE; i++)
+				Player* player;
+				for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
 				{
-					Player* player_a = GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
-					player_a->ChangeToStill();
-					player_a->SetIsStill(true);
-					
-					Player* player_b = GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
-					player_b->ChangeToStill();
-					player_b->SetIsStill(true);
+					player = GetMatch()->GetTeamA()->GetPlayerByPositionIndex(i);
+					player->ChangeToStill();
+					player->SetIsStill(true);
+
+					player = GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
+					player->ChangeToStill();
+					player->SetIsStill(true);
 				}
 				this->match->GetMatchState()->SetFinished();
 			} else {
@@ -94,9 +95,12 @@ void GameState::UpdateMatchState() {
 				// Seteo el segundo tiempo
 				this->match->SetMatchTime(MATCH_TIME_TYPE::SECOND_TIME);
 				this->match->GetBall()->ReturnToMiddle();
-				// segundo tiempo, saca el team B. esto es arbitrario.
-				this->match->SetKickOffLocations(TEAM_NUMBER::TEAM_B);
-				this->match->GetMatchState()->SetKickOff(TEAM_NUMBER::TEAM_B);
+
+				this->match->ChangeTeamSides();
+
+				// Vuelve a sacar el team_a (TEAM_A ES EL DE LA IZQ Y TEAM_B EL DE LA DER SIEMPRE)
+				this->match->SetKickOffLocations(TEAM_NUMBER::TEAM_A);
+				this->match->GetMatchState()->SetKickOff(TEAM_NUMBER::TEAM_A);
 			}
 		}
 		break;
@@ -122,7 +126,7 @@ void GameState::CreateModel(Configuration* initial_configuration)
     Keeper* keeper_a = new Keeper();
     Player* new_player_a;
     for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
-    	new_player_a = new Player(i,TEAM_NUMBER::TEAM_A);
+    	new_player_a = new Player(i, team_a);
         ball->AddPlayerToObserve(new_player_a);
     	// Se setea de forma arbitratia que el team A sea el primero en sacar
     	new_player_a->SetInitialLocation(formation_team_a->GetKickoffLocationForPlayer(i, true));
@@ -135,7 +139,7 @@ void GameState::CreateModel(Configuration* initial_configuration)
     Keeper* keeper_b = new Keeper();
     Player* new_player_b;
     for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
-    	new_player_b = new Player(i,TEAM_NUMBER::TEAM_B);
+    	new_player_b = new Player(i, team_b);
         ball->AddPlayerToObserve(new_player_b);
     	// Se setea de forma arbitratia que el team A sea el primero en sacar
     	new_player_b->SetInitialLocation(formation_team_b->GetKickoffLocationForPlayer(i, false));

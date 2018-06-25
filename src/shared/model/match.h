@@ -38,6 +38,7 @@ class Match
         Team* GetTeamByNumber(TEAM_NUMBER number);
         Team* GetOppositeTeam(Team* team);
         void SetKickOffLocations(TEAM_NUMBER kicker_team);
+        void ChangeTeamSides();
     private:
         Team* team_a;
         Team* team_b;

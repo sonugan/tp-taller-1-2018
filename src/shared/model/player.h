@@ -35,7 +35,7 @@ class PlayerAtackStrategy;
 class Player
 {
     public:
-        Player(unsigned int position_index, TEAM_NUMBER team_number);
+        Player(unsigned int position_index, Team* team);
         virtual ~Player();
         void MoveLeft(bool run);
         void MoveRight(bool run);
@@ -69,7 +69,6 @@ class Player
         void PassBall(Location* nearestPlayer);
         void KickBall(int power);
         bool PlaysForTeamA();
-        bool PlaysForTeamB();
         void SetPlayerColor(USER_COLOR color);
         void SetDirection(DIRECTION direction);
         USER_COLOR GetPlayerColor();
@@ -97,17 +96,18 @@ class Player
         bool IsNorthWinger();
         bool IsCenter();
         void SetInitialLocation(Location* initial_location);
+        void UpdatePlayerSide();
         bool TeamScored();
     protected:
 
     private:
         DIRECTION direction;
-		static const int PLAYER_SPEED = 5;
-		static const int PLAYER_RUNNING_SPEED = 8;
-		static const int PLAYER_JOGGIN_SPEED = 7;
+        DIRECTION default_direction;
+		static const int PLAYER_SPEED = 6;
+		static const int PLAYER_RUNNING_SPEED = 10;
+		static const int PLAYER_JOGGIN_SPEED = 8;
         USER_COLOR color;
         bool plays_for_team_a;
-        bool plays_for_team_b;
         Team* team;
         unsigned int position_index;
         Location* location;
@@ -139,7 +139,6 @@ class Player
         bool is_center = false;
         bool is_north_winger = false;
         bool is_south_winger = false;
-        
 };
 
 #endif // PLAYER_H

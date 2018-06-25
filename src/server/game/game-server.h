@@ -58,7 +58,7 @@ private:
 
     Player* GetUserSelectedPlayer(std::vector<Player*> available_players);
     void CatchBall();
-    void MakePlayerCatchBall(Player* player);
+    void MakePlayerCatchBall(Player* player, Ball* ball);
     void MoveBall();
     void MovePlayersToDefaultPositions();
     void UpdateMatchState();

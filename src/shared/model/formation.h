@@ -28,6 +28,8 @@ public:
     Rectangle* GetDefenseAreaForPlayer(u_int player_index);
     Location* GetKickoffLocationForPlayer(unsigned int player_index, bool is_kicker_team);
     Location* GetKeeperKickoffLocation();
+    void ChangeSide();
+    TEAM_NUMBER GetTeamNumber();
 protected:
     void SetValueFromStringFormation(string string_value);
 
@@ -40,7 +42,6 @@ private:
     void InitializePositions();
     void InitializePositionsTeamA();
     void InitializePositionsTeamB();
-    void InitializeDefenseAreas();
     Position* CreatePosition(Location* defaul_location, Location* kickoff_location, Location* passive_kickoff_location);
 };
 #endif // FORMATION_H
