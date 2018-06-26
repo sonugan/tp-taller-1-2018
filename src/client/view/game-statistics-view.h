@@ -1,5 +1,5 @@
-#ifndef GAME-STATISTICS-VIEW_H
-#define GAME-STATISTICS-VIEW_H
+#ifndef GAME_STATISTICS_VIEW_H
+#define GAME_STATISTICS_VIEW_H
 
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
@@ -22,4 +22,4 @@ class GameStatisticsView
         void RenderTeamScores(Team* team_a, Team* team_b);
 };
 
-#endif // GAME-STATISTICS-VIEW_H
+#endif // GAME_STATISTICS_VIEW_H
