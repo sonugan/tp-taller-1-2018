@@ -302,6 +302,7 @@ void Match::DeserializeAndUpdate(string serialized) {
 
     for (int i = 0; i < scores_size; i++)
     {
+        this->ResetUserGoals(data[base_index]);
         this->AddGoalToUser(data[base_index], SafeStoi(data[base_index + 1]));
         base_index += 2;
     }
@@ -379,6 +380,7 @@ void Match::ChangeTeamSides()
 
 void Match::AddGoalToUser(std::string username, int goals)
 {
+    Logger::getInstance()->info("Agregandole al usuario " + username +  " " + to_string(goals) + " goles");
     if (this->scores.find(username) != this->scores.end())
     {
         this->scores[username] += goals;
@@ -387,6 +389,7 @@ void Match::AddGoalToUser(std::string username, int goals)
     {
         this->scores[username] = goals;
     }
+    Logger::getInstance()->info("El usuario " + username + " tiene ahora " + to_string(this->scores[username]) + " goles");
 }
 
 std::map<std::string, int> Match::GetScoreBoard()
@@ -394,3 +397,10 @@ std::map<std::string, int> Match::GetScoreBoard()
     return this->scores;
 }
 
+void Match::ResetUserGoals(std::string username)
+{
+    if (this->scores.find(username) != this->scores.end())
+    {
+        this->scores[username] = 0;
+    }
+}
