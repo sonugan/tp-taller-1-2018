@@ -43,7 +43,6 @@ void GameState::UpdateMatchState() {
 		break;
 	case GOAL:
 	{
-		this->timer->Stop();
 		TEAM_NUMBER kicker_team = TEAM_NUMBER::TEAM_A == this->GetMatch()->GetMatchState()->GetGoalScorerTeam() ? TEAM_NUMBER::TEAM_B : TEAM_NUMBER::TEAM_A;
 		if (this->match->GetMatchState()->IsReadyToChange()) {
 			Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [GOAL] - Actualizando a: [KICKOFF]");
@@ -155,4 +154,9 @@ bool GameState::WasConnected(User* user) {
 		return it->second == user->GetPassword();
 	}
 	return false;
+}
+
+void GameState::SetGoalState(TEAM_NUMBER goaler_team) {
+	this->timer->Stop();
+	this->match->GetMatchState()->SetGoal(goaler_team);
 }
