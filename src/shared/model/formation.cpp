@@ -52,7 +52,7 @@ void Formation::InitializePositionsTeamA()
         positions.push_back(CreatePosition(new Location(660, 618, 0), new Location(660, 618, 0), new Location(360, 618, 0)));
         positions.push_back(CreatePosition(new Location(660, 918, 0), new Location(660, 918, 0), new Location(360, 618, 0)));
         positions.push_back(CreatePosition(new Location(900, 318, 0), new Location(900, 448, 0), new Location(360, 618, 0)));
-        positions.push_back(CreatePosition(new Location(950, 618, 0), new Location(950, 610, 0), new Location(360, 618, 0)));
+        positions.push_back(CreatePosition(new Location(900, 618, 0), new Location(950, 610, 0), new Location(360, 618, 0)));
         positions.push_back(CreatePosition(new Location(900, 918, 0), new Location(900, 788, 0), new Location(360, 618, 0)));
     }
     else if (FORMATION::F_3_2_1 == this->value)
@@ -95,32 +95,32 @@ void Formation::InitializePositionsTeamB()
         defense_areas.push_back(new Rectangle(new Location(1020, 840, 0), bottom_touchline - (840 - 440), 1260 - 1020));
     	//TODO: AJUSTAR KICKOFF LOCATION PARA CADA FORMATION!
         positions.push_back(CreatePosition(new Location(1660, 618, 0), new Location(1660, 618, 0), new Location(1660, 618, 0)));
-        positions.push_back(CreatePosition(new Location(1260, 318, 0), new Location(1260, 318, 0), new Location(1260, 318, 0)));
-        positions.push_back(CreatePosition(new Location(1260, 618, 0), new Location(1260, 618, 0), new Location(1260, 618, 0)));
-        positions.push_back(CreatePosition(new Location(1260, 918, 0), new Location(1260, 918, 0), new Location(1260, 918, 0)));
-        positions.push_back(CreatePosition(new Location(1020, 318, 0), new Location(1020, 518, 0), new Location(1020, 448, 0)));
-        positions.push_back(CreatePosition(new Location(1020, 618, 0), new Location(1020, 618, 0), new Location(1130, 618, 0)));
-        positions.push_back(CreatePosition(new Location(1020, 918, 0), new Location(1020, 740, 0), new Location(1020, 788, 0)));
+        positions.push_back(CreatePosition(new Location(1260, 318, 0), new Location(1260, 318, 0), new Location(1560, 618, 0)));
+        positions.push_back(CreatePosition(new Location(1260, 618, 0), new Location(1260, 618, 0), new Location(1560, 618, 0)));
+        positions.push_back(CreatePosition(new Location(1260, 918, 0), new Location(1260, 918, 0), new Location(1560, 618, 0)));
+        positions.push_back(CreatePosition(new Location(1020, 318, 0), new Location(1020, 518, 0), new Location(1560, 618, 0)));
+        positions.push_back(CreatePosition(new Location(1020, 618, 0), new Location(1020, 618, 0), new Location(1560, 618, 0)));
+        positions.push_back(CreatePosition(new Location(1020, 918, 0), new Location(1020, 740, 0), new Location(1560, 618, 0)));
     }
     else if (FORMATION::F_3_2_1 == this->value)
     {
-        positions.push_back(CreatePosition(new Location(1660, 618, 0), new Location(360, 618, 0), new Location(1660, 618, 0)));
-        positions.push_back(CreatePosition(new Location(1260, 318, 0), new Location(360, 618, 0), new Location(1260, 318, 0)));
-        positions.push_back(CreatePosition(new Location(1260, 618, 0), new Location(360, 618, 0), new Location(1260, 618, 0)));
-        positions.push_back(CreatePosition(new Location(1260, 918, 0), new Location(360, 618, 0), new Location(1260, 918, 0)));
-        positions.push_back(CreatePosition(new Location(1120, 418, 0), new Location(360, 618, 0), new Location(1020, 448, 0)));
-        positions.push_back(CreatePosition(new Location(1020, 618, 0), new Location(360, 618, 0), new Location(1130, 618, 0)));
-        positions.push_back(CreatePosition(new Location(1120, 818, 0), new Location(360, 618, 0), new Location(1020, 788, 0)));
+        positions.push_back(CreatePosition(new Location(1660, 618, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
+        positions.push_back(CreatePosition(new Location(1260, 318, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
+        positions.push_back(CreatePosition(new Location(1260, 618, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
+        positions.push_back(CreatePosition(new Location(1260, 918, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
+        positions.push_back(CreatePosition(new Location(1120, 418, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
+        positions.push_back(CreatePosition(new Location(1020, 618, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
+        positions.push_back(CreatePosition(new Location(1120, 818, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
     }
     else if (FORMATION::F_3_1_2 == this->value)
     {
-        positions.push_back(CreatePosition(new Location(1660, 618, 0), new Location(360, 618, 0), new Location(1660, 618, 0)));
-        positions.push_back(CreatePosition(new Location(1260, 318, 0), new Location(360, 618, 0), new Location(1260, 318, 0)));
-        positions.push_back(CreatePosition(new Location(1260, 618, 0), new Location(360, 618, 0), new Location(1260, 618, 0)));
-        positions.push_back(CreatePosition(new Location(1260, 918, 0), new Location(360, 618, 0), new Location(1260, 918, 0)));
-        positions.push_back(CreatePosition(new Location(1020, 418, 0), new Location(360, 618, 0), new Location(1020, 448, 0)));
-        positions.push_back(CreatePosition(new Location(1120, 618, 0), new Location(360, 618, 0), new Location(1130, 618, 0)));
-        positions.push_back(CreatePosition(new Location(1020, 818, 0), new Location(360, 618, 0), new Location(1020, 788, 0)));
+        positions.push_back(CreatePosition(new Location(1660, 618, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
+        positions.push_back(CreatePosition(new Location(1260, 318, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
+        positions.push_back(CreatePosition(new Location(1260, 618, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
+        positions.push_back(CreatePosition(new Location(1260, 918, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
+        positions.push_back(CreatePosition(new Location(1020, 418, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
+        positions.push_back(CreatePosition(new Location(1120, 618, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
+        positions.push_back(CreatePosition(new Location(1020, 818, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
     }
 
 }
@@ -193,4 +193,25 @@ bool Formation::ChangedByUser() {
 
 Position* Formation::CreatePosition(Location* default_location, Location* kickoff_location, Location* passive_kickoff_location) {
 	return new Position(default_location, kickoff_location, passive_kickoff_location);
+}
+
+void Formation::ChangeSide()
+{
+    this->positions.clear();
+    this->defense_areas.clear();
+    if (this->team_number == TEAM_NUMBER::TEAM_A)
+    {
+        this->team_number = TEAM_NUMBER::TEAM_B;
+        this->InitializePositionsTeamB();
+    }
+    else
+    {
+        this->team_number = TEAM_NUMBER::TEAM_A;
+        this->InitializePositionsTeamA();
+    }
+}
+
+TEAM_NUMBER Formation::GetTeamNumber()
+{
+    return this->team_number;
 }

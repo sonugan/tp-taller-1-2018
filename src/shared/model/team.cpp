@@ -180,3 +180,14 @@ bool Team::HasBall()
     Ball* ball = this->GetMatch()->GetBall();
     return !ball->IsFree() && ((ball->GetPlayer() != NULL && ball->GetPlayer()->GetTeam() == this) || (ball->GetKeeper() != NULL && ball->GetKeeper()->GetTeam() == this));
 }
+
+void Team::SetTeamNumber(TEAM_NUMBER number)
+{
+    this->team_number = number;
+    this->formation->ChangeSide();
+    for (int i = 0; i < TEAM_SIZE; i++)
+    {
+        this->players[i]->UpdatePlayerSide();
+    }
+    this->keeper->UpdateKeeperSide();
+}

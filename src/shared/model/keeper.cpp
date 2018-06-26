@@ -204,3 +204,12 @@ void Keeper::UpdateState(KEEPER_STATE state) {
 bool Keeper::PlaysOnWestSide() {
 	return this->location->GetX() < PITCH_X_CENTER;
 }
+
+void Keeper::UpdateKeeperSide()
+{
+    Location* default_location = this->GetDefaultLocation();
+	this->location->Update(default_location->GetX(), default_location->GetY(), default_location->GetZ());
+	this->circle->Move(default_location);
+	this->circle = new Circle(HALO_RADIUS, new Location(this->location));
+
+}

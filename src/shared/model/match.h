@@ -41,6 +41,7 @@ class Match
         void SetKickOffLocations(TEAM_NUMBER kicker_team);
         void AddGoalToUser(std::string username, int goals);
         std::map<std::string, int> GetScoreBoard();
+        void ChangeTeamSides();
     private:
         Team* team_a;
         Team* team_b;

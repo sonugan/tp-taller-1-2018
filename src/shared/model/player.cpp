@@ -1,8 +1,9 @@
 #include "player.h"
 #include "../logger.h"
 
-Player::Player(unsigned int position_index, TEAM_NUMBER team_number) // @suppress("Class members should be properly initialized")
+Player::Player(unsigned int position_index, Team* team) // @suppress("Class members should be properly initialized")
 {
+    this->team = team;
     this->position_index = position_index;
     this->still_state = new PlayerStillState(this);
     this->move_state = new PlayerMoveState(this);
@@ -16,19 +17,18 @@ Player::Player(unsigned int position_index, TEAM_NUMBER team_number) // @suppres
     this->current_state = this->still_state;
     this->coin_flipper = new CoinFlipper();
 
-    switch (team_number)
+    switch (team->GetTeamNumber())
     {
     case TEAM_NUMBER::TEAM_A:
-        this->direction = DIRECTION::EAST;
+        this->default_direction = DIRECTION::EAST;
         this->plays_for_team_a = true;
-        this->plays_for_team_b = false;
         break;
     case TEAM_NUMBER::TEAM_B:
-        this->direction = DIRECTION::WEST;
-        this->plays_for_team_b = true;
+        this->default_direction = DIRECTION::WEST;
         this->plays_for_team_a = false;
         break;
     }
+    this->direction = this->default_direction;
 
     this->color = USER_COLOR::NO_COLOR;
 
@@ -194,14 +194,7 @@ void Player::GoBackToDefaultPosition()
     }
     else
     {
-        if (this->plays_for_team_a)
-        {
-            direction = DIRECTION::EAST;
-        }
-        else
-        {
-            direction = DIRECTION::WEST;
-        }
+        direction = this->default_direction;
     }
 
     if (abs(default_y - location->GetY()) < PLAYER_SPEED)
@@ -410,11 +403,6 @@ bool Player::PlaysForTeamA()
     return this->plays_for_team_a;
 }
 
-bool Player::PlaysForTeamB()
-{
-    return this->plays_for_team_b;
-}
-
 void Player::SetPlayerColor(USER_COLOR color)
 {
     this->color = color;
@@ -587,8 +575,9 @@ void Player::InitializePosition()
 
 bool Player::DefineForward()
 {
+    Location* location = this->GetLocation();
     vector<Player*> buddies = this->GetTeam()->GetPlayers();
-    for(unsigned int i = 0; i < buddies.size(); i++)
+    for(int i = 0; i < buddies.size(); i++)
     {
         Player* buddy = buddies[i];
         if(buddy != this)
@@ -605,8 +594,9 @@ bool Player::DefineForward()
 
 bool Player::DefineDefender()
 {
+    Location* location = this->GetLocation();
     vector<Player*> buddies = this->GetTeam()->GetPlayers();
-    for(unsigned int i = 0; i < buddies.size(); i++)
+    for(int i = 0; i < buddies.size(); i++)
     {
         Player* buddy = buddies[i];
         if(buddy != this)
@@ -623,8 +613,9 @@ bool Player::DefineDefender()
 
 bool Player::DefineNorthWinger()
 {
+    Location* location = this->GetLocation();
     vector<Player*> buddies = this->GetTeam()->GetPlayers();
-    for(unsigned int i = 0; i < buddies.size(); i++)
+    for(int i = 0; i < buddies.size(); i++)
     {
         Player* buddy = buddies[i];
         if(buddy != this)
@@ -653,8 +644,9 @@ bool Player::DefineNorthWinger()
 
 bool Player::DefineSouthWinger()
 {
+    Location* location = this->GetLocation();
     vector<Player*> buddies = this->GetTeam()->GetPlayers();
-    for(unsigned int i = 0; i < buddies.size(); i++)
+    for(int i = 0; i < buddies.size(); i++)
     {
         Player* buddy = buddies[i];
         if(buddy != this)
@@ -705,6 +697,19 @@ void Player::SetInitialLocation(Location* initial_location)
 {
 	this->location = new Location(initial_location->GetX(), initial_location->GetY(), initial_location->GetZ());
 	this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
+}
+
+void Player::UpdatePlayerSide()
+{
+    if (this->team->GetTeamNumber() == TEAM_NUMBER::TEAM_A)
+    {
+        this->default_direction = DIRECTION::EAST;
+    }
+    else
+    {
+        this->default_direction = DIRECTION::WEST;
+    }
+    this->direction = this->default_direction;
 }
 
 bool Player::TeamScored() {
