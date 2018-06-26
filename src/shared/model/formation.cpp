@@ -227,3 +227,24 @@ bool Formation::ChangedByUser() {
 Position* Formation::CreatePosition(Location* default_location, Location* kickoff_location, Location* passive_kickoff_location) {
 	return new Position(default_location, kickoff_location, passive_kickoff_location);
 }
+
+void Formation::ChangeSide()
+{
+    this->positions.clear();
+    this->defense_areas.clear();
+    if (this->team_number == TEAM_NUMBER::TEAM_A)
+    {
+        this->team_number = TEAM_NUMBER::TEAM_B;
+        this->InitializePositionsTeamB();
+    }
+    else
+    {
+        this->team_number = TEAM_NUMBER::TEAM_A;
+        this->InitializePositionsTeamA();
+    }
+}
+
+TEAM_NUMBER Formation::GetTeamNumber()
+{
+    return this->team_number;
+}

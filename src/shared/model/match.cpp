@@ -122,7 +122,7 @@ string Match::Serialize() {
         //  Z
 //        result.append(std::to_string(player->GetLocation()->GetZ()));
 //        result.append("|");
-        
+
     }
 
     //  TEAM B
@@ -196,6 +196,20 @@ string Match::Serialize() {
     result.append("|");
     result.append(std::to_string((int) GetMatchState()->GetGoalScorerTeam()));
 
+    // SCORES DE LOS USERS
+    result.append("|");
+    result.append(std::to_string(this->scores.size()));
+
+    for (map<string,int>::iterator i = this->scores.begin(); i != this->scores.end(); i++)
+    {
+        // USERNAME
+        result.append("|");
+        result.append(i->first);
+        // GOALS
+        result.append("|");
+        result.append(to_string(i->second));
+    }
+
 //    Logger::getInstance()->debug("(Match:Serialize) Serialize result: " + result);
     return result;
 }
@@ -230,7 +244,7 @@ void Match::DeserializeAndUpdate(string serialized) {
         player->SetIsStill((bool)(SafeStoi(data[base_index + 3])));
 
         player->GetLocation()->Update(SafeStoi(data[base_index + 4]), SafeStoi(data[base_index + 5]), 0);
-        
+
     }
 
     //  TEAM B
@@ -254,7 +268,7 @@ void Match::DeserializeAndUpdate(string serialized) {
         player->SetIsStill((bool)(SafeStoi(data[base_index + 3])));
 
         player->GetLocation()->Update(SafeStoi(data[base_index + 4]), SafeStoi(data[base_index + 5]), 0);
-        
+
         Logger::getInstance()->info("Match::DeserializeAndUpdate GetIsStill" + to_string(player->GetIsStill()));
         Logger::getInstance()->info("Match::DeserializeAndUpdate IsStill" + to_string(player->IsStill()));
 
@@ -279,6 +293,19 @@ void Match::DeserializeAndUpdate(string serialized) {
     this->SetMatchTime(static_cast<MATCH_TIME_TYPE>(SafeStoi(data[base_index + 7])));
     this->match_state->SetType(static_cast<MATCH_STATE_TYPE>(SafeStoi(data[base_index + 8])));
     this->match_state->SetGoalScorerTeam(static_cast<TEAM_NUMBER>(SafeStoi(data[base_index + 9])));
+
+
+    // SCORES DE LOS USERS
+    int scores_size = SafeStoi(data[base_index + 10]);
+
+    base_index = base_index + 11;
+
+    for (int i = 0; i < scores_size; i++)
+    {
+        this->ResetUserGoals(data[base_index]);
+        this->AddGoalToUser(data[base_index], SafeStoi(data[base_index + 1]));
+        base_index = base_index + 2;
+    }
 
     Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Match deserializado");
 }
@@ -325,44 +352,55 @@ Team* Match::GetOppositeTeam(Team* team)
 }
 
 void Match::SetKickOffLocations(TEAM_NUMBER kicker_team) {
-	if (TEAM_NUMBER::TEAM_A == kicker_team)
-	{
-		Player* player;
-		Formation* formation_a = GetTeamA()->GetFormation();
-		for (unsigned int i = 1; i < Team::TEAM_SIZE; i++)
-		{
-			player = GetTeamA()->GetPlayerByPositionIndex(i);
-			player->ChangeToStill();
-			player->SetIsStill(true);
-			player->GetLocation()->Update(formation_a->GetKickoffLocationForPlayer(i, true));
-		}
-		Formation* formation_b = GetTeamB()->GetFormation();
-		for (unsigned int i = 1; i < Team::TEAM_SIZE; i++)
-		{
-			player = GetTeamB()->GetPlayerByPositionIndex(i);
-			player->ChangeToStill();
-			player->SetIsStill(true);
-			player->GetLocation()->Update(formation_b->GetKickoffLocationForPlayer(i, false));
-		}
-	}
-	else
-	{
-		Player* player;
-		Formation* formation_a = GetTeamA()->GetFormation();
-		for (unsigned int i = 1; i < Team::TEAM_SIZE; i++)
-		{
-			player = GetTeamA()->GetPlayerByPositionIndex(i);
-			player->ChangeToStill();
-			player->SetIsStill(true);
-			player->GetLocation()->Update(formation_a->GetKickoffLocationForPlayer(i, true));
-		}
-		Formation* formation_b = GetTeamB()->GetFormation();
-		for (unsigned int i = 1; i < Team::TEAM_SIZE; i++)
-		{
-			player = GetTeamB()->GetPlayerByPositionIndex(i);
-			player->ChangeToStill();
-			player->SetIsStill(true);
-			player->GetLocation()->Update(formation_b->GetKickoffLocationForPlayer(i, false));
-		}
-	}
+    Player* player;
+	Formation* formation_a = this->team_a->GetFormation();
+	Formation* formation_b = this->team_b->GetFormation();
+    for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
+    {
+        player = this->team_a->GetPlayerByPositionIndex(i);
+        player->ChangeToStill();
+        player->SetIsStill(true);
+        player->GetLocation()->Update(formation_a->GetKickoffLocationForPlayer(i, formation_a->GetTeamNumber() == kicker_team));
+
+        player = this->team_b->GetPlayerByPositionIndex(i);
+        player->ChangeToStill();
+        player->SetIsStill(true);
+        player->GetLocation()->Update(formation_b->GetKickoffLocationForPlayer(i, formation_b->GetTeamNumber() == kicker_team));
+    }
+}
+
+void Match::ChangeTeamSides()
+{
+    Logger::getInstance()->info("Cambiando los equipos de lado...");
+    this->team_a->SetTeamNumber(TEAM_NUMBER::TEAM_B);
+	this->team_b->SetTeamNumber(TEAM_NUMBER::TEAM_A);
+
+    this->pitch->ChangeTeamSides(this->team_a, this->team_b);
+}
+
+void Match::AddGoalToUser(std::string username, int goals)
+{
+    Logger::getInstance()->info("Agregandole al usuario " + username +  " " + to_string(goals) + " goles");
+    if (this->scores.find(username) != this->scores.end())
+    {
+        this->scores[username] += goals;
+    }
+    else
+    {
+        this->scores[username] = goals;
+    }
+    Logger::getInstance()->info("El usuario " + username + " tiene ahora " + to_string(this->scores[username]) + " goles");
+}
+
+std::map<std::string, int> Match::GetScoreBoard()
+{
+    return this->scores;
+}
+
+void Match::ResetUserGoals(std::string username)
+{
+    if (this->scores.find(username) != this->scores.end())
+    {
+        this->scores[username] = 0;
+    }
 }

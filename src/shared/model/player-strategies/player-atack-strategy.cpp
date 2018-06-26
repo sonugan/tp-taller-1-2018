@@ -196,9 +196,8 @@ bool PlayerAtackStrategy::IsTeamA()
     Logger::getInstance()->info("PlayerAtackStrategy::IsTeamA");
     if(this->player->GetTeam() != nullptr &&
         this->player->GetTeam()->GetMatch() != nullptr)
-        {
-        Team* team_a = this->player->GetTeam()->GetMatch()->GetTeamA();
-        return this->player->GetTeam() == team_a;
+    {
+        return this->player->GetTeam()->GetTeamNumber() == TEAM_NUMBER::TEAM_A;
     }
     return false;
 }

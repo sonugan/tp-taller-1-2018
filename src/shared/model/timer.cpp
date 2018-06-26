@@ -1,134 +1,81 @@
-#include "timer.h"
-#include "../logger.h"
+/*
+ * timer2.cpp
+ *
+ *  Created on: Jun 23, 2018
+ *      Author: swandelow
+ */
 
-Timer::Timer(std::string finish_time_mm_ss)
+#include "timer.h"
+
+#include <vector>
+#include "../logger.h"
+#include "../utils/string-utils.h"
+
+
+Timer::Timer(string game_duration)
 {
-    // finish_time_mm_ss debe estar en formato MM:SS
-    this->initial_config_finish_time = finish_time_mm_ss;
-    this->is_ticking = false;
+	this->acum = 0;
+	this->game_duration = game_duration;
+	this->game_duration_sec = StringToSeconds(game_duration);
 }
 
 Timer::~Timer()
 {
-    //dtor
+	// TODO Auto-generated destructor stub
+}
+
+string Timer::GetRemainingTime() {
+	int remaining_sec = this->game_duration_sec - GetPlayedSeconds();
+	return remaining_sec <= 0 ? "00:00" : TimeToString(remaining_sec);
+}
+
+void Timer::Restart() {
+	Logger::getInstance()->debug("(Timer:Restart)");
+	this->acum = 0;
+	this->is_ticking = false;
+}
+
+bool Timer::IsTimeUp() {
+	return GetPlayedSeconds() > this->game_duration_sec;
 }
 
 void Timer::Start() {
 	Logger::getInstance()->debug("(Timer:Start)");
-	this->is_ticking = true;
-	if(IsFinishTimeUnset()) {
-		Logger::getInstance()->debug("(Timer:Start) Set finish time.");
-		this->finish_time = this->AddTimeToNow(this->initial_config_finish_time);
+	if(!is_ticking) {
+		this->is_ticking = true;
+		this->time_stamp = chrono::system_clock::now();
 	}
 }
 
 void Timer::Stop() {
+	Logger::getInstance()->debug("(Timer:Stop)");
 	if(is_ticking) {
-		Logger::getInstance()->debug("(Timer:Stop)");
 		this->is_ticking = false;
-		this->last_stop_time = time(NULL);
+		int elapsed_seconds = chrono::duration_cast<chrono::seconds>(chrono::system_clock::now() - this->time_stamp).count();
+		this->acum += elapsed_seconds;
 	}
 }
 
-std::string Timer::GetRemainingMinutes()
-{
-    std::string remaining_minutes = "";
-
-    time_t now = GetProperTime();
-
-    if (difftime(this->finish_time, now) <= 0)
-    {
-        // Si se paso del tiempo del timer, queda en 0
-        remaining_minutes += ZERO_MINUTES;
-    }
-    else
-    {
-        time_t t = this->finish_time - now;
-        tm* timePtr = localtime(&t);
-
-        remaining_minutes += std::to_string(timePtr->tm_min);
-        remaining_minutes += ":";
-
-        if (timePtr->tm_sec < 10)
-        {
-            // Le agrego un 0 adelante, pq si los segundos eran menos de 10
-            // se mostraba un solo numero (Ej: 10:4 en vez de 10:04) y quedaba mal
-            remaining_minutes += "0";
-        }
-
-        remaining_minutes += std::to_string(timePtr->tm_sec);
-    }
-
-
-    return remaining_minutes;
+string Timer::TimeToString(int seconds) {
+	string time_str = "";
+	int min, sec;
+	min = seconds / 60;
+	sec = seconds % 60;
+	time_str += min < 10 ? ("0" + to_string(min)) : to_string(min);
+	time_str += ":";
+	time_str += sec < 10 ? ("0" + to_string(sec)) : to_string(sec);
+	return time_str;
 }
 
-void Timer::SetFinishTime(std::string finish_time_mm_ss)
-{
-    // finish_time_mm_ss debe estar en formato MM:SS
-    this->initial_config_finish_time = finish_time_mm_ss;
+ int Timer::StringToSeconds(string time) {
+	int seconds = 0;
+	vector<std::string> data = StringUtils::Split(time, ':');
+	seconds += stoi(data[0]) * 60;
+	seconds += stoi(data[1]);
+	return seconds;
 }
 
-std::string Timer::GetFinishTime()
-{
-    return this->initial_config_finish_time;
-}
-
-
-void Timer::Restart()
-{
-	Logger::getInstance()->debug("(Timer:Restart)");
-    this->finish_time = this->AddTimeToNow(this->initial_config_finish_time);
-}
-
-time_t Timer::AddTimeToNow(std::string finish_time_mm_ss)
-{
-    std::vector<std::string> data = StringUtils::Split(finish_time_mm_ss, ':');
-    time_t now = time(NULL);
-    tm* timePtr = localtime(&now);
-
-    struct tm response;
-
-    response.tm_year = timePtr->tm_year;
-    response.tm_mon = timePtr->tm_mon;
-    response.tm_mday = timePtr->tm_mday;
-    response.tm_hour = timePtr->tm_hour;
-    response.tm_min = timePtr->tm_min + stoi(data[0]);
-    response.tm_sec = timePtr->tm_sec + stoi(data[1]);
-
-    return mktime(&response);
-}
-
-std::string Timer::ToString()
-{
-    tm* timePtr = localtime(&this->finish_time);
-
-    // HORA
-    std::string response = std::to_string(timePtr->tm_hour);
-
-    // MINUTOS
-    response += ":";
-    response += std::to_string(timePtr->tm_min);
-
-    // SEGUNDOS
-    response += ":";
-    if (timePtr->tm_sec < 10)
-    {
-        response += "0";
-    }
-    response += std::to_string(timePtr->tm_sec);
-
-    return response;
-}
-
-bool Timer::IsTimeUp() {
-	return ZERO_MINUTES == GetRemainingMinutes();
-}
-
-time_t Timer::GetProperTime() {
-	return is_ticking ? time(NULL) : last_stop_time;
-}
-
-bool Timer::IsFinishTimeUnset() {
-	return this->finish_time < 0;
+ int Timer::GetPlayedSeconds() {
+	 int elapsed_seconds = chrono::duration_cast<chrono::seconds>(chrono::system_clock::now() - this->time_stamp).count();
+	return is_ticking ? this->acum + elapsed_seconds : this->acum;
 }

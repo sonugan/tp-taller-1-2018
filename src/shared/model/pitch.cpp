@@ -102,3 +102,16 @@ bool Pitch::BallTouchingGoalPost(Ball* ball)
 
     return false;
 }
+
+void Pitch::ChangeTeamSides(Team* team_a, Team* team_b)
+{
+    this->east_goal->SetTeam(team_b);
+    this->end_line_zones[0]->SetTeam(team_b);
+    this->end_line_zones[1]->SetTeam(team_b);
+    this->end_line_zones[2]->SetTeam(team_b);
+
+    this->west_goal->SetTeam(team_a);
+    this->end_line_zones[3]->SetTeam(team_a);
+    this->end_line_zones[4]->SetTeam(team_a);
+    this->end_line_zones[5]->SetTeam(team_a);
+}

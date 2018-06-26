@@ -36,6 +36,7 @@ public:
 	KEEPER_STATE GetState();
 	void UpdateState(KEEPER_STATE state);
 	bool PlaysOnWestSide();
+	void UpdateKeeperSide();
 private:
 	std::chrono::time_point<std::chrono::system_clock> last_kick_request;
 	std::chrono::time_point<std::chrono::system_clock> last_jump_request;

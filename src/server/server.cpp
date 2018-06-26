@@ -109,7 +109,7 @@ void Server::ReceiveMessages(ClientSocket* client)
         Message* incoming_message;
         try
         {
-            incoming_message = this->socket->Receive(client, 300);
+            incoming_message = this->socket->Receive(client, 400);
             Logger::getInstance()->debug("(Server:ReceiveMessages) Mensaje recibido. Encolando para ser procesado.");
             // Aplico lock (mutex)  antes de enconlar el mensaje entrante.
             unique_lock<mutex> lock(input_msg_mutex);

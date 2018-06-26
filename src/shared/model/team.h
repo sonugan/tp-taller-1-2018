@@ -37,6 +37,7 @@ class Team
         Location* GetTeamAGoalLine();
         Location* GetTeamBGoalLine();
         bool HasBall();
+        void SetTeamNumber(TEAM_NUMBER number);
 	static const unsigned int TEAM_SIZE = 6;
         string GetName();
         string GetShirt();

@@ -103,7 +103,7 @@ void Game::RenderViews()
 
     if (this->match->GetMatchState()->IsFinished())
     {
-        this->game_statistics_view->Render(this->match->GetTeamA(), this->match->GetTeamB());
+        this->game_statistics_view->Render(this->match->GetTeamA(), this->match->GetTeamB(), this->match->GetScoreBoard());
     }
 
     SDL_RenderPresent( renderer );
@@ -220,7 +220,7 @@ void Game::CreateModel(std::string serialized_model)
 	Player* new_player_a;
 	for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
 	{
-		new_player_a = new Player(i, TEAM_NUMBER::TEAM_A);
+		new_player_a = new Player(i, team_a);
 		// Se setea de forma arbitratia que el team A sea el primero en sacar
 		new_player_a->SetInitialLocation(formation_team_a->GetKickoffLocationForPlayer(i, true));
 		team_a->AddPlayer(new_player_a);
@@ -234,7 +234,7 @@ void Game::CreateModel(std::string serialized_model)
 	Player* new_player_b;
 	for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++)
 	{
-		new_player_b = new Player(i, TEAM_NUMBER::TEAM_B);
+		new_player_b = new Player(i, team_b);
 		new_player_b->SetInitialLocation(formation_team_b->GetKickoffLocationForPlayer(i, false));
 		team_b->AddPlayer(new_player_b);
 	}

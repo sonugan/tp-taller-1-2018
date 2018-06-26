@@ -105,4 +105,3 @@ void ScoreView::Render(Team* team_a, Team* team_b)
     this->RenderTeamBScore(team_b);
 }
 
-
