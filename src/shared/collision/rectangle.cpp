@@ -1,33 +1,24 @@
 #include "rectangle.h"
 
-Rectangle::Rectangle(Location* leftmost_highest_point, int height, int base)
+Rectangle::Rectangle(int x1, int x2, int y1, int y2)
 {
-    this->leftmost_highest_point = leftmost_highest_point;
-    this->height = height;
-    this->base = base;
+    this->x1 = x1;
+    this->x2 = x2;
+    this->y1 = y1;
+    this->y2 = y2;
 }
 
 Rectangle::~Rectangle()
 {
-    delete this->leftmost_highest_point;
+
 }
 
 bool Rectangle::IsInside(Location* location)
 {
     int x = location->GetX();
     int y = location->GetY();
-    return x >= this->leftmost_highest_point->GetX()
-        && x <= this->leftmost_highest_point->GetX() + this->base
-        && y >= this->leftmost_highest_point->GetY()
-        && y <= this->leftmost_highest_point->GetY() + this->height;
-}
-
-void Rectangle::Move(Location* location)
-{
-    this->leftmost_highest_point->Update(location);
-}
-
-Location* Rectangle::GetLeftmostHighestPoint()
-{
-    return this->leftmost_highest_point;
+    return x >= this->x1
+        && x <= this->x2
+        && y >= this->y1
+        && y <= this->y2;
 }
