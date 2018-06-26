@@ -122,7 +122,7 @@ string Match::Serialize() {
         //  Z
 //        result.append(std::to_string(player->GetLocation()->GetZ()));
 //        result.append("|");
-        
+
     }
 
     //  TEAM B
@@ -196,6 +196,20 @@ string Match::Serialize() {
     result.append("|");
     result.append(std::to_string((int) GetMatchState()->GetGoalScorerTeam()));
 
+    // SCORES DE LOS USERS
+    result.append("|");
+    result.append(std::to_string(this->scores.size()));
+
+    for (map<string,int>::iterator i = this->scores.begin(); i != this->scores.end(); i++)
+    {
+        // USERNAME
+        result.append("|");
+        result.append(i->first);
+        // GOALS
+        result.append("|");
+        result.append(to_string(i->second));
+    }
+
 //    Logger::getInstance()->debug("(Match:Serialize) Serialize result: " + result);
     return result;
 }
@@ -230,7 +244,7 @@ void Match::DeserializeAndUpdate(string serialized) {
         player->SetIsStill((bool)(SafeStoi(data[base_index + 3])));
 
         player->GetLocation()->Update(SafeStoi(data[base_index + 4]), SafeStoi(data[base_index + 5]), 0);
-        
+
     }
 
     //  TEAM B
@@ -254,7 +268,7 @@ void Match::DeserializeAndUpdate(string serialized) {
         player->SetIsStill((bool)(SafeStoi(data[base_index + 3])));
 
         player->GetLocation()->Update(SafeStoi(data[base_index + 4]), SafeStoi(data[base_index + 5]), 0);
-        
+
         Logger::getInstance()->info("Match::DeserializeAndUpdate GetIsStill" + to_string(player->GetIsStill()));
         Logger::getInstance()->info("Match::DeserializeAndUpdate IsStill" + to_string(player->IsStill()));
 
@@ -279,6 +293,18 @@ void Match::DeserializeAndUpdate(string serialized) {
     this->SetMatchTime(static_cast<MATCH_TIME_TYPE>(SafeStoi(data[base_index + 7])));
     this->match_state->SetType(static_cast<MATCH_STATE_TYPE>(SafeStoi(data[base_index + 8])));
     this->match_state->SetGoalScorerTeam(static_cast<TEAM_NUMBER>(SafeStoi(data[base_index + 9])));
+
+
+    // SCORES DE LOS USERS
+    int scores_size = SafeStoi(data[base_index + 10]);
+
+    base_index += 11;
+
+    for (int i = 0; i < scores_size; i++)
+    {
+        this->AddGoalToUser(data[base_index], SafeStoi(data[base_index + 1]));
+        base_index += 2;
+    }
 
     Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Match deserializado");
 }
@@ -366,3 +392,21 @@ void Match::SetKickOffLocations(TEAM_NUMBER kicker_team) {
 		}
 	}
 }
+
+void Match::AddGoalToUser(std::string username, int goals)
+{
+    if (this->scores.find(username) != this->scores.end())
+    {
+        this->scores[username] += goals;
+    }
+    else
+    {
+        this->scores[username] = goals;
+    }
+}
+
+std::map<std::string, int> Match::GetScoreBoard()
+{
+    return this->scores;
+}
+

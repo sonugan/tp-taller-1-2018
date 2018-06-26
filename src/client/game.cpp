@@ -103,7 +103,7 @@ void Game::RenderViews()
 
     if (this->match->GetMatchState()->IsFinished())
     {
-        this->game_statistics_view->Render(this->match->GetTeamA(), this->match->GetTeamB());
+        this->game_statistics_view->Render(this->match->GetTeamA(), this->match->GetTeamB(), this->match->GetScoreBoard());
     }
 
     SDL_RenderPresent( renderer );

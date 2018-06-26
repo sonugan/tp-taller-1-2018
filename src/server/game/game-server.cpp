@@ -51,7 +51,7 @@ void GameServer::DoLogin(ClientSocket* client, LoginRequest* login_request) {
 
 	selected_player->SetPlayerColor(authenticated_user->GetUserColor());
 	authenticated_user->SetSelectedPlayer(selected_player);
-
+    this->game_state->GetMatch()->AddGoalToUser(authenticated_user->GetUsername(), 0);
 }
 
 void GameServer::DoQuit(ClientSocket* client) {
@@ -114,7 +114,7 @@ void GameServer::ChangePlayer(ChangePlayerRequest* change_player_request, int so
 	int min_distance = 99999;
 	Team* team = user->GetSelectedPlayer()->GetTeam();
 	Ball* ball = team->GetMatch()->GetBall();
-	
+
 	for (unsigned int i = 1; i <= Team::TEAM_SIZE; i++) {
 
 		Player* possible_player = team->GetPlayerByPositionIndex(i);
@@ -263,9 +263,11 @@ void GameServer::DetectGoals(Ball* ball)
 		Team* goal_scorer_team = ball->GetLastOwnerTeam();
 
 		if (ball->GetLastOwnerColor() != USER_COLOR::NO_COLOR) {
+            string username = this->session_manager->GetUserByColor(ball->GetLastOwnerColor())->GetUsername();
 			Logger::getInstance()->info(
-					"[GOOL] El usuario " + this->session_manager->GetUserByColor(ball->GetLastOwnerColor())->GetUsername() + " convirtio un gol para el equipo "
+					"[GOOL] El usuario " + username + " convirtio un gol para el equipo "
 							+ goaler_team->GetName());
+            this->game_state->GetMatch()->AddGoalToUser(username, 1);
 		} else {
 			Logger::getInstance()->info(
 					"[GOOL] La IA del equipo " + ball->GetLastOwnerTeam()->GetName() + " convirtio un gol para el equipo " + goaler_team->GetName());
@@ -307,27 +309,27 @@ void GameServer::CatchBall() {
 void GameServer::MoveKeepers() {
 	Keeper* keeper_a = this->GetGameState()->GetMatch()->GetTeamA()->GetKeeper();
 	Keeper* keeper_b = this->GetGameState()->GetMatch()->GetTeamB()->GetKeeper();
-	
+
 	if (GetGameState()->GetMatch()->GetMatchState()->IsPlaying()) {
 		keeper_a->TryToCatchBall();
 		keeper_b->TryToCatchBall();
-		
+
 		keeper_a->TryToRun();
 		keeper_b->TryToRun();
-		
+
 		keeper_a->TryToKick();
 		keeper_b->TryToKick();
-		
+
 		keeper_a->TryToJump();
 		keeper_b->TryToJump();
 	}
-	
+
 	keeper_a->TryToStopKicking();
 	keeper_b->TryToStopKicking();
-	
+
 	keeper_a->TryToStopRunning();
 	keeper_b->TryToStopRunning();
-	
+
 	keeper_a->TryToStopJumping();
 	keeper_b->TryToStopJumping();
 }
@@ -445,7 +447,7 @@ void GameServer::MovePlayersToDefaultPositions() {
 		Player* player_b = this->GetGameState()->GetMatch()->GetTeamB()->GetPlayerByPositionIndex(i);
 		player_b->Play();
 	}
-	
+
 }
 
 void GameServer::MoveBall() {
