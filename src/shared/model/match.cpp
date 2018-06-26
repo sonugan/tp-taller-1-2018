@@ -298,13 +298,13 @@ void Match::DeserializeAndUpdate(string serialized) {
     // SCORES DE LOS USERS
     int scores_size = SafeStoi(data[base_index + 10]);
 
-    base_index += 11;
+    base_index = base_index + 11;
 
     for (int i = 0; i < scores_size; i++)
     {
         this->ResetUserGoals(data[base_index]);
         this->AddGoalToUser(data[base_index], SafeStoi(data[base_index + 1]));
-        base_index += 2;
+        base_index = base_index + 2;
     }
 
     Logger::getInstance()->debug("(Match:DeserializeAndUpdate) Match deserializado");

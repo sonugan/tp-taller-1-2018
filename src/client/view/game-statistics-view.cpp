@@ -91,7 +91,7 @@ void GameStatisticsView::RenderScoreBoard(map<string, int> user_scores)
         SDL_FreeSurface(surface);
         SDL_DestroyTexture(message);
 
-        y += 50;
+        y += 30;
     }
 }
 
