@@ -16,10 +16,13 @@ class ScoreView
     protected:
         std::string DISPLAY_FONT = "src/client/sprites/tehkan_world_cup.ttf";
         TTF_Font* font_style = NULL;
+        TTF_Font* title_font_style = NULL;
         SDL_Renderer* renderer;
     private:
-        void RenderRedTeamScore(Team* team);
-        void RenderGreenTeamScore(Team* team);
+        bool title_renderized = false;
+        void RenderTeamAScore(Team* team);
+        void RenderTeamBScore(Team* team);
+        void RenderTitle();
 };
 
 #endif // SCOREVIEW_H
