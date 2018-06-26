@@ -23,6 +23,7 @@ class GameState
         bool WasConnected(User* user);
         void UpdateMatchState();
         void Start();
+        void SetGoalState(TEAM_NUMBER goaler_team);
 
         protected:
 
