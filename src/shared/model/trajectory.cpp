@@ -9,7 +9,7 @@ Trajectory::Trajectory(DIRECTION direction, unsigned int power, TRAJECTORY_TYPE 
     if (TRAJECTORY_TYPE::UPWARDS == trajectory_type) {
 		this->drive = 190;
     } else {
-    	this->drive = 210;
+    	this->drive = 270;
     }
     this->trajectory_type = trajectory_type;
     this->original_ball_speed = this->drive * this->power;
