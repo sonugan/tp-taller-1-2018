@@ -28,7 +28,7 @@ void GameState::AddUser(string username, string password)
 }
 
 void GameState::UpdateMatchState() {
-	this->match->SetRemainingTime(this->timer->GetRemainingMinutes());
+	this->match->SetRemainingTime(this->timer->GetRemainingTime());
 	MATCH_STATE_TYPE current_state_type = this->match->GetMatchState()->GetType();
 	switch (current_state_type)
 	{
@@ -149,7 +149,7 @@ void GameState::CreateModel(Configuration* initial_configuration)
     this->timer = new Timer(initial_configuration->GetGameDuration());
     Pitch* pitch = new Pitch(team_a, team_b);
     this->match = new Match(pitch, team_a, team_b, ball);
-    this->match->SetRemainingTime(this->timer->GetRemainingMinutes());
+    this->match->SetRemainingTime(this->timer->GetRemainingTime());
 }
 
 bool GameState::WasConnected(User* user) {

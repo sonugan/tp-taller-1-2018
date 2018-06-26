@@ -4,7 +4,6 @@
 #include "team.h"
 #include "pitch.h"
 #include "player.h"
-#include "timer.h"
 #include "ball.h"
 #include "../network/message-type.h"
 #include "../utils/string-utils.h"
@@ -14,6 +13,7 @@
 
 #include "match-time-type.h"
 #include "match-state.h"
+#include "timer.h"
 
 class Ball;
 class Team;

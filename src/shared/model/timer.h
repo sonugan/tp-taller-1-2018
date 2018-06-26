@@ -1,37 +1,38 @@
-#ifndef TIMER_H
-#define TIMER_H
+/*
+ * timer2.h
+ *
+ *  Created on: Jun 23, 2018
+ *      Author: swandelow
+ */
 
-#include <ctime>
+#ifndef SRC_SHARED_MODEL_TIMER_H_
+#define SRC_SHARED_MODEL_TIMER_H_
+
+#include <chrono>
 #include <iostream>
-#include <string>
-#include "../logger.h"
-#include "../utils/string-utils.h"
+
+using namespace std;
 
 class Timer
 {
-    public:
-        Timer(std::string finish_time_mm_ss);
-        virtual ~Timer();
-        std::string GetRemainingMinutes();
-        void Restart();
-        void SetFinishTime(std::string finish_time_mm_ss);
-        std::string GetFinishTime();
-        bool IsTimeUp();
-        void Start();
-        void Stop();
+public:
+	Timer(string game_duration);
+	virtual ~Timer();
+    string GetRemainingTime();
+    void Restart();
+    bool IsTimeUp();
+    void Start();
+    void Stop();
+private:
+    int game_duration_sec;
+    string game_duration;
+	bool is_ticking;
+	int acum;
+	chrono::time_point<chrono::system_clock> time_stamp;
 
-    protected:
-        std::string ToString();
-        time_t AddTimeToNow(std::string finish_time_mm_ss);
-    private:
-        const std::string ZERO_MINUTES = "0:00";
-        time_t finish_time = -1;
-        std::string initial_config_finish_time;
-        bool is_ticking;
-        time_t last_stop_time = -1;
-
-        time_t GetProperTime();
-        bool IsFinishTimeUnset();
+	string TimeToString(int seconds);
+	int StringToSeconds(string time);
+	int GetPlayedSeconds();
 };
 
-#endif // TIMER_H
+#endif /* SRC_SHARED_MODEL_TIMER_H_ */
