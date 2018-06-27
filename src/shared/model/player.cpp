@@ -713,12 +713,15 @@ void Player::UpdatePlayerSide()
 }
 
 bool Player::TeamScored() {
-	bool is_goal = this->GetTeam()->GetMatch()->GetMatchState()->IsGoal();
-	if (is_goal) {
-		Match* match = this->GetTeam()->GetMatch();
-		Team* scorer_team = match->GetTeamByNumber(match->GetMatchState()->GetGoalScorerTeam());
-		return scorer_team == this->GetTeam();
-	}
+    if (this->team->GetMatch()->GetMatchState()->IsGoal()) {
+        if (this->team->GetMatch()->GetMatchTime() == MATCH_TIME_TYPE::SECOND_TIME) {
+            return this->team->GetTeamNumber() != this->GetTeam()->GetMatch()->GetMatchState()->GetGoalScorerTeam();
+        }
+        else {
+            return this->team->GetTeamNumber() == this->GetTeam()->GetMatch()->GetMatchState()->GetGoalScorerTeam();
+        }
+    }
+
     return false;
 }
 
