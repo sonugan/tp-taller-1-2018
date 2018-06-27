@@ -8,16 +8,15 @@ using namespace std;
 class Rectangle
 {
     public:
-        Rectangle(Location* leftmost_highest_point, int height, int base);
+        Rectangle(int x1, int x2, int y1, int y2);
         virtual ~Rectangle();
         bool IsInside(Location* location);
-        void Move(Location* location);
-        Location* GetLeftmostHighestPoint();
     protected:
     private:
-        int base;
-        int height;
-        Location* leftmost_highest_point;
+        int x1;
+        int x2;
+        int y1;
+        int y2;
 };
 
 #endif // RECTANGLE_H

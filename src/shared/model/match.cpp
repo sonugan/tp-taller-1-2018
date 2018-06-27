@@ -334,11 +334,13 @@ void Match::SetKickOffLocations(TEAM_NUMBER kicker_team) {
         player->ChangeToStill();
         player->SetIsStill(true);
         player->GetLocation()->Update(formation_a->GetKickoffLocationForPlayer(i, formation_a->GetTeamNumber() == kicker_team));
+        player->UpdateCircle();
 
         player = this->team_b->GetPlayerByPositionIndex(i);
         player->ChangeToStill();
         player->SetIsStill(true);
         player->GetLocation()->Update(formation_b->GetKickoffLocationForPlayer(i, formation_b->GetTeamNumber() == kicker_team));
+        player->UpdateCircle();
     }
 }
 

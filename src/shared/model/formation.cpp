@@ -39,13 +39,13 @@ void Formation::InitializePositionsTeamA()
     int left_goal_line = 180;
     if (FORMATION::F_3_3 == this->value)
     {
-        defense_areas.push_back(new Rectangle(new Location(0,0,0), bottom_touchline, 360));//TODO: Arquero
-        defense_areas.push_back(new Rectangle(new Location(left_goal_line, top_touchline, 0), 440, 660 - left_goal_line));
-        defense_areas.push_back(new Rectangle(new Location(left_goal_line, 440, 0), 840 - 440, 660 - left_goal_line));
-        defense_areas.push_back(new Rectangle(new Location(left_goal_line, 840,0), bottom_touchline - (840 - 440), 660 - left_goal_line));
-        defense_areas.push_back(new Rectangle(new Location(660, 0, 0), 440, 900 - 660));
-        defense_areas.push_back(new Rectangle(new Location(660, 440,  0), 840 - 440, 900 - 660));
-        defense_areas.push_back(new Rectangle(new Location(660, 840, 0), bottom_touchline - (840 - 440), 900 - 660));
+        defense_areas.push_back(new Rectangle(0,0,0,0));//TODO: Arquero
+        defense_areas.push_back(new Rectangle(left_goal_line, 660, top_touchline, 468));
+        defense_areas.push_back(new Rectangle(left_goal_line, 660, 468, 768));
+        defense_areas.push_back(new Rectangle(left_goal_line, 660, 768, bottom_touchline));
+        defense_areas.push_back(new Rectangle(660, 950, top_touchline, 468));
+        defense_areas.push_back(new Rectangle(660, 950, 468, 768));
+        defense_areas.push_back(new Rectangle(660, 950, 768, bottom_touchline));
     	//TODO: AJUSTAR KICKOFF LOCATION PARA CADA FORMATION!
         positions.push_back(CreatePosition(new Location(260, 618, 0), new Location(260, 618, 0), new Location(260, 618, 0)));
         positions.push_back(CreatePosition(new Location(660, 318, 0), new Location(660, 318, 0), new Location(360, 618, 0)));
@@ -57,6 +57,14 @@ void Formation::InitializePositionsTeamA()
     }
     else if (FORMATION::F_3_2_1 == this->value)
     {
+        defense_areas.push_back(new Rectangle(0,0,0,0));//TODO: Arquero
+        defense_areas.push_back(new Rectangle(left_goal_line, 660, top_touchline, 468));
+        defense_areas.push_back(new Rectangle(left_goal_line, 660, 468, 768));
+        defense_areas.push_back(new Rectangle(left_goal_line, 660, 768, bottom_touchline));
+        defense_areas.push_back(new Rectangle(660, 800, top_touchline, 618));
+        defense_areas.push_back(new Rectangle(800, 900, top_touchline, bottom_touchline));
+        defense_areas.push_back(new Rectangle(660, 800, 618, bottom_touchline));
+
         positions.push_back(CreatePosition(new Location(260, 618, 0), new Location(260, 618, 0), new Location(360, 618, 0)));
         positions.push_back(CreatePosition(new Location(660, 318, 0), new Location(660, 318, 0), new Location(360, 618, 0)));
         positions.push_back(CreatePosition(new Location(660, 618, 0), new Location(660, 618, 0), new Location(360, 618, 0)));
@@ -67,6 +75,14 @@ void Formation::InitializePositionsTeamA()
     }
     else if (FORMATION::F_3_1_2 == this->value)
     {
+        defense_areas.push_back(new Rectangle(0,0,0,0));//TODO: Arquero
+        defense_areas.push_back(new Rectangle(left_goal_line, 660, top_touchline, 468));
+        defense_areas.push_back(new Rectangle(left_goal_line, 660, 468, 768));
+        defense_areas.push_back(new Rectangle(left_goal_line, 660, 768, bottom_touchline));
+        defense_areas.push_back(new Rectangle(660, 800, top_touchline, bottom_touchline));
+        defense_areas.push_back(new Rectangle(800, 900, top_touchline, 618));
+        defense_areas.push_back(new Rectangle(800, 900, 618, bottom_touchline));
+
         positions.push_back(CreatePosition(new Location(260, 618, 0), new Location(260, 618, 0), new Location(360, 618, 0)));
         positions.push_back(CreatePosition(new Location(660, 318, 0), new Location(660, 318, 0), new Location(360, 618, 0)));
         positions.push_back(CreatePosition(new Location(660, 618, 0), new Location(660, 618, 0), new Location(360, 618, 0)));
@@ -86,13 +102,13 @@ void Formation::InitializePositionsTeamB()
     int goal_line = 1740;
     if (FORMATION::F_3_3 == this->value)
     {
-        defense_areas.push_back(new Rectangle(new Location(0,0,0), bottom_touchline, 360));//TODO: Arquero
-        defense_areas.push_back(new Rectangle(new Location(1260, top_touchline, 0), 440, goal_line - 1260));
-        defense_areas.push_back(new Rectangle(new Location(1260, 440, 0), 840 - 440, goal_line - 1260));
-        defense_areas.push_back(new Rectangle(new Location(1260, 840,0), bottom_touchline - (840 - 440), goal_line - 1260));
-        defense_areas.push_back(new Rectangle(new Location(1020, 0, 0), 440, 1260 - 1020));
-        defense_areas.push_back(new Rectangle(new Location(1020, 440,  0), 840 - 440, 1260 - 1020));
-        defense_areas.push_back(new Rectangle(new Location(1020, 840, 0), bottom_touchline - (840 - 440), 1260 - 1020));
+        defense_areas.push_back(new Rectangle(0,0,0,0));//TODO: Arquero
+        defense_areas.push_back(new Rectangle(1260, goal_line, top_touchline, 468));
+        defense_areas.push_back(new Rectangle(1260, goal_line, 468, 768));
+        defense_areas.push_back(new Rectangle(1260, goal_line, 768, bottom_touchline));
+        defense_areas.push_back(new Rectangle(1020, 1260, top_touchline, 468));
+        defense_areas.push_back(new Rectangle(1020, 1260, 468, 768));
+        defense_areas.push_back(new Rectangle(1020, 1260, 768, bottom_touchline));
     	//TODO: AJUSTAR KICKOFF LOCATION PARA CADA FORMATION!
         positions.push_back(CreatePosition(new Location(1660, 618, 0), new Location(1660, 618, 0), new Location(1660, 618, 0)));
         positions.push_back(CreatePosition(new Location(1260, 318, 0), new Location(1260, 318, 0), new Location(1560, 618, 0)));
@@ -104,6 +120,14 @@ void Formation::InitializePositionsTeamB()
     }
     else if (FORMATION::F_3_2_1 == this->value)
     {
+        defense_areas.push_back(new Rectangle(0,0,0,0));//TODO: Arquero
+        defense_areas.push_back(new Rectangle(1260, goal_line, top_touchline, 468));
+        defense_areas.push_back(new Rectangle(1260, goal_line, 468, 768));
+        defense_areas.push_back(new Rectangle(1260, goal_line, 768, bottom_touchline));
+        defense_areas.push_back(new Rectangle(1120, 1260, top_touchline, 618));
+        defense_areas.push_back(new Rectangle(1020, 1120, top_touchline, bottom_touchline));
+        defense_areas.push_back(new Rectangle(1120, 1260, 618, bottom_touchline));
+
         positions.push_back(CreatePosition(new Location(1660, 618, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
         positions.push_back(CreatePosition(new Location(1260, 318, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
         positions.push_back(CreatePosition(new Location(1260, 618, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
@@ -114,6 +138,14 @@ void Formation::InitializePositionsTeamB()
     }
     else if (FORMATION::F_3_1_2 == this->value)
     {
+        defense_areas.push_back(new Rectangle(0,0,0,0));//TODO: Arquero
+        defense_areas.push_back(new Rectangle(1260, goal_line, top_touchline, 468));
+        defense_areas.push_back(new Rectangle(1260, goal_line, 468, 768));
+        defense_areas.push_back(new Rectangle(1260, goal_line, 768, bottom_touchline));
+        defense_areas.push_back(new Rectangle(1020, 1120, top_touchline, 618));
+        defense_areas.push_back(new Rectangle(1120, 1260, top_touchline, bottom_touchline));
+        defense_areas.push_back(new Rectangle(1020, 1120, 618, bottom_touchline));
+
         positions.push_back(CreatePosition(new Location(1660, 618, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
         positions.push_back(CreatePosition(new Location(1260, 318, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));
         positions.push_back(CreatePosition(new Location(1260, 618, 0), new Location(360, 618, 0), new Location(1560, 618, 0)));

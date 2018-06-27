@@ -710,6 +710,9 @@ void Player::UpdatePlayerSide()
         this->default_direction = DIRECTION::WEST;
     }
     this->direction = this->default_direction;
+
+    this->defense_strategy->SetDefenseArea(this->GetDefenseArea());
+    this->UpdateCircle();
 }
 
 bool Player::TeamScored() {
@@ -720,4 +723,9 @@ bool Player::TeamScored() {
 		return scorer_team == this->GetTeam();
 	}
     return false;
+}
+
+void Player::UpdateCircle()
+{
+    this->circle->Move(this->location);
 }

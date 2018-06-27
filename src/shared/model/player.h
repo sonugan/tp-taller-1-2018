@@ -98,6 +98,7 @@ class Player
         void SetInitialLocation(Location* initial_location);
         void UpdatePlayerSide();
         bool TeamScored();
+        void UpdateCircle();
     protected:
 
     private:
