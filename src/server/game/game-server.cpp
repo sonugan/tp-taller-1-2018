@@ -51,7 +51,7 @@ void GameServer::DoLogin(ClientSocket* client, LoginRequest* login_request) {
 
 	selected_player->SetPlayerColor(authenticated_user->GetUserColor());
 	authenticated_user->SetSelectedPlayer(selected_player);
-
+    this->game_state->GetMatch()->AddGoalToUser(authenticated_user->GetUsername(), 0);
 }
 
 void GameServer::DoQuit(ClientSocket* client) {
@@ -263,15 +263,17 @@ void GameServer::DetectGoals(Ball* ball)
 		Team* goal_scorer_team = ball->GetLastOwnerTeam();
 
 		if (ball->GetLastOwnerColor() != USER_COLOR::NO_COLOR) {
+            string username = this->session_manager->GetUserByColor(ball->GetLastOwnerColor())->GetUsername();
 			Logger::getInstance()->info(
-					"[GOOL] El usuario " + this->session_manager->GetUserByColor(ball->GetLastOwnerColor())->GetUsername() + " convirtio un gol para el equipo "
+					"[GOOL] El usuario " + username + " convirtio un gol para el equipo "
 							+ goaler_team->GetName());
+            this->game_state->GetMatch()->AddGoalToUser(username, 1);
 		} else {
 			Logger::getInstance()->info(
 					"[GOOL] La IA del equipo " + ball->GetLastOwnerTeam()->GetName() + " convirtio un gol para el equipo " + goaler_team->GetName());
 		}
 
-		this->game_state->GetMatch()->GetMatchState()->SetGoal(goaler_team->GetTeamNumber());
+		this->game_state->SetGoalState(goaler_team->GetTeamNumber());
 
 		if (scoring_on_goal_team != goal_scorer_team) {
 			//Si el equipo del que hace el gol es distinto del equipo del arco en el que se hace el gol => suma goles el equipo del goleador (el que hizo el gol)

@@ -38,7 +38,6 @@
 #include "controller/game-music-controller.h"
 #include "client.h"
 #include "../shared/model/user.h"
-#include "../shared/model/timer.h"
 #include <map>
 
 class GameController; //  forward declaration
@@ -58,11 +57,11 @@ public:
     void LogIn();
     User* GetUser();
 
-    static const int SCREEN_WIDTH = 800;
-    static const int SCREEN_HEIGHT = 600;
-    static const unsigned int PITCH_WIDTH = 1920;
-    static const unsigned int PITCH_HEIGHT = 1158;
-    static const int INFO_PANEL_HEIGHT = 78;
+	static const int SCREEN_WIDTH = 800;
+	static const int SCREEN_HEIGHT = 600;
+	static const unsigned int PITCH_WIDTH = 1920;
+	static const unsigned int PITCH_HEIGHT = 1158;
+	static const int INFO_PANEL_HEIGHT = 78;
 
 protected:
 
@@ -73,7 +72,6 @@ private:
     SDL_Renderer* renderer;
     Match* match;
     Camera* camera;
-    Timer* timer;
     TimerView* timer_view;
     ScoreView* score_view;
     MatchTimeView* match_time_view;
@@ -83,7 +81,7 @@ private:
     GameMusic* game_music;
     SoundManager* sound_manager;
 
-    static const int FRAMES_PER_SECOND = 30;
+	static const int FRAMES_PER_SECOND = 30;
     u_int STOP_LOOP_MILLISECONDS = 30;
 
     TeamController* team_controller;

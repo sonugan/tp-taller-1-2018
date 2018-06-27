@@ -24,6 +24,7 @@ void PlayerDefenseStrategy::Play()
             ball_team = ball->GetPlayer()->GetTeam();
         }
         bool my_keeper_has_ball = ball->IsHeldByAnyKeeper() && ball->GetKeeper() == this->player->GetTeam()->GetKeeper();
+        int x_ball = ball->GetLocation()->GetX();
         if((ball_team == nullptr || ball_team != this->player->GetTeam()) && !my_keeper_has_ball)
         {
             if(this->rectangle->IsInside(ball->GetLocation()))
@@ -34,6 +35,26 @@ void PlayerDefenseStrategy::Play()
                     player->ChangeToRecover();
                 }
                 else
+                {
+                    player->GoTo(ball->GetLocation(), false);
+                }
+            }
+            else if(x_ball > 900 && x_ball < 1020)
+            {
+                vector<Player*> buddies = this->player->GetTeam()->GetPlayers();
+                float min_distance = this->player->GetLocation()->Distance(ball->GetLocation());
+                Player* nearest_player = this->player;
+                for(int i = 0; i < buddies.size(); i++)
+                {
+                    Player* buddy = buddies[i];
+                    float distance = buddy->GetLocation()->Distance(ball->GetLocation());
+                    if(buddy != this->player && distance < min_distance)
+                    {
+                        min_distance = distance;
+                        nearest_player = buddy;
+                    }
+                }
+                if(nearest_player == this->player)
                 {
                     player->GoTo(ball->GetLocation(), false);
                 }

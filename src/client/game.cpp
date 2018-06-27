@@ -103,7 +103,7 @@ void Game::RenderViews()
 
     if (this->match->GetMatchState()->IsFinished())
     {
-        this->game_statistics_view->Render(this->match->GetTeamA(), this->match->GetTeamB());
+        this->game_statistics_view->Render(this->match->GetTeamA(), this->match->GetTeamB(), this->match->GetScoreBoard());
     }
 
     SDL_RenderPresent( renderer );
@@ -150,9 +150,9 @@ void Game::Start()
 
         if (this->match->GetMatchState()->IsPlaying())
         {
+			this->team_controller->Handle(keyboard_state_array);
 			this->player_controller->SetEvent(e);
 			this->player_controller->Handle(keyboard_state_array);
-			this->team_controller->Handle(keyboard_state_array);
         }
 
         this->game_controller->Handle(keyboard_state_array);

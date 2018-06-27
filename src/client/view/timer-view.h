@@ -4,7 +4,6 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include "../../shared/logger.h"
-#include "../../shared/model/timer.h"
 
 class TimerView
 {

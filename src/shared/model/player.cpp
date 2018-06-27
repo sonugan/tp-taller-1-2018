@@ -128,9 +128,6 @@ Location* Player::GetDefaultLocation()
 void Player::SetTeam(Team* team)
 {
     this->team = team;
-    Location* default_location = GetDefaultLocation();
-    this->location = new Location(default_location->GetX(), default_location->GetY(), default_location->GetZ());
-    this->previous_location = new Location(this->location->GetX(), this->location->GetY(), this->location->GetZ());
     this->circle = new Circle(HALO_RADIUS, new Location(this->location));
     this->defense_strategy->SetDefenseArea(this->GetDefenseArea());
 }

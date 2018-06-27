@@ -2,20 +2,20 @@
 
 PlayerAtackStrategy::PlayerAtackStrategy(Player* player)
 {
-    Logger::getInstance()->debug("CREANDO PlayerAtackStrategy");
+    Logger::getInstance()->info("CREANDO PlayerAtackStrategy");
     this->player = player;
     this->coin_flipper = new CoinFlipper();
 }
 
 PlayerAtackStrategy::~PlayerAtackStrategy()
 {
-    Logger::getInstance()->debug("DESTRUYENDO PlayerAtackStrategy");
+    Logger::getInstance()->info("DESTRUYENDO PlayerAtackStrategy");
     delete this->coin_flipper;
 }
 
 void PlayerAtackStrategy::Play()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::Play");
+    Logger::getInstance()->info("PlayerAtackStrategy::Play");
     if(!player->IsSelected())
     {
         if(this->player->GetTeam()->HasBall())
@@ -53,7 +53,7 @@ void PlayerAtackStrategy::Play()
 bool PlayerAtackStrategy::PassBall()//TODO: los angulos de pase son de 45°, lo que hace que no todos los pases sean efectivos
                                     // reduciendose su efectividad cuanto mayor es la distancia
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::PassBall");
+    Logger::getInstance()->info("PlayerAtackStrategy::PassBall");
     if(!this->coin_flipper->Win(10,5)) return false;
     vector<Player*> pass_ball_players;
     vector<Player*> buddies = this->player->GetTeam()->GetPlayers();
@@ -112,7 +112,7 @@ bool PlayerAtackStrategy::PassBall()//TODO: los angulos de pase son de 45°, lo 
 
 vector<Player*> PlayerAtackStrategy::GetEnemies()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::GetEnemies");
+    Logger::getInstance()->info("PlayerAtackStrategy::GetEnemies");
     Team* team_a = player->GetTeam()->GetMatch()->GetTeamA();
     if(player->GetTeam() == team_a)
     {
@@ -126,7 +126,7 @@ vector<Player*> PlayerAtackStrategy::GetEnemies()
 
 bool PlayerAtackStrategy::IsNearGoalLine(Player* buddy)
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::IsNearGoalLine");
+    Logger::getInstance()->info("PlayerAtackStrategy::IsNearGoalLine");
     if(buddy != nullptr && buddy->GetTeam() != nullptr)
     {
         if(IsTeamA())
@@ -143,7 +143,7 @@ bool PlayerAtackStrategy::IsNearGoalLine(Player* buddy)
 
 bool PlayerAtackStrategy::IsPlayerInFrontOfMe()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::IsPlayerInFrontOfMe");
+    Logger::getInstance()->info("PlayerAtackStrategy::IsPlayerInFrontOfMe");
     vector<Player*> buddies = player->GetTeam()->GetPlayers();
     for(int i = 0; i < buddies.size(); i++)
     {
@@ -168,7 +168,7 @@ bool PlayerAtackStrategy::IsPlayerInFrontOfMe()
 
 bool PlayerAtackStrategy::ThereIsAnEnemyInFrontOfMe()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::ThereIsAnEnemyInFrontOfMe");
+    Logger::getInstance()->info("PlayerAtackStrategy::ThereIsAnEnemyInFrontOfMe");
     vector<Player*> enemies = GetEnemies();
     for(int i = 0; i < enemies.size(); i++)
     {
@@ -193,7 +193,7 @@ bool PlayerAtackStrategy::ThereIsAnEnemyInFrontOfMe()
 
 bool PlayerAtackStrategy::IsTeamA()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::IsTeamA");
+    Logger::getInstance()->info("PlayerAtackStrategy::IsTeamA");
     if(this->player->GetTeam() != nullptr &&
         this->player->GetTeam()->GetMatch() != nullptr)
     {
@@ -209,7 +209,7 @@ bool PlayerAtackStrategy::AreBetween(int a, int b, int value)
 
 bool PlayerAtackStrategy::Kick()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::Kick");
+    Logger::getInstance()->info("PlayerAtackStrategy::Kick");
     if(IsOutisideShootingRange())
     {
         return false;
@@ -250,7 +250,7 @@ bool PlayerAtackStrategy::Kick()
 
 bool PlayerAtackStrategy::Cross()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::Cross");
+    Logger::getInstance()->info("PlayerAtackStrategy::Cross");
     if(IsOutisideShootingRange())
     {
         if(this->coin_flipper->FlipPorc(10, 8) == COIN_RESULT::WIN)
@@ -282,7 +282,7 @@ bool PlayerAtackStrategy::Cross()
 
 bool PlayerAtackStrategy::IsInGoalZone()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::IsInGoalZone");
+    Logger::getInstance()->info("PlayerAtackStrategy::IsInGoalZone");
     int x = this->player->GetLocation()->GetX();
     int y = this->player->GetLocation()->GetY();
     if(IsTeamA())
@@ -297,7 +297,7 @@ bool PlayerAtackStrategy::IsInGoalZone()
 
 bool PlayerAtackStrategy::IsInEnemyMiddle()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::IsInEnemyMiddle");
+    Logger::getInstance()->info("PlayerAtackStrategy::IsInEnemyMiddle");
     if(IsTeamA())
     {
         return this->player->GetLocation()->GetX() > MIDDLE;
@@ -310,7 +310,7 @@ bool PlayerAtackStrategy::IsInEnemyMiddle()
 
 bool PlayerAtackStrategy::IsOutisideShootingRange()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::IsOutisideShootingRange");
+    Logger::getInstance()->info("PlayerAtackStrategy::IsOutisideShootingRange");
     int y = this->player->GetLocation()->GetY();
     if(y > GOAL_POST_SOUTH + 180 && y < GOAL_POST_NORTH - 180)
     {
@@ -333,7 +333,7 @@ bool PlayerAtackStrategy::IsExpectingACross(Player* player)
 
 bool PlayerAtackStrategy::IsBallInMyMiddle()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::IsBallInMyMiddle");
+    Logger::getInstance()->info("PlayerAtackStrategy::IsBallInMyMiddle");
     Ball* ball = this->player->GetTeam()->GetMatch()->GetBall();
     if(IsTeamA())
     {
@@ -349,7 +349,7 @@ bool PlayerAtackStrategy::IsRecovering(){ return is_recovering; }
 
 bool PlayerAtackStrategy::LongKick()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::LongKick");
+    Logger::getInstance()->info("PlayerAtackStrategy::LongKick");
     //x = 960 es el centro
     int distance_to_middle = abs(MIDDLE - this->player->GetLocation()->GetX());
     float inc = IsInGoalZone() ? 0.7 : 0.05;
@@ -358,7 +358,7 @@ bool PlayerAtackStrategy::LongKick()
 
 bool PlayerAtackStrategy::MediumKick()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::MediumKick");
+    Logger::getInstance()->info("PlayerAtackStrategy::MediumKick");
     int distance_to_middle = abs(MIDDLE - this->player->GetLocation()->GetX());
     float inc = IsInGoalZone() ? 0.7 : 0.05;
     return this->coin_flipper->FlipPorc(100, 2 + distance_to_middle*inc) == COIN_RESULT::WIN;
@@ -366,7 +366,7 @@ bool PlayerAtackStrategy::MediumKick()
 
 bool PlayerAtackStrategy::IsKeeperInFrontOfMe(Keeper* keeper)
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::IsKeeperInFrontOfMe");
+    Logger::getInstance()->info("PlayerAtackStrategy::IsKeeperInFrontOfMe");
     int my_x = this->player->GetLocation()->GetX();
     int my_y = this->player->GetLocation()->GetY();
     int x = keeper->GetLocation()->GetX();
@@ -376,7 +376,7 @@ bool PlayerAtackStrategy::IsKeeperInFrontOfMe(Keeper* keeper)
 
 Keeper* PlayerAtackStrategy::GetOpponetKeeper()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::GetOpponetKeeper");
+    Logger::getInstance()->info("PlayerAtackStrategy::GetOpponetKeeper");
     if(IsTeamA())
     {
         return this->player->GetTeam()->GetMatch()->GetTeamA()->GetKeeper();
@@ -389,7 +389,7 @@ Keeper* PlayerAtackStrategy::GetOpponetKeeper()
 
 void PlayerAtackStrategy::Point()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::Point");
+    Logger::getInstance()->info("PlayerAtackStrategy::Point");
     int x = this->player->GetLocation()->GetX();
     int y = this->player->GetLocation()->GetY();
     Keeper* keeper = GetOpponetKeeper();
@@ -440,7 +440,7 @@ void PlayerAtackStrategy::Point()
 
 bool PlayerAtackStrategy::RecoverInAtack()//TODO: no detecta la pelota libre?¡
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::RecoverInAtack");
+    Logger::getInstance()->info("PlayerAtackStrategy::RecoverInAtack");
     Ball* ball = this->player->GetTeam()->GetMatch()->GetBall();
     Location* ball_location = ball->GetLocation();
     if(BallIsFree())
@@ -471,7 +471,7 @@ bool PlayerAtackStrategy::RecoverInAtack()//TODO: no detecta la pelota libre?¡
 
 bool PlayerAtackStrategy::RunWithBall()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::RunWithBall");
+    Logger::getInstance()->info("PlayerAtackStrategy::RunWithBall");
     if(IsInGoalZone())
     {
         return false;
@@ -499,7 +499,7 @@ bool PlayerAtackStrategy::RunWithBall()
 
 bool PlayerAtackStrategy::RunToArea()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::RunToArea");
+    Logger::getInstance()->info("PlayerAtackStrategy::RunToArea");
     if(IsInGoalZone())
     {
         is_running_to_area = false;
@@ -543,7 +543,7 @@ bool PlayerAtackStrategy::RunToArea()
 
 bool PlayerAtackStrategy::StayDefend()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::StayDefend");
+    Logger::getInstance()->info("PlayerAtackStrategy::StayDefend");
     int prob = 1;
     if(this->player->IsDefender())
     {
@@ -555,7 +555,7 @@ bool PlayerAtackStrategy::StayDefend()
 
 bool PlayerAtackStrategy::Convoy()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::Convoy");
+    Logger::getInstance()->info("PlayerAtackStrategy::Convoy");
     int prob = 100;
     if(this->player->IsDefender())
     {
@@ -582,7 +582,7 @@ bool PlayerAtackStrategy::Convoy()
 
 bool PlayerAtackStrategy::BallIsFree()
 {
-    Logger::getInstance()->debug("PlayerAtackStrategy::BallIsFree");
+    Logger::getInstance()->info("PlayerAtackStrategy::BallIsFree");
     vector<Player*> buddies = this->player->GetTeam()->GetPlayers();
     for(int i = 0; i < buddies.size(); i++)
     {

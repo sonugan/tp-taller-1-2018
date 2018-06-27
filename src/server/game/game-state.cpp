@@ -28,7 +28,7 @@ void GameState::AddUser(string username, string password)
 }
 
 void GameState::UpdateMatchState() {
-	this->match->SetRemainingTime(this->timer->GetRemainingMinutes());
+	this->match->SetRemainingTime(this->timer->GetRemainingTime());
 	MATCH_STATE_TYPE current_state_type = this->match->GetMatchState()->GetType();
 	switch (current_state_type)
 	{
@@ -43,8 +43,7 @@ void GameState::UpdateMatchState() {
 		break;
 	case GOAL:
 	{
-		this->timer->Stop();
-		TEAM_NUMBER kicker_team = this->match->GetOppositeTeam(this->match->GetTeamByNumber(this->match->GetMatchState()->GetGoalScorerTeam()))->GetTeamNumber();
+		TEAM_NUMBER kicker_team = TEAM_NUMBER::TEAM_A == this->GetMatch()->GetMatchState()->GetGoalScorerTeam() ? TEAM_NUMBER::TEAM_B : TEAM_NUMBER::TEAM_A;
 		if (this->match->GetMatchState()->IsReadyToChange()) {
 			Logger::getInstance()->debug("(GameState:UpdateMatchState) Estado actual: [GOAL] - Actualizando a: [KICKOFF]");
 			this->match->SetKickOffLocations(kicker_team);
@@ -150,7 +149,7 @@ void GameState::CreateModel(Configuration* initial_configuration)
     this->timer = new Timer(initial_configuration->GetGameDuration());
     Pitch* pitch = new Pitch(team_a, team_b);
     this->match = new Match(pitch, team_a, team_b, ball);
-    this->match->SetRemainingTime(this->timer->GetRemainingMinutes());
+    this->match->SetRemainingTime(this->timer->GetRemainingTime());
 }
 
 bool GameState::WasConnected(User* user) {
@@ -159,4 +158,9 @@ bool GameState::WasConnected(User* user) {
 		return it->second == user->GetPassword();
 	}
 	return false;
+}
+
+void GameState::SetGoalState(TEAM_NUMBER goaler_team) {
+	this->timer->Stop();
+	this->match->GetMatchState()->SetGoal(goaler_team);
 }

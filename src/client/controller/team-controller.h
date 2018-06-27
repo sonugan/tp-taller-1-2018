@@ -27,13 +27,13 @@ class TeamController : public AbstractController
         static const unsigned int PLAYER_SELECTION_DELAY_MILLIS = 150;
         static const unsigned int FORMATION_CHANGE_DELAY_MILLIS = 150;
         bool CKeySelected(const Uint8 *keyboard_state_array);
-        bool FKeySelected(const Uint8 *keyboard_state_array);
+//        bool FKeySelected(const Uint8 *keyboard_state_array);
         void ChangePlayerSelection(const Uint8 *keyboard_state_array);
-        void ChangeFormation(const Uint8 *keyboard_state_array);
+//        void ChangeFormation(const Uint8 *keyboard_state_array);
         void SetColor(USER_COLOR color);
 
         std::chrono::time_point<std::chrono::system_clock> last_player_selection_change;
-        std::chrono::time_point<std::chrono::system_clock> last_formation_change;
+//        std::chrono::time_point<std::chrono::system_clock> last_formation_change;
         Team* team;
         Camera* camera;
         USER_COLOR color;

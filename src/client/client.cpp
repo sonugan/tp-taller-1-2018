@@ -37,7 +37,7 @@ std::string Client::LogIn(LoginRequest* login_request) {
         Logger::getInstance()->debug("(Client:LogIn) Esperando login response");
 
         // OJO con esto. Recibe bloquea el thread.
-        Message* login_status = clientSocket->Receive(300);
+        Message* login_status = clientSocket->Receive(400);
         string login_response(login_status->GetData());
         Logger::getInstance()->debug("(Client) login data: " + login_response);
         Logger::getInstance()->debug("(Client) login size: " + to_string(login_status->GetDataSize()));
@@ -54,7 +54,7 @@ std::string Client::WaitForGameStart() {
 
         // OJO con esto. Recibe bloquea el thread.
         // Espero el primer estado del juego para instanciar el modelo.
-        Message* server_message = clientSocket->Receive(300);
+        Message* server_message = clientSocket->Receive(400);
         this->is_connected = true;
 
         //Empiezo a escuchar actualizaciones del modelo.
@@ -125,7 +125,7 @@ void Client::ReceiveMessages()
 
         try
         {
-            Message* incoming_message = this->clientSocket->Receive(300);
+            Message* incoming_message = this->clientSocket->Receive(400);
 //            Logger::getInstance()->debug("(Client:ReceiveMessages) Recibido: " + string(incoming_message->GetData()));
             this->message_queue->Append(incoming_message);
         }
