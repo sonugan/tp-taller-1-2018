@@ -17,7 +17,6 @@ Server::Server(Configuration* config)
 
     this->message_queue = new Queue<pair<ClientSocket*, Message*>>();
     this->port = config->GetPort();
-    this->user_count = config->GetMaxPlayers();
     this->socket = new ServerSocket();
     this->game = new GameServer(config);
 }
@@ -360,7 +359,7 @@ void Server::NotifyGameState()
 
         std::this_thread::sleep_for(std::chrono::milliseconds(SEND_GAME_STATE_EVERY_MILLISECONDS));
 
-//        unique_lock<mutex> lock(input_msg_mutex);
+        unique_lock<mutex> lock(input_msg_mutex); // agrego mutex para sincronizar hilos y ver si soluciona el seg-fault del infierno
         this->game->Run();
     }
 }
@@ -409,7 +408,6 @@ void Server::CheckDisconnections()
         unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>
                              (now - it->second).count();
         if (elapsed_millis > CONNECTION_TIMEOUT) {
-//            Logger::getInstance()->debug("(Server::CheckDisconnections) Desconectando cliente...");
             if (this->clients.find(it->first) != this->clients.end()) {
                 Logger::getInstance()->debug("(Server::CheckDisconnections) Desconectando client " + to_string((int)it->first));
                 this->DisconnectClient(this->clients[it->first]);

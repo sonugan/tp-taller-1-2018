@@ -40,7 +40,6 @@ private:
     Queue<pair<ClientSocket*, Message*>>* message_queue;
     ServerSocket* socket;
     map<int, ClientSocket*> clients = {};
-    u_int user_count;
     u_int MAX_SOCKET_QUEUE_SIZE = 10;
     std::mutex server_mutex;
     std::mutex input_msg_mutex;
