@@ -9,7 +9,6 @@ PlayerDefenseStrategy::PlayerDefenseStrategy(Player* player)
 
 PlayerDefenseStrategy::~PlayerDefenseStrategy()
 {
-    delete this->rectangle;
     delete this->coin_flipper;
 }
 
