@@ -28,6 +28,10 @@ Formation::~Formation()
         delete positions[i];
     }
     positions.clear();
+    for (unsigned int i = 0; i < defense_areas.size(); i++)
+    {
+        delete defense_areas[i];
+    }
 }
 
 void Formation::InitializePositionsTeamA()
