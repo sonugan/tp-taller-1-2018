@@ -3,6 +3,11 @@
 #include "server-socket.h"
 #include "exceptions/socket-connection-exception.h"
 
+#include <iostream>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sstream>
+
 using namespace std;
 
 ServerSocket::ServerSocket():Socket()
@@ -48,17 +53,43 @@ ClientSocket* ServerSocket::Accept()
         return client;
     }
 }
+/*
+int isValidPtr(const void*p, int len) {
+    if (!p) {
+    return 0;
+    }
+    int ret = 1;
+    int nullfd = open("/dev/random", O_WRONLY);
+    if (write(nullfd, p, len) < 0) {
+    ret = 0;
+    //Not OK
+    }
+    close(nullfd);
+    return ret;
+}
+int isValidOrNullPtr(const void*p, int len) {
+    return !p||isValidPtr(p, len);
+}*/
+
 
 void ServerSocket::Send(Socket* client_socket, Message* request)
 {
     try
     {
+        //if(!isValidOrNullPtr(request, sizeof(Message)) || request == nullptr || request == NULL)
+        if(request == nullptr || request == NULL)
+        {
+            return;
+        }
         const string data = string(request->GetData());
         const string data_size = to_string(request->GetDataSize());
+        int d_size = request->GetDataSize();
         Logger::getInstance()->debug("(ServerSocket:Send) data: " + data + " size: " + data_size);
-        send(client_socket->socket_id, request->GetData(), request->GetDataSize(), 0);
-
-        delete request;
+        if(send(client_socket->socket_id, data.c_str(), d_size, 0) != -1)
+        //if(send(client_socket->socket_id, request->GetData(), request->GetDataSize(), 0) != -1)
+        {
+            delete request;
+        }
     }
     catch (...) {
         Logger::getInstance()->error("(ServerSocket::Send) Error enviando el mensaje.");

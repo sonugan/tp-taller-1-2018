@@ -193,17 +193,27 @@ bool PlayerAtackStrategy::ThereIsAnEnemyInFrontOfMe()
 
 bool PlayerAtackStrategy::IsTeamA()
 {
-    Logger::getInstance()->info("PlayerAtackStrategy::IsTeamA");
-    if(this->player->GetTeam() != nullptr &&
-        this->player->GetTeam()->GetMatch() != nullptr)
+    try
+    {
+        Logger::getInstance()->info("PlayerAtackStrategy::IsTeamA");
+        if(this->player != nullptr &&
+            this->player != NULL &&
+            this->player->GetTeam() != nullptr &&
+            this->player->GetTeam() != NULL)
     {
         return this->player->GetTeam()->GetTeamNumber() == TEAM_NUMBER::TEAM_A;
     }
+}
+catch(...)
+{
+
+}
     return false;
 }
 
 bool PlayerAtackStrategy::AreBetween(int a, int b, int value)
 {
+    Logger::getInstance()->info("PlayerAtackStrategy::AreBetween" + to_string(a) + "," + to_string(b) + "," + to_string(value));
     return abs(a - b) <= value;
 }
 
@@ -494,6 +504,7 @@ bool PlayerAtackStrategy::RunWithBall()
     else destination = new Location(TEAM_B_GOAL_ZONE_X - 150, y, location->GetZ());
 
     this->player->GoTo(destination, run);
+    delete destination;
     return true;
 }
 
@@ -536,6 +547,7 @@ bool PlayerAtackStrategy::RunToArea()
 
         this->player->GoTo(destination, true);
         is_running_to_area = true;
+        delete destination;
         return true;
     }
     return false;
@@ -565,16 +577,27 @@ bool PlayerAtackStrategy::Convoy()
 
     if(coin_flipper->Win(100, prob) && !IsPlayerInFrontOfMe())
     {
-        Ball* ball = player->GetTeam()->GetMatch()->GetBall();
-        Location* player_ball_location = ball->GetPlayer()->GetLocation();
-        Location* location = player->GetLocation();
-        Team* team_a = player->GetTeam()->GetMatch()->GetTeamA();
-        Location* destination = new Location(player_ball_location->GetX(), location->GetY(), location->GetZ());
-        if((player->GetTeam() == team_a && destination->GetX() >= location->GetX())
-            || (player->GetTeam() != team_a && destination->GetX() <= location->GetX()))
+        if(this->player != nullptr && this->player != NULL
+            && this->player->GetTeam() != nullptr && this->player->GetTeam() != NULL
+            && this->player->GetTeam()->GetMatch() != nullptr && this->player->GetTeam()->GetMatch() != NULL)
         {
-            player->GoTo(destination, false);
-            return true;
+            Ball* ball = this->player->GetTeam()->GetMatch()->GetBall();
+            if(ball != nullptr && ball != NULL && ball->GetPlayer() != nullptr && ball->GetPlayer() != NULL)
+            {
+                Logger::getInstance()->info("PlayerAtackStrategy::Convoy-2");
+                Location* player_ball_location = ball->GetPlayer()->GetLocation();
+                Location* location = player->GetLocation();
+                Team* team_a = player->GetTeam()->GetMatch()->GetTeamA();
+                Location* destination = new Location(player_ball_location->GetX(), location->GetY(), location->GetZ());
+                if((player->GetTeam() == team_a && destination->GetX() >= location->GetX())
+                    || (player->GetTeam() != team_a && destination->GetX() <= location->GetX()))
+                {
+                    player->GoTo(destination, false);
+                    delete destination;
+                    return true;
+                }
+                delete destination;
+            }
         }
     }
     return false;
