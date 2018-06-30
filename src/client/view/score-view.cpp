@@ -42,7 +42,7 @@ void ScoreView::RenderTitle()
 
     team = "TeamB";
 
-    text_color = { 127, 255, 0, 0xFF };
+    text_color = { 0, 0, 255, 0xFF };//{ 127, 255, 0, 0xFF };
     surface = TTF_RenderText_Solid(this->title_font_style, team.c_str(), text_color);
     message = SDL_CreateTextureFromSurface(this->renderer, surface);
 
@@ -104,4 +104,3 @@ void ScoreView::Render(Team* team_a, Team* team_b)
     this->RenderTeamAScore(team_a);
     this->RenderTeamBScore(team_b);
 }
-
