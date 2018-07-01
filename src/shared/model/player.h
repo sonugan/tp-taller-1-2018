@@ -140,6 +140,7 @@ class Player
         bool is_center = false;
         bool is_north_winger = false;
         bool is_south_winger = false;
+        bool my_team_has_ball = false;
 };
 
 #endif // PLAYER_H

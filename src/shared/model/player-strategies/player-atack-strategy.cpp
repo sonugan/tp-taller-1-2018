@@ -18,33 +18,18 @@ void PlayerAtackStrategy::Play()
     Logger::getInstance()->info("PlayerAtackStrategy::Play");
     if(!player->IsSelected())
     {
-        if(this->player->GetTeam()->HasBall())
+        Ball* ball = this->player->GetTeam()->GetMatch()->GetBall();
+        if(this->player->GetTeam()->HasBall() || ball->IsFree())
         {
             if(!player->HasBall())
             {
-                if(!RecoverInAtack() && !RunToArea() && !StayDefend() && Convoy())
+                if(!RecoverInAtack() && !Convoy() && !RunToArea() && !StayDefend())
                     return;
             }
             else
             {
                 if(!PassBall() && !Kick() && !RunWithBall())
-                {
-                    /*Location* goal_line = nullptr;
-                    Team* team_a = player->GetTeam()->GetMatch()->GetTeamA();
-                    if(player->GetTeam() == team_a)
-                    {
-                        goal_line = new Location(player->GetTeam()->GetTeamAGoalLine());
-                    }
-                    else
-                    {
-                        goal_line = new Location(player->GetTeam()->GetTeamBGoalLine());
-                    }
-                    if(goal_line != nullptr)
-                    {
-                        goal_line->UpdateY(player->GetLocation()->GetY());
-                    }
-                    player->GoTo(goal_line, false);*/
-                }
+                    return;
             }
         }
     }
@@ -443,34 +428,31 @@ void PlayerAtackStrategy::Point()
     }
 }
 
-bool PlayerAtackStrategy::RecoverInAtack()//TODO: no detecta la pelota libre?¡
+bool PlayerAtackStrategy::RecoverInAtack()
 {
-    /*Logger::getInstance()->info("PlayerAtackStrategy::RecoverInAtack");
     Ball* ball = this->player->GetTeam()->GetMatch()->GetBall();
     Location* ball_location = ball->GetLocation();
-    if(BallIsFree())
+    Player* player_ball = ball->GetPlayer();
+    if(!ball->IsHeldByAnyKeeper())
     {
         vector<Player*> buddies = this->player->GetTeam()->GetPlayers();
         int my_distance = ball_location->Distance(this->player->GetLocation());
-        for(int i = 0; i < buddies.size(); i++)
+        for(u_int i = 0; i < buddies.size(); i++)
         {
             Player* buddy = buddies[i];
             if(buddy != this->player)
             {
                 float distance = ball_location->Distance(buddy->GetLocation());
-                if(my_distance > distance)// || buddy->GetStrategy()->IsRecovering())
+                if(my_distance > distance)
                 {
-                    is_recovering = false;
                     return false;
                 }
             }
         }
         Location* destination = new Location(ball_location->GetX(), ball_location->GetY(), ball_location->GetZ());
         player->GoTo(destination, true);
-        is_recovering = true;
         return true;
     }
-    is_recovering = false;*/
     return false;
 }
 
