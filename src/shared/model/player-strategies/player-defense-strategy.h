@@ -23,6 +23,7 @@ class PlayerDefenseStrategy : public IPlayerStrategy
         Player* player;
     private:
         bool KickBall();
+        bool ImTheNearestPlayer();
         Rectangle* rectangle;
         CoinFlipper* coin_flipper;
 };
