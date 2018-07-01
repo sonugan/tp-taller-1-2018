@@ -1,4 +1,4 @@
-#define MSG_ERROR_DESCONECT "Se ha producido un error con la conexión. Presione esc para salir"
+#define MSG_ERROR_DESCONECT "Se ha producido un error con la conexion. Presione esc para salir"
 #define MSG_CONNECTING "Intentando reconectarse al servidor. Por favor espere"
 
 
