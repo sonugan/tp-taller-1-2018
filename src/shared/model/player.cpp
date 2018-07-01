@@ -517,7 +517,7 @@ bool Player::TryRecover()
     }
     else
     {
-        if(left_ball_counter == 0)
+        if(left_ball_counter == 0 || this->current_state == this->recover_ball_state)
         {
             if(!this->HasBall() && !ball->IsHeldByAnyKeeper()
                 && !this->AreInSameTeam(ball->GetPlayer())
