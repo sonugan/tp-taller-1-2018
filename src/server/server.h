@@ -71,7 +71,7 @@ private:
     void CheckDisconnections();
     void RestartTimers();
     void StartGame();
-    u_int SEND_GAME_STATE_EVERY_MILLISECONDS = 50;
+    u_int SEND_GAME_STATE_EVERY_MILLISECONDS = 80;
     u_int CONNECTION_TIMEOUT = 4000;
 };
 

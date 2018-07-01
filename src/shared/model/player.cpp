@@ -517,7 +517,7 @@ bool Player::TryRecover()
     }
     else
     {
-        if(left_ball_counter == 0)
+        if(left_ball_counter == 0 || this->current_state == this->recover_ball_state)
         {
             if(!this->HasBall() && !ball->IsHeldByAnyKeeper()
                 && !this->AreInSameTeam(ball->GetPlayer())
@@ -547,6 +547,24 @@ IPlayerStrategy* Player::GetStrategy()
 
 void Player::NotifyChangeBall(Ball* ball)
 {
+    if(ball->IsFree() && this->my_team_has_ball)
+    {
+        this->strategy = this->atack_stategy;
+        return;
+    }
+
+    Team* ball_team = nullptr;
+    if(ball->IsHeldByAnyPlayer() && ball->GetPlayer() != NULL && ball->GetPlayer() != nullptr) ball_team = ball->GetPlayer()->GetTeam();
+    if(ball->IsHeldByAnyKeeper() && ball->GetKeeper() != NULL && ball->GetKeeper() != nullptr) ball_team = ball->GetKeeper()->GetTeam();
+    if(ball_team != nullptr)
+    {
+        this->my_team_has_ball = this->GetTeam() == ball_team;
+    }
+    else
+    {
+        this->my_team_has_ball = false;
+    }
+
     if(this->GetTeam()->HasBall() && ball->IsHeldByAnyPlayer())
     {
         this->strategy = this->atack_stategy;
@@ -572,9 +590,8 @@ void Player::InitializePosition()
 
 bool Player::DefineForward()
 {
-    Location* location = this->GetLocation();
     vector<Player*> buddies = this->GetTeam()->GetPlayers();
-    for(int i = 0; i < buddies.size(); i++)
+    for(u_int i = 0; i < buddies.size(); i++)
     {
         Player* buddy = buddies[i];
         if(buddy != this)
@@ -591,9 +608,8 @@ bool Player::DefineForward()
 
 bool Player::DefineDefender()
 {
-    Location* location = this->GetLocation();
     vector<Player*> buddies = this->GetTeam()->GetPlayers();
-    for(int i = 0; i < buddies.size(); i++)
+    for(u_int i = 0; i < buddies.size(); i++)
     {
         Player* buddy = buddies[i];
         if(buddy != this)
@@ -610,9 +626,8 @@ bool Player::DefineDefender()
 
 bool Player::DefineNorthWinger()
 {
-    Location* location = this->GetLocation();
     vector<Player*> buddies = this->GetTeam()->GetPlayers();
-    for(int i = 0; i < buddies.size(); i++)
+    for(u_int i = 0; i < buddies.size(); i++)
     {
         Player* buddy = buddies[i];
         if(buddy != this)
@@ -641,9 +656,8 @@ bool Player::DefineNorthWinger()
 
 bool Player::DefineSouthWinger()
 {
-    Location* location = this->GetLocation();
     vector<Player*> buddies = this->GetTeam()->GetPlayers();
-    for(int i = 0; i < buddies.size(); i++)
+    for(u_int i = 0; i < buddies.size(); i++)
     {
         Player* buddy = buddies[i];
         if(buddy != this)

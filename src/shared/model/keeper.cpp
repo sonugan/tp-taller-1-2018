@@ -5,7 +5,8 @@ Keeper::Keeper() { // @suppress("Class members should be properly initialized")
 }
 
 Keeper::~Keeper() {
-	
+	delete this->location;
+	delete this->circle;
 }
 
 void Keeper::SetTeam(Team* team) {
@@ -83,13 +84,13 @@ void Keeper::TryToStopRunning() {
 
 void Keeper::TryToJump() {
 	if (this->GetTeam()->GetMatch()->GetMatchState()->IsPlaying()) {
-		
+
 		if (this->state == KEEPER_STATE::MOVING_DOWN_KEEPER || this->state == KEEPER_STATE::MOVING_UP_KEEPER || this->state == KEEPER_STATE::STILL_KEEPER) {
 			Ball* ball = this->GetTeam()->GetMatch()->GetBall();
 			if (PlaysOnWestSide() && ball->IsGoingToWestGoalZone()) {
 				unsigned int ball_y = ball->GetLocation()->GetY();
 				unsigned int keeper_y = this->GetLocation()->GetY();
-				
+
 				if ((DIRECTION::SOUTHWEST == ball->GetTrajectory()->GetDirection() && ball_y < keeper_y) || (DIRECTION::WEST == ball->GetTrajectory()->GetDirection() && ball_y > keeper_y)) {
 					this->state = KEEPER_STATE::JUMPING_DOWN_KEEPER;
 					this->location->UpdateY(location->GetY() + JUMPING_SPEED);
@@ -100,11 +101,11 @@ void Keeper::TryToJump() {
 				last_jump_request = std::chrono::system_clock::now();
 				this->circle->Move(this->location);
 			}
-			
+
 			if (!PlaysOnWestSide() && ball->IsGoingToEastGoalZone()) {
 				unsigned int ball_y = ball->GetLocation()->GetY();
 				unsigned int keeper_y = this->GetLocation()->GetY();
-				
+
 				if ((DIRECTION::SOUTHEAST == ball->GetTrajectory()->GetDirection() && ball_y < keeper_y) || (DIRECTION::EAST == ball->GetTrajectory()->GetDirection() && ball_y > keeper_y)) {
 					this->state = KEEPER_STATE::JUMPING_DOWN_KEEPER;
 					this->location->UpdateY(location->GetY() + JUMPING_SPEED);
@@ -116,7 +117,7 @@ void Keeper::TryToJump() {
 				this->circle->Move(this->location);
 			}
 		}
-		
+
 	}
 }
 
@@ -128,13 +129,13 @@ bool Keeper::HasBall() {
 
 void Keeper::TryToRun() {
 	if (this->GetTeam()->GetMatch()->GetMatchState()->IsPlaying()) {
-		
+
 		if (this->state == KEEPER_STATE::STILL_KEEPER || this->state == KEEPER_STATE::MOVING_UP_KEEPER || this->state == KEEPER_STATE::MOVING_DOWN_KEEPER) {
-			
+
 			Ball* ball = this->GetTeam()->GetMatch()->GetBall();
 			unsigned int ball_y = ball->GetLocation()->GetY();
 			unsigned int keeper_y = this->GetLocation()->GetY();
-			
+
 			if (abs(ball_y - keeper_y) < WALKING_SPEED) {
 				this->location->UpdateY(ball_y);
 				this->state = KEEPER_STATE::STILL_KEEPER;
@@ -150,7 +151,7 @@ void Keeper::TryToRun() {
 				this->state = KEEPER_STATE::STILL_KEEPER;
 			}
 		}
-		
+
 	}
 }
 
