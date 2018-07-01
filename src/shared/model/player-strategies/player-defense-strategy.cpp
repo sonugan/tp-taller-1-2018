@@ -76,7 +76,7 @@ bool PlayerDefenseStrategy::ImTheNearestPlayer()
     vector<Player*> buddies = this->player->GetTeam()->GetPlayers();
     float min_distance = this->player->GetLocation()->Distance(ball->GetLocation());
     Player* nearest_player = this->player;
-    for(int i = 0; i < buddies.size(); i++)
+    for(u_int i = 0; i < buddies.size(); i++)
     {
         Player* buddy = buddies[i];
         float distance = buddy->GetLocation()->Distance(ball->GetLocation());

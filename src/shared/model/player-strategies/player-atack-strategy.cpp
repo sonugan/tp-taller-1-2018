@@ -64,35 +64,6 @@ bool PlayerAtackStrategy::PassBall()//TODO: los angulos de pase son de 45°, lo 
         }
     }
     return false;
-
-    /*if(this->coin_flipper->FlipPorc(10, 6) == COIN_RESULT::WIN)
-    {
-        vector<Player*> buddies = this->player->GetTeam()->GetPlayers();
-        float min_distance = Location::MAX_DISTANCE;
-        Player* pass_ball_player = nullptr;
-        for(int i = 0; i < buddies.size(); i++)
-        {
-            Player* buddy = buddies[i];
-            if(buddy != this->player)
-            {
-                if(IsNearGoalLine(buddy))// && buddy->GetCircle()->ExistsCollision2d(this->vision_area))
-                {
-                    float distance = buddy->GetLocation()->Distance(this->player->GetLocation());
-                    if(distance < min_distance)
-                    {
-                        pass_ball_player = buddy;
-                        min_distance = distance;
-                    }
-                }
-            }
-        }
-        if(pass_ball_player != nullptr)
-        {
-            this->player->PassBallTo(pass_ball_player);
-            return true;
-        }
-    }
-    return false;*/
 }
 
 vector<Player*> PlayerAtackStrategy::GetEnemies()
