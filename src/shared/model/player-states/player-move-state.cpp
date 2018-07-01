@@ -86,8 +86,8 @@ void PlayerMoveState::Play()
     {
         this->has_been_moved--;
     }
-    this->TryRecover();
     this->player->GetStrategy()->Play();
+    this->TryRecover();
 }
 
 void PlayerMoveState::TryRecover()
