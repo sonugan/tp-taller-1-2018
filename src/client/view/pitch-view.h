@@ -14,6 +14,7 @@ class PitchView : public AbstractView {
 
     private:
         Pitch* pitch;
+        SpriteSheet* goal_zone_sheet;
 };
 
 #endif // PITCHVIEW_H

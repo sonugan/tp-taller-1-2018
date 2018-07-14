@@ -13,6 +13,7 @@ class GoalZone : public iPitchZone
         bool IsGoal(Ball* ball);
         void SetTeam(Team* team);
         Team* GetTeam();
+        Location* GetTopLeftCorner();
     protected:
         Team* team;
     private:

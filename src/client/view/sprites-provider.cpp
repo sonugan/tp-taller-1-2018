@@ -111,6 +111,10 @@ std::string SpritesProvider::GetDefaultPath(SPRITE_SHEET sprite_sheet_enum)
     {
         return "game_statistics_screen.png";
     }
+    else if (GOAL_ZONE == sprite_sheet_enum)
+    {
+        return "goal-zone.png";
+    }
     return NULL;
 }
 

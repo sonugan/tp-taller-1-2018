@@ -115,3 +115,13 @@ void Pitch::ChangeTeamSides(Team* team_a, Team* team_b)
     this->end_line_zones[4]->SetTeam(team_a);
     this->end_line_zones[5]->SetTeam(team_a);
 }
+
+GoalZone* Pitch::GetEastGoalZone()
+{
+    return this->east_goal;
+}
+
+GoalZone* Pitch::GetWestGoalZone()
+{
+    return this->west_goal;
+}

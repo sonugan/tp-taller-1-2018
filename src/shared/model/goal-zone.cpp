@@ -42,3 +42,7 @@ void GoalZone::SetTeam(Team* team)
 {
     this->team = team;
 }
+
+Location* GoalZone::GetTopLeftCorner() {
+	return this->top_left_corner;
+}
