@@ -72,7 +72,7 @@ private:
     void RestartTimers();
     void StartGame();
     u_int SEND_GAME_STATE_EVERY_MILLISECONDS = 80;
-    u_int CONNECTION_TIMEOUT = 4000;
+    u_int CONNECTION_TIMEOUT = 5000;
 };
 
 #endif // SERVER_H

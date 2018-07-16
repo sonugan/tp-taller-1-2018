@@ -199,7 +199,7 @@ void Client::SendHealthCheck()
         Logger::getInstance()->debug("(Client:SendHealthCheck) Enviando ping.");
         Message ping(health_check->Serialize());
         this->clientSocket->Send(ping);
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(250));
         delete health_check;
     }
 }
