@@ -133,6 +133,9 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
 
     switch(message->GetType())
     {
+    case MESSAGE_TYPE::HEALTH_CHECK:
+        this->HandleHealthCheck(client, message);
+        break;
     case MESSAGE_TYPE::LOGIN_REQUEST:
         this->HandleLoginRequest(client, message);
         break;
@@ -153,9 +156,6 @@ void Server::ProcessMessage(ClientSocket* client, Message* message)
         break;
     case MESSAGE_TYPE::PASS_REQUEST:
         this->HandlePassBallRequest(client, message);
-        break;
-    case MESSAGE_TYPE::HEALTH_CHECK:
-        this->HandleHealthCheck(client, message);
         break;
     case MESSAGE_TYPE::CHANGE_FORMATION_REQUEST:
         this->HandleChangeFormationRequest(client, message);

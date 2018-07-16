@@ -171,15 +171,15 @@ string Client::GetGameState()
                 return "";
             }
         }
-        current_match_state = new_id;
         this->health_checked = std::chrono::system_clock::now();
+        current_match_state = new_id;
         return data;
     }
     else
     {
         unsigned int elapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds>
                              (std::chrono::system_clock::now() - this->health_checked).count();
-        if(elapsed_millis > 3000)
+        if(elapsed_millis > 5000)
         {
             is_connected = false;
         }
