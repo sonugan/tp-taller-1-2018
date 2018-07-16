@@ -10,17 +10,17 @@ Pitch::Pitch(Team* team_a, Team* team_b)
 
     //Creando zonas de lateral
     int throw_in_height = 300;
-    throw_in_zones[0] = new ThrowInZone(new Location(186, 78, 0), new Location(1734, 99, throw_in_height));
-    throw_in_zones[1] = new ThrowInZone(new Location(186, 1139, 0), new Location(1734, 1158, throw_in_height));
+    throw_in_zones[0] = new ThrowInZone(new Location(0, 78, 0), new Location(1920, 99, throw_in_height));
+    throw_in_zones[1] = new ThrowInZone(new Location(0, 1139, 0), new Location(1920, 1158, throw_in_height));
 
     //Creando zonas de fin de linea (saque de arco)
     end_line_zones[0] = new EndLineZone(team_a, new Location(0, 100, 0), new Location(185 - Ball::BALL_TRIDIMENSIONAL_OFFSET, 550, goal_height + 4));
     end_line_zones[1] = new EndLineZone(team_a, new Location(0, 100, goal_height + 4), new Location(185 - Ball::BALL_TRIDIMENSIONAL_OFFSET, 1138, throw_in_height));
     end_line_zones[2] = new EndLineZone(team_a, new Location(0, 688, 0), new Location(185 - Ball::BALL_TRIDIMENSIONAL_OFFSET, 1138, goal_height + 4));
 
-    end_line_zones[3] = new EndLineZone(team_b, new Location(1734 + Ball::BALL_TRIDIMENSIONAL_OFFSET, 100, 0), new Location(1774, 550, goal_height + 4));
-    end_line_zones[4] = new EndLineZone(team_b, new Location(1734 + Ball::BALL_TRIDIMENSIONAL_OFFSET, 100, goal_height + 4), new Location(1774, 1158, throw_in_height));
-    end_line_zones[5] = new EndLineZone(team_b, new Location(1734 + Ball::BALL_TRIDIMENSIONAL_OFFSET, 688, 0), new Location(1774, 1138, goal_height + 4));
+    end_line_zones[3] = new EndLineZone(team_b, new Location(1734 + Ball::BALL_TRIDIMENSIONAL_OFFSET, 100, 0), new Location(1920, 550, goal_height + 4));
+    end_line_zones[4] = new EndLineZone(team_b, new Location(1734 + Ball::BALL_TRIDIMENSIONAL_OFFSET, 100, goal_height + 4), new Location(1920, 1158, throw_in_height));
+    end_line_zones[5] = new EndLineZone(team_b, new Location(1734 + Ball::BALL_TRIDIMENSIONAL_OFFSET, 688, 0), new Location(1920, 1138, goal_height + 4));
 
     //Creando los palos
     goal_posts[0] = new GoalPost(new Location(185, 550, 0), new Location(189, 554, goal_height));
