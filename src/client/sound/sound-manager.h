@@ -14,6 +14,7 @@ class SoundManager
         void PlayKickBallSound();
         void PlayGoalSound();
         void PlayTimeUpSound();
+        void DeleteSound();
     protected:
 
     private:

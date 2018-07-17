@@ -13,6 +13,12 @@ SoundManager::SoundManager()
 SoundManager::~SoundManager()
 {
     Logger::getInstance()->debug("DESTRUYENDO SOUND MANAGER");
+    DeleteSound();
+    Logger::getInstance()->debug("(SoundManager::Cerrando audio)");
+    Mix_CloseAudio();
+}
+
+void SoundManager::DeleteSound() {
     if (this->sound != NULL)
     {
         Mix_Pause(1);
@@ -20,8 +26,6 @@ SoundManager::~SoundManager()
         Mix_FreeChunk(this->sound);
         this->sound = NULL;
     }
-    Logger::getInstance()->debug("(SoundManager::Cerrando audio)");
-    Mix_CloseAudio();
 }
 
 void SoundManager::PlaySound(char* path)
@@ -71,6 +75,7 @@ void SoundManager::PlayGoalSound()
         // del juego, si es que esta sonando
         Logger::getInstance()->debug("(SoundManager::Ejecutando musica de gol");
     }
+    DeleteSound();
 }
 
 void SoundManager::PlayTimeUpSound()
