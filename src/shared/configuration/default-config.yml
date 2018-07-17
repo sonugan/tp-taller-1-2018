@@ -1,5 +1,5 @@
 logger:
-  level: debug
+  level: error
 team:
   formation: 3-3
   shirt: home

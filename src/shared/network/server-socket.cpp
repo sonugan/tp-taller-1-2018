@@ -25,7 +25,7 @@ bool ServerSocket::Bind(SocketAddress address)
     bool has_error = HasError(bind(this->socket_id, (struct sockaddr *) &addr, sizeof(addr)));
     if (has_error)
     {
-        Logger::getInstance()->debug("(ServerSocket:Bind) Error durante el binding.");
+        Logger::getInstance()->error("(ServerSocket:Bind) Error durante el binding.");
     }
     this->address = address;
     return !has_error;

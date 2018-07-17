@@ -106,11 +106,40 @@ BallView::BallView(Ball* ball)
     sprite13->h = 34;
 
     std::vector<SDL_Rect*> upwards_ball_clips9;
-    SDL_Rect* sprite14 = new SDL_Rect();
-    sprite14->x = 654;
-    sprite14->y = 158;
-    sprite14->w = 36;
-    sprite14->h = 36;
+//    SDL_Rect* sprite14 = new SDL_Rect();
+//    sprite14->x = 654;
+//    sprite14->y = 158;
+//    sprite14->w = 36;
+//    sprite14->h = 36;
+    
+    SDL_Rect* sprite15 = new SDL_Rect();
+    sprite15->x = 0;
+    sprite15->y = 84;
+    sprite15->w = 41;
+    sprite15->h = 42;
+    
+    SDL_Rect* sprite16 = new SDL_Rect();
+    sprite16->x = 42;
+    sprite16->y = 84;
+    sprite16->w = 41;
+    sprite16->h = 42;
+    
+    SDL_Rect* sprite17 = new SDL_Rect();
+    sprite17->x = 83;
+    sprite17->y = 84;
+    sprite17->w = 41;
+    sprite17->h = 42;
+    
+    SDL_Rect* sprite18 = new SDL_Rect();
+    sprite18->x = 124;
+    sprite18->y = 84;
+    sprite18->w = 41;
+    sprite18->h = 42;
+//    upwards_ball_clips9.push_back(sprite14);
+    upwards_ball_clips9.push_back(sprite15);
+    upwards_ball_clips9.push_back(sprite16);
+    upwards_ball_clips9.push_back(sprite17);
+    upwards_ball_clips9.push_back(sprite18);
 
     upwards_ball_clips1.push_back(sprite6);
     upwards_ball_clips2.push_back(sprite7);
@@ -120,7 +149,6 @@ BallView::BallView(Ball* ball)
     upwards_ball_clips6.push_back(sprite11);
     upwards_ball_clips7.push_back(sprite12);
     upwards_ball_clips8.push_back(sprite13);
-    upwards_ball_clips9.push_back(sprite14);
 
 
     animations.push_back(new Animation("upwards_ball1", upwards_ball_clips1, 1));
@@ -131,7 +159,7 @@ BallView::BallView(Ball* ball)
     animations.push_back(new Animation("upwards_ball6", upwards_ball_clips6, 1));
     animations.push_back(new Animation("upwards_ball7", upwards_ball_clips7, 1));
     animations.push_back(new Animation("upwards_ball8", upwards_ball_clips8, 1));
-    animations.push_back(new Animation("upwards_ball9", upwards_ball_clips9, 1));
+    animations.push_back(new Animation("upwards_ball9", upwards_ball_clips9, 0.2));
 
     current_animation_index = 0;
 
